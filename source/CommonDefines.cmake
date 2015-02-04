@@ -1,0 +1,18 @@
+#Defines common set of variables used across all the sub projects.
+
+# include XMPCore and XMPCommon public header files and source files.
+file(GLOB_RECURSE PUBLIC_XMPCOMMON_HEADERS ${XMPTOOLKIT_INCLUDE}/XMPCommon/*.h)
+source_group("Public\\Headers\\XMPCommon" FILES ${PUBLIC_XMPCOMMON_HEADERS})
+file(GLOB_RECURSE PUBLIC_XMPCORE_HEADERS ${XMPTOOLKIT_INCLUDE}/XMPCore/*.h)
+source_group("Public\\Headers\\XMPCore" FILES ${PUBLIC_XMPCORE_HEADERS})
+file(GLOB_RECURSE PUBLIC_XMPCOMMON_SOURCES ${XMPTOOLKIT_INCLUDE}/XMPCommon/*.cpp)
+source_group("Public\\Sources\\XMPCommon" FILES ${PUBLIC_XMPCOMMON_SOURCES})
+file(GLOB_RECURSE PUBLIC_XMPCORE_SOURCES ${XMPTOOLKIT_INCLUDE}/XMPCore/*.cpp)
+source_group("Public\\Sources\\XMPCore" FILES ${PUBLIC_XMPCORE_SOURCES})
+
+list(APPEND PUBLIC_XMPTOOLKIT_FILES 
+	${PUBLIC_XMPCOMMON_HEADERS}
+	${PUBLIC_XMPCORE_HEADERS}
+	${PUBLIC_XMPCOMMON_SOURCES}
+	${PUBLIC_XMPCORE_SOURCES}
+)
