@@ -23,3 +23,8 @@ add_custom_command( TARGET CreatingAndSerializingMetadata POST_BUILD
 set(LIB_ADOBEXMP "AdobeXMP")
 target_link_libraries( CreatingAndSerializingMetadata ${LIB_ADOBEXMP})
 
+if (UNIX AND NOT APPLE)
+	set_target_properties(CreatingAndSerializingMetadata PROPERTIES
+         	RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
+endif()
+
