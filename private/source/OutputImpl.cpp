@@ -95,6 +95,7 @@ namespace INT_UMC {
 		return list;
 	}
 
+
 	IOutput::cTrackList OutputImpl::GetVideoTracks() const {
 		cTrackList list;
 		auto it = mVideoTrackMap.begin();
