@@ -29,6 +29,20 @@ namespace UMC {
 	typedef const IUMC *							pcIUMC;
 	typedef shared_ptr< IUMC >						spIUMC;
 	typedef shared_ptr< const IUMC >				spcIUMC;
+
+	// IOutput
+	class IOutput;
+	typedef IOutput *								pIOutput;
+	typedef const IOutput *							pcIOutput;
+	typedef shared_ptr< IOutput >					spIOutput;
+	typedef shared_ptr< const IOutput >				spcIOutput;
+
+	// ITrack
+	class ITrack;
+	typedef ITrack *								pITrack;
+	typedef const ITrack *							pcITrack;
+	typedef shared_ptr< ITrack >					spITrack;
+	typedef shared_ptr< const ITrack >				spcITrack;
 	
 };
 

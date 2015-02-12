@@ -46,6 +46,17 @@ namespace INT_UMC {
 		virtual void RemoveAllSources();
 		virtual void RemoveSource( const char * uniqueID, size_t length = npos );
 
+		virtual size_t OutputCount() const;
+
+		virtual OutputList GetOutputs();
+		virtual cOutputList GetOutputs() const;
+		
+		virtual spIOutput GetOutput( const char * uniqueID, size_t length = npos );
+		virtual spcIOutput GetOutput( const char * uniqueID, size_t length = npos ) const;
+
+		virtual void RemoveAllOutputs();
+		virtual void RemoveOutput( const char * uniqueID, size_t length = npos );
+
 	protected:
 		spISource AddSource( const char * uniqueID, size_t length, ISource::eSourceTypes sourceType );
 		void UpdateCount( ISource::eSourceTypes sourceType, bool removed = true );
@@ -58,6 +69,10 @@ namespace INT_UMC {
 		size_t				mVideoSourceCount;
 		size_t				mAudioSourceCount;
 		size_t				mImageSourceCount;
+
+		typedef std::map< const std::string, spIOutput > OutputMap;
+
+		OutputMap			mOutputMap;
 	};
 }
 

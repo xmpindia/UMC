@@ -11,6 +11,7 @@
 #include "utils/UMCToRDFConversion.h"
 
 #include "interfaces/ISource.h"
+#include "interfaces/IOutput.h"
 #include "interfaces/IUMC.h"
 
 #include "XMPCore/Interfaces/IXMPMetadata.h"
@@ -125,6 +126,17 @@ namespace INT_UMC {
 			return sp;
 		}
 
+		spIXMPNode Convert( const spcIOutput & output ) {
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "source" );
+			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_XMP_MM, "DocumentID",
+				output->GetUniqueID().c_str() ) );
+			std::string temp;
+			temp = output->GetName();
+			if ( temp.size() > 0 )
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "description", temp.c_str() ) );
+			return sp;
+		}
+
 		spIXMPMetadata Convert( const spcIUMC & umc ) {
 			auto sp = IXMPMetadata::CreateMetadata();
 			if ( umc->SourceCount() > 0 ) {
@@ -134,6 +146,15 @@ namespace INT_UMC {
 					sourceArray->AppendNode( Convert( sources[ i ] ) );
 				}
 				sp->AppendNode( sourceArray );
+			}
+
+			if ( umc->OutputCount() > 0 ) {
+				auto outputArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "compositions" );
+				IUMC::cOutputList outputs = umc->GetOutputs();
+				for ( size_t i = 0, count = outputs.size(); i < count; i++ ) {
+					outputArray->AppendNode( Convert( outputs[ i ] ) );
+				}
+				sp->AppendNode( outputArray );
 			}
 			return sp;
 		}

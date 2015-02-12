@@ -19,6 +19,9 @@ namespace UMC {
 		typedef std::vector< spISource > SourceList;
 		typedef std::vector< spcISource > cSourceList;
 
+		typedef std::vector< spIOutput > OutputList;
+		typedef std::vector< spcIOutput > cOutputList;
+
 		virtual spISource AddVideoSource( const char * uniqueID, size_t length = npos ) = 0;
 		virtual spISource AddAudioSource( const char * uniqueID, size_t length = npos ) = 0;
 		virtual spISource AddStillImageSource( const char * uniqueID, size_t length = npos ) = 0;
@@ -42,6 +45,17 @@ namespace UMC {
 
 		virtual void RemoveAllSources() = 0;
 		virtual void RemoveSource( const char * uniqueID, size_t length = npos ) = 0;
+
+		virtual size_t OutputCount() const = 0;
+
+		virtual OutputList GetOutputs() = 0;
+		virtual cOutputList GetOutputs() const = 0;
+
+		virtual spIOutput GetOutput( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spcIOutput GetOutput( const char * uniqueID, size_t length = npos ) const = 0;
+
+		virtual void RemoveAllOutputs() = 0;
+		virtual void RemoveOutput( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual std::string SerializeToBuffer() const = 0;
 

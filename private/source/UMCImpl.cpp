@@ -180,6 +180,60 @@ namespace INT_UMC {
 		return list;
 	}
 
+	size_t UMCImpl::OutputCount() const {
+		return mOutputMap.size();
+	}
+
+	IUMC::OutputList UMCImpl::GetOutputs() {
+		OutputList list;
+		auto it = mOutputMap.begin();
+		auto endIt = mOutputMap.end();
+		for ( ; it != endIt; it++ ) {
+			list.push_back( it->second );
+		}
+		return list;
+	}
+
+	IUMC::cOutputList UMCImpl::GetOutputs() const {
+		cOutputList list;
+		auto it = mOutputMap.begin();
+		auto endIt = mOutputMap.end();
+		for ( ; it != endIt; it++ ) {
+			list.push_back( it->second );
+			}
+		return list;
+	}
+
+	spIOutput UMCImpl::GetOutput( const char * uniqueID, size_t length /*= npos */ ) {
+		//assert( length > 0 && uniqueID );
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		auto it = mOutputMap.find( strID );
+		if ( it == mOutputMap.end() ) {
+			return spIOutput();
+		} else {
+			return it->second;
+		}
+	}
+
+	spcIOutput UMCImpl::GetOutput( const char * uniqueID, size_t length /*= npos */ ) const {
+		return const_cast< UMCImpl *>( this )->GetOutput( uniqueID, length );
+	}
+
+	void UMCImpl::RemoveAllOutputs() {
+		mOutputMap.clear();
+	}
+
+	void UMCImpl::RemoveOutput( const char * uniqueID, size_t length /*= npos */ ) {
+		//assert( length > 0 && uniqueID );
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		auto it = mOutputMap.find( strID );
+		if ( it != mOutputMap.end() ) {
+			mOutputMap.erase( it );
+		}
+	}
+
 	UMCImpl::UMCImpl()
 		: mVideoSourceCount( 0 )
 		, mAudioSourceCount( 0 )

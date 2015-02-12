@@ -24,6 +24,7 @@ namespace INT_UMC {
 
 		spIXMPMetadata Convert( const spcIUMC & umc );
 		spIXMPNode Convert( const spcISource & source );
+		spIXMPNode Convert( const spcIOutput & output );
 		spIXMPNode Convert( const FrameRate & frameRate );
 		spIXMPNode Convert( const TimeCode & timeCode );
 

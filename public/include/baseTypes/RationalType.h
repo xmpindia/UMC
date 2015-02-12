@@ -47,6 +47,7 @@ namespace UMC {
 
 	typedef Unsigned64RationalType EditRate;
 	typedef Unsigned64RationalType FrameRate;
+	typedef Unsigned64RationalType AspectRatio;
 
 }
 
