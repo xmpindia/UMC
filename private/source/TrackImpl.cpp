@@ -40,6 +40,30 @@ namespace INT_UMC {
 		return mEditRate;
 	}
 
+	size_t TrackImpl::ShotCount() const {
+		return mShotMap.size();
+	}
+
+	ITrack::ShotList TrackImpl::GetShots() {
+		ShotList list;
+		auto it = mShotMap.begin();
+		auto endIt = mShotMap.end();
+		for ( ; it != endIt; it++ ) {
+			list.push_back( it->second );
+		}
+		return list;
+	}
+
+	ITrack::cShotList TrackImpl::GetShots() const {
+		cShotList list;
+		auto it = mShotMap.begin();
+		auto endIt = mShotMap.end();
+		for ( ; it != endIt; it++ ) {
+			list.push_back( it->second );
+			}
+		return list;
+	}
+
 	spcIOutput TrackImpl::GetParent() const  {
 		return spcIOutput( mwpOutput );
 	}

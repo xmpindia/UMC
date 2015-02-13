@@ -85,6 +85,10 @@ namespace INT_UMC {
 		return spIUMC( mwpUMC );
 	}
 
+	size_t OutputImpl::VideoTrackCount() const {
+		return mVideoTrackMap.size();
+	}
+
 	IOutput::TrackList OutputImpl::GetVideoTracks() {
 		TrackList list;
 		auto it = mVideoTrackMap.begin();
@@ -95,7 +99,6 @@ namespace INT_UMC {
 		return list;
 	}
 
-
 	IOutput::cTrackList OutputImpl::GetVideoTracks() const {
 		cTrackList list;
 		auto it = mVideoTrackMap.begin();
@@ -104,6 +107,10 @@ namespace INT_UMC {
 			list.push_back( it->second );
 			}
 		return list;
+	}
+
+	size_t OutputImpl::AudioTrackCount() const {
+		return mAudioTrackMap.size();
 	}
 
 	IOutput::TrackList OutputImpl::GetAudioTracks() {

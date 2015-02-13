@@ -43,6 +43,20 @@ namespace UMC {
 	typedef const ITrack *							pcITrack;
 	typedef shared_ptr< ITrack >					spITrack;
 	typedef shared_ptr< const ITrack >				spcITrack;
+
+	// IShot
+	class IShot;
+	typedef IShot *									pIShot;
+	typedef const IShot *							pcIShot;
+	typedef shared_ptr< IShot >						spIShot;
+	typedef shared_ptr< const IShot >				spcIShot;
+
+	// IFrame
+	class IFrame;
+	typedef IFrame *								pIFrame;
+	typedef const IFrame *							pcIFrame;
+	typedef shared_ptr< IFrame >					spIFrame;
+	typedef shared_ptr< const IFrame >				spcIFrame;
 	
 };
 

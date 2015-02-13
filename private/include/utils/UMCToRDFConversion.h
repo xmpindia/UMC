@@ -22,11 +22,14 @@ namespace INT_UMC {
 		using namespace NS_XMPCORE;
 		using namespace UMC;
 
-		spIXMPMetadata Convert( const spcIUMC & umc );
-		spIXMPNode Convert( const spcISource & source );
-		spIXMPNode Convert( const spcIOutput & output );
-		spIXMPNode Convert( const FrameRate & frameRate );
 		spIXMPNode Convert( const TimeCode & timeCode );
+		spIXMPNode Convert( const Unsigned64RationalType & rational, const std::string label );
+		spIXMPNode Convert( const spcISource & source );
+		spIXMPNode Convert( const spcIFrame & frame );
+		spIXMPNode Convert( const spcIShot & shot );
+		spIXMPNode Convert( const spcITrack & track );
+		spIXMPNode Convert( const spcIOutput & output );
+		spIXMPMetadata Convert( const spcIUMC & umc );
 
 	}
 }

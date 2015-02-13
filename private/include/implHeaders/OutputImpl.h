@@ -43,9 +43,11 @@ namespace INT_UMC {
 		virtual void SetAudioEditRate( const EditRate & audioEditRate );
 		virtual EditRate GetAudioEditRate() const;
 
+		virtual size_t VideoTrackCount() const;
 		virtual TrackList GetVideoTracks();
 		virtual cTrackList GetVideoTracks() const;
 
+		virtual size_t AudioTrackCount() const;
 		virtual TrackList GetAudioTracks();
 		virtual cTrackList GetAudioTracks() const;
 

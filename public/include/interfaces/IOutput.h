@@ -45,9 +45,11 @@ namespace UMC {
 		virtual void SetAudioEditRate( const EditRate & audioEditRate ) = 0;
 		virtual EditRate GetAudioEditRate() const = 0;
 
+		virtual size_t VideoTrackCount() const = 0;
 		virtual TrackList GetVideoTracks() = 0;
 		virtual cTrackList GetVideoTracks() const = 0;
 
+		virtual size_t AudioTrackCount() const = 0;
 		virtual TrackList GetAudioTracks() = 0;
 		virtual cTrackList GetAudioTracks() const = 0;
 

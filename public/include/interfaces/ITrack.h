@@ -14,12 +14,16 @@
 #include "baseTypes/RationalType.h"
 
 #include <string>
+#include <vector>
 
 namespace UMC {
 
 	class ITrack {
 
 	public:
+		typedef std::vector< spIShot > ShotList;
+		typedef std::vector< spcIShot > cShotList;
+
 		virtual const std::string & GetUniqueID() const = 0;
 		virtual std::string GetUniqueID() = 0;
 
@@ -28,6 +32,10 @@ namespace UMC {
 
 		virtual void SetEditRate( const EditRate & editRate ) = 0;
 		virtual EditRate GetEditRate() const = 0;
+
+		virtual size_t ShotCount() const = 0;
+		virtual ShotList GetShots() = 0;
+		virtual cShotList GetShots() const = 0;
 
 		virtual spcIOutput GetParent() const = 0;
 		virtual spIOutput GetParent() = 0;
