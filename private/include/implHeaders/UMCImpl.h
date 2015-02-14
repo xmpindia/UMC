@@ -23,6 +23,7 @@ namespace INT_UMC {
 		virtual spISource AddVideoSource( const char * uniqueID, size_t length = npos );
 		virtual spISource AddAudioSource( const char * uniqueID, size_t length = npos );
 		virtual spISource AddStillImageSource( const char * uniqueID, size_t length = npos );
+		virtual spIOutput AddOutput( const char * uniqueID, size_t length = npos );
 
 		virtual std::string SerializeToBuffer() const;
 

@@ -13,10 +13,11 @@
 #include "UMCFwdDeclarations.h"
 
 #include <string>
+#include <vector>
 
 namespace UMC {
 
-	class IFrame {
+	class IFrame : public enable_shared_from_this< IFrame > {
 
 	public:
 		virtual const std::string & GetUniqueID() const = 0;

@@ -18,7 +18,7 @@
 
 namespace UMC {
 
-	class ITrack {
+	class ITrack : public enable_shared_from_this< ITrack > {
 
 	public:
 		typedef std::vector< spIShot > ShotList;
@@ -26,6 +26,8 @@ namespace UMC {
 
 		virtual const std::string & GetUniqueID() const = 0;
 		virtual std::string GetUniqueID() = 0;
+
+		virtual spIShot AddShot( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual void SetName( const char * outputName, size_t length = npos ) = 0;
 		virtual std::string GetName() const = 0;

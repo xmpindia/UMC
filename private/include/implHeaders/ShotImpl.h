@@ -13,6 +13,7 @@
 #include "interfaces/IShot.h"
 #include "UMCDefines_I.h"
 #include "interfaces/IFrame.h"
+#include "interfaces/ISource.h"
 
 #include <string>
 #include <map>
@@ -25,6 +26,8 @@ namespace INT_UMC {
 
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetUniqueID();
+
+		virtual spIFrame AddFrame( const char * uniqueID, size_t length = npos );
 
 		virtual size_t FrameCount() const;
 		virtual FrameList GetFrames();
@@ -39,6 +42,7 @@ namespace INT_UMC {
 
 		typedef std::map< const std::string, spIFrame > FrameMap;
 		FrameMap				mFrameMap;
+
 	};
 }
 

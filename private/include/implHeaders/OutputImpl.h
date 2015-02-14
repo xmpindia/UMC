@@ -25,6 +25,9 @@ namespace INT_UMC {
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetUniqueID();
 
+		virtual spITrack AddVideoTrack( const char * uniqueID, size_t length = npos );
+		virtual spITrack AddAudioTrack( const char * uniqueID, size_t length = npos );
+
 		virtual void SetName( const char * name, size_t length = npos );
 		virtual std::string GetName() const;
 

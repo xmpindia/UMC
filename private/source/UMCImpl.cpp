@@ -9,6 +9,7 @@
 
 #include "implHeaders/UMCImpl.h"
 #include "implHeaders/SourceImpl.h"
+#include "implHeaders/OutputImpl.h"
 
 #include "utils/UMCToRDFConversion.h"
 
@@ -28,6 +29,19 @@ namespace INT_UMC {
 
 	spISource UMCImpl::AddStillImageSource( const char * uniqueID, size_t length /*= npos */ ) {
 		return AddSource( uniqueID, length, ISource::kStillImageSourceType );
+	}
+
+	spIOutput UMCImpl::AddOutput( const char * uniqueID, size_t length ) {
+		//assert( length > 0 && uniqueID );
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		if ( mOutputMap.find( strID ) == mOutputMap.end() ) {
+			spIOutput output = shared_ptr< IOutput >( new OutputImpl( uniqueID, length, shared_from_this() ) );
+			mOutputMap[ strID ] = output;
+			return output;
+		} else {
+			return spIOutput();
+		}
 	}
 
 	std::string UMCImpl::SerializeToBuffer() const {

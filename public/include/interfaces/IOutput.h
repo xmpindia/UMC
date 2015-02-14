@@ -18,7 +18,7 @@
 
 namespace UMC {
 
-	class IOutput {
+	class IOutput : public enable_shared_from_this< IOutput > {
 
 	public:
 		typedef std::vector< spITrack > TrackList;
@@ -26,6 +26,9 @@ namespace UMC {
 
 		virtual const std::string & GetUniqueID() const = 0;
 		virtual std::string GetUniqueID() = 0;
+
+		virtual spITrack AddVideoTrack( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spITrack AddAudioTrack( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual void SetName( const char * name, size_t length = npos ) = 0;
 		virtual std::string GetName() const = 0;

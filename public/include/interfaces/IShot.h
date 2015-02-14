@@ -17,7 +17,7 @@
 
 namespace UMC {
 
-	class IShot {
+	class IShot : public enable_shared_from_this< IShot > {
 
 	public:
 		typedef std::vector< spIFrame > FrameList;
@@ -25,6 +25,8 @@ namespace UMC {
 
 		virtual const std::string & GetUniqueID() const = 0;
 		virtual std::string GetUniqueID() = 0;
+
+		virtual spIFrame AddFrame( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual size_t FrameCount() const = 0;
 		virtual FrameList GetFrames() = 0;

@@ -8,6 +8,7 @@
 // =================================================================================================
 
 #include "implHeaders/ShotImpl.h"
+#include "implHeaders/FrameImpl.h"
 
 namespace INT_UMC {
 
@@ -18,6 +19,18 @@ namespace INT_UMC {
 
 	std::string ShotImpl::GetUniqueID() {
 		return mUniqueID;
+	}
+
+	spIFrame ShotImpl::AddFrame( const char * uniqueID, size_t length ) {
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		if ( mFrameMap.find( strID ) == mFrameMap.end() ) {
+			spIFrame frame = shared_ptr< IFrame >( new FrameImpl( uniqueID, length, shared_from_this() ) );
+			mFrameMap[ strID ] = frame;
+			return frame;
+		} else {
+			return spIFrame();
+		}
 	}
 
 	size_t ShotImpl::FrameCount() const {

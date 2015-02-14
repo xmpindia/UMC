@@ -8,6 +8,7 @@
 // =================================================================================================
 
 #include "implHeaders/OutputImpl.h"
+#include "implHeaders/TrackImpl.h"
 
 namespace INT_UMC {
 
@@ -18,6 +19,30 @@ namespace INT_UMC {
 
 	std::string OutputImpl::GetUniqueID() {
 		return mUniqueID;
+	}
+
+	spITrack OutputImpl::AddVideoTrack( const char * uniqueID, size_t length ) {
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		if ( mVideoTrackMap.find( strID ) == mVideoTrackMap.end() ) {
+			spITrack track = spITrack( new TrackImpl( uniqueID, length, shared_from_this() ) );
+			mVideoTrackMap[ strID ] = track;
+			return track;
+		} else {
+			return spITrack();
+		}
+	}
+
+	spITrack OutputImpl::AddAudioTrack( const char * uniqueID, size_t length ) {
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		if ( mAudioTrackMap.find( strID ) == mAudioTrackMap.end() ) {
+			spITrack track = spITrack( new TrackImpl( uniqueID, length, shared_from_this() ) );
+			mAudioTrackMap[ strID ] = track;
+			return track;
+		} else {
+			return spITrack();
+		}
 	}
 
 	void OutputImpl::SetName( const char * name, size_t length ) {

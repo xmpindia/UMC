@@ -25,6 +25,7 @@ namespace UMC {
 		virtual spISource AddVideoSource( const char * uniqueID, size_t length = npos ) = 0;
 		virtual spISource AddAudioSource( const char * uniqueID, size_t length = npos ) = 0;
 		virtual spISource AddStillImageSource( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spIOutput AddOutput( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual size_t SourceCount() const = 0;
 		virtual size_t VideoSourceCount() const = 0;

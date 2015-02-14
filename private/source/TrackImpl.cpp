@@ -8,6 +8,7 @@
 // =================================================================================================
 
 #include "implHeaders/TrackImpl.h"
+#include "implHeaders/ShotImpl.h"
 
 namespace INT_UMC {
 
@@ -18,6 +19,18 @@ namespace INT_UMC {
 
 	std::string TrackImpl::GetUniqueID() {
 		return mUniqueID;
+	}
+
+	spIShot TrackImpl::AddShot( const char * uniqueID, size_t length ) {
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		if ( mShotMap.find( strID ) == mShotMap.end() ) {
+			spIShot shot = shared_ptr< IShot >( new ShotImpl( uniqueID, length, shared_from_this() ) );
+			mShotMap[ strID ] = shot;
+			return shot;
+		} else {
+			return spIShot();
+		}
 	}
 
 	void TrackImpl::SetName( const char * name, size_t length ) {

@@ -12,6 +12,8 @@
 
 #include "interfaces/IFrame.h"
 #include "UMCDefines_I.h"
+#include <map>
+#include "interfaces/ISource.h"
 
 #include <string>
 
