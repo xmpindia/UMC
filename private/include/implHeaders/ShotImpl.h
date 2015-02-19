@@ -22,10 +22,19 @@ namespace INT_UMC {
 	using namespace UMC;
 	class ShotImpl : public IShot {
 	public:
-		ShotImpl( const char * uniqueID, size_t length, const spITrack & parent );
+		ShotImpl( const char * uniqueID, size_t length, eShotTypes type, const spITrack & parent );
 
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetUniqueID();
+
+		virtual void SetType( eShotTypes type );
+		virtual eShotTypes GetType() const ;
+
+		virtual void SetIn( const UMC_Int64 & editUnit );
+		virtual UMC_Int64 GetIn() const;
+
+		virtual void SetDuration( const UMC_Uns64 & duration );
+		virtual UMC_Uns64 GetDuration() const;
 
 		virtual spIFrame AddFrame( const char * uniqueID, size_t length = npos );
 
@@ -38,6 +47,9 @@ namespace INT_UMC {
 
 	protected:
 		std::string				mUniqueID;
+		eShotTypes				mShotType;
+		UMC_Int64				mIn;
+		UMC_Uns64				mDuration;
 		weak_ptr< ITrack >		mwpTrack;
 
 		typedef std::map< const std::string, spIFrame > FrameMap;

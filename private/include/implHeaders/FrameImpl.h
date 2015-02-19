@@ -26,10 +26,14 @@ namespace INT_UMC {
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetUniqueID();
 
+		virtual void SetEditOffset( const UMC_Int64 & editOffset );
+		virtual UMC_Int64 GetEditOffset() const;
+
 		virtual spcIShot GetParent() const;
 		virtual spIShot GetParent();
 
 	protected:
+		UMC_Int64				mEditOffset;
 		std::string				mUniqueID;
 		weak_ptr< IShot >		mwpShot;
 	};

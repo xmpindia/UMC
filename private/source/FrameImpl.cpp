@@ -20,6 +20,14 @@ namespace INT_UMC {
 		return mUniqueID;
 	}
 
+	void FrameImpl::SetEditOffset( const UMC_Int64 & editOffset ) {
+		mEditOffset = editOffset;
+	}
+
+	UMC_Int64 FrameImpl::GetEditOffset() const  {
+		return mEditOffset;
+	}
+
 	spcIShot FrameImpl::GetParent() const  {
 		return spcIShot( mwpShot );
 	}
@@ -30,7 +38,8 @@ namespace INT_UMC {
 
 	FrameImpl::FrameImpl( const char * uniqueID, size_t length,
 		const spIShot & parent )
-		: mwpShot( parent)
+		: mwpShot( parent),
+		  mEditOffset( 0 )
 	{
 		if ( length == npos ) mUniqueID.assign( uniqueID ); else mUniqueID.assign( uniqueID, length );
 	}

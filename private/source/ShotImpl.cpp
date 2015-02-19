@@ -11,7 +11,6 @@
 #include "implHeaders/FrameImpl.h"
 
 namespace INT_UMC {
-
 	
 	const std::string & ShotImpl::GetUniqueID() const  {
 		return mUniqueID;
@@ -19,6 +18,30 @@ namespace INT_UMC {
 
 	std::string ShotImpl::GetUniqueID() {
 		return mUniqueID;
+	}
+
+	void ShotImpl::SetType( eShotTypes type ) {
+		mShotType = type;
+	}
+
+	IShot::eShotTypes ShotImpl::GetType() const {
+		return mShotType;
+	}
+
+	void ShotImpl::SetIn( const UMC_Int64 & editUnit ) {
+		mIn = editUnit;
+	}
+
+	UMC_Int64 ShotImpl::GetIn() const  {
+		return mIn;
+	}
+
+	void ShotImpl::SetDuration( const UMC_Uns64 & duration ) {
+		mDuration = duration;
+	}
+
+	UMC_Uns64 ShotImpl::GetDuration() const  {
+		return mDuration;
 	}
 
 	spIFrame ShotImpl::AddFrame( const char * uniqueID, size_t length ) {
@@ -65,9 +88,12 @@ namespace INT_UMC {
 		return spITrack( mwpTrack );
 	}
 
-	ShotImpl::ShotImpl( const char * uniqueID, size_t length,
+	ShotImpl::ShotImpl( const char * uniqueID, size_t length, eShotTypes type, 
 		const spITrack & parent )
-		: mwpTrack( parent)
+		: mwpTrack( parent ),
+		  mShotType( type ),
+		  mIn( 0 ),
+		  mDuration( Max_UMC_Uns64 )
 	{
 		if ( length == npos ) mUniqueID.assign( uniqueID ); else mUniqueID.assign( uniqueID, length );
 	}

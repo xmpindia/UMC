@@ -20,11 +20,25 @@ namespace UMC {
 	class IShot : public enable_shared_from_this< IShot > {
 
 	public:
+		typedef enum {
+			kClipShotType		= 0,
+			kTransitionShotType		= 1
+		} eShotTypes;
+
 		typedef std::vector< spIFrame > FrameList;
 		typedef std::vector< spcIFrame > cFrameList;
 
 		virtual const std::string & GetUniqueID() const = 0;
 		virtual std::string GetUniqueID() = 0;
+
+		virtual void SetType( eShotTypes type ) = 0;
+		virtual eShotTypes GetType() const = 0;
+
+		virtual void SetIn( const UMC_Int64 & editUnit ) = 0;
+		virtual UMC_Int64 GetIn() const = 0;
+
+		virtual void SetDuration( const UMC_Uns64 & duration ) = 0;
+		virtual UMC_Uns64 GetDuration() const = 0;
 
 		virtual spIFrame AddFrame( const char * uniqueID, size_t length = npos ) = 0;
 

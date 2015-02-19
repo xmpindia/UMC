@@ -23,6 +23,9 @@ namespace UMC {
 		virtual const std::string & GetUniqueID() const = 0;
 		virtual std::string GetUniqueID() = 0;
 
+		virtual void SetEditOffset( const UMC_Int64 & editOffset ) = 0;
+		virtual UMC_Int64 GetEditOffset() const = 0;
+
 		virtual spcIShot GetParent() const = 0;
 		virtual spIShot GetParent() = 0;
 

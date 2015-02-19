@@ -21,16 +21,13 @@ namespace INT_UMC {
 		return mUniqueID;
 	}
 
-	spIShot TrackImpl::AddShot( const char * uniqueID, size_t length ) {
-		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
-		if ( mShotMap.find( strID ) == mShotMap.end() ) {
-			spIShot shot = shared_ptr< IShot >( new ShotImpl( uniqueID, length, shared_from_this() ) );
-			mShotMap[ strID ] = shot;
-			return shot;
-		} else {
-			return spIShot();
-		}
+
+	spIShot TrackImpl::AddClipShot( const char * uniqueID, size_t length ) {
+		return AddShot( uniqueID, length, IShot::kClipShotType );
+	}
+
+	spIShot TrackImpl::AddTransitionShot( const char * uniqueID, size_t length ) {
+		return AddShot( uniqueID, length, IShot::kTransitionShotType );
 	}
 
 	void TrackImpl::SetName( const char * name, size_t length ) {
@@ -91,6 +88,19 @@ namespace INT_UMC {
 		, mEditRate( 1 )
 	{
 		if ( length == npos ) mUniqueID.assign( uniqueID ); else mUniqueID.assign( uniqueID, length );
+	}
+
+
+	spIShot TrackImpl::AddShot( const char * uniqueID, size_t length, IShot::eShotTypes type ) {
+		std::string strID;
+		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		if ( mShotMap.find( strID ) == mShotMap.end() ) {
+			spIShot shot = shared_ptr< IShot >( new ShotImpl( uniqueID, length, type, shared_from_this() ) );
+			mShotMap[ strID ] = shot;
+			return shot;
+		} else {
+			return spIShot();
+		}
 	}
 
 }

@@ -134,6 +134,13 @@ namespace INT_UMC {
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_XMP_MM, "DocumentID",
 				frame->GetUniqueID().c_str() ) );
 
+			std::stringstream buf;
+
+			if ( frame->GetEditOffset() != 0 ) {
+				buf << frame->GetEditOffset();
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "editOffset", buf.str().c_str() ) );
+			}
+
 			return sp;
 		}
 
@@ -141,6 +148,34 @@ namespace INT_UMC {
 			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "shot" );
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_XMP_MM, "DocumentID",
 				shot->GetUniqueID().c_str() ) );
+
+			const char * type( NULL );
+			switch ( shot->GetType() ) {
+				case IShot::kClipShotType:
+					type = "clip";
+					break;
+
+				case IShot::kTransitionShotType:
+					type = "transition";
+					break;
+			}
+			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "type", type ) );
+
+			auto recordSp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "record" );
+
+			std::stringstream buf;
+			if ( shot->GetIn() != 0 ) {
+				buf << shot->GetIn();
+				recordSp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "in", buf.str().c_str() ) );
+			}
+
+			if ( shot->GetDuration() != npos ) {
+				buf.str("");
+				buf << shot->GetDuration();
+				recordSp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "duration", buf.str().c_str() ) );
+			}
+
+			sp->AppendNode( recordSp );
 
 			if ( shot->FrameCount() > 0 ) {
 				auto framesArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "frames" );

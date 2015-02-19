@@ -27,7 +27,8 @@ namespace UMC {
 		virtual const std::string & GetUniqueID() const = 0;
 		virtual std::string GetUniqueID() = 0;
 
-		virtual spIShot AddShot( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spIShot AddClipShot( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spIShot AddTransitionShot( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual void SetName( const char * outputName, size_t length = npos ) = 0;
 		virtual std::string GetName() const = 0;

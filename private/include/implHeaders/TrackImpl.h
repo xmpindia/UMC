@@ -26,7 +26,8 @@ namespace INT_UMC {
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetUniqueID();
 
-		virtual spIShot AddShot( const char * uniqueID, size_t length = npos );
+		virtual spIShot AddClipShot( const char * uniqueID, size_t length = npos );
+		virtual spIShot AddTransitionShot( const char * uniqueID, size_t length = npos );
 
 		virtual void SetName( const char * outputName, size_t length = npos );
 		virtual std::string GetName() const;
@@ -42,6 +43,8 @@ namespace INT_UMC {
 		virtual spIOutput GetParent();
 
 	protected:
+		spIShot AddShot( const char * uniqueID, size_t length, IShot::eShotTypes type );
+
 		std::string				mUniqueID;
 		std::string				mName;
 		EditRate				mEditRate;
