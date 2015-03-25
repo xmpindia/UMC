@@ -302,13 +302,7 @@ namespace NS_XMPCORE {
 namespace NS_XMPCORE {
 #if DEPENDS_ON_XMPCORE
 	inline pIXMPCoreObjectFactory_base XMPCoreObjectFactoryBaseInstance( bool reset = false ) {
-		static pIXMPCoreObjectFactory_base sDOMFactoryInstanceBasePtr = NULL;
-		if ( reset ) {
-			sDOMFactoryInstanceBasePtr = NULL;
-		} else if ( sDOMFactoryInstanceBasePtr == NULL ) {
-			sDOMFactoryInstanceBasePtr = WXMPMeta_GetXMPDOMFactoryInstance_1();
-		}
-		return sDOMFactoryInstanceBasePtr;
+		return WXMPMeta_GetXMPDOMFactoryInstance_1();
 	}
 #else // !DEPENDS_ON_XMPCORE
 	inline pIXMPCoreObjectFactory_base XMPCoreObjectFactoryBaseInstance( bool changeInstanceValue = false, pIXMPCoreObjectFactory instanceValue = NULL ) {

@@ -9,48 +9,46 @@
 
 #include "implHeaders/OutputImpl.h"
 #include "implHeaders/TrackImpl.h"
+#include "utils/Utils.h"
 
 namespace INT_UMC {
 
-
-	const std::string & OutputImpl::GetUniqueID() const  {
+	std::string OutputImpl::GetUniqueID() const {
 		return mUniqueID;
 	}
 
-	std::string OutputImpl::GetUniqueID() {
-		return mUniqueID;
+	spITrack OutputImpl::AddTrack( TrackMap & trackMap, const char * uniqueID, size_t length ) {
+		std::string strID;
+		PopulateString( strID, uniqueID, length );
+		if ( trackMap.find( strID ) == trackMap.end() ) {
+			spITrack track = shared_ptr< TrackImpl >( new TrackImpl( strID, shared_from_this() ) );
+			trackMap[ strID ] = track;
+			return track;
+		}
+		return spITrack();
+	}
+
+	spITrack OutputImpl::GetTrack( const TrackMap & trackMap, const char * uniqueID, size_t length ) const {
+		std::string strID;
+		PopulateString( strID, uniqueID, length );
+		auto it = trackMap.find( strID );
+		if ( it == trackMap.end() ) {
+			return spITrack();
+		} else {
+			return it->second;
+		}
 	}
 
 	spITrack OutputImpl::AddVideoTrack( const char * uniqueID, size_t length ) {
-		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
-		if ( mVideoTrackMap.find( strID ) == mVideoTrackMap.end() ) {
-			spITrack track = spITrack( new TrackImpl( uniqueID, length, shared_from_this() ) );
-			mVideoTrackMap[ strID ] = track;
-			return track;
-		} else {
-			return spITrack();
-		}
+		return AddTrack( mVideoTrackMap, uniqueID, length );
 	}
 
 	spITrack OutputImpl::AddAudioTrack( const char * uniqueID, size_t length ) {
-		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
-		if ( mAudioTrackMap.find( strID ) == mAudioTrackMap.end() ) {
-			spITrack track = spITrack( new TrackImpl( uniqueID, length, shared_from_this() ) );
-			mAudioTrackMap[ strID ] = track;
-			return track;
-		} else {
-			return spITrack();
-		}
+		return AddTrack( mAudioTrackMap, uniqueID, length );
 	}
 
 	void OutputImpl::SetName( const char * name, size_t length ) {
-		if ( name ) {
-			if ( length == npos ) mName.assign( name ); else mName.assign( name, npos );
-		} else {
-			mName.clear();
-		}
+		PopulateString( mName, name, length );
 	}
 
 	std::string OutputImpl::GetName() const {
@@ -58,11 +56,7 @@ namespace INT_UMC {
 	}
 
 	void OutputImpl::SetTitle( const char * title, size_t length ) {
-		if ( title ) {
-			if ( length == npos ) mTitle.assign( title ); else mTitle.assign( title, npos );
-		} else {
-			mTitle.clear();
-		}
+		PopulateString( mTitle, title, length );
 	}
 
 	std::string OutputImpl::GetTitle() const {
@@ -102,6 +96,14 @@ namespace INT_UMC {
 	}
 
 
+	spcITrack OutputImpl::GetAudioTrack( const char * uniqueID, size_t length ) const {
+		return GetTrack( mAudioTrackMap, uniqueID, length );
+	}
+
+	spITrack OutputImpl::GetAudioTrack( const char * uniqueID, size_t length ) {
+		return GetTrack( mAudioTrackMap, uniqueID, length );
+	}
+
 	spcIUMC OutputImpl::GetParent() const  {
 		return spcIUMC( mwpUMC );
 	}
@@ -110,8 +112,12 @@ namespace INT_UMC {
 		return spIUMC( mwpUMC );
 	}
 
+	size_t OutputImpl::TrackCount( const TrackMap & trackMap ) const {
+		return trackMap.size();
+	}
+
 	size_t OutputImpl::VideoTrackCount() const {
-		return mVideoTrackMap.size();
+		return TrackCount( mVideoTrackMap );
 	}
 
 	IOutput::TrackList OutputImpl::GetVideoTracks() {
@@ -130,12 +136,20 @@ namespace INT_UMC {
 		auto endIt = mVideoTrackMap.end();
 		for ( ; it != endIt; it++ ) {
 			list.push_back( it->second );
-			}
+		}
 		return list;
 	}
 
+	spcITrack OutputImpl::GetVideoTrack( const char * uniqueID, size_t length ) const {
+		return GetTrack( mVideoTrackMap, uniqueID, length );
+	}
+
+	spITrack OutputImpl::GetVideoTrack( const char * uniqueID, size_t length ) {
+		return GetTrack( mVideoTrackMap, uniqueID, length );
+	}
+
 	size_t OutputImpl::AudioTrackCount() const {
-		return mAudioTrackMap.size();
+		return TrackCount( mAudioTrackMap );
 	}
 
 	IOutput::TrackList OutputImpl::GetAudioTracks() {
@@ -154,19 +168,16 @@ namespace INT_UMC {
 		auto endIt = mAudioTrackMap.end();
 		for ( ; it != endIt; it++ ) {
 			list.push_back( it->second );
-			}
+		}
 		return list;
 	}
 
-	OutputImpl::OutputImpl( const char * uniqueID, size_t length,
-		const spIUMC & parent )
+	OutputImpl::OutputImpl( const std::string & uniqueID,const spIUMC & parent )
 		: mwpUMC( parent)
 		, mCanvasAspectRatio( 1 )
 		, mImageAspectRatio( 1 )
 		, mVideoEditRate( 1 )
 		, mAudioEditRate( 1 )
-	{
-		if ( length == npos ) mUniqueID.assign( uniqueID ); else mUniqueID.assign( uniqueID, length );
-	}
+		, mUniqueID( uniqueID ) { }
 
 }

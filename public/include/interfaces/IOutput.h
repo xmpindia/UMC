@@ -18,14 +18,13 @@
 
 namespace UMC {
 
-	class IOutput : public enable_shared_from_this< IOutput > {
+	class IOutput {
 
 	public:
 		typedef std::vector< spITrack > TrackList;
 		typedef std::vector< spcITrack > cTrackList;
 
-		virtual const std::string & GetUniqueID() const = 0;
-		virtual std::string GetUniqueID() = 0;
+		virtual std::string GetUniqueID() const = 0;
 
 		virtual spITrack AddVideoTrack( const char * uniqueID, size_t length = npos ) = 0;
 		virtual spITrack AddAudioTrack( const char * uniqueID, size_t length = npos ) = 0;
@@ -51,10 +50,14 @@ namespace UMC {
 		virtual size_t VideoTrackCount() const = 0;
 		virtual TrackList GetVideoTracks() = 0;
 		virtual cTrackList GetVideoTracks() const = 0;
+		virtual spITrack GetVideoTrack( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spcITrack GetVideoTrack( const char * uniqueID, size_t length = npos ) const = 0;
 
 		virtual size_t AudioTrackCount() const = 0;
 		virtual TrackList GetAudioTracks() = 0;
 		virtual cTrackList GetAudioTracks() const = 0;
+		virtual spITrack GetAudioTrack( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spcITrack GetAudioTrack( const char * uniqueID, size_t length = npos ) const = 0;
 
 		virtual spcIUMC GetParent() const = 0;
 		virtual spIUMC GetParent() = 0;

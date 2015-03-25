@@ -22,13 +22,12 @@ namespace UMC {
 
 	public:
 		typedef enum {
-			kVideoSourceType		= 0,
-			kAudioSourceType		= 1,
-			kStillImageSourceType	= 2
+			kSourceTypeVideo		= 0,
+			kSourceTypeAudio		= 1,
+			kSourceTypeFrame	= 2
 		} eSourceTypes;
 
-		virtual const std::string & GetUniqueID() const = 0;
-		virtual std::string GetUniqueID() = 0;
+		virtual std::string GetUniqueID() const = 0;
 
 		virtual void SetClipName( const char * clipName, size_t length = npos ) = 0;
 		virtual std::string GetClipName() const = 0;
@@ -38,11 +37,11 @@ namespace UMC {
 		virtual void SetEditRate( const EditRate & editRate ) = 0;
 		virtual EditRate GetEditRate() const = 0;
 
-		virtual void SetInCount( const UMC_Int64 & editUnit ) = 0; 
-		virtual UMC_Int64 GetInCount() const = 0;
+		virtual void SetInCount( const EditUnitInCount & inCount ) = 0; 
+		virtual EditUnitInCount GetInCount() const = 0;
 
-		virtual void SetDuration( const UMC_Uns64 & duration ) = 0;
-		virtual UMC_Uns64 GetDuration() const = 0;
+		virtual void SetDuration( const EditUnitDuration & duration ) = 0;
+		virtual EditUnitDuration GetDuration() const = 0;
 
 		virtual void SetTimeCode( const TimeCode & timeCode ) = 0;
 		virtual TimeCode GetTimeCode() const = 0;

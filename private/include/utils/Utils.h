@@ -1,5 +1,5 @@
-#ifndef UMCFwdDeclarations_I_h__
-#define UMCFwdDeclarations_I_h__ 1
+#ifndef Utils_h__
+#define Utils_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,11 +10,10 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "UMCFwdDeclarations.h"
 #include "UMCDefines_I.h"
 
 namespace INT_UMC {
-
-};
-
-#endif  // UMCFwdDeclarations_I_h__
+	std::string & PopulateString( std::string & dest, const char * buffer, size_t lenOfBuffer );
+	std::string GetUniqueID();
+}
+#endif  // Utils_h__

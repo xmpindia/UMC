@@ -9,46 +9,44 @@
 
 #include "implHeaders/ShotImpl.h"
 #include "implHeaders/FrameImpl.h"
+#include "implHeaders/ShotSourceImpl.h"
+#include "utils/Utils.h"
 
 namespace INT_UMC {
-	
-	const std::string & ShotImpl::GetUniqueID() const  {
-		return mUniqueID;
-	}
 
-	std::string ShotImpl::GetUniqueID() {
+	std::string ShotImpl::GetUniqueID() const {
 		return mUniqueID;
-	}
-
-	void ShotImpl::SetType( eShotTypes type ) {
-		mShotType = type;
 	}
 
 	IShot::eShotTypes ShotImpl::GetType() const {
 		return mShotType;
 	}
 
-	void ShotImpl::SetIn( const UMC_Int64 & editUnit ) {
-		mIn = editUnit;
+	void ShotImpl::SetInCount( const EditUnitInCount & inCount ) {
+		mInCount = inCount;
 	}
 
-	UMC_Int64 ShotImpl::GetIn() const  {
-		return mIn;
+	EditUnitInCount ShotImpl::GetInCount() const {
+		return mInCount;
 	}
 
-	void ShotImpl::SetDuration( const UMC_Uns64 & duration ) {
+	void ShotImpl::SetDuration( const EditUnitDuration & duration ) {
 		mDuration = duration;
 	}
 
-	UMC_Uns64 ShotImpl::GetDuration() const  {
+	EditUnitDuration ShotImpl::GetDuration() const {
 		return mDuration;
 	}
 
-	spIFrame ShotImpl::AddFrame( const char * uniqueID, size_t length ) {
+	spIFrame ShotImpl::AddFrame( const spISource & frameSource, const char * uniqueID,
+		size_t lengthOfID, const EditUnitInCount & sourceInCount,
+		const EditUnitInCount shotInCount )
+	{
 		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		PopulateString( strID, uniqueID, lengthOfID );
 		if ( mFrameMap.find( strID ) == mFrameMap.end() ) {
-			spIFrame frame = shared_ptr< IFrame >( new FrameImpl( uniqueID, length, shared_from_this() ) );
+			spIFrame frame = shared_ptr< FrameImpl >( new FrameImpl( strID, frameSource,
+				shared_from_this(), sourceInCount, shotInCount ) );
 			mFrameMap[ strID ] = frame;
 			return frame;
 		} else {
@@ -76,7 +74,7 @@ namespace INT_UMC {
 		auto endIt = mFrameMap.end();
 		for ( ; it != endIt; it++ ) {
 			list.push_back( it->second );
-			}
+		}
 		return list;
 	}
 
@@ -88,14 +86,54 @@ namespace INT_UMC {
 		return spITrack( mwpTrack );
 	}
 
-	ShotImpl::ShotImpl( const char * uniqueID, size_t length, eShotTypes type, 
-		const spITrack & parent )
-		: mwpTrack( parent ),
-		  mShotType( type ),
-		  mIn( 0 ),
-		  mDuration( Max_UMC_Uns64 )
+	spIShotSource ShotImpl::AddShotSource( const spISource & source,
+		const EditUnitInCount & sourceInCount, const EditUnitDuration sourceDuration,
+		const EditUnitInCount shotInCount )
 	{
-		if ( length == npos ) mUniqueID.assign( uniqueID ); else mUniqueID.assign( uniqueID, length );
+		std::string strID( GetUniqueID() );
+		if ( mShotSourceMap.find( strID ) == mShotSourceMap.end() ) {
+			auto shotSource = shared_ptr< ShotSourceImpl >( new ShotSourceImpl( source,
+				shared_from_this(), sourceInCount, sourceDuration, shotInCount ) );
+			mShotSourceMap[ strID ] = shotSource;
+			return shotSource;
+		} else {
+			return spIShotSource();
+		}
 	}
 
+	size_t ShotImpl::ShotSourceCount() const {
+		return mShotSourceMap.size();
+	}
+
+	IShot::ShotSourceList ShotImpl::GetShotSources() {
+		ShotSourceList list;
+		auto it = mShotSourceMap.begin();
+		auto endIt = mShotSourceMap.end();
+		for ( ; it != endIt; it++ ) {
+			list.push_back( it->second );
+		}
+		return list;
+	}
+
+	IShot::cShotSourceList ShotImpl::GetShotSources() const {
+		cShotSourceList list;
+		auto it = mShotSourceMap.begin();
+		auto endIt = mShotSourceMap.end();
+		for ( ; it != endIt; it++ ) {
+			list.push_back( it->second );
+		}
+		return list;
+	}
+
+	ShotImpl::ShotImpl( const std::string & uniqueID, eShotTypes type, const spITrack & parent )
+		: mwpTrack( parent )
+		, mUniqueID( uniqueID )
+		, mShotType( type )
+		, mInCount( kEditUnitInCountFromBeginning )
+		, mDuration( kEditUnitDurationTillEnd ) { }
+
+	spIFrame ShotImpl::GetFrame( const char * uniqueID, size_t length ) {
+		return spIFrame();
+	}
 }
+

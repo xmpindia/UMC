@@ -1,5 +1,5 @@
-#ifndef IFrame_h__
-#define IFrame_h__ 1
+#ifndef IShotSource_h__
+#define IShotSource_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -12,21 +12,18 @@
 
 #include "UMCFwdDeclarations.h"
 
-#include <string>
-#include <vector>
-
 namespace UMC {
-
-	class IFrame {
+	class IShotSource {
 
 	public:
-		virtual std::string GetUniqueID() const = 0;
-
 		virtual spISource GetSource() = 0;
 		virtual spcISource GetSource() const = 0;
 
 		virtual void SetSourceInCount( const EditUnitInCount & sourceInCount ) = 0;
 		virtual EditUnitInCount GetSourceInCount() const = 0;
+
+		virtual void SetSourceDuration( const EditUnitDuration & sourceDuration ) = 0;
+		virtual EditUnitDuration GetSourceDuration() const = 0;
 
 		virtual void SetShotInCount( const EditUnitInCount & shotInCount ) = 0;
 		virtual EditUnitInCount GetShotInCount() const = 0;
@@ -34,14 +31,13 @@ namespace UMC {
 		virtual spcIShot GetParent() const = 0;
 		virtual spIShot GetParent() = 0;
 
-		virtual ~IFrame() = 0;
+		virtual ~IShotSource() = 0;
 
 	private:
 
 	};
 
-	inline IFrame::~IFrame() {}
+	inline IShotSource::~IShotSource() { }
+}
 
-};
-
-#endif  // IFrame_h__
+#endif  // IShotSource_h__

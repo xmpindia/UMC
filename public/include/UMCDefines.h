@@ -93,6 +93,12 @@ namespace UMC {
 	static const UMC_Int64 Min_UMC_Int64 = ( ( UMC_Int64 ) 0x8000000000000000LL );
 	static const UMC_Int64 Max_UMC_Int64 = ( ( UMC_Int64 ) 0x7FFFFFFFFFFFFFFFLL );
 
+	typedef UMC_Int64 EditUnitInCount;
+	typedef UMC_Uns64 EditUnitDuration;
+
+	static const EditUnitInCount kEditUnitInCountFromBeginning = 0;
+	static const EditUnitDuration kEditUnitDurationTillEnd = Max_UMC_Uns64;
+
 	static const size_t npos = std::string::npos;
 
 }

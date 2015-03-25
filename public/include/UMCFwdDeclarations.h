@@ -57,7 +57,14 @@ namespace UMC {
 	typedef const IFrame *							pcIFrame;
 	typedef shared_ptr< IFrame >					spIFrame;
 	typedef shared_ptr< const IFrame >				spcIFrame;
-	
+
+	// IShotSource
+	class IShotSource;	
+	typedef IShotSource *							pIShotSource;
+	typedef const IShotSource *						pcIShotSource;
+	typedef shared_ptr< IShotSource >				spIShotSource;
+	typedef shared_ptr< const IShotSource >			spcIShotSource;
+
 };
 
 #endif  // UMCFwdDeclarations_h__

@@ -17,20 +17,23 @@
 
 namespace INT_UMC {
 
-	class UMCImpl : public IUMC {
+	class UMCImpl
+		: public IUMC
+		, public enable_shared_from_this< UMCImpl >
+	{
 	public:
 		UMCImpl();
-		virtual spISource AddVideoSource( const char * uniqueID, size_t length = npos );
-		virtual spISource AddAudioSource( const char * uniqueID, size_t length = npos );
-		virtual spISource AddStillImageSource( const char * uniqueID, size_t length = npos );
-		virtual spIOutput AddOutput( const char * uniqueID, size_t length = npos );
+		virtual spISource AddVideoSource( const char * uniqueID, size_t length );
+		virtual spISource AddAudioSource( const char * uniqueID, size_t length );
+		virtual spISource AddFrameSource( const char * uniqueID, size_t length );
+		virtual spIOutput AddOutput( const char * uniqueID, size_t length );
 
 		virtual std::string SerializeToBuffer() const;
 
 		virtual size_t SourceCount() const;
 		virtual size_t VideoSourceCount() const;
 		virtual size_t AudioSourceCount() const;
-		virtual size_t StillImageSourceCount() const;
+		virtual size_t FrameSourceCount() const;
 
 		virtual SourceList GetAllSources();
 		virtual cSourceList GetAllSources() const;
@@ -38,8 +41,8 @@ namespace INT_UMC {
 		virtual cSourceList GetVideoSources() const;
 		virtual SourceList GetAudioSources();
 		virtual cSourceList GetAudioSources() const;
-		virtual SourceList GetStillImageSources();
-		virtual cSourceList GetStillImageSources() const;
+		virtual SourceList GetFrameSources();
+		virtual cSourceList GetFrameSources() const;
 
 		virtual spISource GetSource( const char * uniqueID, size_t length = npos );
 		virtual spcISource GetSource( const char * uniqueID, size_t length = npos ) const;
@@ -65,14 +68,12 @@ namespace INT_UMC {
 		cSourceList GetSources( ISource::eSourceTypes sourceType ) const;
 
 		typedef std::map< const std::string, spISource > SourceMap;
-		
+		typedef std::map< const std::string, spIOutput > OutputMap;
+
 		SourceMap			mSourceMap;
 		size_t				mVideoSourceCount;
 		size_t				mAudioSourceCount;
 		size_t				mImageSourceCount;
-
-		typedef std::map< const std::string, spIOutput > OutputMap;
-
 		OutputMap			mOutputMap;
 	};
 }

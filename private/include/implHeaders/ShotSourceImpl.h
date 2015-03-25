@@ -1,5 +1,5 @@
-#ifndef FrameImpl_h__
-#define FrameImpl_h__ 1
+#ifndef ShotSourceImpl_h__
+#define ShotSourceImpl_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,45 +10,43 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "interfaces/IFrame.h"
+#include "interfaces/IShotSource.h"
 #include "UMCDefines_I.h"
-#include <map>
-#include "interfaces/ISource.h"
-
-#include <string>
 
 namespace INT_UMC {
 	using namespace UMC;
-	class FrameImpl
-		: public IFrame
-		, public enable_shared_from_this< FrameImpl >
+
+	class ShotSourceImpl
+		: public IShotSource
+		, public enable_shared_from_this< ShotSourceImpl >
 	{
 	public:
-		FrameImpl( const std::string & uniqueID, const spISource & frameSource,
-			const spIShot & parent, const EditUnitInCount & sourceInCount = kEditUnitInCountFromBeginning,
-			const EditUnitInCount & shotInCount = kEditUnitInCountFromBeginning );
-
-		virtual std::string GetUniqueID() const;
-
-		virtual spcIShot GetParent() const;
-		virtual spIShot GetParent();
-
+		ShotSourceImpl( const spISource & shotSource, const spIShot & parentShot,
+			const EditUnitInCount & sourceInCount = kEditUnitInCountFromBeginning,
+			const EditUnitDuration sourceDuration = kEditUnitDurationTillEnd,
+			const EditUnitInCount shotInCount = kEditUnitInCountFromBeginning );
+	
 		virtual spISource GetSource();
 		virtual spcISource GetSource() const;
-
+		
 		virtual void SetSourceInCount( const EditUnitInCount & sourceInCount );
 		virtual EditUnitInCount GetSourceInCount() const;
+
+		virtual void SetSourceDuration( const EditUnitDuration & sourceDuration );
+		virtual EditUnitDuration GetSourceDuration() const;
 
 		virtual void SetShotInCount( const EditUnitInCount & shotInCount );
 		virtual EditUnitInCount GetShotInCount() const;
 
-	protected:
+		virtual spcIShot GetParent() const;
+		virtual spIShot GetParent();
+
+	private:
 		weak_ptr< IShot >		mwpShot;
 		weak_ptr< ISource >		mwpSource;
 		EditUnitInCount			mSourceInCount;
+		EditUnitDuration		mSourceDuration;
 		EditUnitInCount			mShotInCount;
-		std::string				mUniqueID;
 	};
 }
-
-#endif  // FrameImpl_h__
+#endif  // ShotSourceImpl_h__

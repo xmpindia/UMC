@@ -14,7 +14,7 @@
 #include <vector>
 
 namespace UMC {
-	class IUMC : public enable_shared_from_this< IUMC > {
+	class IUMC {
 	public:
 		typedef std::vector< spISource > SourceList;
 		typedef std::vector< spcISource > cSourceList;
@@ -24,13 +24,14 @@ namespace UMC {
 
 		virtual spISource AddVideoSource( const char * uniqueID, size_t length = npos ) = 0;
 		virtual spISource AddAudioSource( const char * uniqueID, size_t length = npos ) = 0;
-		virtual spISource AddStillImageSource( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spISource AddFrameSource( const char * uniqueID, size_t length = npos ) = 0;
+
 		virtual spIOutput AddOutput( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual size_t SourceCount() const = 0;
 		virtual size_t VideoSourceCount() const = 0;
 		virtual size_t AudioSourceCount() const = 0;
-		virtual size_t StillImageSourceCount() const = 0;
+		virtual size_t FrameSourceCount() const = 0;
 
 		virtual SourceList GetAllSources() = 0;
 		virtual cSourceList GetAllSources() const = 0;
@@ -38,8 +39,8 @@ namespace UMC {
 		virtual cSourceList GetVideoSources() const = 0;
 		virtual SourceList GetAudioSources() = 0;
 		virtual cSourceList GetAudioSources() const = 0;
-		virtual SourceList GetStillImageSources() = 0;
-		virtual cSourceList GetStillImageSources() const = 0;
+		virtual SourceList GetFrameSources() = 0;
+		virtual cSourceList GetFrameSources() const = 0;
 
 		virtual spISource GetSource( const char * uniqueID, size_t length = npos ) = 0;
 		virtual spcISource GetSource( const char * uniqueID, size_t length = npos ) const = 0;

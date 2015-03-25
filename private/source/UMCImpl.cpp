@@ -12,6 +12,7 @@
 #include "implHeaders/OutputImpl.h"
 
 #include "utils/UMCToRDFConversion.h"
+#include "utils/Utils.h"
 
 #include "XMPCore/Interfaces/IXMPDOMImplementationRegistry.h"
 #include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
@@ -20,23 +21,23 @@
 namespace INT_UMC {
 
 	spISource UMCImpl::AddVideoSource( const char * uniqueID, size_t length /*= npos */ ) {
-		return AddSource( uniqueID, length, ISource::kVideoSourceType );
+		return AddSource( uniqueID, length, ISource::kSourceTypeVideo );
 	}
 
 	spISource UMCImpl::AddAudioSource( const char * uniqueID, size_t length /*= npos */ ) {
-		return AddSource( uniqueID, length, ISource::kAudioSourceType );
+		return AddSource( uniqueID, length, ISource::kSourceTypeAudio );
 	}
 
-	spISource UMCImpl::AddStillImageSource( const char * uniqueID, size_t length /*= npos */ ) {
-		return AddSource( uniqueID, length, ISource::kStillImageSourceType );
+	spISource UMCImpl::AddFrameSource( const char * uniqueID, size_t length /*= npos */ ) {
+		return AddSource( uniqueID, length, ISource::kSourceTypeFrame );
 	}
 
 	spIOutput UMCImpl::AddOutput( const char * uniqueID, size_t length ) {
 		//assert( length > 0 && uniqueID );
 		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		PopulateString( strID, uniqueID, length );
 		if ( mOutputMap.find( strID ) == mOutputMap.end() ) {
-			spIOutput output = shared_ptr< IOutput >( new OutputImpl( uniqueID, length, shared_from_this() ) );
+			spIOutput output = shared_ptr< OutputImpl >( new OutputImpl( strID, shared_from_this() ) );
 			mOutputMap[ strID ] = output;
 			return output;
 		} else {
@@ -64,7 +65,7 @@ namespace INT_UMC {
 		return mAudioSourceCount;
 	}
 
-	size_t UMCImpl::StillImageSourceCount() const {
+	size_t UMCImpl::FrameSourceCount() const {
 		return mImageSourceCount;
 	}
 
@@ -89,33 +90,33 @@ namespace INT_UMC {
 	}
 
 	IUMC::SourceList UMCImpl::GetVideoSources() {
-		return GetSources( ISource::kVideoSourceType );
+		return GetSources( ISource::kSourceTypeVideo );
 	}
 
 	IUMC::cSourceList UMCImpl::GetVideoSources() const {
-		return GetSources( ISource::kVideoSourceType );
+		return GetSources( ISource::kSourceTypeVideo );
 	}
 
 	IUMC::SourceList UMCImpl::GetAudioSources() {
-		return GetSources( ISource::kAudioSourceType );
+		return GetSources( ISource::kSourceTypeAudio );
 	}
 
 	IUMC::cSourceList UMCImpl::GetAudioSources() const {
-		return GetSources( ISource::kAudioSourceType );
+		return GetSources( ISource::kSourceTypeAudio );
 	}
 
-	IUMC::SourceList UMCImpl::GetStillImageSources() {
-		return GetSources( ISource::kStillImageSourceType );
+	IUMC::SourceList UMCImpl::GetFrameSources() {
+		return GetSources( ISource::kSourceTypeFrame );
 	}
 
-	IUMC::cSourceList UMCImpl::GetStillImageSources() const {
-		return GetSources( ISource::kStillImageSourceType );
+	IUMC::cSourceList UMCImpl::GetFrameSources() const {
+		return GetSources( ISource::kSourceTypeFrame );
 	}
 
 	spISource UMCImpl::GetSource( const char * uniqueID, size_t length /*= npos */ ) {
 		//assert( length > 0 && uniqueID );
 		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		PopulateString( strID, uniqueID, length );
 		auto it = mSourceMap.find( strID );
 		if ( it == mSourceMap.end() ) {
 			return spISource();
@@ -136,7 +137,7 @@ namespace INT_UMC {
 	void UMCImpl::RemoveSource( const char * uniqueID, size_t length /*= npos */ ) {
 		//assert( length > 0 && uniqueID );
 		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		PopulateString( strID, uniqueID, length );
 		auto it = mSourceMap.find( strID );
 		if ( it != mSourceMap.end() ) {
 			UpdateCount( it->second->GetSourceType(), true );
@@ -147,9 +148,9 @@ namespace INT_UMC {
 	spISource UMCImpl::AddSource( const char * uniqueID, size_t length, ISource::eSourceTypes sourceType ) {
 		//assert( length > 0 && uniqueID );
 		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		PopulateString( strID, uniqueID, length );
 		if ( mSourceMap.find( strID ) == mSourceMap.end() ) {
-			spISource source = shared_ptr< ISource >( new SourceImpl( uniqueID, length, sourceType, shared_from_this() ) );
+			spISource source = shared_ptr< SourceImpl >( new SourceImpl( strID, sourceType, shared_from_this() ) );
 			mSourceMap[ strID ] = source;
 			UpdateCount( sourceType, false );
 			return source;
@@ -160,13 +161,13 @@ namespace INT_UMC {
 
 	void UMCImpl::UpdateCount( ISource::eSourceTypes sourceType, bool removed /*= true */ ) {
 		switch( sourceType ) {
-			case ISource::kVideoSourceType:
+			case ISource::kSourceTypeVideo:
 				removed ? mVideoSourceCount-- : mVideoSourceCount++;
 				break;
-			case ISource::kAudioSourceType:
+			case ISource::kSourceTypeAudio:
 				removed ? mAudioSourceCount-- : mAudioSourceCount++;
 				break;
-			case ISource::kStillImageSourceType:
+			case ISource::kSourceTypeFrame:
 				removed ? mImageSourceCount-- : mImageSourceCount++;
 				break;
 		}
@@ -214,14 +215,14 @@ namespace INT_UMC {
 		auto endIt = mOutputMap.end();
 		for ( ; it != endIt; it++ ) {
 			list.push_back( it->second );
-			}
+		}
 		return list;
 	}
 
 	spIOutput UMCImpl::GetOutput( const char * uniqueID, size_t length /*= npos */ ) {
 		//assert( length > 0 && uniqueID );
 		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		PopulateString( strID, uniqueID, length );
 		auto it = mOutputMap.find( strID );
 		if ( it == mOutputMap.end() ) {
 			return spIOutput();
@@ -241,7 +242,7 @@ namespace INT_UMC {
 	void UMCImpl::RemoveOutput( const char * uniqueID, size_t length /*= npos */ ) {
 		//assert( length > 0 && uniqueID );
 		std::string strID;
-		if ( length == npos ) strID.assign( uniqueID ); else strID.assign( uniqueID, length );
+		PopulateString( strID, uniqueID, length );
 		auto it = mOutputMap.find( strID );
 		if ( it != mOutputMap.end() ) {
 			mOutputMap.erase( it );
@@ -257,7 +258,7 @@ namespace INT_UMC {
 
 namespace UMC {
 	spIUMC IUMC::CreateEmptyUMC() {
-		pIUMC ptr = new INT_UMC::UMCImpl();
-		return shared_ptr< IUMC >( ptr );
+		INT_UMC::UMCImpl * ptr = new INT_UMC::UMCImpl();
+		return shared_ptr< INT_UMC::UMCImpl >( ptr );
 	}
 }

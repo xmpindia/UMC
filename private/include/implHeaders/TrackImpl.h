@@ -19,17 +19,19 @@
 
 namespace INT_UMC {
 	using namespace UMC;
-	class TrackImpl : public ITrack {
+	class TrackImpl
+		: public ITrack
+		, public enable_shared_from_this< TrackImpl >
+	{
 	public:
-		TrackImpl( const char * uniqueID, size_t length, const spIOutput & parent );
+		TrackImpl( const std::string & uniqueID, const spIOutput & parent );
 
-		virtual const std::string & GetUniqueID() const;
-		virtual std::string GetUniqueID();
+		virtual std::string GetUniqueID() const;
 
-		virtual spIShot AddClipShot( const char * uniqueID, size_t length = npos );
-		virtual spIShot AddTransitionShot( const char * uniqueID, size_t length = npos );
+		virtual spIShot AddClipShot( const char * uniqueID, size_t length );
+		virtual spIShot AddTransitionShot( const char * uniqueID, size_t length );
 
-		virtual void SetName( const char * outputName, size_t length = npos );
+		virtual void SetName( const char * outputName, size_t length );
 		virtual std::string GetName() const;
 
 		virtual void SetEditRate( const EditRate & editRate );
@@ -45,12 +47,12 @@ namespace INT_UMC {
 	protected:
 		spIShot AddShot( const char * uniqueID, size_t length, IShot::eShotTypes type );
 
+		typedef std::map< const std::string, spIShot > ShotMap;
+
 		std::string				mUniqueID;
 		std::string				mName;
 		EditRate				mEditRate;
 		weak_ptr< IOutput >		mwpOutput;
-
-		typedef std::map< const std::string, spIShot > ShotMap;
 		ShotMap					mShotMap;
 	};
 }

@@ -17,34 +17,47 @@
 
 namespace UMC {
 
-	class IShot : public enable_shared_from_this< IShot > {
+	class IShot {
 
 	public:
 		typedef enum {
-			kClipShotType		= 0,
-			kTransitionShotType		= 1
+			kShotTypeClip			= 0,
+			kShotTypeTransition		= 1
 		} eShotTypes;
 
 		typedef std::vector< spIFrame > FrameList;
 		typedef std::vector< spcIFrame > cFrameList;
 
-		virtual const std::string & GetUniqueID() const = 0;
-		virtual std::string GetUniqueID() = 0;
+		typedef std::vector< spIShotSource > ShotSourceList;
+		typedef std::vector< spcIShotSource > cShotSourceList;
 
-		virtual void SetType( eShotTypes type ) = 0;
+		virtual std::string GetUniqueID() const = 0;
+
 		virtual eShotTypes GetType() const = 0;
 
-		virtual void SetIn( const UMC_Int64 & editUnit ) = 0;
-		virtual UMC_Int64 GetIn() const = 0;
+		virtual void SetInCount( const EditUnitInCount & inCount ) = 0;
+		virtual EditUnitInCount GetInCount() const = 0;
 
-		virtual void SetDuration( const UMC_Uns64 & duration ) = 0;
-		virtual UMC_Uns64 GetDuration() const = 0;
+		virtual void SetDuration( const EditUnitDuration & duration ) = 0;
+		virtual EditUnitDuration GetDuration() const = 0;
 
-		virtual spIFrame AddFrame( const char * uniqueID, size_t length = npos ) = 0;
+		virtual spIFrame AddFrame( const spISource & frameSource, const char * uniqueID,
+			size_t lengthOfID = npos, const EditUnitInCount & sourceInCount = kEditUnitInCountFromBeginning,
+			const EditUnitInCount shotInCount = kEditUnitInCountFromBeginning ) = 0;
+
+		virtual spIShotSource AddShotSource( const spISource & shotSource,
+			const EditUnitInCount & sourceInCount = kEditUnitInCountFromBeginning,
+			const EditUnitDuration sourceDuration = kEditUnitDurationTillEnd,
+			const EditUnitInCount shotInCount = 0 ) = 0;
 
 		virtual size_t FrameCount() const = 0;
 		virtual FrameList GetFrames() = 0;
 		virtual cFrameList GetFrames() const = 0;
+		virtual spIFrame GetFrame( const char * uniqueID, size_t length = npos ) = 0;
+
+		virtual size_t ShotSourceCount() const = 0;
+		virtual ShotSourceList GetShotSources() = 0;
+		virtual cShotSourceList GetShotSources() const = 0;
 
 		virtual spcITrack GetParent() const = 0;
 		virtual spITrack GetParent() = 0;

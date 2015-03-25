@@ -54,11 +54,11 @@ static UMC::spIUMC CreateDefaultUMC() {
 	source = sp->AddAudioSource( "audio3" );
 
 	// add 3 images ( 1 filled, 2 blank )
-	source = sp->AddStillImageSource( "image1" );
+	source = sp->AddFrameSource( "image1" );
 	source->SetClipName( "clipNamei1" );
 
-	sp->AddStillImageSource( "image2" );
-	sp->AddStillImageSource( "image3" );
+	sp->AddFrameSource( "image2" );
+	sp->AddFrameSource( "image3" );
 
 	return sp;
 }
@@ -70,42 +70,42 @@ void AddingSourcesToUMCTests::CountOfSources() {
 	CPPUNIT_ASSERT_EQUAL( sp->SourceCount(),( size_t ) 8 );
 	CPPUNIT_ASSERT_EQUAL( sp->VideoSourceCount(), ( size_t ) 2 );
 	CPPUNIT_ASSERT_EQUAL( sp->AudioSourceCount(), ( size_t ) 3 );
-	CPPUNIT_ASSERT_EQUAL( sp->StillImageSourceCount(), ( size_t ) 3 );
+	CPPUNIT_ASSERT_EQUAL( sp->FrameSourceCount(), ( size_t ) 3 );
 
 	// remove image source
 	sp->RemoveSource( "image2" );
 	CPPUNIT_ASSERT_EQUAL( sp->SourceCount(), ( size_t ) 7 );
 	CPPUNIT_ASSERT_EQUAL( sp->VideoSourceCount(), ( size_t ) 2 );
 	CPPUNIT_ASSERT_EQUAL( sp->AudioSourceCount(), ( size_t ) 3 );
-	CPPUNIT_ASSERT_EQUAL( sp->StillImageSourceCount(), ( size_t ) 2 );
+	CPPUNIT_ASSERT_EQUAL( sp->FrameSourceCount(), ( size_t ) 2 );
 
 	// remove Audio source
 	sp->RemoveSource( "audio1" );
 	CPPUNIT_ASSERT_EQUAL( sp->SourceCount(), ( size_t ) 6 );
 	CPPUNIT_ASSERT_EQUAL( sp->VideoSourceCount(), ( size_t ) 2 );
 	CPPUNIT_ASSERT_EQUAL( sp->AudioSourceCount(), ( size_t ) 2 );
-	CPPUNIT_ASSERT_EQUAL( sp->StillImageSourceCount(), ( size_t ) 2 );
+	CPPUNIT_ASSERT_EQUAL( sp->FrameSourceCount(), ( size_t ) 2 );
 
 	// remove Video source
 	sp->RemoveSource( "video1" );
 	CPPUNIT_ASSERT_EQUAL( sp->SourceCount(), ( size_t ) 5 );
 	CPPUNIT_ASSERT_EQUAL( sp->VideoSourceCount(), ( size_t ) 1 );
 	CPPUNIT_ASSERT_EQUAL( sp->AudioSourceCount(), ( size_t ) 2 );
-	CPPUNIT_ASSERT_EQUAL( sp->StillImageSourceCount(), ( size_t ) 2 );
+	CPPUNIT_ASSERT_EQUAL( sp->FrameSourceCount(), ( size_t ) 2 );
 
 	// remove non existent source
 	sp->RemoveSource( "notAvailable" );
 	CPPUNIT_ASSERT_EQUAL( sp->SourceCount(), ( size_t ) 5 );
 	CPPUNIT_ASSERT_EQUAL( sp->VideoSourceCount(), ( size_t ) 1 );
 	CPPUNIT_ASSERT_EQUAL( sp->AudioSourceCount(), ( size_t ) 2 );
-	CPPUNIT_ASSERT_EQUAL( sp->StillImageSourceCount(), ( size_t ) 2 );
+	CPPUNIT_ASSERT_EQUAL( sp->FrameSourceCount(), ( size_t ) 2 );
 
 	// remove all sources
 	sp->RemoveAllSources();
 	CPPUNIT_ASSERT_EQUAL( sp->SourceCount(), ( size_t ) 0 );
 	CPPUNIT_ASSERT_EQUAL( sp->VideoSourceCount(), ( size_t ) 0 );
 	CPPUNIT_ASSERT_EQUAL( sp->AudioSourceCount(), ( size_t ) 0 );
-	CPPUNIT_ASSERT_EQUAL( sp->StillImageSourceCount(), ( size_t ) 0 );
+	CPPUNIT_ASSERT_EQUAL( sp->FrameSourceCount(), ( size_t ) 0 );
 }
 
 void AddingSourcesToUMCTests::SerializeSources() {
