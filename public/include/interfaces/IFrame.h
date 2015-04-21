@@ -13,7 +13,6 @@
 #include "UMCFwdDeclarations.h"
 
 #include <string>
-#include <vector>
 
 namespace UMC {
 

@@ -1,5 +1,5 @@
-#ifndef TrackImpl_h__
-#define TrackImpl_h__ 1
+#ifndef VideoTrackImpl_h__
+#define VideoTrackImpl_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,24 +10,24 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "interfaces/ITrack.h"
-#include "interfaces/IShot.h"
-#include "UMCFwdDeclarations_I.h"
-
-#include <string>
-#include <map>
+#include "interfaces/IVideoTrack.h"
+#include "implHeaders/TrackImpl.h"
 
 namespace INT_UMC {
-	using namespace UMC;
 
-	class TrackImpl
-		: public ITrack
+	class VideoTrackImpl
+		: public IVideoTrack
+		, enable_shared_from_this< VideoTrackImpl >
 	{
 	public:
-		TrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+		VideoTrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
 			const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent );
 
-		const std::string & GetUniqueID() const;
+		virtual void SetVideoEditRate( const EditRate & editRate );
+		virtual EditRate GetVideoEditRate() const;
+
+		virtual void SetAudioEditRate( const EditRate & editRate );
+		virtual EditRate GetAudioEditRate() const;
 
 		virtual eTrackTypes GetType() const;
 
@@ -38,61 +38,51 @@ namespace INT_UMC {
 		virtual std::string GetName() const;
 
 		virtual size_t ShotCount() const;
-		virtual size_t ClipShotCount() const;
-		virtual size_t TransitionShotCount() const;
-
 		virtual ShotList GetAllShots();
 		virtual cShotList GetAllShots() const;
-		virtual ShotList GetAllClipShots();
-		virtual cShotList GetAllClipShots() const;
-		virtual ShotList GetAllTransitionShots();
-		virtual cShotList GetAllTransitionShots() const;
-
 		virtual spIShot GetShot( const std::string & uniqueID );
 		virtual spcIShot GetShot( const std::string & uniqueID ) const;
+
+		virtual size_t ClipShotCount() const;
+		virtual ShotList GetAllClipShots();
+		virtual cShotList GetAllClipShots() const;
 		virtual spIShot GetClipShot( const std::string & uniqueID );
 		virtual spcIShot GetClipShot( const std::string & uniqueID ) const;
+
+		virtual size_t TransitionShotCount() const;
+		virtual ShotList GetAllTransitionShots();
+		virtual cShotList GetAllTransitionShots() const;
 		virtual spIShot GetTransitionShot( const std::string & uniqueID );
 		virtual spcIShot GetTransitionShot( const std::string & uniqueID ) const;
 
 		virtual size_t RemoveAllShots();
 		virtual size_t RemoveAllClipShots();
 		virtual size_t RemoveAllTransitionShots();
-
 		virtual size_t RemoveShot( const std::string & uniqueID );
+
 		virtual size_t RemoveClipShot( const std::string & uniqueID );
 		virtual size_t RemoveTransitionShot( const std::string & uniqueID );
 
 		virtual eNodeTypes GetNodeType() const;
 
+		virtual const std::string & GetUniqueID() const;
+
 		virtual spcINode GetParentNode() const;
 		virtual spINode GetParentNode();
-
-		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
-		virtual spINode GetChildNode( const std::string & uniqueID );
 
 		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const;
 		virtual spINode GetDecendantNode( const std::string & uniqueID );
 
-		virtual NodeList GetAllChildren();
-		virtual cNodeList GetAllChildren() const;
+		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
+		virtual spINode GetChildNode( const std::string & uniqueID );
 
-		virtual NodeList GetAllDecendants();
-		virtual cNodeList GetAllDecendants() const;
+		virtual ~VideoTrackImpl() {}
 
 	protected:
-
-		typedef std::map< const std::string, spIShot > ShotMap;
-
-		std::string				mUniqueID;
-		std::string				mName;
-		ShotMap					mShotMap;
-
-		weak_ptr< IOutput >		mwpOutput;
-		spUniqueIDSet			mspUniqueIDSet;
-		spIUniqueIDGenerator	mspUniqueIDGenerator;
-
+		TrackImpl				mTrackImpl;
+		EditRate				mVideoEditRate;
+		EditRate				mAudioEditRate;
 	};
 }
 
-#endif  // TrackImpl_h__
+#endif  // VideoTrackImpl_h__

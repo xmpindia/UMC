@@ -11,47 +11,51 @@
 // =================================================================================================
 
 #include "interfaces/ISource.h"
-#include "UMCDefines_I.h"
-
-#include <string>
+#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
 	using namespace UMC;
-	class SourceImpl : public ISource {
+
+	class SourceImpl
+		: public ISource
+	{
 	public:
-		SourceImpl( const std::string & uniqueID, eSourceTypes sourceType, const spIUMC & parent );
+		SourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent );
 
-		virtual std::string GetUniqueID() const;
+		virtual const std::string & GetUniqueID() const;
 
-		virtual void SetClipName( const char * clipName, size_t length );
+		virtual void SetClipName( const std::string & clipName );
 		virtual std::string GetClipName() const;
 
-		virtual eSourceTypes GetSourceType() const;
+		virtual spcINode GetParentNode() const;
+		virtual spINode GetParentNode();
 
-		virtual void SetEditRate( const EditRate & editRate );
-		virtual EditRate GetEditRate() const;
+		virtual spcINode GetDecendantNode( const std::string & id ) const;
+		virtual spINode GetDecendantNode( const std::string & id );
 
-		virtual void SetInCount( const EditUnitInCount & inCount );
-		virtual EditUnitInCount GetInCount() const;
+		virtual spcINode GetChildNode( const std::string & id ) const;
+		virtual spINode GetChildNode( const std::string & id );
 
-		virtual void SetDuration( const EditUnitDuration & duration );
-		virtual EditUnitDuration GetDuration() const;
+		virtual eNodeTypes GetNodeType() const { return kNodeTypeSource; }
 
-		virtual void SetTimeCode( const TimeCode & timeCode );
-		virtual TimeCode GetTimeCode() const;
+		virtual eSourceTypes GetType() const { return ISource::kSourceTypeAll; }
 
-		virtual spcIUMC GetParent() const;
-		virtual spIUMC GetParent();
+		virtual NodeList GetAllChildren();
+
+		virtual cNodeList GetAllChildren() const;
+
+		virtual NodeList GetAllDecendants();
+
+		virtual cNodeList GetAllDecendants() const;
 
 	protected:
 		const std::string		mUniqueID;
-		eSourceTypes			mSourceType;
 		std::string				mClipName;
-		EditRate				mEditRate;
-		EditUnitInCount			mInCount;
-		EditUnitDuration		mDuration;
-		TimeCode				mTimeCode;
+
 		weak_ptr< IUMC >		mwpUMC;
+		spUniqueIDSet			mspUniqueIDSet;
+		spIUniqueIDGenerator	mspUniqueIDGenerator;
 	};
 }
 

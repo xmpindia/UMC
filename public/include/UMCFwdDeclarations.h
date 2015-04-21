@@ -16,12 +16,59 @@
 
 namespace UMC {
 
+	extern const std::string kEmptyString;
+
+	// IUniqueIDGenerator
+	class IUniqueIDGenerator;
+	typedef IUniqueIDGenerator *					pIUniqueIDGenerator;
+	typedef const IUniqueIDGenerator *				pcIUniqueIDGenerator;
+	typedef shared_ptr< IUniqueIDGenerator >		spIUniqueIDGenerator;
+	typedef shared_ptr< const IUniqueIDGenerator >	spcIUniqueIDGenerator;
+
+	// INode
+	class INode;
+	typedef INode *									pINode;
+	typedef const INode *							pcINode;
+	typedef shared_ptr< INode >						spINode;
+	typedef shared_ptr< const INode >				spcINode;
+
+
 	// ISource
 	class ISource;
 	typedef ISource *								pISource;
 	typedef const ISource *							pcISource;
 	typedef shared_ptr< ISource >					spISource;
 	typedef shared_ptr< const ISource >				spcISource;
+
+	// IVideoVideoSource
+	class IVideoSource;
+	typedef IVideoSource *							pIVideoSource;
+	typedef const IVideoSource *					pcIVideoSource;
+	typedef shared_ptr< IVideoSource >				spIVideoSource;
+	typedef shared_ptr< const IVideoSource >		spcIVideoSource;
+
+	// IAudioSource
+	class IAudioSource;
+	typedef IAudioSource *							pIAudioSource;
+	typedef const IAudioSource *					pcIAudioSource;
+	typedef shared_ptr< IAudioSource >				spIAudioSource;
+	typedef shared_ptr< const IAudioSource >		spcIAudioSource;
+
+	// IVideoFrameSource
+	class IVideoFrameSource;
+	typedef IVideoFrameSource *						pIVideoFrameSource;
+	typedef const IVideoFrameSource *				pcIVideoFrameSource;
+	typedef shared_ptr< IVideoFrameSource >			spIVideoFrameSource;
+	typedef shared_ptr< const IVideoFrameSource >	spcIVideoFrameSource;
+
+	// IImageSource
+	class IImageSource;
+	typedef IImageSource *							pIImageSource;
+	typedef const IImageSource *					pcIImageSource;
+	typedef shared_ptr< IImageSource >				spIImageSource;
+	typedef shared_ptr< const IImageSource >		spcIImageSource;
+
+
 
 	// IUMC
 	class IUMC;
@@ -43,6 +90,20 @@ namespace UMC {
 	typedef const ITrack *							pcITrack;
 	typedef shared_ptr< ITrack >					spITrack;
 	typedef shared_ptr< const ITrack >				spcITrack;
+
+	// IVideoTrack
+	class IVideoTrack;
+	typedef IVideoTrack *							pIVideoTrack;
+	typedef const IVideoTrack *						pcIVideoTrack;
+	typedef shared_ptr< IVideoTrack >				spIVideoTrack;
+	typedef shared_ptr< const IVideoTrack >			spcIVideoTrack;
+
+	// ITrack
+	class IAudioTrack;
+	typedef IAudioTrack *							pIAudioTrack;
+	typedef const IAudioTrack *						pcIAudioTrack;
+	typedef shared_ptr< IAudioTrack >				spIAudioTrack;
+	typedef shared_ptr< const IAudioTrack >			spcIAudioTrack;
 
 	// IShot
 	class IShot;

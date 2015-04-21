@@ -1,5 +1,5 @@
-#ifndef UMCFwdDeclarations_I_h__
-#define UMCFwdDeclarations_I_h__ 1
+#ifndef IImageSource_h__
+#define IImageSource_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,18 +10,18 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "UMCFwdDeclarations.h"
-#include "UMCDefines_I.h"
+#include "interfaces/ISource.h"
 
-#include <set>
-#include <string>
+namespace UMC {
 
-namespace INT_UMC {
-	using namespace UMC;
+	class IImageSource
+		: public ISource
+	{
+	public:
+		virtual ~IImageSource() = 0;
+	};
 
-	typedef std::set< const std::string >			UniqueIDSet;
-	typedef shared_ptr< UniqueIDSet >				spUniqueIDSet;
-	typedef shared_ptr< const UniqueIDSet >			spcUniqueIDSet;
-};
+	inline IImageSource::~IImageSource() {}
+}
 
-#endif  // UMCFwdDeclarations_I_h__
+#endif  // IImageSource_h__

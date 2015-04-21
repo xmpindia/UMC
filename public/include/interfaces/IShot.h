@@ -22,7 +22,11 @@ namespace UMC {
 	public:
 		typedef enum {
 			kShotTypeClip			= 0,
-			kShotTypeTransition		= 1
+			kShotTypeTransition		= 1,
+
+			kShotTypeAll			= Max_UMC_Uns32 - 1,
+			kShotTypeMaxValue		= Max_UMC_Uns32
+
 		} eShotTypes;
 
 		typedef std::vector< spIFrame > FrameList;

@@ -1,5 +1,5 @@
-#ifndef UMCFwdDeclarations_I_h__
-#define UMCFwdDeclarations_I_h__ 1
+#ifndef IUniqueIDGenerator_h__
+#define IUniqueIDGenerator_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,18 +10,15 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "UMCFwdDeclarations.h"
-#include "UMCDefines_I.h"
 
-#include <set>
-#include <string>
+#include <UMCFwdDeclarations.h>
+#include "interfaces/INode.h"
 
-namespace INT_UMC {
-	using namespace UMC;
+namespace UMC {
+	class IUniqueIDGenerator {
+	public:
+		virtual std::string GenerateUniqueID( INode::eNodeTypes nodeType ) = 0;
+	};
+}
 
-	typedef std::set< const std::string >			UniqueIDSet;
-	typedef shared_ptr< UniqueIDSet >				spUniqueIDSet;
-	typedef shared_ptr< const UniqueIDSet >			spcUniqueIDSet;
-};
-
-#endif  // UMCFwdDeclarations_I_h__
+#endif  // IUniqueIDGenerator_h__

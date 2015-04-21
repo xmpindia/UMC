@@ -11,28 +11,31 @@
 // =================================================================================================
 
 #include "interfaces/IOutput.h"
-#include "UMCDefines_I.h"
 #include "interfaces/ITrack.h"
+#include "UMCFwdDeclarations_I.h"
 
 #include <map>
 
 namespace INT_UMC {
 	using namespace UMC;
+
 	class OutputImpl
 		: public IOutput
-		, public enable_shared_from_this< OutputImpl > {
+		, public enable_shared_from_this< OutputImpl >
+	{
 	public:
-		OutputImpl( const std::string & uniqueID, const spIUMC & parent );
+		OutputImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent );
 
-		virtual std::string GetUniqueID() const;
+		virtual const std::string & GetUniqueID() const;
 
-		virtual spITrack AddVideoTrack( const char * uniqueID, size_t length );
-		virtual spITrack AddAudioTrack( const char * uniqueID, size_t length );
+		virtual spIVideoTrack AddVideoTrack();
+		virtual spIAudioTrack AddAudioTrack();
 
-		virtual void SetName( const char * name, size_t length );
+		virtual void SetName( const std::string & name );
 		virtual std::string GetName() const;
 
-		virtual void SetTitle( const char * title, size_t length );
+		virtual void SetTitle( const std::string & title );
 		virtual std::string GetTitle() const;
 
 		virtual void SetCanvasAspectRatio( const AspectRatio & canvasAspectRatio );
@@ -47,27 +50,52 @@ namespace INT_UMC {
 		virtual void SetAudioEditRate( const EditRate & audioEditRate );
 		virtual EditRate GetAudioEditRate() const;
 
+		virtual size_t	TrackCount() const;
+		virtual TrackList GetAllTracks();
+		virtual cTrackList GetAllTracks() const;
+		virtual spITrack GetTrack( const std::string & uniqueID );
+		virtual spcITrack GetTrack( const std::string & uniqueID ) const;
+
 		virtual size_t VideoTrackCount() const;
-		virtual TrackList GetVideoTracks();
-		virtual cTrackList GetVideoTracks() const;
-		virtual spITrack GetVideoTrack( const char * uniqueID, size_t length );
-		virtual spcITrack GetVideoTrack( const char * uniqueID, size_t length ) const;
+		virtual VideoTrackList GetAllVideoTracks();
+		virtual cVideoTrackList GetAllVideoTracks() const;
+		virtual spIVideoTrack GetVideoTrack( const std::string & uniqueID );
+		virtual spcIVideoTrack GetVideoTrack( const std::string & uniqueID ) const;
 
 		virtual size_t AudioTrackCount() const;
-		virtual TrackList GetAudioTracks();
-		virtual cTrackList GetAudioTracks() const;
-		virtual spITrack GetAudioTrack( const char * uniqueID, size_t length );
-		virtual spcITrack GetAudioTrack( const char * uniqueID, size_t length ) const;
+		virtual AudioTrackList GetAllAudioTracks();
+		virtual cAudioTrackList GetAllAudioTracks() const;
+		virtual spIAudioTrack GetAudioTrack( const std::string & uniqueID );
+		virtual spcIAudioTrack GetAudioTrack( const std::string & uniqueID ) const;
 
-		virtual spcIUMC GetParent() const;
-		virtual spIUMC GetParent();
+		virtual size_t RemoveAllTracks();
+		virtual size_t RemoveAllVideoTracks();
+		virtual size_t RemoveAllAudioTracks();
+		virtual size_t RemoveTrack( const std::string & uniqueID );
+		virtual size_t RemoveVideoTrack( const std::string & uniqueID );
+		virtual size_t RemoveAudioTrack( const std::string & uniqueID );
+
+		virtual eNodeTypes GetNodeType() const;
+
+		virtual spcINode GetParentNode() const;
+		virtual spINode GetParentNode();
+
+		virtual spcINode GetDecendantNode( const std::string & id ) const;
+		virtual spINode GetDecendantNode( const std::string & id );
+
+		virtual spcINode GetChildNode( const std::string & id ) const;
+		virtual spINode GetChildNode( const std::string & id );
+
+		virtual NodeList GetAllChildren();
+		virtual cNodeList GetAllChildren() const;
+
+		virtual NodeList GetAllDecendants();
+		virtual cNodeList GetAllDecendants() const;
 
 	protected:
-		typedef std::map< const std::string, spITrack > TrackMap;
-		size_t TrackCount( const TrackMap & trackMap ) const;
-		spITrack AddTrack( TrackMap & trackMap, const char * uniqueID, size_t length );
-		spITrack GetTrack( const TrackMap & trackMap, const char * uniqueID, size_t length ) const;
-		
+		typedef std::map< const std::string, spIVideoTrack > VideoTrackMap;
+		typedef std::map< const std::string, spIAudioTrack > AudioTrackMap;
+
 	protected:
 		const std::string		mUniqueID;
 		std::string				mName;
@@ -76,11 +104,12 @@ namespace INT_UMC {
 		AspectRatio 			mImageAspectRatio;
 		EditRate				mVideoEditRate;
 		EditRate				mAudioEditRate;
-
-		TrackMap				mVideoTrackMap;
-		TrackMap				mAudioTrackMap;
+		VideoTrackMap			mVideoTrackMap;
+		AudioTrackMap			mAudioTrackMap;
 
 		weak_ptr< IUMC >		mwpUMC;
+		spUniqueIDSet			mspUniqueIDSet;
+		spIUniqueIDGenerator	mspUniqueIDGenerator;
 	};
 }
 

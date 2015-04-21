@@ -23,58 +23,101 @@ namespace INT_UMC {
 	{
 	public:
 		UMCImpl();
-		virtual spISource AddVideoSource( const char * uniqueID, size_t length );
-		virtual spISource AddAudioSource( const char * uniqueID, size_t length );
-		virtual spISource AddFrameSource( const char * uniqueID, size_t length );
-		virtual spIOutput AddOutput( const char * uniqueID, size_t length );
+
+		virtual eNodeTypes GetNodeType() const;
+
+		virtual const std::string & GetUniqueID() const;
+
+		virtual spcINode GetParentNode() const;
+		virtual spINode GetParentNode();
+
+		virtual spcINode GetDecendantNode( const std::string & id ) const;
+		virtual spINode GetDecendantNode( const std::string & id );
+
+		virtual spcINode GetChildNode( const std::string & id ) const;
+		virtual spINode GetChildNode( const std::string & id );
 
 		virtual std::string SerializeToBuffer() const;
+
+		virtual spIOutput AddOutput();
+		virtual size_t OutputCount() const;
+
+		virtual OutputList GetAllOutputs();
+		virtual cOutputList GetAllOutputs() const;
+
+		virtual spIOutput GetOutput( const std::string & uniqueID );
+		virtual spcIOutput GetOutput( const std::string & uniqueID ) const;
+
+		virtual size_t RemoveAllOutputs();
+		virtual size_t RemoveOutput( const std::string & uniqueID );
+
+		virtual spIVideoSource AddVideoSource();
+		virtual spIAudioSource AddAudioSource();
+		virtual spIVideoFrameSource AddVideoFrameSource( const spIVideoSource & videoSource );
+		virtual spIImageSource AddImageSource();
 
 		virtual size_t SourceCount() const;
 		virtual size_t VideoSourceCount() const;
 		virtual size_t AudioSourceCount() const;
-		virtual size_t FrameSourceCount() const;
+		virtual size_t VideoFrameSourceCount() const;
+		virtual size_t ImageSourceCount() const;
 
 		virtual SourceList GetAllSources();
 		virtual cSourceList GetAllSources() const;
-		virtual SourceList GetVideoSources();
-		virtual cSourceList GetVideoSources() const;
-		virtual SourceList GetAudioSources();
-		virtual cSourceList GetAudioSources() const;
-		virtual SourceList GetFrameSources();
-		virtual cSourceList GetFrameSources() const;
+		virtual VideoSourceList GetAllVideoSources();
+		virtual cVideoSourceList GetAllVideoSources() const;
+		virtual AudioSourceList GetAllAudioSources();
+		virtual cAudioSourceList GetAllAudioSources() const;
+		virtual VideoFrameSourceList GetAllVideoFrameSources();
+		virtual cVideoFrameSourceList GetAllVideoFrameSources() const;
+		virtual ImageSourceList GetAllImageSources();
+		virtual cImageSourceList GetAllImageSources() const;
 
-		virtual spISource GetSource( const char * uniqueID, size_t length = npos );
-		virtual spcISource GetSource( const char * uniqueID, size_t length = npos ) const;
+		virtual spISource GetSource( const std::string & uniqueID );
+		virtual spcISource GetSource( const std::string & uniqueID ) const;
+		virtual spIVideoSource GetVideoSource( const std::string & uniqueID );
+		virtual spcIVideoSource GetVideoSource( const std::string & uniqueID ) const;
+		virtual spIAudioSource GetAudioSource( const std::string & uniqueID );
+		virtual spcIAudioSource GetAudioSource( const std::string & uniqueID ) const;
+		virtual spIVideoFrameSource GetVideoFrameSource( const std::string & uniqueID );
+		virtual spcIVideoFrameSource GetVideoFrameSource( const std::string & uniqueID ) const;
+		virtual spIImageSource GetImageSource( const std::string & uniqueID );
+		virtual spcIImageSource GetImageSource( const std::string & uniqueID ) const;
 
-		virtual void RemoveAllSources();
-		virtual void RemoveSource( const char * uniqueID, size_t length = npos );
+		virtual size_t RemoveAllSources();
+		virtual size_t RemoveAllVideoSources();
+		virtual size_t RemoveAllAudioSources();
+		virtual size_t RemoveAllVideoFramesSources();
+		virtual size_t RemoveAllImageSources();
 
-		virtual size_t OutputCount() const;
+		virtual size_t RemoveSource( const std::string & uniqueID );
+		virtual size_t RemoveVideoSource( const std::string & uniqueID );
+		virtual size_t RemoveAudioSource( const std::string & uniqueID );
+		virtual size_t RemoveVideoFrameSource( const std::string & uniqueID );
+		virtual size_t RemoveImageSource( const std::string & uniqueID );
 
-		virtual OutputList GetOutputs();
-		virtual cOutputList GetOutputs() const;
+		virtual NodeList GetAllChildren();
+		virtual cNodeList GetAllChildren() const;
+
+		virtual NodeList GetAllDecendants();
+		virtual cNodeList GetAllDecendants() const;
+
 		
-		virtual spIOutput GetOutput( const char * uniqueID, size_t length = npos );
-		virtual spcIOutput GetOutput( const char * uniqueID, size_t length = npos ) const;
-
-		virtual void RemoveAllOutputs();
-		virtual void RemoveOutput( const char * uniqueID, size_t length = npos );
-
 	protected:
-		spISource AddSource( const char * uniqueID, size_t length, ISource::eSourceTypes sourceType );
-		void UpdateCount( ISource::eSourceTypes sourceType, bool removed = true );
-		SourceList GetSources( ISource::eSourceTypes sourceType );
-		cSourceList GetSources( ISource::eSourceTypes sourceType ) const;
-
-		typedef std::map< const std::string, spISource > SourceMap;
+		typedef std::map< const std::string, spIVideoSource > VideoSourceMap;
+		typedef std::map< const std::string, spIAudioSource > AudioSourceMap;
+		typedef std::map< const std::string, spIVideoFrameSource > VideoFrameSourceMap;
+		typedef std::map< const std::string, spIImageSource > ImageSourceMap;
 		typedef std::map< const std::string, spIOutput > OutputMap;
 
-		SourceMap			mSourceMap;
-		size_t				mVideoSourceCount;
-		size_t				mAudioSourceCount;
-		size_t				mImageSourceCount;
-		OutputMap			mOutputMap;
+		VideoSourceMap			mVideoSourceMap;
+		AudioSourceMap			mAudioSourceMap;
+		VideoFrameSourceMap		mVideoFrameSourceMap;
+		ImageSourceMap			mImageSourceMap;
+		OutputMap				mOutputMap;
+
+		spUniqueIDSet			mspUniqueIDSet;
+		spIUniqueIDGenerator	mspUniqueIDGenerator;
 	};
 }
 

@@ -42,8 +42,7 @@ namespace INT_UMC {
 		size_t lengthOfID, const EditUnitInCount & sourceInCount,
 		const EditUnitInCount shotInCount )
 	{
-		std::string strID;
-		PopulateString( strID, uniqueID, lengthOfID );
+		std::string strID( uniqueID);
 		if ( mFrameMap.find( strID ) == mFrameMap.end() ) {
 			spIFrame frame = shared_ptr< FrameImpl >( new FrameImpl( strID, frameSource,
 				shared_from_this(), sourceInCount, shotInCount ) );

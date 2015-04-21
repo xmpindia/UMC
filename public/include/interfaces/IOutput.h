@@ -11,28 +11,30 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
+#include "interfaces/INode.h"
 #include "baseTypes/RationalType.h"
-
-#include <vector>
-#include <string>
 
 namespace UMC {
 
-	class IOutput {
+	class IOutput
+		: public INode
+	{
 
 	public:
 		typedef std::vector< spITrack > TrackList;
 		typedef std::vector< spcITrack > cTrackList;
+		typedef std::vector< spIVideoTrack > VideoTrackList;
+		typedef std::vector< spcIVideoTrack > cVideoTrackList;
+		typedef std::vector< spIAudioTrack > AudioTrackList;
+		typedef std::vector< spcIAudioTrack > cAudioTrackList;
 
-		virtual std::string GetUniqueID() const = 0;
+		virtual spIVideoTrack AddVideoTrack() = 0;
+		virtual spIAudioTrack AddAudioTrack() = 0;
 
-		virtual spITrack AddVideoTrack( const char * uniqueID, size_t length = npos ) = 0;
-		virtual spITrack AddAudioTrack( const char * uniqueID, size_t length = npos ) = 0;
-
-		virtual void SetName( const char * name, size_t length = npos ) = 0;
+		virtual void SetName( const std::string & name ) = 0;
 		virtual std::string GetName() const = 0;
 
-		virtual void SetTitle( const char * title, size_t length = npos ) = 0;
+		virtual void SetTitle( const std::string & title ) = 0;
 		virtual std::string GetTitle() const = 0;
 
 		virtual void SetCanvasAspectRatio( const AspectRatio & canvasAspectRatio ) = 0;
@@ -46,25 +48,33 @@ namespace UMC {
 
 		virtual void SetAudioEditRate( const EditRate & audioEditRate ) = 0;
 		virtual EditRate GetAudioEditRate() const = 0;
+		
+		virtual size_t	TrackCount() const = 0;
+		virtual TrackList GetAllTracks() = 0;
+		virtual cTrackList GetAllTracks() const = 0;
+		virtual spITrack GetTrack( const std::string & uniqueID ) = 0;
+		virtual spcITrack GetTrack( const std::string & uniqueID ) const = 0;
 
 		virtual size_t VideoTrackCount() const = 0;
-		virtual TrackList GetVideoTracks() = 0;
-		virtual cTrackList GetVideoTracks() const = 0;
-		virtual spITrack GetVideoTrack( const char * uniqueID, size_t length = npos ) = 0;
-		virtual spcITrack GetVideoTrack( const char * uniqueID, size_t length = npos ) const = 0;
+		virtual VideoTrackList GetAllVideoTracks() = 0;
+		virtual cVideoTrackList GetAllVideoTracks() const = 0;
+		virtual spIVideoTrack GetVideoTrack( const std::string & uniqueID ) = 0;
+		virtual spcIVideoTrack GetVideoTrack( const std::string & uniqueID ) const = 0;
 
 		virtual size_t AudioTrackCount() const = 0;
-		virtual TrackList GetAudioTracks() = 0;
-		virtual cTrackList GetAudioTracks() const = 0;
-		virtual spITrack GetAudioTrack( const char * uniqueID, size_t length = npos ) = 0;
-		virtual spcITrack GetAudioTrack( const char * uniqueID, size_t length = npos ) const = 0;
+		virtual AudioTrackList GetAllAudioTracks() = 0;
+		virtual cAudioTrackList GetAllAudioTracks() const = 0;
+		virtual spIAudioTrack GetAudioTrack( const std::string & uniqueID ) = 0;
+		virtual spcIAudioTrack GetAudioTrack( const std::string & uniqueID ) const = 0;
 
-		virtual spcIUMC GetParent() const = 0;
-		virtual spIUMC GetParent() = 0;
+		virtual size_t RemoveAllTracks() = 0;
+		virtual size_t RemoveAllVideoTracks() = 0;
+		virtual size_t RemoveAllAudioTracks() = 0;
+		virtual size_t RemoveTrack( const std::string & uniqueID ) = 0;
+		virtual size_t RemoveVideoTrack( const std::string & uniqueID ) = 0;
+		virtual size_t RemoveAudioTrack( const std::string & uniqueID ) = 0;
 
 		virtual ~IOutput() = 0;
-
-	private:
 
 	};
 

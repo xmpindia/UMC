@@ -9,87 +9,198 @@
 
 #include "implHeaders/TrackImpl.h"
 #include "implHeaders/ShotImpl.h"
+#include "interfaces/IOutput.h"
 #include "utils/Utils.h"
 
 namespace INT_UMC {
 
-	std::string TrackImpl::GetUniqueID() const {
+	const std::string & TrackImpl::GetUniqueID() const {
 		return mUniqueID;
 	}
 
 
-	spIShot TrackImpl::AddClipShot( const char * uniqueID, size_t length ) {
-		return AddShot( uniqueID, length, IShot::kShotTypeClip );
+	spIShot TrackImpl::AddClipShot() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spIShot();
 	}
 
-	spIShot TrackImpl::AddTransitionShot( const char * uniqueID, size_t length ) {
-		return AddShot( uniqueID, length, IShot::kShotTypeTransition );
+	spIShot TrackImpl::AddTransitionShot() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spIShot();
 	}
 
-	void TrackImpl::SetName( const char * name, size_t length ) {
-		PopulateString( mName, name, length );
+	void TrackImpl::SetName( const std::string & uniqueID ) {
+		mName = uniqueID;
+	}
+
+	spIShot TrackImpl::GetShot( const std::string & uniqueID ) {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spIShot();
+	}
+
+	UMC::spcIShot TrackImpl::GetShot( const std::string & uniqueID ) const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spIShot();
+	}
+
+	size_t TrackImpl::ClipShotCount() const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	ITrack::ShotList TrackImpl::GetAllClipShots() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return ITrack::ShotList();
+	}
+
+	ITrack::cShotList TrackImpl::GetAllClipShots() const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return cShotList();
+	}
+
+	spIShot TrackImpl::GetClipShot( const std::string & uniqueID ) {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spIShot();
+	}
+
+	spcIShot TrackImpl::GetClipShot( const std::string & uniqueID ) const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spIShot();
+	}
+
+	size_t TrackImpl::TransitionShotCount() const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	ITrack::ShotList TrackImpl::GetAllTransitionShots() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return ShotList();
+	}
+
+	ITrack::cShotList TrackImpl::GetAllTransitionShots() const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return cShotList();
+	}
+
+	spIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spIShot();
+	}
+
+	spcIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return spcIShot();
+	}
+
+	size_t TrackImpl::RemoveAllShots() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	size_t TrackImpl::RemoveAllClipShots() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	size_t TrackImpl::RemoveAllTransitionShots() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	size_t TrackImpl::RemoveShot( const std::string & uniqueID ) {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	size_t TrackImpl::RemoveClipShot( const std::string & uniqueID ) {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	size_t TrackImpl::RemoveTransitionShot( const std::string & uniqueID ) {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return 0;
+	}
+
+	INode::eNodeTypes TrackImpl::GetNodeType() const {
+		return INode::kNodeTypeTrack;
+	}
+
+	spcINode TrackImpl::GetParentNode() const {
+		return spcINode( mwpOutput );
+	}
+
+	spINode TrackImpl::GetParentNode() {
+		return spINode( mwpOutput );
+	}
+
+	spcINode TrackImpl::GetChildNode( const std::string & uniqueID ) const {
+		return const_cast< TrackImpl * >( this )->GetChildNode( uniqueID );
+	}
+
+	spINode TrackImpl::GetChildNode( const std::string & uniqueID ) {
+		spINode node;/*TODO = GetElementFromMap< spINode > ( mShotMap, uniqueID ); */
+		return node;
 	}
 
 	std::string TrackImpl::GetName() const {
 		return mName;
 	}
 
-	void TrackImpl::SetEditRate( const EditRate & editRate ) {
-		mEditRate = editRate;
-	}
-
-	EditRate TrackImpl::GetEditRate() const {
-		return mEditRate;
-	}
-
 	size_t TrackImpl::ShotCount() const {
 		return mShotMap.size();
 	}
 
-	ITrack::ShotList TrackImpl::GetShots() {
-		ShotList list;
-		auto it = mShotMap.begin();
-		auto endIt = mShotMap.end();
-		for ( ; it != endIt; it++ ) {
-			list.push_back( it->second );
-		}
-		return list;
+	ITrack::ShotList TrackImpl::GetAllShots() {
+		return CreateListFromMap< spIShot >( mShotMap );
 	}
 
-	ITrack::cShotList TrackImpl::GetShots() const {
-		cShotList list;
-		auto it = mShotMap.begin();
-		auto endIt = mShotMap.end();
-		for ( ; it != endIt; it++ ) {
-			list.push_back( it->second );
-			}
-		return list;
+	ITrack::cShotList TrackImpl::GetAllShots() const {
+		return CreateListFromMap< spcIShot >( mShotMap );
 	}
 
-	spcIOutput TrackImpl::GetParent() const  {
-		return spcIOutput( mwpOutput );
+	TrackImpl::TrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent )
+		: mUniqueID( uniqueID )
+		, mName()
+		, mShotMap()
+		, mwpOutput( parent )
+		, mspUniqueIDSet( uniqueIDSet )
+		, mspUniqueIDGenerator( uniqueIDGenerator ) {}
+
+	spcINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
+		return const_cast< TrackImpl * >( this )->GetDecendantNode( uniqueID );
 	}
 
-	spIOutput TrackImpl::GetParent() {
-		return spIOutput( mwpOutput );
+	spINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) {
+		spINode node = GetChildNode( uniqueID );
+		return node; /* TODO if ( node ) return node;
+		node = GetDecendantFromMap< spINode >( mShotMap, uniqueID ); */
 	}
 
-	TrackImpl::TrackImpl( const std::string & uniqueID,
-		const spIOutput & parent )
-		: mwpOutput( parent)
-		, mEditRate( 1 )
-		, mUniqueID( uniqueID ) { }
+	INode::NodeList TrackImpl::GetAllChildren() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return NodeList();
+	}
 
-	spIShot TrackImpl::AddShot( const char * uniqueID, size_t length, IShot::eShotTypes type ) {
-		std::string strID;
-		PopulateString( strID, uniqueID, length );
-		if ( mShotMap.find( strID ) == mShotMap.end() ) {
-			spIShot shot = shared_ptr< ShotImpl >( new ShotImpl( strID, type, shared_from_this() ) );
-			mShotMap[ strID ] = shot;
-			return shot;
-		} else {
-			return spIShot();
-		}
+	INode::cNodeList TrackImpl::GetAllChildren() const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return cNodeList();
+	}
+
+	INode::NodeList TrackImpl::GetAllDecendants() {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return NodeList();
+	}
+
+	INode::cNodeList TrackImpl::GetAllDecendants() const {
+		throw std::logic_error( "The method or operation is not implemented." );
+		return cNodeList();
+	}
+
+	ITrack::eTrackTypes TrackImpl::GetType() const {
+		return ITrack::kTrackTypeAll;
 	}
 
 }

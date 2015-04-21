@@ -8,77 +8,72 @@
 // =================================================================================================
 
 #include "implHeaders/SourceImpl.h"
-#include "utils/Utils.h"
+#include "interfaces/IUMC.h"
 
 namespace INT_UMC {
 
-	std::string SourceImpl::GetUniqueID() const {
+	const std::string & SourceImpl::GetUniqueID() const {
 		return mUniqueID;
 	}
 
-	void SourceImpl::SetClipName( const char * clipName, size_t length ) {
-		PopulateString( mClipName, clipName, length );
+	void SourceImpl::SetClipName( const std::string & clipName ) {
+		mClipName = clipName;
 	}
 
 	std::string SourceImpl::GetClipName() const  {
 		return mClipName;
 	}
 
-	ISource::eSourceTypes SourceImpl::GetSourceType() const {
-		return mSourceType;
+	spcINode SourceImpl::GetParentNode() const  {
+		return spcINode( mwpUMC );
 	}
 
-	void SourceImpl::SetEditRate( const EditRate & editRate ) {
-		mEditRate = editRate;
+	spINode SourceImpl::GetParentNode() {
+		return spINode( mwpUMC );
 	}
 
-	EditRate SourceImpl::GetEditRate() const {
-		return mEditRate;
+	spcINode SourceImpl::GetDecendantNode( const std::string & id ) const {
+		return spcINode();
 	}
 
-	void SourceImpl::SetInCount( const EditUnitInCount & editUnit ) {
-		mInCount = editUnit;
+	spINode SourceImpl::GetDecendantNode( const std::string & id ) {
+		return spINode();
 	}
 
-	EditUnitInCount SourceImpl::GetInCount() const {
-		return mInCount;
+	spcINode SourceImpl::GetChildNode( const std::string & id ) const {
+		return spcINode();
 	}
 
-	void SourceImpl::SetDuration( const EditUnitDuration & duration ) {
-		mDuration = duration;
+	spINode SourceImpl::GetChildNode( const std::string & id ) {
+		return spINode();
 	}
 
-	EditUnitDuration SourceImpl::GetDuration() const {
-		return mDuration;
+	INode::NodeList SourceImpl::GetAllChildren() {
+		return NodeList();
 	}
 
-	void SourceImpl::SetTimeCode( const TimeCode & timeCode ) {
-		mTimeCode = timeCode;
+	INode::cNodeList SourceImpl::GetAllChildren() const {
+		return cNodeList();
 	}
 
-	TimeCode SourceImpl::GetTimeCode() const  {
-		return mTimeCode;
+	INode::NodeList SourceImpl::GetAllDecendants() {
+		return NodeList();
 	}
 
-	spcIUMC SourceImpl::GetParent() const  {
-		return spcIUMC( mwpUMC );
+	INode::cNodeList SourceImpl::GetAllDecendants() const {
+		return cNodeList();
 	}
 
-	spIUMC SourceImpl::GetParent() {
-		return spIUMC( mwpUMC );
-	}
-
-	SourceImpl::SourceImpl( const std::string & uniqueID,
-		eSourceTypes sourceType, const spIUMC & parent )
+	SourceImpl::SourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent )
 		: mUniqueID( uniqueID )
-		, mSourceType( sourceType )
-		, mwpUMC( parent)
-		, mEditRate( 1 )
-		, mInCount( kEditUnitInCountFromBeginning )
-		, mDuration( kEditUnitDurationTillEnd )
-		, mTimeCode( FrameRate( 0 ) )
+		, mwpUMC( parent )
+		, mspUniqueIDSet( uniqueIDSet )
+		, mspUniqueIDGenerator( uniqueIDGenerator )
 	{
-		// assert ( parent );
+		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
+		if ( !mspUniqueIDSet ) THROW_UNIQUE_ID_MAP_CANT_BE_NULL;
+		if ( !mspUniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
 	}
 
 }

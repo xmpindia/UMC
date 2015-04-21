@@ -1,5 +1,5 @@
-#ifndef UMCFwdDeclarations_I_h__
-#define UMCFwdDeclarations_I_h__ 1
+#ifndef IAudioTrack_h__
+#define IAudioTrack_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,18 +10,20 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "UMCFwdDeclarations.h"
-#include "UMCDefines_I.h"
+#include "interfaces/ITrack.h"
 
-#include <set>
-#include <string>
+namespace UMC {
 
-namespace INT_UMC {
-	using namespace UMC;
+	class IAudioTrack
+		: public ITrack
+	{
+	public:
+		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
+		virtual EditRate GetAudioEditRate() const = 0;
 
-	typedef std::set< const std::string >			UniqueIDSet;
-	typedef shared_ptr< UniqueIDSet >				spUniqueIDSet;
-	typedef shared_ptr< const UniqueIDSet >			spcUniqueIDSet;
-};
+		virtual ~IAudioTrack() = 0;
+	};
 
-#endif  // UMCFwdDeclarations_I_h__
+	inline IAudioTrack::~IAudioTrack() {}
+}
+#endif  // IAudioTrack_h__
