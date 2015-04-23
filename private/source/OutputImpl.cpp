@@ -16,6 +16,7 @@
 
 #include "UMCDefines_I.h"
 #include "utils/Utils.h"
+
 #include <assert.h>
 
 namespace INT_UMC {

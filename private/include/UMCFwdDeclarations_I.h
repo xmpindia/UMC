@@ -19,7 +19,7 @@
 namespace INT_UMC {
 	using namespace UMC;
 
-	typedef std::set< const std::string >			UniqueIDSet;
+	typedef std::set< std::string >					UniqueIDSet;
 	typedef shared_ptr< UniqueIDSet >				spUniqueIDSet;
 	typedef shared_ptr< const UniqueIDSet >			spcUniqueIDSet;
 };

@@ -39,7 +39,8 @@ namespace INT_UMC {
 
 	std::string UMCImpl::SerializeToBuffer() const {
 		using namespace NS_XMPCORE;
-		auto sp = UMCToRDFConversion::Convert( shared_from_this() );
+		spcIUMC umc = shared_from_this();
+		auto sp = UMCToRDFConversion::Convert( umc );
 		auto serializer = IXMPDOMImplementationRegistry::GetDOMImplementationRegistry()->CreateSerializer( "rdf" );
 		auto spString = serializer->Serialize( sp );
 		return std::string( spString->c_str() );

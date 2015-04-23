@@ -86,7 +86,7 @@ namespace UMC {
 
 	template< typename requiredNodeType >
 	shared_ptr< const requiredNodeType > UMC::INode::GetDecendant( const std::string & uniqueID ) const {
-		return const_cast< INode * >( this )->GetDecendant( uniqueID );
+		return const_cast< INode * >( this )->GetDecendant< requiredNodeType >( uniqueID );
 	}
 
 	template< typename requiredNodeType >
@@ -101,7 +101,7 @@ namespace UMC {
 
 	template< typename requiredNodeType >
 	shared_ptr< const requiredNodeType > UMC::INode::GetChild( const std::string & uniqueID ) const {
-		return const_cast< INode * >( this )->GetChild( uniqueID );
+		return const_cast< INode * >( this )->GetChild< requiredNodeType >( uniqueID );
 	}
 
 	template< typename requiredNodeType >
@@ -116,7 +116,7 @@ namespace UMC {
 
 	template< typename requiredNodeType >
 	shared_ptr< const requiredNodeType > UMC::INode::GetParent() const {
-		return const_cast< INode * >( this )->GetParent();
+		return const_cast< INode * >( this )->GetParent< requiredNodeType >();
 	}
 
 	template< typename requiredNodeType >

@@ -10,6 +10,7 @@
 
 #include "implHeaders/UniqueIDGeneratorImpl.h"
 #include <assert.h>
+#include <cstdio>
 
 namespace INT_UMC {
 
@@ -19,7 +20,8 @@ namespace INT_UMC {
 
 	std::string UniqueIDGeneratorImpl::GenerateUniqueID( INode::eNodeTypes nodeType ) {
 		static char buffer[ 30 ] = "";
-		_itoa( mCurrentID, buffer, 10 );
+		int cx;
+		cx = snprintf ( buffer, 30, "%d", mCurrentID );
 		mCurrentID++;
 		assert( mUniqueIDSet->find( buffer ) == mUniqueIDSet->end() );
 		return std::string( buffer );

@@ -80,24 +80,6 @@ namespace INT_UMC {
 		return 0;
 	}
 
-	template< typename mapType >
-	size_t ClearMap( mapType & map, spUniqueIDSet & uniqueIDSet ) {
-		size_t nCount( 0 );
-		if ( map.size() == 0 )
-			return 0;
-		auto elements = CreateListFromMap< mapType::mapped_type, mapType >( map );
-		auto it = elements.begin();
-		auto itEnd = elements.end();
-		while ( it != itEnd ) {
-			RemoveElementFromMap( map, ( *it )->GetUniqueID(), uniqueIDSet );
-			nCount++;
-			it++;
-		}
-		assert( map.size() == 0 );
-		return nCount;
-
-	}
-
 	template< typename OutputListElementType, typename MapType >
 	void AppendToListFromMap( std::vector< OutputListElementType > & list, const MapType & map ) {
 		auto it = map.begin();
@@ -112,6 +94,24 @@ namespace INT_UMC {
 		std::vector< OutputListElementType > list;
 		AppendToListFromMap( list, map );
 		return list;
+	}
+
+	template< typename mapType >
+	size_t ClearMap( mapType & map, spUniqueIDSet & uniqueIDSet ) {
+		size_t nCount( 0 );
+		if ( map.size() == 0 )
+			return 0;
+		auto elements = CreateListFromMap< typename mapType::mapped_type, mapType >( map );
+		auto it = elements.begin();
+		auto itEnd = elements.end();
+		while ( it != itEnd ) {
+			RemoveElementFromMap( map, ( *it )->GetUniqueID(), uniqueIDSet );
+			nCount++;
+			it++;
+		}
+		assert( map.size() == 0 );
+		return nCount;
+
 	}
 
 	template< typename OutputListElementType, typename MapType,

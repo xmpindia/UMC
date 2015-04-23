@@ -11,6 +11,7 @@
 // =================================================================================================
 
 #include "UMCDefines.h"
+#include <stdexcept>
 
 namespace INT_UMC {
 	using namespace UMC;
