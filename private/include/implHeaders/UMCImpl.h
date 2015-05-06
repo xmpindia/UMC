@@ -13,7 +13,6 @@
 #include "interfaces/IUMC.h"
 #include "UMCFwdDeclarations_I.h"
 #include <map>
-#include "interfaces/ISource.h"
 
 namespace INT_UMC {
 
@@ -102,7 +101,10 @@ namespace INT_UMC {
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
 
-		
+		virtual void RemoveFromDOM();
+		virtual void AddToDOM( const spINode & parent );
+		virtual size_t GetReferenceCount() const;
+
 	protected:
 		typedef std::map< const std::string, spIVideoSource > VideoSourceMap;
 		typedef std::map< const std::string, spIAudioSource > AudioSourceMap;
@@ -110,14 +112,14 @@ namespace INT_UMC {
 		typedef std::map< const std::string, spIImageSource > ImageSourceMap;
 		typedef std::map< const std::string, spIOutput > OutputMap;
 
-		VideoSourceMap			mVideoSourceMap;
-		AudioSourceMap			mAudioSourceMap;
-		VideoFrameSourceMap		mVideoFrameSourceMap;
-		ImageSourceMap			mImageSourceMap;
-		OutputMap				mOutputMap;
+		VideoSourceMap					mVideoSourceMap;
+		AudioSourceMap					mAudioSourceMap;
+		VideoFrameSourceMap				mVideoFrameSourceMap;
+		ImageSourceMap					mImageSourceMap;
+		OutputMap						mOutputMap;
 
-		spUniqueIDSet			mspUniqueIDSet;
-		spIUniqueIDGenerator	mspUniqueIDGenerator;
+		spIUniqueIDGenerator			mspUniqueIDGenerator;
+		spIUniqueIDAndReferenceTracker	mspUniqueIDAndReferenceTracker;
 	};
 }
 

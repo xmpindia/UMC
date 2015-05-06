@@ -12,9 +12,9 @@
 
 namespace INT_UMC {
 
-	VideoTrackImpl::VideoTrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+	VideoTrackImpl::VideoTrackImpl( const std::string & uniqueID, const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent )
-		: mTrackImpl( uniqueID, uniqueIDSet, uniqueIDGenerator, parent )
+		: mTrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
 		, mVideoEditRate( 1 )
 		, mAudioEditRate( 1 ) {}
 
@@ -168,6 +168,12 @@ namespace INT_UMC {
 
 	spINode VideoTrackImpl::GetChildNode( const std::string & uniqueID ) {
 		return mTrackImpl.GetChildNode( uniqueID );
+	}
+
+	spIVideoTrack CreateVideoTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return spIVideoTrack(); //std::make_shared< VideoTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 	}
 
 }

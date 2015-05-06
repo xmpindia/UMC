@@ -8,17 +8,20 @@
 // =================================================================================================
 
 #include "implHeaders/UMCImpl.h"
-#include "implHeaders/VideoSourceImpl.h"
-#include "implHeaders/AudioSourceImpl.h"
-#include "implHeaders/VideoFrameSourceImpl.h"
-#include "implHeaders/ImageSourceImpl.h"
-#include "implHeaders/SourceImpl.h"
+
+#include "interfaces/IUniqueIDGenerator.h"
+
+#include "interfaces/IVideoSource.h"
+#include "interfaces/IAudioSource.h"
+#include "interfaces/IImageSource.h"
+#include "interfaces/IVideoFrameSource.h"
+#include "interfaces/IOutput.h"
+
 #include "implHeaders/OutputImpl.h"
 
-#include "implHeaders/UniqueIDGeneratorImpl.h"
+#include "utils/Utils.h"
 
 #include "utils/UMCToRDFConversion.h"
-#include "utils/Utils.h"
 
 #include "XMPCore/Interfaces/IXMPDOMImplementationRegistry.h"
 #include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
@@ -27,13 +30,12 @@
 namespace INT_UMC {
 
 	spIOutput UMCImpl::AddOutput() {
-		const std::string & uniqueIDStr = mspUniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeOutput );
-		spIOutput output = std::make_shared
-			<
-				OutputImpl, const std::string &, const spUniqueIDSet &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, mspUniqueIDSet, mspUniqueIDGenerator, shared_from_this() );
-		;
-		AddElementToMap< spIOutput, OutputMap >( mOutputMap, uniqueIDStr, output, mspUniqueIDSet );
+		spIOutput output = CreateOutput( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+			/*<
+				OutputImpl, const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
+			> ( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
+		;*/
+		AddElementToMap< OutputMap, spIOutput >( mOutputMap, output, shared_from_this() );
 		return output;
 	}
 
@@ -66,19 +68,18 @@ namespace INT_UMC {
 		return const_cast< UMCImpl * >( this )->GetDecendantNode( id );
 	}
 
-
 	spINode UMCImpl::GetDecendantNode( const std::string & id ) {
 		spINode node = GetChildNode( id );
 		if ( node ) return node;
-		node = GetDecendantFromMap< spINode, VideoSourceMap >( mVideoSourceMap, id );
+		node = GetDecendantFromMap< VideoSourceMap >( mVideoSourceMap, id );
 		if ( node ) return node;
-		node = GetDecendantFromMap< spINode, AudioSourceMap >( mAudioSourceMap, id );
+		node = GetDecendantFromMap< AudioSourceMap >( mAudioSourceMap, id );
 		if ( node ) return node;
-		node = GetDecendantFromMap< spINode, VideoFrameSourceMap >( mVideoFrameSourceMap, id );
+		node = GetDecendantFromMap< VideoFrameSourceMap >( mVideoFrameSourceMap, id );
 		if ( node ) return node;
-		node = GetDecendantFromMap< spINode, ImageSourceMap >( mImageSourceMap, id );
+		node = GetDecendantFromMap< ImageSourceMap >( mImageSourceMap, id );
 		if ( node ) return node;
-		node = GetDecendantFromMap< spINode, OutputMap >( mOutputMap, id );
+		node = GetDecendantFromMap< OutputMap >( mOutputMap, id );
 		return node;
 	}
 
@@ -120,55 +121,57 @@ namespace INT_UMC {
 	}
 
 	size_t UMCImpl::RemoveAllOutputs() {
-		return ClearMap< OutputMap >( mOutputMap, mspUniqueIDSet );
+		bool safeToClear = SafeToClearMap( mOutputMap );
+		if ( safeToClear )
+			return ClearMap( mOutputMap );
+		else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
 	}
 
 	size_t UMCImpl::RemoveOutput( const std::string & uniqueID ) {
-		return RemoveElementFromMap< OutputMap >( mOutputMap, uniqueID, mspUniqueIDSet );
+		return TryAndRemoveElementFromMap< OutputMap >( mOutputMap, uniqueID );
 	}
 
 	spIVideoSource UMCImpl::AddVideoSource() {
-		const std::string & uniqueIDStr = mspUniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeSource );
-		spIVideoSource source = std::make_shared
-			<
-				VideoSourceImpl, const std::string &, const spUniqueIDSet &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, mspUniqueIDSet, mspUniqueIDGenerator, shared_from_this() );
-		;
-		AddElementToMap< spIVideoSource, VideoSourceMap >( mVideoSourceMap, uniqueIDStr, source, mspUniqueIDSet );
+		spIVideoSource source = CreateVideoSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		AddElementToMap< VideoSourceMap, spIVideoSource >( mVideoSourceMap, source,shared_from_this() );
 		return source;
 	}
 
 	spIAudioSource UMCImpl::AddAudioSource() {
-		const std::string & uniqueIDStr = mspUniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeSource );
-		spIAudioSource source = std::make_shared
+		spIAudioSource source = CreateAudioSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		/*std::make_shared
 			<
-				AudioSourceImpl, const std::string &, const spUniqueIDSet &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, mspUniqueIDSet, mspUniqueIDGenerator, shared_from_this() );
-		;
-		AddElementToMap< spIAudioSource, AudioSourceMap >( mAudioSourceMap, uniqueIDStr, source, mspUniqueIDSet );
+				AudioSourceImpl, const std::string &, const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
+			> ( uniqueIDStr, mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
+		;*/
+		AddElementToMap< AudioSourceMap, spIAudioSource >( mAudioSourceMap, source, shared_from_this() );
 		return source;
 	}
 
 	spIVideoFrameSource UMCImpl::AddVideoFrameSource( const spIVideoSource & videoSource ) {
-		const std::string & uniqueIDStr = mspUniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeSource );
-		spIVideoFrameSource source = std::make_shared
+		spIVideoFrameSource source = CreateVideoFrameSource( videoSource, mspUniqueIDAndReferenceTracker,
+			mspUniqueIDGenerator );
+		/*std::make_shared
 			<
 				VideoFrameSourceImpl, const std::string &, const spIVideoSource &,
-				const spUniqueIDSet &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, videoSource, mspUniqueIDSet, mspUniqueIDGenerator, shared_from_this() );
-		;
-		AddElementToMap< spIVideoFrameSource, VideoFrameSourceMap >( mVideoFrameSourceMap, uniqueIDStr, source, mspUniqueIDSet );
+				const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
+			> ( uniqueIDStr, videoSource, mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
+		;*/
+		AddElementToMap< VideoFrameSourceMap, spIVideoFrameSource >( mVideoFrameSourceMap, source, shared_from_this() );
 		return source;
 	}
 
 	spIImageSource UMCImpl::AddImageSource() {
-		const std::string & uniqueIDStr = mspUniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeSource );
-		spIImageSource source = std::make_shared
+		spIImageSource source = CreateImageSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		/*std::make_shared
 			<
-				ImageSourceImpl, const std::string &, const spUniqueIDSet &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, mspUniqueIDSet, mspUniqueIDGenerator, shared_from_this() );
-		;
-		AddElementToMap< spIImageSource, ImageSourceMap >( mImageSourceMap, uniqueIDStr, source, mspUniqueIDSet );
+				ImageSourceImpl, const std::string &, const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
+			> ( uniqueIDStr, mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
+		;*/
+		AddElementToMap< ImageSourceMap, spIImageSource >( mImageSourceMap, source, shared_from_this() );
 		return source;
 	}
 
@@ -290,68 +293,133 @@ namespace INT_UMC {
 	}
 
 	size_t UMCImpl::RemoveAllSources() {
+		bool safeToClear = SafeToClearMap( mVideoFrameSourceMap );
+		if ( safeToClear ) {
+			safeToClear = SafeToClearMap( mAudioSourceMap );
+		} else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
+		if ( safeToClear ) {
+			safeToClear = SafeToClearMap( mImageSourceMap ); 
+		} else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
+
+		if ( safeToClear ) {
+			// Get the list of all 
+			if ( mVideoFrameSourceMap.size() > 0 ) {
+				std::map< std::string, size_t > videoSourceReferences;
+				auto it = mVideoFrameSourceMap.begin(); auto itEnd = mVideoFrameSourceMap.end();
+				for ( ; it != itEnd; it++ ) {
+					const std::string & uid = it->second->GetVideoSource()->GetUniqueID();
+					auto rtVal = videoSourceReferences.insert( std::make_pair( uid, ( size_t ) 0 ) );
+					rtVal.first->second++;
+				}
+				auto it2 = mVideoSourceMap.begin();
+				auto it2End = mVideoSourceMap.end();
+				for( auto & it : mVideoSourceMap ) {
+					size_t actualReferenceCount = it.second->GetReferenceCount();
+					size_t expectedReferenceCount(0 );
+					try {
+						expectedReferenceCount = videoSourceReferences.at( it.second->GetUniqueID() );
+					} catch( std::out_of_range & ) {
+						// do nothing
+					}
+					if ( actualReferenceCount != expectedReferenceCount ) {
+						THROW_NODE_IS_REFERENCED( "remove" );
+						return 0;
+					}
+				}
+			} else {
+				safeToClear = SafeToClearMap( mVideoSourceMap );
+				if ( !safeToClear ) {
+					THROW_NODE_IS_REFERENCED( "remove" );
+					return 0;
+				}
+			}
+		} else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
+
 		size_t expectedCount = SourceCount();
-		size_t count = ClearMap< VideoSourceMap >( mVideoSourceMap, mspUniqueIDSet );
-		count += ClearMap< AudioSourceMap >( mAudioSourceMap, mspUniqueIDSet );
-		count += ClearMap< VideoFrameSourceMap >( mVideoFrameSourceMap, mspUniqueIDSet );
-		count += ClearMap< ImageSourceMap >( mImageSourceMap, mspUniqueIDSet );
+
+		size_t count( 0 );
+		count += ClearMap( mVideoFrameSourceMap );
+		count += ClearMap( mVideoSourceMap );
+		count += ClearMap( mAudioSourceMap );
+		count += ClearMap( mImageSourceMap );
 		assert( expectedCount == count );
 		return count;
 	}
 
 	size_t UMCImpl::RemoveAllVideoSources() {
-		size_t expectedCount = VideoSourceCount();
-		size_t count = ClearMap( mVideoSourceMap, mspUniqueIDSet );
-		assert( expectedCount == count );
-		return count;
+		bool safeToClear = SafeToClearMap( mVideoSourceMap );
+		if ( safeToClear )
+			return ClearMap( mVideoSourceMap );
+		else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
 	}
 
 	size_t UMCImpl::RemoveAllAudioSources() {
-		size_t expectedCount = AudioSourceCount();
-		size_t count = ClearMap( mAudioSourceMap, mspUniqueIDSet );
-		assert( expectedCount == count );
-		return count;
+		bool safeToClear = SafeToClearMap( mAudioSourceMap );
+		if ( safeToClear )
+			return ClearMap( mAudioSourceMap );
+		else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
 	}
 
 	size_t UMCImpl::RemoveAllVideoFramesSources() {
-		size_t expectedCount = VideoFrameSourceCount();
-		size_t count = ClearMap( mVideoFrameSourceMap, mspUniqueIDSet );
-		assert( expectedCount == count );
-		return count;
+		bool safeToClear = SafeToClearMap( mVideoFrameSourceMap );
+		if ( safeToClear )
+			return ClearMap( mVideoFrameSourceMap );
+		else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
 	}
 
 	size_t UMCImpl::RemoveAllImageSources() {
-		size_t expectedCount = ImageSourceCount();
-		size_t count = ClearMap( mImageSourceMap, mspUniqueIDSet );
-		assert( expectedCount == count );
-		return count;
+		bool safeToClear = SafeToClearMap( mImageSourceMap );
+		if ( safeToClear )
+			return ClearMap( mImageSourceMap );
+		else {
+			THROW_NODE_IS_REFERENCED( "remove" );
+			return 0;
+		}
 	}
 
 	size_t UMCImpl::RemoveSource( const std::string & uniqueID ) {
-		size_t count = RemoveElementFromMap( mVideoSourceMap, uniqueID, mspUniqueIDSet );
+		size_t count = TryAndRemoveElementFromMap( mVideoSourceMap, uniqueID );
 		if ( count != 0 ) return count;
-		count = RemoveElementFromMap( mAudioSourceMap, uniqueID, mspUniqueIDSet );
+		count = TryAndRemoveElementFromMap( mAudioSourceMap, uniqueID );
 		if ( count != 0 ) return count;
-		count = RemoveElementFromMap( mVideoFrameSourceMap, uniqueID, mspUniqueIDSet );
+		count = TryAndRemoveElementFromMap( mVideoFrameSourceMap, uniqueID );
 		if ( count != 0 ) return count;
-		count = RemoveElementFromMap( mImageSourceMap, uniqueID, mspUniqueIDSet );
+		count = TryAndRemoveElementFromMap( mImageSourceMap, uniqueID );
 		return count;
 	}
 
 	size_t UMCImpl::RemoveVideoSource( const std::string & uniqueID ) {
-		return RemoveElementFromMap( mVideoSourceMap, uniqueID, mspUniqueIDSet );
+		return TryAndRemoveElementFromMap( mVideoSourceMap, uniqueID );
 	}
 
 	size_t UMCImpl::RemoveAudioSource( const std::string & uniqueID ) {
-		return RemoveElementFromMap( mAudioSourceMap, uniqueID, mspUniqueIDSet );
+		return TryAndRemoveElementFromMap( mAudioSourceMap, uniqueID );
 	}
 
 	size_t UMCImpl::RemoveVideoFrameSource( const std::string & uniqueID ) {
-		return RemoveElementFromMap( mVideoFrameSourceMap, uniqueID, mspUniqueIDSet );
+		return TryAndRemoveElementFromMap( mVideoFrameSourceMap, uniqueID );
 	}
 
 	size_t UMCImpl::RemoveImageSource( const std::string & uniqueID ) {
-		return RemoveElementFromMap( mImageSourceMap, uniqueID, mspUniqueIDSet );
+		return TryAndRemoveElementFromMap( mImageSourceMap, uniqueID );
 	}
 
 	INode::NodeList UMCImpl::GetAllChildren() {
@@ -394,9 +462,17 @@ namespace INT_UMC {
 		return list;
 	}
 
+	void UMCImpl::RemoveFromDOM() { }
+
+	size_t UMCImpl::GetReferenceCount() const { return 0; }
+
+	void UMCImpl::AddToDOM( const spINode & parent ) { }
+
 	UMCImpl::UMCImpl()
-		: mspUniqueIDSet( new UniqueIDSet() )
-		, mspUniqueIDGenerator( UniqueIDGeneratorImpl::CreateUniqueIDGenerator( mspUniqueIDSet ) ) { }
+		: mspUniqueIDAndReferenceTracker( CreateUniqueIDAndReferenceTracker() )
+	{ 
+		mspUniqueIDGenerator = CreateUniqueIDGenerator( mspUniqueIDAndReferenceTracker );
+	}
 
 }
 

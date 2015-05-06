@@ -19,9 +19,33 @@
 namespace INT_UMC {
 	using namespace UMC;
 
-	typedef std::set< std::string >					UniqueIDSet;
-	typedef shared_ptr< UniqueIDSet >				spUniqueIDSet;
-	typedef shared_ptr< const UniqueIDSet >			spcUniqueIDSet;
-};
+	// IUniqueIDAndReferenceTracker
+	class IUniqueIDAndReferenceTracker;
+	typedef IUniqueIDAndReferenceTracker *						pIUniqueIDAndReferenceTracker;
+	typedef const IUniqueIDAndReferenceTracker *				pcIUniqueIDAndReferenceTracker;
+	typedef shared_ptr< IUniqueIDAndReferenceTracker >			spIUniqueIDAndReferenceTracker;
+	typedef shared_ptr< const IUniqueIDAndReferenceTracker >	spcIUniqueIDAndReferenceTracker;
 
+	spIUniqueIDAndReferenceTracker CreateUniqueIDAndReferenceTracker();
+	spIUniqueIDGenerator CreateUniqueIDGenerator( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker );
+
+	spIVideoSource CreateVideoSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+	spIAudioSource CreateAudioSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+	spIImageSource CreateImageSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+	spIVideoFrameSource CreateVideoFrameSource( const spIVideoSource & videoSource,
+		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+
+	spIOutput CreateOutput( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+
+	spIVideoTrack CreateVideoTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+	spIAudioTrack CreateAudioTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+
+}
 #endif  // UMCFwdDeclarations_I_h__

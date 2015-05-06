@@ -19,8 +19,9 @@ namespace INT_UMC {
 		, public enable_shared_from_this < VideoSourceImpl >
 	{
 	public:
-		VideoSourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent );
+		VideoSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
+
 		virtual void SetVideoEditRate( const EditRate & editRate );
 		virtual EditRate GetVideoEditRate() const;
 
@@ -59,6 +60,10 @@ namespace INT_UMC {
 
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
+
+		virtual size_t GetReferenceCount() const;
+		virtual void RemoveFromDOM();
+		virtual void AddToDOM( const spINode & parent );
 
 	protected:
 		SourceImpl					mSourceImpl;

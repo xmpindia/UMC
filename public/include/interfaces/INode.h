@@ -15,6 +15,16 @@
 #include <string>
 #include <vector>
 
+namespace INT_UMC {
+	using namespace UMC;
+	template< typename mapType, typename mapElementType >
+	void AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent );
+	template< typename mapType >
+	size_t ClearMap( mapType & map );
+	template< typename mapType >
+	typename mapType::iterator RemoveElementFromMap( mapType & map, typename mapType::const_iterator it );
+};
+
 namespace UMC {
 	class INode {
 	public:
@@ -72,6 +82,19 @@ namespace UMC {
 
 		virtual NodeList GetAllDecendants() = 0;
 		virtual cNodeList GetAllDecendants() const = 0;
+
+		virtual size_t GetReferenceCount() const = 0;
+
+	protected:
+		virtual void RemoveFromDOM() = 0;
+		virtual void AddToDOM( const spINode & parent ) = 0;
+
+		template< typename mapType, typename mapElementType >
+		friend void INT_UMC::AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent );
+		template< typename mapType >
+		friend size_t INT_UMC::ClearMap( mapType & map );
+		template< typename mapType >
+		friend typename mapType::iterator INT_UMC::RemoveElementFromMap( mapType & map, typename mapType::const_iterator it );
 	};
 
 	template< typename requiredNodeType >

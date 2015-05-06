@@ -8,16 +8,12 @@
 // =================================================================================================
 
 #include "implHeaders/OutputImpl.h"
-#include "implHeaders/TrackImpl.h"	//TODO: remove this and VideoTrackImp and AudioTrackImpl. Remove next 2 lines also
 #include "interfaces/IVideoTrack.h"
 #include "interfaces/IAudioTrack.h"
 #include "interfaces/IUniqueIDGenerator.h"
 #include "interfaces/IUMC.h"
 
-#include "UMCDefines_I.h"
 #include "utils/Utils.h"
-
-#include <assert.h>
 
 namespace INT_UMC {
 
@@ -61,9 +57,9 @@ namespace INT_UMC {
 	spINode OutputImpl::GetDecendantNode( const std::string & id ) {
 		auto node = GetChildNode( id );
 		if ( node ) return node;
-		node = GetDecendantFromMap< spINode, VideoTrackMap >( mVideoTrackMap, id );
+		node = GetDecendantFromMap( mVideoTrackMap, id );
 		if ( node ) return node;
-		node = GetDecendantFromMap< spINode, AudioTrackMap >( mAudioTrackMap, id );
+		node = GetDecendantFromMap( mAudioTrackMap, id );
 		return node;
 	}
 
@@ -103,25 +99,33 @@ namespace INT_UMC {
 		return list;
 	}
 
-	spIVideoTrack OutputImpl::AddVideoTrack() {
-		const std::string & uniqueIDStr = mspUniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeOutput );
+	size_t OutputImpl::GetReferenceCount() const {
+		return mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
+	}
 
-		spIVideoTrack track; /*TODO = std::make_shared
-			<
-			TrackImpl, ITrack::eTrackTypes, const spUniqueIDSet &, spIUniqueIDGenerator &, const spIOutput &
-			> ( std::move( trackType ), mspUniqueIDSet, mspUniqueIDGenerator, shared_from_this() );*/
-		AddElementToMap( mVideoTrackMap, uniqueIDStr, track, mspUniqueIDSet );
+	void OutputImpl::RemoveFromDOM() {
+		ClearMap( mVideoTrackMap );
+		ClearMap( mAudioTrackMap );
+		mspUniqueIDAndReferenceTracker->RemoveUniqueID( mUniqueID );
+	}
+
+	void OutputImpl::AddToDOM( const spINode & parent ) {
+		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
+		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
+		spIUMC umcParent = ConvertNode< IUMC >( parent );
+		if ( !umcParent ) THROW_PARENT_CANT_BE_NULL;
+		mwpUMC = umcParent;
+	}
+
+	spIVideoTrack OutputImpl::AddVideoTrack() {
+		spIVideoTrack track = CreateVideoTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		AddElementToMap( mVideoTrackMap, track, shared_from_this() );
 		return track;
 	}
 
 	spIAudioTrack OutputImpl::AddAudioTrack() {
-		const std::string & uniqueIDStr = mspUniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeOutput );
-
-		spIAudioTrack track;/* TODO= std::make_shared
-			<
-			TrackImpl, ITrack::eTrackTypes, const spUniqueIDSet &, spIUniqueIDGenerator &, const spIOutput &
-			> ( std::move( trackType ), mspUniqueIDSet, mspUniqueIDGenerator, shared_from_this() );*/
-		AddElementToMap( mAudioTrackMap, uniqueIDStr, track, mspUniqueIDSet );
+		spIAudioTrack track = CreateAudioTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		AddElementToMap( mAudioTrackMap, track, shared_from_this() );
 		return track;
 	}
 
@@ -182,24 +186,32 @@ namespace INT_UMC {
 	}
 
 	size_t OutputImpl::RemoveAllTracks() {
-		size_t count( 0 );
-		count = RemoveAllVideoTracks();
-		count += RemoveAllAudioTracks();
-		return count;
+		bool safeToClear( false );
+		safeToClear = SafeToClearMap( mVideoTrackMap );
+		if ( safeToClear ) SafeToClearMap( mAudioTrackMap ); else return 0;
+		if ( safeToClear ) {
+			size_t expectedCount = TrackCount();
+			size_t count( 0 );
+			count += ClearMap( mVideoTrackMap );
+			count += ClearMap( mAudioTrackMap );
+			assert( expectedCount == count );
+			return count;
+		}
+		return 0;
 	}
 
 	size_t OutputImpl::RemoveAllVideoTracks() {
-		size_t expectedCount = mVideoTrackMap.size();
-		size_t count = ClearMap( mVideoTrackMap, mspUniqueIDSet );
-		assert( count == expectedCount );
-		return count;
+		if ( SafeToClearMap( mVideoTrackMap ) ) {
+			return ClearMap( mVideoTrackMap );
+		}
+		return 0;
 	}
 
 	size_t OutputImpl::RemoveAllAudioTracks() {
-		size_t expectedCount = mAudioTrackMap.size();
-		size_t count = ClearMap( mAudioTrackMap, mspUniqueIDSet );
-		assert( count == expectedCount );
-		return count;
+		if ( SafeToClearMap( mAudioTrackMap ) ) {
+			return ClearMap( mAudioTrackMap );
+		}
+		return 0;
 	}
 
 	size_t OutputImpl::RemoveTrack( const std::string & uniqueID ) {
@@ -210,11 +222,11 @@ namespace INT_UMC {
 	}
 
 	size_t OutputImpl::RemoveVideoTrack( const std::string & uniqueID ) {
-		return RemoveElementFromMap( mVideoTrackMap, uniqueID, mspUniqueIDSet );
+		return TryAndRemoveElementFromMap( mVideoTrackMap, uniqueID );
 	}
 
 	size_t OutputImpl::RemoveAudioTrack( const std::string & uniqueID ) {
-		return RemoveElementFromMap( mAudioTrackMap, uniqueID, mspUniqueIDSet );
+		return TryAndRemoveElementFromMap( mAudioTrackMap, uniqueID );
 	}
 
 	spcINode OutputImpl::GetParentNode() const  {
@@ -261,20 +273,24 @@ namespace INT_UMC {
 		return CreateListFromMap< spcIAudioTrack >( mAudioTrackMap );
 	}
 
-	OutputImpl::OutputImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent )
-		: mUniqueID( uniqueID )
+	OutputImpl::OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mUniqueID( uniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeOutput ) )
 		, mCanvasAspectRatio( 1 )
 		, mImageAspectRatio( 1 )
 		, mVideoEditRate( 1 )
 		, mAudioEditRate( 1 )
-		, mwpUMC( parent)
-		, mspUniqueIDSet( uniqueIDSet )
+		, mspUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
 		, mspUniqueIDGenerator( uniqueIDGenerator )
 	{
-		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
-		if ( !mspUniqueIDSet ) THROW_UNIQUE_ID_MAP_CANT_BE_NULL;
+		if ( !mspUniqueIDAndReferenceTracker ) THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL;
 		if ( !mspUniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
 	}
 
+
+	spIOutput CreateOutput( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< OutputImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+	}
 }

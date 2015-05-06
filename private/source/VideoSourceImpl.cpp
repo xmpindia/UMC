@@ -12,9 +12,9 @@
 
 namespace INT_UMC {
 
-	VideoSourceImpl::VideoSourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent )
-		: mSourceImpl( uniqueID, uniqueIDSet, uniqueIDGenerator, parent )
+	VideoSourceImpl::VideoSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd )
 		, mVideoEditRate( 1 )
@@ -120,4 +120,21 @@ namespace INT_UMC {
 		return mSourceImpl.GetAllDecendants();
 	}
 
+	size_t VideoSourceImpl::GetReferenceCount() const {
+		return mSourceImpl.GetReferenceCount();
+	}
+
+	void VideoSourceImpl::RemoveFromDOM() {
+		return mSourceImpl.RemoveFromDOM();
+	}
+
+	void VideoSourceImpl::AddToDOM( const spINode & parent ) {
+		return mSourceImpl.AddToDOM( parent );
+	}
+
+	spIVideoSource CreateVideoSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< VideoSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+	}
 }

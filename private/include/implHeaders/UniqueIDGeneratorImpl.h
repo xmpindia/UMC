@@ -18,14 +18,12 @@ namespace INT_UMC {
 		: public IUniqueIDGenerator
 	{
 	public:
-		UniqueIDGeneratorImpl( const spcUniqueIDSet & uniqueIDSet );
+		UniqueIDGeneratorImpl( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker );
 		virtual std::string GenerateUniqueID( INode::eNodeTypes nodeType );
 
-		static spIUniqueIDGenerator CreateUniqueIDGenerator( const spcUniqueIDSet & uniqueIDSet );
-
 	protected:
-		spcUniqueIDSet				mUniqueIDSet;
-		int							mCurrentID;
+		spcIUniqueIDAndReferenceTracker				mUniqueIDAndReferenceTracker;
+		size_t										mCurrentID;
 	};
 }
 #endif  // UniqueIDGeneratorImpl_h__

@@ -24,8 +24,8 @@ namespace INT_UMC {
 		, public enable_shared_from_this< OutputImpl >
 	{
 	public:
-		OutputImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent );
+		OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		virtual const std::string & GetUniqueID() const;
 
@@ -92,24 +92,30 @@ namespace INT_UMC {
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
 
+		virtual size_t GetReferenceCount() const;
+
+		virtual void RemoveFromDOM();
+
+		virtual void AddToDOM( const spINode & parent );
+
 	protected:
 		typedef std::map< const std::string, spIVideoTrack > VideoTrackMap;
 		typedef std::map< const std::string, spIAudioTrack > AudioTrackMap;
 
 	protected:
-		const std::string		mUniqueID;
-		std::string				mName;
-		std::string				mTitle;
-		AspectRatio 			mCanvasAspectRatio;
-		AspectRatio 			mImageAspectRatio;
-		EditRate				mVideoEditRate;
-		EditRate				mAudioEditRate;
-		VideoTrackMap			mVideoTrackMap;
-		AudioTrackMap			mAudioTrackMap;
+		const std::string				mUniqueID;
+		std::string						mName;
+		std::string						mTitle;
+		AspectRatio						mCanvasAspectRatio;
+		AspectRatio						mImageAspectRatio;
+		EditRate						mVideoEditRate;
+		EditRate						mAudioEditRate;
+		VideoTrackMap					mVideoTrackMap;
+		AudioTrackMap					mAudioTrackMap;
 
-		weak_ptr< IUMC >		mwpUMC;
-		spUniqueIDSet			mspUniqueIDSet;
-		spIUniqueIDGenerator	mspUniqueIDGenerator;
+		weak_ptr< IUMC >				mwpUMC;
+		spIUniqueIDAndReferenceTracker	mspUniqueIDAndReferenceTracker;
+		spIUniqueIDGenerator			mspUniqueIDGenerator;
 	};
 }
 

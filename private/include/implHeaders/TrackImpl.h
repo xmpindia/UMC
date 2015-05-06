@@ -24,8 +24,8 @@ namespace INT_UMC {
 		: public ITrack
 	{
 	public:
-		TrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent );
+		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		const std::string & GetUniqueID() const;
 
@@ -80,17 +80,23 @@ namespace INT_UMC {
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
 
+		virtual size_t GetReferenceCount() const;
+
+		virtual void RemoveFromDOM();
+
+		virtual void AddToDOM( const spINode & parent );
+
 	protected:
 
 		typedef std::map< const std::string, spIShot > ShotMap;
 
-		std::string				mUniqueID;
-		std::string				mName;
-		ShotMap					mShotMap;
+		std::string						mUniqueID;
+		std::string						mName;
+		ShotMap							mShotMap;
 
-		weak_ptr< IOutput >		mwpOutput;
-		spUniqueIDSet			mspUniqueIDSet;
-		spIUniqueIDGenerator	mspUniqueIDGenerator;
+		weak_ptr< IOutput >				mwpOutput;
+		spIUniqueIDGenerator			mspUniqueIDGenerator;
+		spIUniqueIDAndReferenceTracker	mspUniqueIDAndReferenceTracker;
 
 	};
 }

@@ -11,24 +11,23 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations_I.h"
+#include "interfaces/IUniqueIDAndReferenceTracker.h"
+
 #include <vector>
 #include <assert.h>
 
 namespace INT_UMC {
 
-	size_t RemoveFromUniqueIDSet( const spUniqueIDSet & uniqueIDSet, const spcINode & nodeToRemoved );
-	size_t AddToUniqueIDSet( const spUniqueIDSet & uniqueIDSet, const std::string & uniqueID );
-
-	template< typename mapElementType, typename mapType >
-	mapElementType GetDecendantFromMap( const mapType & map, const std::string & descendantID ) {
+	template< typename mapType >
+	spINode GetDecendantFromMap( const mapType & map, const std::string & descendantID ) {
 		auto it = map.begin();
 		auto itEnd = map.end();
 		for ( ; it != itEnd; it++ ) {
-			auto kidNode = it->second->GetDecendantNode( descendantID );
+			spINode kidNode = it->second->GetDecendantNode( descendantID );
 			if ( kidNode )
 				return kidNode;
 		}
-		return mapElementType();
+		return spINode();
 	}
 
 	template< typename mapElementType, typename mapType >
@@ -46,13 +45,13 @@ namespace INT_UMC {
 		}
 	}
 
-	template< typename mapElementType, typename mapType >
-	void AddElementToMap( mapType & map, const std::string & elementID,
-		const mapElementType & element, const spUniqueIDSet & uniqueIDSet ) {
+	template< typename mapType, typename mapElementType >
+	void AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent ) {
 		assert( element );
+		const std::string & elementID = element->GetUniqueID();
 		assert( map.find( elementID ) == map.end() );
 		map[ elementID ] = element;
-		AddToUniqueIDSet( uniqueIDSet, elementID );
+		element->AddToDOM( parent );
 		assert( map.find( elementID ) != map.end() );
 	}
 
@@ -65,17 +64,26 @@ namespace INT_UMC {
 		return mapElementType();
 	}
 
+	bool SafeToRemoveElement( const spcINode & node );
+
 	template< typename mapType >
-	size_t RemoveElementFromMap( mapType & map, const std::string & elementID,
-		const spUniqueIDSet & uniqueIDSet )
-	{
+	typename mapType::iterator RemoveElementFromMap( mapType & map, typename mapType::const_iterator it ) {
+		it->second->RemoveFromDOM();
+		return map.erase( it );
+	}
+
+	template< typename mapType >
+	size_t TryAndRemoveElementFromMap( mapType & map, const std::string & elementID ) {
 		auto it = map.find( elementID );
 		if ( it != map.end() ) {
-			assert( uniqueIDSet->find( elementID ) != uniqueIDSet->end() );
-			size_t entriesRemoved = RemoveFromUniqueIDSet( uniqueIDSet, it->second );
-			assert( entriesRemoved >= 1 );
-			map.erase( it );
-			return 1;
+			if ( SafeToRemoveElement( it->second ) ) {
+				RemoveElementFromMap( map, it );
+				return 1;
+			} else {
+				// element is still referenced somewhere in the node, so can't be removed.
+				THROW_NODE_IS_REFERENCED( "remove" );
+				return 0;
+			}
 		}
 		return 0;
 	}
@@ -97,21 +105,27 @@ namespace INT_UMC {
 	}
 
 	template< typename mapType >
-	size_t ClearMap( mapType & map, spUniqueIDSet & uniqueIDSet ) {
+	bool SafeToClearMap( const mapType & map ) {
+		for ( auto & element : map ) {
+			if ( !SafeToRemoveElement( element.second ) )
+				return false;
+		}
+		return true;
+	}
+
+	template< typename mapType >
+	size_t ClearMap( mapType & map ) {
 		size_t nCount( 0 );
 		if ( map.size() == 0 )
 			return 0;
-		auto elements = CreateListFromMap< typename mapType::mapped_type, mapType >( map );
-		auto it = elements.begin();
-		auto itEnd = elements.end();
+		auto it = map.begin(); auto itEnd = map.end();
 		while ( it != itEnd ) {
-			RemoveElementFromMap( map, ( *it )->GetUniqueID(), uniqueIDSet );
+			it->second->RemoveFromDOM();
+			it = map.erase( it );
 			nCount++;
-			it++;
 		}
 		assert( map.size() == 0 );
 		return nCount;
-
 	}
 
 	template< typename OutputListElementType, typename MapType,

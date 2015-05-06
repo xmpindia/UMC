@@ -12,9 +12,9 @@
 
 namespace INT_UMC {
 
-	AudioTrackImpl::AudioTrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+	AudioTrackImpl::AudioTrackImpl( const std::string & uniqueID, const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent )
-		: mTrackImpl( uniqueID, uniqueIDSet, uniqueIDGenerator, parent )
+		: mTrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
 		, mAudioEditRate( 1 ) {}
 
 	void AudioTrackImpl::SetAudioEditRate( const EditRate & editRate ) {
@@ -159,6 +159,12 @@ namespace INT_UMC {
 
 	spINode AudioTrackImpl::GetChildNode( const std::string & uniqueID ) {
 		return mTrackImpl.GetChildNode( uniqueID );
+	}
+
+	spIAudioTrack CreateAudioTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+	const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return spIAudioTrack(); //std::make_shared< AudioTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 	}
 
 }

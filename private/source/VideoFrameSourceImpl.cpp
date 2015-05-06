@@ -10,12 +10,14 @@
 
 #include "implHeaders/VideoFrameSourceImpl.h"
 #include "interfaces/IVideoSource.h"
+#include "interfaces/IUniqueIDAndReferenceTracker.h"
 
 namespace INT_UMC {
 
-	VideoFrameSourceImpl::VideoFrameSourceImpl( const std::string & uniqueID, const spIVideoSource & videoSource,
-		const spUniqueIDSet & uniqueIDSet, const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent )
-		: mSourceImpl( uniqueID, uniqueIDSet, uniqueIDGenerator, parent )
+	VideoFrameSourceImpl::VideoFrameSourceImpl( const spIVideoSource & videoSource,
+		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
 		, mVideoSource( videoSource )
 		, mInCount( kEditUnitInCountFromBeginning )
 	{
@@ -102,4 +104,24 @@ namespace INT_UMC {
 		return mSourceImpl.GetAllDecendants();
 	}
 
+	size_t VideoFrameSourceImpl::GetReferenceCount() const {
+		return mSourceImpl.GetReferenceCount();
+	}
+
+	void VideoFrameSourceImpl::RemoveFromDOM() {
+		mSourceImpl.RemoveFromDOM();
+		mSourceImpl.mspUniqueIDAndReferenceTracker->RemoveReference( mVideoSource->GetUniqueID() );
+	}
+
+	void VideoFrameSourceImpl::AddToDOM( const spINode & parent ) {
+		mSourceImpl.AddToDOM( parent );
+		mSourceImpl.mspUniqueIDAndReferenceTracker->AddReference( mVideoSource->GetUniqueID() );
+	}
+
+	spIVideoFrameSource CreateVideoFrameSource( const spIVideoSource & videoSource,
+		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< VideoFrameSourceImpl >( videoSource, uniqueIDAndReferenceTracker, uniqueIDGenerator );
+	}
 }

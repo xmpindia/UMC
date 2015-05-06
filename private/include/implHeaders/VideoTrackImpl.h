@@ -20,7 +20,7 @@ namespace INT_UMC {
 		, enable_shared_from_this< VideoTrackImpl >
 	{
 	public:
-		VideoTrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+		VideoTrackImpl( const std::string & uniqueID, const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent );
 
 		virtual void SetVideoEditRate( const EditRate & editRate );

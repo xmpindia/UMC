@@ -12,9 +12,9 @@
 
 namespace INT_UMC {
 
-	AudioSourceImpl::AudioSourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent )
-		: mSourceImpl( uniqueID, uniqueIDSet, uniqueIDGenerator, parent )
+	AudioSourceImpl::AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd )
 		, mAudioEditRate( 48000 )
@@ -110,6 +110,24 @@ namespace INT_UMC {
 
 	INode::cNodeList AudioSourceImpl::GetAllDecendants() const {
 		return mSourceImpl.GetAllDecendants();
+	}
+
+	size_t AudioSourceImpl::GetReferenceCount() const {
+		return mSourceImpl.GetReferenceCount();
+	}
+
+	void AudioSourceImpl::RemoveFromDOM() {
+		return mSourceImpl.RemoveFromDOM();
+	}
+
+	void AudioSourceImpl::AddToDOM( const spINode & parent ) {
+		return mSourceImpl.AddToDOM( parent );
+	}
+
+	spIAudioSource CreateAudioSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< AudioSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 	}
 
 }

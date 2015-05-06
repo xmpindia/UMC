@@ -20,7 +20,7 @@ namespace INT_UMC {
 		, enable_shared_from_this < AudioTrackImpl >
 	{
 	public:
-		AudioTrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
+		AudioTrackImpl( const std::string & uniqueID, const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent );
 
 		virtual void SetAudioEditRate( const EditRate & editRate );

@@ -20,8 +20,8 @@ namespace INT_UMC {
 		: public ISource
 	{
 	public:
-		SourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent );
+		SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		virtual const std::string & GetUniqueID() const;
 
@@ -49,13 +49,21 @@ namespace INT_UMC {
 
 		virtual cNodeList GetAllDecendants() const;
 
-	protected:
-		const std::string		mUniqueID;
-		std::string				mClipName;
+		virtual size_t GetReferenceCount() const;
 
-		weak_ptr< IUMC >		mwpUMC;
-		spUniqueIDSet			mspUniqueIDSet;
-		spIUniqueIDGenerator	mspUniqueIDGenerator;
+		virtual void RemoveFromDOM();
+
+		virtual void AddToDOM( const spINode & parent );
+
+	protected:
+		const std::string					mUniqueID;
+		std::string							mClipName;
+
+		weak_ptr< IUMC >					mwpUMC;
+		spIUniqueIDAndReferenceTracker		mspUniqueIDAndReferenceTracker;
+		spIUniqueIDGenerator				mspUniqueIDGenerator;
+
+		friend class VideoFrameSourceImpl;
 	};
 }
 

@@ -9,13 +9,14 @@
 
 
 #include "implHeaders/UniqueIDGeneratorImpl.h"
+#include "interfaces/IUniqueIDAndReferenceTracker.h"
 #include <assert.h>
 #include <cstdio>
 
 namespace INT_UMC {
 
-	UniqueIDGeneratorImpl::UniqueIDGeneratorImpl( const spcUniqueIDSet & uniqueIDSet )
-		: mUniqueIDSet( uniqueIDSet )
+	UniqueIDGeneratorImpl::UniqueIDGeneratorImpl( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker )
+		: mUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
 		, mCurrentID( 1 ) { }
 
 	std::string UniqueIDGeneratorImpl::GenerateUniqueID( INode::eNodeTypes nodeType ) {
@@ -28,12 +29,12 @@ namespace INT_UMC {
 		#error "Missing implementation for the platform"
 	#endif
 		mCurrentID++;
-		assert( mUniqueIDSet->find( buffer ) == mUniqueIDSet->end() );
+		assert( !mUniqueIDAndReferenceTracker->IsUniqueIDPresent( buffer ) );
 		return std::string( buffer );
 	}
 
-	spIUniqueIDGenerator UniqueIDGeneratorImpl::CreateUniqueIDGenerator( const spcUniqueIDSet & uniqueIDSet ) {
-		return std::make_shared< UniqueIDGeneratorImpl, const spcUniqueIDSet & >( uniqueIDSet );
+	spIUniqueIDGenerator CreateUniqueIDGenerator( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker ) {
+		return std::make_shared< UniqueIDGeneratorImpl, const spcIUniqueIDAndReferenceTracker & >( uniqueIDAndReferenceTracker );
 	}
 
 }

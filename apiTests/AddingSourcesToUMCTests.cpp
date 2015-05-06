@@ -71,7 +71,15 @@ static UMC::spIUMC CreateDefaultUMC() {
 	sp->AddImageSource();
 	sp->AddImageSource();
 
-	// TODO: add video frame sources
+	// add 5 video frame sources
+	auto videoFrameSource = sp->AddVideoFrameSource( videoSource );
+	videoFrameSource->SetClipName( "clipNamevf1" );
+	videoFrameSource->SetInCount( 5 );
+	sp->AddVideoFrameSource( videoSource );
+	sp->AddVideoFrameSource( videoSource );
+	sp->AddVideoFrameSource( videoSource );
+	sp->AddVideoFrameSource( videoSource );
+
 	return sp;
 }
 
@@ -91,7 +99,7 @@ bool CheckCount( const UMC::spcIUMC & umc, size_t videoSources, size_t audioSour
 
 void AddingSourcesToUMCTests::CountOfSources() {
 	auto sp = CreateDefaultUMC();
-	size_t videoSourceCount( 5 ), audioSourceCount( 5 ), imageSourceCount( 5 ), videoFrameSourceCount( 0 );
+	size_t videoSourceCount( 5 ), audioSourceCount( 5 ), imageSourceCount( 5 ), videoFrameSourceCount( 5 );
 
 	CPPUNIT_ASSERT_EQUAL( sp ? true : false, true );
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
@@ -128,7 +136,10 @@ void AddingSourcesToUMCTests::CountOfSources() {
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
 
 	// remove Video source
-	CPPUNIT_ASSERT_EQUAL( sp->RemoveSource( "1" ), ( size_t ) 1 );
+	CPPUNIT_ASSERT_THROW_MESSAGE( "can't remove as node is referenced somewhere in the DOM", sp->RemoveSource( "1" ), std::logic_error );
+	CPPUNIT_ASSERT_THROW_MESSAGE( "can't remove as node is referenced somewhere in the DOM", sp->RemoveVideoSource( "1" ), std::logic_error );
+
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoSource( "3" ), ( size_t ) 1 );
 	videoSourceCount--;
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
 
@@ -140,6 +151,21 @@ void AddingSourcesToUMCTests::CountOfSources() {
 	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoSource( "15" ), ( size_t ) 0 );
 	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoSource( "20" ), ( size_t ) 0 );
 	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoSource( "0" ), ( size_t ) 0 );
+	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
+
+	// remove Video Frame Source source
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveSource( "16" ), ( size_t ) 1 );
+	videoFrameSourceCount--;
+	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
+
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoFrameSource( "17" ), ( size_t ) 1 );
+	videoFrameSourceCount--;
+	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
+
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoFrameSource( "5" ), ( size_t ) 0 );
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoFrameSource( "10" ), ( size_t ) 0 );
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoFrameSource( "15" ), ( size_t ) 0 );
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveVideoFrameSource( "0" ), ( size_t ) 0 );
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
 
 	// remove non existent source
@@ -155,12 +181,23 @@ void AddingSourcesToUMCTests::CountOfSources() {
 	audioSourceCount = 0;
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
 
-	sp->RemoveAllVideoSources();
-	videoSourceCount = 0;
+	CPPUNIT_ASSERT_THROW_MESSAGE( "can't remove as node is referenced somewhere in the DOM", sp->RemoveAllVideoSources(), std::logic_error );
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
 
 	sp->RemoveAllVideoFramesSources();
 	videoFrameSourceCount = 0;
+	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
+
+	sp->RemoveAllVideoSources();
+	videoSourceCount = 0;
+	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
+
+	sp = CreateDefaultUMC();
+	videoSourceCount = imageSourceCount = audioSourceCount = videoFrameSourceCount = 5;
+	CPPUNIT_ASSERT_THROW_MESSAGE( "can't remove as node is referenced somewhere in the DOM", sp->RemoveAllVideoSources(), std::logic_error );
+	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
+	CPPUNIT_ASSERT_EQUAL( sp->RemoveAllSources(), videoSourceCount + imageSourceCount + audioSourceCount + videoFrameSourceCount );
+	videoSourceCount = imageSourceCount = audioSourceCount = videoFrameSourceCount = 0;
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
 }
 

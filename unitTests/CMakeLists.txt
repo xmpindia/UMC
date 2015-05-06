@@ -57,7 +57,7 @@ set(XMPTOOLKIT_INCLUDE "${PROJECT_SOURCE_DIR}/../imports/XMPToolkit/public/inclu
 link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION})
 
 add_executable( UnitTests ${UMC_FILES} ${TEST_FILES} )
-add_dependencies( UnitTests CPPUnitStatic )
+add_dependencies( UnitTests CPPUnitStatic UMC)
 
 set(LIB_ADOBEXMP "AdobeXMP")
 
@@ -69,7 +69,7 @@ target_link_libraries( UnitTests
 
 if (UNIX AND NOT APPLE)
 	set_target_properties(UnitTests PROPERTIES
-         	RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
+		RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
 endif()
 
 add_custom_command( TARGET UnitTests POST_BUILD

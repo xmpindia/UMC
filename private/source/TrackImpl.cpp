@@ -10,7 +10,9 @@
 #include "implHeaders/TrackImpl.h"
 #include "implHeaders/ShotImpl.h"
 #include "interfaces/IOutput.h"
+#include "interfaces/IUniqueIDGenerator.h"
 #include "utils/Utils.h"
+
 
 namespace INT_UMC {
 
@@ -160,13 +162,12 @@ namespace INT_UMC {
 		return CreateListFromMap< spcIShot >( mShotMap );
 	}
 
-	TrackImpl::TrackImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent )
-		: mUniqueID( uniqueID )
+	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mUniqueID( uniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeTrack ) )
 		, mName()
 		, mShotMap()
-		, mwpOutput( parent )
-		, mspUniqueIDSet( uniqueIDSet )
+		, mspUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
 		, mspUniqueIDGenerator( uniqueIDGenerator ) {}
 
 	spcINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
@@ -197,6 +198,22 @@ namespace INT_UMC {
 	INode::cNodeList TrackImpl::GetAllDecendants() const {
 		throw std::logic_error( "The method or operation is not implemented." );
 		return cNodeList();
+	}
+
+	size_t TrackImpl::GetReferenceCount() const {
+		return mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
+	}
+
+	void TrackImpl::RemoveFromDOM() {
+		mspUniqueIDAndReferenceTracker->RemoveUniqueID( mUniqueID );
+	}
+
+	void TrackImpl::AddToDOM( const spINode & parent ) {
+		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
+		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
+		spIOutput outputParent = ConvertNode< IOutput >( parent );
+		if ( !outputParent ) THROW_PARENT_CANT_BE_NULL;
+		mwpOutput = outputParent;
 	}
 
 	ITrack::eTrackTypes TrackImpl::GetType() const {

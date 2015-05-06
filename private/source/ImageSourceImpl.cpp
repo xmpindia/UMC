@@ -12,9 +12,9 @@
 
 namespace INT_UMC {
 
-	ImageSourceImpl::ImageSourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent )
-		: mSourceImpl( uniqueID, uniqueIDSet, uniqueIDGenerator, parent ) {}
+	ImageSourceImpl::ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator ) {}
 
 	ISource::eSourceTypes ImageSourceImpl::GetType() const {
 		return ISource::kSourceTypeImage;
@@ -74,6 +74,24 @@ namespace INT_UMC {
 
 	INode::cNodeList ImageSourceImpl::GetAllDecendants() const {
 		return mSourceImpl.GetAllDecendants();
+	}
+
+	size_t ImageSourceImpl::GetReferenceCount() const {
+		return mSourceImpl.GetReferenceCount();
+	}
+
+	void ImageSourceImpl::RemoveFromDOM() {
+		return mSourceImpl.RemoveFromDOM();
+	}
+
+	void ImageSourceImpl::AddToDOM( const spINode & parent ) {
+		return mSourceImpl.AddToDOM( parent );
+	}
+
+	spIImageSource CreateImageSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< ImageSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 	}
 
 }

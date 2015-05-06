@@ -20,8 +20,8 @@ namespace INT_UMC {
 		, public enable_shared_from_this < ImageSourceImpl >
 	{
 	public:
-		ImageSourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent );
+		ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		virtual eSourceTypes GetType() const;
 
@@ -46,6 +46,12 @@ namespace INT_UMC {
 
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
+
+		virtual size_t GetReferenceCount() const;
+
+		virtual void RemoveFromDOM();
+
+		virtual void AddToDOM( const spINode & parent );
 
 	protected:
 		SourceImpl					mSourceImpl;

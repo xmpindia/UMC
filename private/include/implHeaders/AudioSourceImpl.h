@@ -19,8 +19,8 @@ namespace INT_UMC {
 		, public enable_shared_from_this < AudioSourceImpl >
 	{
 	public:
-		AudioSourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent );
+		AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		virtual void SetAudioEditRate( const EditRate & editRate );
 		virtual EditRate GetAudioEditRate() const;
@@ -57,6 +57,12 @@ namespace INT_UMC {
 
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
+
+		virtual size_t GetReferenceCount() const;
+
+		virtual void RemoveFromDOM();
+
+		virtual void AddToDOM( const spINode & parent );
 
 	protected:
 		SourceImpl					mSourceImpl;

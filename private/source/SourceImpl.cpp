@@ -8,6 +8,9 @@
 // =================================================================================================
 
 #include "implHeaders/SourceImpl.h"
+
+#include "interfaces/IUniqueIDAndReferenceTracker.h"
+#include "interfaces/IUniqueIDGenerator.h"
 #include "interfaces/IUMC.h"
 
 namespace INT_UMC {
@@ -64,15 +67,29 @@ namespace INT_UMC {
 		return cNodeList();
 	}
 
-	SourceImpl::SourceImpl( const std::string & uniqueID, const spUniqueIDSet & uniqueIDSet,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIUMC & parent )
-		: mUniqueID( uniqueID )
-		, mwpUMC( parent )
-		, mspUniqueIDSet( uniqueIDSet )
+	size_t SourceImpl::GetReferenceCount() const {
+		return mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
+	}
+
+	void SourceImpl::RemoveFromDOM() {
+		mspUniqueIDAndReferenceTracker->RemoveUniqueID( mUniqueID );
+	}
+
+	void SourceImpl::AddToDOM( const spINode & parent ) {
+		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
+		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
+		spIUMC umcParent = ConvertNode< IUMC >( parent );
+		if ( !umcParent ) THROW_PARENT_CANT_BE_NULL;
+		mwpUMC = umcParent;
+	}
+
+	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mUniqueID( uniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeSource ) )
+		, mspUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
 		, mspUniqueIDGenerator( uniqueIDGenerator )
 	{
-		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
-		if ( !mspUniqueIDSet ) THROW_UNIQUE_ID_MAP_CANT_BE_NULL;
+		if ( !mspUniqueIDAndReferenceTracker ) THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL;
 		if ( !mspUniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
 	}
 
