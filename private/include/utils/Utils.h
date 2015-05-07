@@ -67,9 +67,9 @@ namespace INT_UMC {
 	bool SafeToRemoveElement( const spcINode & node );
 
 	template< typename mapType >
-	typename mapType::iterator RemoveElementFromMap( mapType & map, typename mapType::const_iterator it ) {
+	void RemoveElementFromMap( mapType & map, typename mapType::iterator it ) {
 		it->second->RemoveFromDOM();
-		return map.erase( it );
+		map.erase( it );
 	}
 
 	template< typename mapType >
@@ -106,25 +106,25 @@ namespace INT_UMC {
 
 	template< typename mapType >
 	bool SafeToClearMap( const mapType & map ) {
-		for ( auto & element : map ) {
-			if ( !SafeToRemoveElement( element.second ) )
+		auto it = map.begin();
+		auto itEnd = map.end();
+		for ( ; it != itEnd; it++ ) {
+			if ( !SafeToRemoveElement( it->second ) )
 				return false;
-		}
+			}
 		return true;
 	}
 
 	template< typename mapType >
 	size_t ClearMap( mapType & map ) {
-		size_t nCount( 0 );
-		if ( map.size() == 0 )
-			return 0;
-		auto it = map.begin(); auto itEnd = map.end();
-		while ( it != itEnd ) {
-			it->second->RemoveFromDOM();
-			it = map.erase( it );
-			nCount++;
+		size_t nCount( map.size() );
+		if ( nCount > 0 ) {
+			auto it = map.begin(); auto itEnd = map.end();
+			for ( ; it != itEnd; ++it ) {
+				it->second->RemoveFromDOM();
+			}
+			map.clear();
 		}
-		assert( map.size() == 0 );
 		return nCount;
 	}
 

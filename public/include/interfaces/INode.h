@@ -22,7 +22,7 @@ namespace INT_UMC {
 	template< typename mapType >
 	size_t ClearMap( mapType & map );
 	template< typename mapType >
-	typename mapType::iterator RemoveElementFromMap( mapType & map, typename mapType::const_iterator it );
+	void RemoveElementFromMap( mapType & map, typename mapType::iterator it );
 };
 
 namespace UMC {
@@ -94,7 +94,7 @@ namespace UMC {
 		template< typename mapType >
 		friend size_t INT_UMC::ClearMap( mapType & map );
 		template< typename mapType >
-		friend typename mapType::iterator INT_UMC::RemoveElementFromMap( mapType & map, typename mapType::const_iterator it );
+		friend void INT_UMC::RemoveElementFromMap( mapType & map, typename mapType::iterator it );
 	};
 
 	template< typename requiredNodeType >

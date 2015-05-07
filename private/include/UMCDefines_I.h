@@ -1,6 +1,8 @@
 #ifndef UMCDefines_I_h__
 #define UMCDefines_I_h__ 1
 
+#include <stdexcept>
+
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
 // Copyright 2015 Adobe Systems Incorporated
@@ -24,7 +26,7 @@ namespace INT_UMC {
 	#define THROW_PARENT_CANT_BE_NULL throw std::logic_error( "parent can't be null" );
 	#define THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL throw std::logic_error( "uniqueIDAndReferenceTracker can't be null" );
 	#define THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL throw std::logic_error( "uniqueID generator can't be null" );
-		#define THROW_NODE_IS_REFERENCED( operation ) throw std::logic_error( "can't " ## operation ## " as node is referenced somewhere in the DOM" );
+	#define THROW_NODE_IS_REFERENCED( operation ) throw std::logic_error( "can't " operation " as node is referenced somewhere in the DOM" );
 }
 
 #endif  // UMCDefines_I_h__

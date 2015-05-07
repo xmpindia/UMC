@@ -16,8 +16,10 @@ namespace INT_UMC {
 	bool SafeToRemoveElement( const spcINode & node ) {
 		if ( node->GetReferenceCount() == 0  ) {
 			auto list = node->GetAllChildren();
-			for ( auto & element : list ) {
-				if( !SafeToRemoveElement( element ) )
+			auto it = list.begin();
+			auto itEnd = list.end();
+			for ( ; it != itEnd; it++ ) {
+				if( !SafeToRemoveElement( *it ) )
 					return false;
 			}
 			return true;

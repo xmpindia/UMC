@@ -319,11 +319,11 @@ namespace INT_UMC {
 				}
 				auto it2 = mVideoSourceMap.begin();
 				auto it2End = mVideoSourceMap.end();
-				for( auto & it : mVideoSourceMap ) {
-					size_t actualReferenceCount = it.second->GetReferenceCount();
+				for( ; it2 != it2End; it2++ ) {
+					size_t actualReferenceCount = it2->second->GetReferenceCount();
 					size_t expectedReferenceCount(0 );
 					try {
-						expectedReferenceCount = videoSourceReferences.at( it.second->GetUniqueID() );
+						expectedReferenceCount = videoSourceReferences.at( it2->second->GetUniqueID() );
 					} catch( std::out_of_range & ) {
 						// do nothing
 					}
