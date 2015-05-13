@@ -456,8 +456,8 @@ namespace INT_UMC {
 		return mNode->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool UMCImpl::SetCustomData( const spICustomData & customData ) {
-		return mNode->SetCustomData( customData );
+	bool UMCImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mNode->SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI UMCImpl::GetInternalNode() {

@@ -96,7 +96,7 @@ namespace UMC {
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) = 0;
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const = 0;
 
-		virtual bool SetCustomData( const spICustomData & customData ) = 0;
+		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) = 0;
 
 		virtual INT_UMC::pINodeI GetInternalNode() = 0;
 		virtual INT_UMC::pcINodeI GetInternalNode() const = 0;

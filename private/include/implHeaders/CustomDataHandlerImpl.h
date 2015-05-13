@@ -24,7 +24,8 @@ namespace INT_UMC {
 		: public ICustomDataHandler
 	{
 	public:
-		CustomDataHandlerImpl( const spcICustomData & customData, const spIXMPStructureNode & node );
+		CustomDataHandlerImpl( const spcICustomData & customData, const std::string & customDataNameSpace,
+			const std::string & customDataName, const spIXMPStructureNode & baseNode );
 
 		virtual bool BeginCustomData();
 		virtual spICustomData EndCustomData();

@@ -17,11 +17,12 @@
 
 namespace INT_UMC {
 
-	CustomDataHandlerImpl::CustomDataHandlerImpl( const spcICustomData & customData, const spIXMPStructureNode & baseNode )
-		: mNameSpace( customData->GetNameSpace() )
+	CustomDataHandlerImpl::CustomDataHandlerImpl( const spcICustomData & customData, const std::string & customDataNameSpace,
+		const std::string & customDataName, const spIXMPStructureNode & baseNode )
+		: mNameSpace( customDataNameSpace )
 		, mBaseNode( baseNode )
 	{
-		spIXMPStructureNode node = IXMPStructureNode::CreateStructureNode( mNameSpace.c_str(), customData->GetName().c_str() );
+		spIXMPStructureNode node = IXMPStructureNode::CreateStructureNode( mNameSpace.c_str(), customDataName.c_str() );
 		mParents.push( Parent( node ) );
 	}
 
@@ -82,8 +83,10 @@ namespace INT_UMC {
 		: mArrayNode( arrayNode )
 		, mIsArray( true ) { }
 
-	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData, const spIXMPStructureNode & baseNode ) {
-		return std::make_shared< CustomDataHandlerImpl >( customData, baseNode );
+	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData, const std::string & customDataNameSpace,
+		const std::string & customDataName, const spIXMPStructureNode & baseNode )
+	{
+		return std::make_shared< CustomDataHandlerImpl >( customData, customDataNameSpace, customDataName, baseNode );
 	}
 }
 

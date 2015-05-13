@@ -53,7 +53,7 @@ namespace INT_UMC {
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
-		virtual bool SetCustomData( const spICustomData & customData );
+		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
 		virtual INT_UMC::pINodeI GetInternalNode();
 		virtual INT_UMC::pcINodeI GetInternalNode() const;

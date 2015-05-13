@@ -32,7 +32,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AddingDoViDisplayCustomDataToUMC );
 
 void AddingDoViDisplayCustomDataToUMC::setUp() {
 	UMC_Initialize();
-	UMC::IUMC::RegisterCustomNodeHandler( DoVi::Display::sGetNameSpace(), DoVi::Display::sGetName(),
+	UMC::IUMC::RegisterCustomNodeHandler( DoVi::Display::GetNameSpace(), DoVi::Display::GetPropertyName(),
 		std::make_shared< DoVi::DisplayHandler >() );
 }
 
@@ -42,7 +42,7 @@ void AddingDoViDisplayCustomDataToUMC::Test() {
 	display->setID( "id-1");
 	display->setName( "reference display - 1" );
 	display->setDiagonalSize( 52.0 );
-	umc->SetCustomData( display );
+	umc->SetCustomData( DoVi::Display::GetNameSpace(), DoVi::Display::GetPropertyName(), display );
 
 	auto rdfRep = umc->SerializeToBuffer();
 	std::cout<<" ******* AddingDoViDisplayCustomDataToUMC::Test *****\n";

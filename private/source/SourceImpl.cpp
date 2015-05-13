@@ -79,8 +79,8 @@ namespace INT_UMC {
 		return mNode->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool SourceImpl::SetCustomData( const spICustomData & customData ) {
-		return mNode->SetCustomData( customData );
+	bool SourceImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mNode->SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI SourceImpl::GetInternalNode() {

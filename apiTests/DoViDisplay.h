@@ -33,12 +33,10 @@ namespace DoVi {
 		virtual spcINode GetParentNode() const;
 		virtual spINode GetParentNode();
 
-		virtual const std::string & GetNameSpace() const;
-		virtual const std::string & GetName() const;
 		virtual ~Display();
 
-		static const std::string & sGetNameSpace();
-		static const std::string & sGetName();
+		static const std::string & GetNameSpace();
+		static const std::string & GetPropertyName();
 
 	protected:
 		std::string		_id;

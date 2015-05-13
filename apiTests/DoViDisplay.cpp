@@ -24,14 +24,6 @@ namespace DoVi {
 		return _parent;
 	}
 
-	const std::string & Display::GetNameSpace() const {
-		return sGetNameSpace();
-	}
-
-	const std::string & Display::GetName() const {
-		return sGetName();
-	}
-
 	std::string Display::getID() {
 		return _id;
 	}
@@ -63,12 +55,12 @@ namespace DoVi {
 
 	}
 
-	const std::string & Display::sGetNameSpace() {
+	const std::string & Display::GetNameSpace() {
 		static std::string nameSpace( "www.dolby.com/1.0/" );
 		return nameSpace;
 	}
 
-	const std::string & Display::sGetName() {
+	const std::string & Display::GetPropertyName() {
 		static std::string name( "display" );
 		return name;
 	}

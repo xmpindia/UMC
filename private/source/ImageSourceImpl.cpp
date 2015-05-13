@@ -88,8 +88,8 @@ namespace INT_UMC {
 		return mSource->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool ImageSourceImpl::SetCustomData( const spICustomData & customData ) {
-		return mSource->SetCustomData( customData );
+	bool ImageSourceImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mSource->SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI ImageSourceImpl::GetInternalNode() {

@@ -43,8 +43,8 @@ namespace INT_UMC {
 	typedef shared_ptr< ICustomDataHandlerRegistry >			spICustomDataHandlerRegistry;
 	typedef shared_ptr< const ICustomDataHandlerRegistry >		spcICustomDataHandlerRegistry;
 
-	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData,
-		const NS_XMPCORE::spIXMPStructureNode & baseNode );
+	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData, const std::string & customDataNameSpace,
+		const std::string & customDataName, const NS_XMPCORE::spIXMPStructureNode & baseNode );
 
 	spINode CreateNode( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType );

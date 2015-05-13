@@ -116,8 +116,8 @@ namespace INT_UMC {
 		return mSource->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool VideoFrameSourceImpl::SetCustomData( const spICustomData & customData ) {
-		return mSource->SetCustomData( customData );
+	bool VideoFrameSourceImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mSource->SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI VideoFrameSourceImpl::GetInternalNode() {

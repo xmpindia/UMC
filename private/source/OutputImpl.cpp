@@ -111,8 +111,8 @@ namespace INT_UMC {
 		return mNode->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool OutputImpl::SetCustomData( const spICustomData & customData ) {
-		return mNode->SetCustomData( customData );
+	bool OutputImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mNode->SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI OutputImpl::GetInternalNode() {

@@ -124,8 +124,8 @@ namespace INT_UMC {
 		return mSource->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool AudioSourceImpl::SetCustomData( const spICustomData & customData ) {
-		return mSource->SetCustomData( customData );
+	bool AudioSourceImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mSource->SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI AudioSourceImpl::GetInternalNode() {

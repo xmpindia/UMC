@@ -21,9 +21,6 @@ namespace UMC {
 
 		virtual spcINode GetParentNode() const = 0;
 		virtual spINode GetParentNode() = 0;
-
-		virtual const std::string & GetNameSpace() const = 0;
-		virtual const std::string & GetName() const = 0;
 	};
 }
 

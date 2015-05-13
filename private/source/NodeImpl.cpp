@@ -155,7 +155,7 @@ namespace INT_UMC {
 			auto node = mExtensionNode->GetNode( customDataNameSpace.c_str(), customDataName.c_str() );
 			if ( handler && node ) {
 				auto returnValue = ParseNode( handler, node );
-				if ( returnValue ) SetCustomData( returnValue );
+				if ( returnValue ) SetCustomData(customDataNameSpace, customDataName, returnValue );
 				return returnValue;
 			}
 		}
@@ -166,17 +166,15 @@ namespace INT_UMC {
 		return const_cast< NodeImpl * >( this )->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool NodeImpl::SetCustomData( const spICustomData & customData ) {
+	bool NodeImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
 		if ( customData &&
-			ICustomDataHandlerRegistry::GetInstance()->IsHandlerRegistered( customData->GetNameSpace(), customData->GetName() ) ) 
+			ICustomDataHandlerRegistry::GetInstance()->IsHandlerRegistered( customDataNameSpace, customDataName ) ) 
 		{
-			const std::string & nameSpace = customData->GetNameSpace();
-			const std::string & name = customData->GetName();
-			std::string combinedString = GetCombinedString( nameSpace, name );
+			std::string combinedString = GetCombinedString( customDataNameSpace, customDataName );
 			mCustomDataMap[ combinedString ] = customData;
 			customData->SetParentNode( shared_from_this() );
 			if ( mExtensionNode )
-				mExtensionNode->RemoveNode( nameSpace.c_str(), name.c_str() );
+				mExtensionNode->RemoveNode( customDataNameSpace.c_str(), customDataName.c_str() );
 			return true;
 		}
 		return false;
@@ -227,10 +225,13 @@ namespace INT_UMC {
 			auto node = GetExtensionNode( true );
 			auto it = mCustomDataMap.begin(); auto itEnd = mCustomDataMap.end();
 			for ( ; it != itEnd; ++it ) {
-				auto handler = ICustomDataHandlerRegistry::GetInstance()->GetHandler( it->second->GetNameSpace(), it->second->GetName() );
-				assert(  handler );
-				auto serializerHandler = CreateSerializerHandler( it->second, node );
-				handler->Serialize( it->second, serializerHandler );
+				std::string nameSpace, name;
+				if ( GetSplitStrings( it->first, nameSpace, name ) ) {
+					auto handler = ICustomDataHandlerRegistry::GetInstance()->GetHandler( nameSpace, name );
+					assert(  handler );
+					auto serializerHandler = CreateSerializerHandler( it->second, nameSpace, name, node );
+					handler->Serialize( it->second, serializerHandler );
+				}
 			}
 			return node;
 		} else {
@@ -242,6 +243,16 @@ namespace INT_UMC {
 		std::string combinedString( nameSpace );
 		combinedString.append( ":" ).append( name );
 		return combinedString;
+	}
+
+	bool NodeImpl::GetSplitStrings( const std::string & combinedString, std::string & nameSpace, std::string & name ) const {
+		size_t pos = combinedString.find_last_of( ":" );
+		if ( pos != std::string::npos && pos != combinedString.length() - 1 ) {
+			nameSpace.assign( combinedString, 0, pos );
+			name.assign( combinedString, pos + 1, std::string::npos );
+			return true;
+		}
+		return false;
 	}
 
 	spcIUniqueIDAndReferenceTracker NodeImpl::GetUniqueIDAndReferenceTracker() const {

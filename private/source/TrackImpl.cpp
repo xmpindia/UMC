@@ -219,8 +219,8 @@ namespace INT_UMC {
 		return mNode->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool TrackImpl::SetCustomData( const spICustomData & customData ) {
-		return mNode->SetCustomData( customData );
+	bool TrackImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mNode->SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI TrackImpl::GetInternalNode() {
