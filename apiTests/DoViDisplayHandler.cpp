@@ -62,7 +62,7 @@ namespace DoVi {
 			if ( !display->getID().empty() )
 				customDataCreator->AddKeyValuePair( "id", display->getID() );
 			if ( display->getDiagonalSize() != 0.0 )
-				customDataCreator->AddKeyValuePair( "diagonalSize", std::to_string( display->getDiagonalSize() ) );
+				customDataCreator->AddKeyValuePair( "diagonalSize", std::to_string( (long double )display->getDiagonalSize() ) );
 			customDataCreator->EndCustomData();
 			return true;
 		}

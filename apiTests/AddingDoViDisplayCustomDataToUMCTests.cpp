@@ -29,7 +29,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AddingDoViDisplayCustomDataToUMC );
 
 #include "interfaces/IUMC.h"
 #include "DoViDisplayHandler.h"
-#include "DoViDisplay.h"
 
 void AddingDoViDisplayCustomDataToUMC::setUp() {
 	UMC_Initialize();

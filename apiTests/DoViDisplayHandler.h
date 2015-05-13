@@ -1,5 +1,5 @@
-#ifndef DoviDisplayHandler_h__
-#define DoviDisplayHandler_h__ 1
+#ifndef DoViDisplayHandler_h__
+#define DoViDisplayHandler_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -11,7 +11,7 @@
 // =================================================================================================
 
 #include "interfaces/ICustomDataHandler.h"
-#include "DoviDisplay.h"
+#include "DoViDisplay.h"
 
 namespace DoVi {
 	using namespace UMC;
@@ -39,4 +39,4 @@ namespace DoVi {
 	};
 }
 
-#endif  // DoviDisplayHandler_h__
+#endif  // DoViDisplayHandler_h__

@@ -1,5 +1,5 @@
-#ifndef DoviDisplay_h__
-#define DoviDisplay_h__ 1
+#ifndef DoViDisplay_h__
+#define DoViDisplay_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -48,4 +48,4 @@ namespace DoVi {
 	};
 }
 
-#endif  // DoviDisplay_h__
+#endif  // DoViDisplay_h__

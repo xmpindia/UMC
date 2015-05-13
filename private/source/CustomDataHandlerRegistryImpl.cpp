@@ -37,7 +37,7 @@ namespace INT_UMC {
 			mCustomDataHandlerMap.insert( std::make_pair( combinedString, handler ) );
 			std::string registeredPrefix;
 			if ( !SXMPMeta::GetNamespacePrefix( nameSpace.c_str(), &registeredPrefix) ) {
-				static int count( 1 );
+				static long long unsigned int count( 1 );
 				std::string prefix( "cm" );
 				prefix.append( std::to_string( count ) );
 				SXMPMeta::RegisterNamespace( nameSpace.c_str(), prefix.c_str(), &registeredPrefix );
