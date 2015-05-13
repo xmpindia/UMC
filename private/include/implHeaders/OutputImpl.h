@@ -12,7 +12,7 @@
 
 #include "interfaces/IOutput.h"
 #include "interfaces/ITrack.h"
-#include "UMCFwdDeclarations_I.h"
+#include "interfaces/INodeI.h"
 
 #include <map>
 
@@ -21,6 +21,7 @@ namespace INT_UMC {
 
 	class OutputImpl
 		: public IOutput
+		, public INodeI
 		, public enable_shared_from_this< OutputImpl >
 	{
 	public:
@@ -94,16 +95,35 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
+		virtual void AddToDOM( const spINode & parent );
 		virtual void RemoveFromDOM();
 
-		virtual void AddToDOM( const spINode & parent );
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const spICustomData & customData );
+
+		virtual pINodeI GetInternalNode();
+		virtual pcINodeI GetInternalNode() const;
+
+		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
+		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
+		virtual spIXMPStructureNode GetMergedExtensionNode() const;
+
+		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
+
+		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+
+		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
+
+		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	protected:
 		typedef std::map< const std::string, spIVideoTrack > VideoTrackMap;
 		typedef std::map< const std::string, spIAudioTrack > AudioTrackMap;
 
 	protected:
-		const std::string				mUniqueID;
+		spINode							mNode;
 		std::string						mName;
 		std::string						mTitle;
 		AspectRatio						mCanvasAspectRatio;
@@ -112,10 +132,6 @@ namespace INT_UMC {
 		EditRate						mAudioEditRate;
 		VideoTrackMap					mVideoTrackMap;
 		AudioTrackMap					mAudioTrackMap;
-
-		weak_ptr< IUMC >				mwpUMC;
-		spIUniqueIDAndReferenceTracker	mspUniqueIDAndReferenceTracker;
-		spIUniqueIDGenerator			mspUniqueIDGenerator;
 	};
 }
 

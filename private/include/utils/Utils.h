@@ -12,6 +12,7 @@
 
 #include "UMCFwdDeclarations_I.h"
 #include "interfaces/IUniqueIDAndReferenceTracker.h"
+#include "interfaces/INodeI.h"
 
 #include <vector>
 #include <assert.h>
@@ -51,7 +52,7 @@ namespace INT_UMC {
 		const std::string & elementID = element->GetUniqueID();
 		assert( map.find( elementID ) == map.end() );
 		map[ elementID ] = element;
-		element->AddToDOM( parent );
+		element->GetInternalNode()->AddToDOM( parent );
 		assert( map.find( elementID ) != map.end() );
 	}
 
@@ -68,7 +69,7 @@ namespace INT_UMC {
 
 	template< typename mapType >
 	void RemoveElementFromMap( mapType & map, typename mapType::iterator it ) {
-		it->second->RemoveFromDOM();
+		it->second->GetInternalNode()->RemoveFromDOM();
 		map.erase( it );
 	}
 
@@ -121,7 +122,7 @@ namespace INT_UMC {
 		if ( nCount > 0 ) {
 			auto it = map.begin(); auto itEnd = map.end();
 			for ( ; it != itEnd; ++it ) {
-				it->second->RemoveFromDOM();
+				it->second->GetInternalNode()->RemoveFromDOM();
 			}
 			map.clear();
 		}

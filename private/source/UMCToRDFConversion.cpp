@@ -19,6 +19,7 @@
 #include "interfaces/ITrack.h"
 #include "interfaces/IOutput.h"
 #include "interfaces/IUMC.h"
+#include "interfaces/INodeI.h"
 
 #include "XMPCore/Interfaces/IXMPMetadata.h"
 #include "XMPCore/Interfaces/IXMPArrayNode.h"
@@ -352,6 +353,10 @@ namespace INT_UMC {
 				}
 				sp->AppendNode( outputArray );
 			}
+
+			auto mergedNode = umc->GetInternalNode()->GetMergedExtensionNode();
+			if ( mergedNode ) 
+				sp->AppendNode( mergedNode );
 			return sp;
 		}
 

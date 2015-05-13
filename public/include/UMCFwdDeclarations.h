@@ -68,8 +68,6 @@ namespace UMC {
 	typedef shared_ptr< IImageSource >				spIImageSource;
 	typedef shared_ptr< const IImageSource >		spcIImageSource;
 
-
-
 	// IUMC
 	class IUMC;
 	typedef IUMC *									pIUMC;
@@ -125,6 +123,21 @@ namespace UMC {
 	typedef const IShotSource *						pcIShotSource;
 	typedef shared_ptr< IShotSource >				spIShotSource;
 	typedef shared_ptr< const IShotSource >			spcIShotSource;
+
+
+	// ICustomData
+	class ICustomData;
+	typedef ICustomData *							pICustomData;
+	typedef const ICustomData *						pcICustomData;
+	typedef shared_ptr< ICustomData >				spICustomData;
+	typedef shared_ptr< const ICustomData >			spcICustomData;
+
+	// ICustomDataHandler
+	class ICustomDataHandler;
+	typedef ICustomDataHandler *					pICustomDataHandler;
+	typedef const ICustomDataHandler *				pcICustomDataHandler;
+	typedef shared_ptr< ICustomDataHandler >		spICustomDataHandler;
+	typedef shared_ptr< const ICustomDataHandler >	spcICustomDataHandler;
 
 };
 

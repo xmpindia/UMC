@@ -11,7 +11,8 @@
 // =================================================================================================
 
 #include "interfaces/IVideoSource.h"
-#include "implHeaders/SourceImpl.h"
+#include "interfaces/ISource.h"
+#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
 	class VideoSourceImpl
@@ -62,11 +63,17 @@ namespace INT_UMC {
 		virtual cNodeList GetAllDecendants() const;
 
 		virtual size_t GetReferenceCount() const;
-		virtual void RemoveFromDOM();
-		virtual void AddToDOM( const spINode & parent );
+
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const spICustomData & customData );
+
+		virtual INT_UMC::pINodeI GetInternalNode();
+		virtual INT_UMC::pcINodeI GetInternalNode() const;
 
 	protected:
-		SourceImpl					mSourceImpl;
+		spISource					mSource;
 		EditUnitInCount				mInCount;
 		EditUnitDuration			mDuration;
 		EditRate					mVideoEditRate,

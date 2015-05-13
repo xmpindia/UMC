@@ -11,11 +11,13 @@
 // =================================================================================================
 
 #include "interfaces/IVideoFrameSource.h"
-#include "implHeaders/SourceImpl.h"
+#include "interfaces/ISource.h"
+#include "interfaces/INodeI.h"
 
 namespace INT_UMC {
 	class VideoFrameSourceImpl
 		: public IVideoFrameSource
+		, public INodeI
 		, public enable_shared_from_this < VideoFrameSourceImpl >
 	{
 	public:
@@ -56,12 +58,32 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
-		virtual void RemoveFromDOM();
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
+		virtual bool SetCustomData( const spICustomData & customData );
+
+		virtual pINodeI GetInternalNode();
+		virtual pcINodeI GetInternalNode() const;
+
+		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
+
+		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
+		virtual spIXMPStructureNode GetMergedExtensionNode() const;
+
+		virtual void RemoveFromDOM();
 		virtual void AddToDOM( const spINode & parent );
 
+		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
+
+		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+
+		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
+
+		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
+
 	protected:
-		SourceImpl					mSourceImpl;
+		spISource					mSource;
 		spIVideoSource				mVideoSource;
 		EditUnitInCount				mInCount;
 	};

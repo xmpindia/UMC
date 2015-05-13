@@ -17,7 +17,7 @@
 #include "interfaces/IVideoFrameSource.h"
 #include "interfaces/IOutput.h"
 
-#include "implHeaders/OutputImpl.h"
+#include "interfaces/ICustomDataHandlerRegistry.h"
 
 #include "utils/Utils.h"
 
@@ -30,11 +30,8 @@
 namespace INT_UMC {
 
 	spIOutput UMCImpl::AddOutput() {
-		spIOutput output = CreateOutput( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
-			/*<
-				OutputImpl, const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
-			> ( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
-		;*/
+		spIOutput output = CreateOutput( mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker(),
+			mNode->GetInternalNode()->GetUniqueIDGenerator() );
 		AddElementToMap< OutputMap, spIOutput >( mOutputMap, output, shared_from_this() );
 		return output;
 	}
@@ -135,42 +132,29 @@ namespace INT_UMC {
 	}
 
 	spIVideoSource UMCImpl::AddVideoSource() {
-		spIVideoSource source = CreateVideoSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		spIVideoSource source = CreateVideoSource( mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker(),
+			mNode->GetInternalNode()->GetUniqueIDGenerator() );
 		AddElementToMap< VideoSourceMap, spIVideoSource >( mVideoSourceMap, source,shared_from_this() );
 		return source;
 	}
 
 	spIAudioSource UMCImpl::AddAudioSource() {
-		spIAudioSource source = CreateAudioSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
-		/*std::make_shared
-			<
-				AudioSourceImpl, const std::string &, const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
-		;*/
+		spIAudioSource source = CreateAudioSource( mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker(),
+			mNode->GetInternalNode()->GetUniqueIDGenerator() );
 		AddElementToMap< AudioSourceMap, spIAudioSource >( mAudioSourceMap, source, shared_from_this() );
 		return source;
 	}
 
 	spIVideoFrameSource UMCImpl::AddVideoFrameSource( const spIVideoSource & videoSource ) {
-		spIVideoFrameSource source = CreateVideoFrameSource( videoSource, mspUniqueIDAndReferenceTracker,
-			mspUniqueIDGenerator );
-		/*std::make_shared
-			<
-				VideoFrameSourceImpl, const std::string &, const spIVideoSource &,
-				const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, videoSource, mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
-		;*/
+		spIVideoFrameSource source = CreateVideoFrameSource( videoSource, mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker(),
+			mNode->GetInternalNode()->GetUniqueIDGenerator() );
 		AddElementToMap< VideoFrameSourceMap, spIVideoFrameSource >( mVideoFrameSourceMap, source, shared_from_this() );
 		return source;
 	}
 
 	spIImageSource UMCImpl::AddImageSource() {
-		spIImageSource source = CreateImageSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
-		/*std::make_shared
-			<
-				ImageSourceImpl, const std::string &, const spIUniqueIDAndReferenceTracker &, spIUniqueIDGenerator &, const spIUMC &
-			> ( uniqueIDStr, mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, shared_from_this() );
-		;*/
+		spIImageSource source = CreateImageSource( mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker(),
+			mNode->GetInternalNode()->GetUniqueIDGenerator() );
 		AddElementToMap< ImageSourceMap, spIImageSource >( mImageSourceMap, source, shared_from_this() );
 		return source;
 	}
@@ -462,16 +446,33 @@ namespace INT_UMC {
 		return list;
 	}
 
-	void UMCImpl::RemoveFromDOM() { }
-
 	size_t UMCImpl::GetReferenceCount() const { return 0; }
 
-	void UMCImpl::AddToDOM( const spINode & parent ) { }
+	spICustomData UMCImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	spcICustomData UMCImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool UMCImpl::SetCustomData( const spICustomData & customData ) {
+		return mNode->SetCustomData( customData );
+	}
+
+	pINodeI UMCImpl::GetInternalNode() {
+		return mNode->GetInternalNode();
+	}
+
+	pcINodeI UMCImpl::GetInternalNode() const {
+		return mNode->GetInternalNode();
+	}
 
 	UMCImpl::UMCImpl()
-		: mspUniqueIDAndReferenceTracker( CreateUniqueIDAndReferenceTracker() )
-	{ 
-		mspUniqueIDGenerator = CreateUniqueIDGenerator( mspUniqueIDAndReferenceTracker );
+	{
+		auto first = CreateUniqueIDAndReferenceTracker();
+		auto second = CreateUniqueIDGenerator( first );
+		mNode = CreateNode( first, second, INode::kNodeTypeUMC );
 	}
 
 }
@@ -481,4 +482,9 @@ namespace UMC {
 		INT_UMC::UMCImpl * ptr = new INT_UMC::UMCImpl();
 		return shared_ptr< INT_UMC::UMCImpl >( ptr );
 	}
+
+	bool IUMC::RegisterCustomNodeHandler( const std::string & customNameSpace, const std::string & customName, const spICustomDataHandler & customDataHandler ) {
+		return INT_UMC::ICustomDataHandlerRegistry::GetInstance()->RegisterHandler( customNameSpace, customName, customDataHandler );
+	}
+
 }

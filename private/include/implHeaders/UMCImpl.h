@@ -101,9 +101,15 @@ namespace INT_UMC {
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
 
-		virtual void RemoveFromDOM();
-		virtual void AddToDOM( const spINode & parent );
 		virtual size_t GetReferenceCount() const;
+
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const spICustomData & customData );
+
+		virtual pINodeI GetInternalNode();
+		virtual pcINodeI GetInternalNode() const;
 
 	protected:
 		typedef std::map< const std::string, spIVideoSource > VideoSourceMap;
@@ -112,14 +118,13 @@ namespace INT_UMC {
 		typedef std::map< const std::string, spIImageSource > ImageSourceMap;
 		typedef std::map< const std::string, spIOutput > OutputMap;
 
+		spINode							mNode;
+
 		VideoSourceMap					mVideoSourceMap;
 		AudioSourceMap					mAudioSourceMap;
 		VideoFrameSourceMap				mVideoFrameSourceMap;
 		ImageSourceMap					mImageSourceMap;
 		OutputMap						mOutputMap;
-
-		spIUniqueIDGenerator			mspUniqueIDGenerator;
-		spIUniqueIDAndReferenceTracker	mspUniqueIDAndReferenceTracker;
 	};
 }
 

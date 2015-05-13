@@ -17,7 +17,7 @@
 namespace INT_UMC {
 
 	const std::string & TrackImpl::GetUniqueID() const {
-		return mUniqueID;
+		return mNode->GetUniqueID();
 	}
 
 
@@ -40,7 +40,7 @@ namespace INT_UMC {
 		return spIShot();
 	}
 
-	UMC::spcIShot TrackImpl::GetShot( const std::string & uniqueID ) const {
+	spcIShot TrackImpl::GetShot( const std::string & uniqueID ) const {
 		throw std::logic_error( "The method or operation is not implemented." );
 		return spIShot();
 	}
@@ -130,11 +130,11 @@ namespace INT_UMC {
 	}
 
 	spcINode TrackImpl::GetParentNode() const {
-		return spcINode( mwpOutput );
+		return mNode->GetParentNode();
 	}
 
 	spINode TrackImpl::GetParentNode() {
-		return spINode( mwpOutput );
+		return mNode->GetParentNode();
 	}
 
 	spcINode TrackImpl::GetChildNode( const std::string & uniqueID ) const {
@@ -164,11 +164,9 @@ namespace INT_UMC {
 
 	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mUniqueID( uniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeTrack ) )
+		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeTrack ) )
 		, mName()
-		, mShotMap()
-		, mspUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
-		, mspUniqueIDGenerator( uniqueIDGenerator ) {}
+		, mShotMap() { }
 
 	spcINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return const_cast< TrackImpl * >( this )->GetDecendantNode( uniqueID );
@@ -201,19 +199,64 @@ namespace INT_UMC {
 	}
 
 	size_t TrackImpl::GetReferenceCount() const {
-		return mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
+		return mNode->GetReferenceCount();
 	}
 
 	void TrackImpl::RemoveFromDOM() {
-		mspUniqueIDAndReferenceTracker->RemoveUniqueID( mUniqueID );
+		//ClearMap( mShotMap );
+		mNode->GetInternalNode()->RemoveFromDOM();
 	}
 
 	void TrackImpl::AddToDOM( const spINode & parent ) {
-		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
-		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
-		spIOutput outputParent = ConvertNode< IOutput >( parent );
-		if ( !outputParent ) THROW_PARENT_CANT_BE_NULL;
-		mwpOutput = outputParent;
+		mNode->GetInternalNode()->AddToDOM( parent );
+	}
+
+	spICustomData TrackImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	spcICustomData TrackImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool TrackImpl::SetCustomData( const spICustomData & customData ) {
+		return mNode->SetCustomData( customData );
+	}
+
+	pINodeI TrackImpl::GetInternalNode() {
+		return this;
+	}
+
+	pcINodeI TrackImpl::GetInternalNode() const {
+		return this;
+	}
+
+	void TrackImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
+		return mNode->GetInternalNode()->SetExtensionNode( structureNode );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode TrackImpl::GetExtensionNode(bool create /*= false */) const {
+		return mNode->GetInternalNode()->GetExtensionNode( create );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode TrackImpl::GetMergedExtensionNode() const {
+		return mNode->GetInternalNode()->GetMergedExtensionNode();
+	}
+
+	spIUniqueIDAndReferenceTracker TrackImpl::GetUniqueIDAndReferenceTracker() {
+		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	}
+
+	spcIUniqueIDAndReferenceTracker TrackImpl::GetUniqueIDAndReferenceTracker() const {
+		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	}
+
+	spIUniqueIDGenerator TrackImpl::GetUniqueIDGenerator() {
+		return mNode->GetInternalNode()->GetUniqueIDGenerator();
+	}
+
+	spcIUniqueIDGenerator TrackImpl::GetUniqueIDGenerator() const {
+		return mNode->GetInternalNode()->GetUniqueIDGenerator();
 	}
 
 	ITrack::eTrackTypes TrackImpl::GetType() const {

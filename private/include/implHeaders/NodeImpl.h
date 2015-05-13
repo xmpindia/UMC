@@ -1,5 +1,5 @@
-#ifndef AudioSourceImpl_h__
-#define AudioSourceImpl_h__ 1
+#ifndef NodeImpl_h__
+#define NodeImpl_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,38 +10,23 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "interfaces/IAudioSource.h"
-#include "interfaces/ISource.h"
 #include "UMCFwdDeclarations_I.h"
+#include "interfaces/INode.h"
+#include "interfaces/INodeI.h"
+
+#include <map>
 
 namespace INT_UMC {
-	class AudioSourceImpl
-		: public IAudioSource
-		, public enable_shared_from_this < AudioSourceImpl >
+	class NodeImpl
+		: public INode
+		, public INodeI
+		, public enable_shared_from_this< NodeImpl >
 	{
 	public:
-		AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator );
-
-		virtual void SetAudioEditRate( const EditRate & editRate );
-		virtual EditRate GetAudioEditRate() const;
-
-		virtual void SetInCount( const EditUnitInCount & inCount );
-		virtual EditUnitInCount GetInCount() const;
-
-		virtual void SetDuration( const EditUnitDuration & duration );
-		virtual EditUnitDuration GetDuration() const;
-
-		virtual void SetTimeCode( const TimeCode & timeCode );
-		virtual TimeCode GetTimeCode() const;
-
-		virtual eSourceTypes GetType() const;
-
-		virtual void SetClipName( const std::string & clipName );
-		virtual std::string GetClipName() const;
+		NodeImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, eNodeTypes nodeType );
 
 		virtual eNodeTypes GetNodeType() const;
-
 		virtual const std::string & GetUniqueID() const;
 
 		virtual spcINode GetParentNode() const;
@@ -67,18 +52,39 @@ namespace INT_UMC {
 
 		virtual bool SetCustomData( const spICustomData & customData );
 
+		virtual void RemoveFromDOM();
+
+		virtual void AddToDOM( const spINode & parent );
+
 		virtual INT_UMC::pINodeI GetInternalNode();
 
 		virtual INT_UMC::pcINodeI GetInternalNode() const;
 
-	protected:
-		spISource					mSource;
-		EditUnitInCount				mInCount;
-		EditUnitDuration			mDuration;
-		EditRate					mAudioEditRate;
-		TimeCode					mTimeCode;
+		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
 
+		virtual spIXMPStructureNode GetExtensionNode( bool create = false ) const;
+		virtual spIXMPStructureNode GetMergedExtensionNode() const;
+
+	protected:
+		std::string GetCombinedString( const std::string & nameSpace, const std::string & name ) const;
+
+		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
+
+		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+
+		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
+
+		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
+
+
+		const std::string									mUniqueID;
+		mutable NS_XMPCORE::spIXMPStructureNode				mExtensionNode;
+		std::map< std::string, spICustomData >				mCustomDataMap;
+
+		weak_ptr< INode >									mwpParentNode;
+		spIUniqueIDAndReferenceTracker						mspUniqueIDAndReferenceTracker;
+		spIUniqueIDGenerator								mspUniqueIDGenerator;
 	};
 }
 
-#endif  // AudioSourceImpl_h__
+#endif  // NodeImpl_h__

@@ -14,34 +14,34 @@ namespace INT_UMC {
 
 	ImageSourceImpl::ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator ) {}
+		: mSource( CreateSource( uniqueIDAndReferenceTracker, uniqueIDGenerator ) ) { }
 
 	ISource::eSourceTypes ImageSourceImpl::GetType() const {
 		return ISource::kSourceTypeImage;
 	}
 
 	void ImageSourceImpl::SetClipName( const std::string & clipName ) {
-		mSourceImpl.SetClipName( clipName );
+		mSource->SetClipName( clipName );
 	}
 
 	std::string ImageSourceImpl::GetClipName() const {
-		return mSourceImpl.GetClipName();
+		return mSource->GetClipName();
 	}
 
 	INode::eNodeTypes ImageSourceImpl::GetNodeType() const {
-		return mSourceImpl.GetNodeType();
+		return mSource->GetNodeType();
 	}
 
 	const std::string & ImageSourceImpl::GetUniqueID() const {
-		return mSourceImpl.GetUniqueID();
+		return mSource->GetUniqueID();
 	}
 
 	spcINode ImageSourceImpl::GetParentNode() const {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spINode ImageSourceImpl::GetParentNode() {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spcINode ImageSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
@@ -61,31 +61,43 @@ namespace INT_UMC {
 	}
 
 	INode::NodeList ImageSourceImpl::GetAllChildren() {
-		return mSourceImpl.GetAllChildren();
+		return mSource->GetAllChildren();
 	}
 
 	INode::cNodeList ImageSourceImpl::GetAllChildren() const {
-		return mSourceImpl.GetAllChildren();
+		return const_pointer_cast< const ISource >( mSource )->GetAllChildren();
 	}
 
 	INode::NodeList ImageSourceImpl::GetAllDecendants() {
-		return mSourceImpl.GetAllDecendants();
+		return mSource->GetAllDecendants();
 	}
 
 	INode::cNodeList ImageSourceImpl::GetAllDecendants() const {
-		return mSourceImpl.GetAllDecendants();
+		return const_pointer_cast< const ISource >( mSource )->GetAllDecendants();
 	}
 
 	size_t ImageSourceImpl::GetReferenceCount() const {
-		return mSourceImpl.GetReferenceCount();
+		return mSource->GetReferenceCount();
 	}
 
-	void ImageSourceImpl::RemoveFromDOM() {
-		return mSourceImpl.RemoveFromDOM();
+	spICustomData ImageSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	void ImageSourceImpl::AddToDOM( const spINode & parent ) {
-		return mSourceImpl.AddToDOM( parent );
+	spcICustomData ImageSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool ImageSourceImpl::SetCustomData( const spICustomData & customData ) {
+		return mSource->SetCustomData( customData );
+	}
+
+	pINodeI ImageSourceImpl::GetInternalNode() {
+		return mSource->GetInternalNode();
+	}
+
+	pcINodeI ImageSourceImpl::GetInternalNode() const {
+		return mSource->GetInternalNode();
 	}
 
 	spIImageSource CreateImageSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,

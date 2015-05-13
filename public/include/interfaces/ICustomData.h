@@ -1,3 +1,6 @@
+#ifndef ICustomData_h__
+#define ICustomData_h__ 1
+
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
 // Copyright 2015 Adobe Systems Incorporated
@@ -7,21 +10,21 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "UMCDefines_I.h"
-#include "interfaces/ICustomDataHandlerRegistry.h"
+#include "UMCFwdDeclarations.h"
 
-#define TXMP_STRING_TYPE std::string
-#include "XMP.incl_cpp"
+namespace UMC {
 
+	class ICustomData {
+	
+	public:
+		virtual void SetParentNode( const spINode & parentNode ) = 0;
 
-extern "C" void UMC_Initialize() {
-	SXMPMeta::Initialize();
-	std::string registeredPrefix;
-	SXMPMeta::RegisterNamespace( INT_UMC::kXMP_NS_UMC, "umc", &registeredPrefix );
+		virtual spcINode GetParentNode() const = 0;
+		virtual spINode GetParentNode() = 0;
+
+		virtual const std::string & GetNameSpace() const = 0;
+		virtual const std::string & GetName() const = 0;
+	};
 }
 
-extern "C" void UMC_Terminate() {
-	INT_UMC::ICustomDataHandlerRegistry::DestroyInstance();
-	SXMPMeta::Terminate();
-}
-
+#endif  // ICustomData_h__

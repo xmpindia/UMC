@@ -16,32 +16,39 @@
 #include <vector>
 
 namespace INT_UMC {
-	using namespace UMC;
-	template< typename mapType, typename mapElementType >
-	void AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent );
-	template< typename mapType >
-	size_t ClearMap( mapType & map );
-	template< typename mapType >
-	void RemoveElementFromMap( mapType & map, typename mapType::iterator it );
+	class INodeI;
+	typedef INodeI *		pINodeI;
+	typedef const INodeI *	pcINodeI;
+	//using namespace UMC;
+	//template< typename mapType, typename mapElementType >
+	//void AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent );
+	//template< typename mapType >
+	//size_t ClearMap( mapType & map );
+	//template< typename mapType >
+	//void RemoveElementFromMap( mapType & map, typename mapType::iterator it );
 };
 
 namespace UMC {
 	class INode {
 	public:
 		typedef enum {
-			kNodeTypeSource				= 0,
+			kNodeTypeNone				= 0,
 
-			kNodeTypeOutput				= 10,
+			kNodeTypeSource				= 1,
 
-			kNodeTypeTrack				= 20,
+			kNodeTypeOutput				= 2,
 
-			kNodeTypeShot				= 30,
+			kNodeTypeTrack				= 4,
 
-			kNodeTypeShotSource			= 40,
+			kNodeTypeShot				= 8,
 
-			kNodeTypeFrame				= 50,
+			kNodeTypeShotSource			= 16,
 
-			kNodeTypeUMC				= 60
+			kNodeTypeFrame				= 32,
+
+			kNodeTypeUMC				= 64,
+
+			kNodeTypeAll				= 0xFFFFFFFF,
 		} eNodeTypes;
 
 		typedef std::vector< spINode >		NodeList;
@@ -85,16 +92,23 @@ namespace UMC {
 
 		virtual size_t GetReferenceCount() const = 0;
 
-	protected:
-		virtual void RemoveFromDOM() = 0;
-		virtual void AddToDOM( const spINode & parent ) = 0;
+		// plugin-able extension node handling
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) = 0;
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const = 0;
 
-		template< typename mapType, typename mapElementType >
-		friend void INT_UMC::AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent );
-		template< typename mapType >
-		friend size_t INT_UMC::ClearMap( mapType & map );
-		template< typename mapType >
-		friend void INT_UMC::RemoveElementFromMap( mapType & map, typename mapType::iterator it );
+		virtual bool SetCustomData( const spICustomData & customData ) = 0;
+
+		virtual INT_UMC::pINodeI GetInternalNode() = 0;
+		virtual INT_UMC::pcINodeI GetInternalNode() const = 0;
+
+	protected:
+
+		//template< typename mapType, typename mapElementType >
+		//friend void INT_UMC::AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent );
+		//template< typename mapType >
+		//friend size_t INT_UMC::ClearMap( mapType & map );
+		//template< typename mapType >
+		//friend void INT_UMC::RemoveElementFromMap( mapType & map, typename mapType::iterator it );
 	};
 
 	template< typename requiredNodeType >

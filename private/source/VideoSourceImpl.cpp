@@ -14,7 +14,7 @@ namespace INT_UMC {
 
 	VideoSourceImpl::VideoSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
+		: mSource( CreateSource( uniqueIDAndReferenceTracker, uniqueIDGenerator ) )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd )
 		, mVideoEditRate( 1 )
@@ -65,27 +65,27 @@ namespace INT_UMC {
 		return ISource::kSourceTypeVideo;
 	}
 	void VideoSourceImpl::SetClipName( const std::string & clipName ) {
-		mSourceImpl.SetClipName( clipName );
+		mSource->SetClipName( clipName );
 	}
 
 	std::string VideoSourceImpl::GetClipName() const {
-		return mSourceImpl.GetClipName();
+		return mSource->GetClipName();
 	}
 
 	INode::eNodeTypes VideoSourceImpl::GetNodeType() const {
-		return mSourceImpl.GetNodeType();
+		return mSource->GetNodeType();
 	}
 
 	const std::string & VideoSourceImpl::GetUniqueID() const {
-		return mSourceImpl.GetUniqueID();
+		return mSource->GetUniqueID();
 	}
 
 	spcINode VideoSourceImpl::GetParentNode() const {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spINode VideoSourceImpl::GetParentNode() {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spcINode VideoSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
@@ -105,31 +105,43 @@ namespace INT_UMC {
 	}
 
 	INode::NodeList VideoSourceImpl::GetAllChildren() {
-		return mSourceImpl.GetAllChildren();
+		return mSource->GetAllChildren();
 	}
 
 	INode::cNodeList VideoSourceImpl::GetAllChildren() const {
-		return mSourceImpl.GetAllChildren();
+		return const_pointer_cast< const ISource >( mSource )->GetAllChildren();
 	}
 
 	INode::NodeList VideoSourceImpl::GetAllDecendants() {
-		return mSourceImpl.GetAllDecendants();
+		return mSource->GetAllDecendants();
 	}
 
 	INode::cNodeList VideoSourceImpl::GetAllDecendants() const {
-		return mSourceImpl.GetAllDecendants();
+		return const_pointer_cast< const ISource >( mSource )->GetAllDecendants();
 	}
 
 	size_t VideoSourceImpl::GetReferenceCount() const {
-		return mSourceImpl.GetReferenceCount();
+		return mSource->GetReferenceCount();
 	}
 
-	void VideoSourceImpl::RemoveFromDOM() {
-		return mSourceImpl.RemoveFromDOM();
+	pcINodeI VideoSourceImpl::GetInternalNode() const {
+		return mSource->GetInternalNode();
 	}
 
-	void VideoSourceImpl::AddToDOM( const spINode & parent ) {
-		return mSourceImpl.AddToDOM( parent );
+	pINodeI VideoSourceImpl::GetInternalNode() {
+		return mSource->GetInternalNode();
+	}
+
+	bool VideoSourceImpl::SetCustomData( const spICustomData & customData ) {
+		return mSource->SetCustomData( customData );
+	}
+
+	spcICustomData VideoSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	spICustomData VideoSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	spIVideoSource CreateVideoSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,

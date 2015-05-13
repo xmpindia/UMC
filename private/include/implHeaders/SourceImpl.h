@@ -12,6 +12,7 @@
 
 #include "interfaces/ISource.h"
 #include "UMCFwdDeclarations_I.h"
+#include "interfaces/INodeI.h"
 
 namespace INT_UMC {
 	using namespace UMC;
@@ -51,17 +52,19 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
-		virtual void RemoveFromDOM();
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 
-		virtual void AddToDOM( const spINode & parent );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const spICustomData & customData );
+
+		virtual INT_UMC::pINodeI GetInternalNode();
+
+		virtual INT_UMC::pcINodeI GetInternalNode() const;
 
 	protected:
-		const std::string					mUniqueID;
+		spINode								mNode;
 		std::string							mClipName;
-
-		weak_ptr< IUMC >					mwpUMC;
-		spIUniqueIDAndReferenceTracker		mspUniqueIDAndReferenceTracker;
-		spIUniqueIDGenerator				mspUniqueIDGenerator;
 
 		friend class VideoFrameSourceImpl;
 	};

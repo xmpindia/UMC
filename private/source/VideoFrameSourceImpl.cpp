@@ -17,7 +17,7 @@ namespace INT_UMC {
 	VideoFrameSourceImpl::VideoFrameSourceImpl( const spIVideoSource & videoSource,
 		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
+		: mSource( CreateSource( uniqueIDAndReferenceTracker, uniqueIDGenerator ) )
 		, mVideoSource( videoSource )
 		, mInCount( kEditUnitInCountFromBeginning )
 	{
@@ -49,27 +49,27 @@ namespace INT_UMC {
 	}
 
 	void VideoFrameSourceImpl::SetClipName( const std::string & clipName ) {
-		mSourceImpl.SetClipName( clipName );
+		mSource->SetClipName( clipName );
 	}
 
 	std::string VideoFrameSourceImpl::GetClipName() const {
-		return mSourceImpl.GetClipName();
+		return mSource->GetClipName();
 	}
 
 	INode::eNodeTypes VideoFrameSourceImpl::GetNodeType() const {
-		return mSourceImpl.GetNodeType();
+		return mSource->GetNodeType();
 	}
 
 	const std::string & VideoFrameSourceImpl::GetUniqueID() const {
-		return mSourceImpl.GetUniqueID();
+		return mSource->GetUniqueID();
 	}
 
 	spcINode VideoFrameSourceImpl::GetParentNode() const {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spINode VideoFrameSourceImpl::GetParentNode() {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spcINode VideoFrameSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
@@ -89,33 +89,81 @@ namespace INT_UMC {
 	}
 
 	INode::NodeList VideoFrameSourceImpl::GetAllChildren() {
-		return mSourceImpl.GetAllChildren();
+		return NodeList();
 	}
 
 	INode::cNodeList VideoFrameSourceImpl::GetAllChildren() const {
-		return mSourceImpl.GetAllChildren();
+		return cNodeList();
 	}
 
 	INode::NodeList VideoFrameSourceImpl::GetAllDecendants() {
-		return mSourceImpl.GetAllDecendants();
+		return NodeList();
 	}
 
 	INode::cNodeList VideoFrameSourceImpl::GetAllDecendants() const {
-		return mSourceImpl.GetAllDecendants();
+		return cNodeList();
 	}
 
 	size_t VideoFrameSourceImpl::GetReferenceCount() const {
-		return mSourceImpl.GetReferenceCount();
+		return mSource->GetReferenceCount();
 	}
 
-	void VideoFrameSourceImpl::RemoveFromDOM() {
-		mSourceImpl.RemoveFromDOM();
-		mSourceImpl.mspUniqueIDAndReferenceTracker->RemoveReference( mVideoSource->GetUniqueID() );
+	spICustomData VideoFrameSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	spcICustomData VideoFrameSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool VideoFrameSourceImpl::SetCustomData( const spICustomData & customData ) {
+		return mSource->SetCustomData( customData );
+	}
+
+	pINodeI VideoFrameSourceImpl::GetInternalNode() {
+		return this;
+	}
+
+	pcINodeI VideoFrameSourceImpl::GetInternalNode() const {
+		return this;
+	}
+
+	spcIUniqueIDGenerator VideoFrameSourceImpl::GetUniqueIDGenerator() const {
+		return mSource->GetInternalNode()->GetUniqueIDGenerator();
+	}
+
+	spIUniqueIDGenerator VideoFrameSourceImpl::GetUniqueIDGenerator() {
+		return mSource->GetInternalNode()->GetUniqueIDGenerator();
+	}
+
+	spcIUniqueIDAndReferenceTracker VideoFrameSourceImpl::GetUniqueIDAndReferenceTracker() const {
+		return mSource->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	}
+
+	spIUniqueIDAndReferenceTracker VideoFrameSourceImpl::GetUniqueIDAndReferenceTracker() {
+		return mSource->GetInternalNode()->GetUniqueIDAndReferenceTracker();
 	}
 
 	void VideoFrameSourceImpl::AddToDOM( const spINode & parent ) {
-		mSourceImpl.AddToDOM( parent );
-		mSourceImpl.mspUniqueIDAndReferenceTracker->AddReference( mVideoSource->GetUniqueID() );
+		mSource->GetInternalNode()->AddToDOM( parent );
+		GetUniqueIDAndReferenceTracker()->AddReference( mVideoSource->GetUniqueID() );
+	}
+
+	void VideoFrameSourceImpl::RemoveFromDOM() {
+		mSource->GetInternalNode()->RemoveFromDOM();
+		GetUniqueIDAndReferenceTracker()->RemoveReference( mVideoSource->GetUniqueID() );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode VideoFrameSourceImpl::GetExtensionNode(bool create /*= false */) const {
+		return mSource->GetInternalNode()->GetExtensionNode( create );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode VideoFrameSourceImpl::GetMergedExtensionNode() const {
+		return mSource->GetInternalNode()->GetMergedExtensionNode();
+	}
+
+	void VideoFrameSourceImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
+		mSource->GetInternalNode()->SetExtensionNode( structureNode );
 	}
 
 	spIVideoFrameSource CreateVideoFrameSource( const spIVideoSource & videoSource,

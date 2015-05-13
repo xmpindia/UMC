@@ -11,7 +11,8 @@
 // =================================================================================================
 
 #include "interfaces/IImageSource.h"
-#include "implHeaders/SourceImpl.h"
+#include "interfaces/ISource.h"
+#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
 
@@ -49,12 +50,16 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
-		virtual void RemoveFromDOM();
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
-		virtual void AddToDOM( const spINode & parent );
+		virtual bool SetCustomData( const spICustomData & customData );
+
+		virtual INT_UMC::pINodeI GetInternalNode();
+		virtual INT_UMC::pcINodeI GetInternalNode() const;
 
 	protected:
-		SourceImpl					mSourceImpl;
+		spISource					mSource;
 	};
 }
 

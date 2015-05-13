@@ -17,14 +17,14 @@ namespace INT_UMC {
 
 	UniqueIDGeneratorImpl::UniqueIDGeneratorImpl( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker )
 		: mUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
-		, mCurrentID( 1 ) { }
+		, mCurrentID( 0 ) { }
 
 	std::string UniqueIDGeneratorImpl::GenerateUniqueID( INode::eNodeTypes nodeType ) {
-		static char buffer[ 30 ] = "";
+		static char buffer[ 32 ] = "";
 	#if UMC_UNIXBuild
-		snprintf ( buffer, 30, "%d", mCurrentID );
+		snprintf ( buffer, 32, "%d", mCurrentID );
 	#elif UMC_WinBuild
-		sprintf_s( buffer, 30, "%d", mCurrentID );
+		sprintf_s( buffer, 32, "%d", mCurrentID );
 	#else
 		#error "Missing implementation for the platform"
 	#endif

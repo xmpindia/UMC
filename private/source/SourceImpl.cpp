@@ -16,7 +16,7 @@
 namespace INT_UMC {
 
 	const std::string & SourceImpl::GetUniqueID() const {
-		return mUniqueID;
+		return mNode->GetUniqueID();
 	}
 
 	void SourceImpl::SetClipName( const std::string & clipName ) {
@@ -28,11 +28,11 @@ namespace INT_UMC {
 	}
 
 	spcINode SourceImpl::GetParentNode() const  {
-		return spcINode( mwpUMC );
+		return mNode->GetParentNode();
 	}
 
 	spINode SourceImpl::GetParentNode() {
-		return spINode( mwpUMC );
+		return mNode->GetParentNode();
 	}
 
 	spcINode SourceImpl::GetDecendantNode( const std::string & id ) const {
@@ -68,29 +68,36 @@ namespace INT_UMC {
 	}
 
 	size_t SourceImpl::GetReferenceCount() const {
-		return mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
+		return mNode->GetReferenceCount();
 	}
 
-	void SourceImpl::RemoveFromDOM() {
-		mspUniqueIDAndReferenceTracker->RemoveUniqueID( mUniqueID );
+	spICustomData SourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	void SourceImpl::AddToDOM( const spINode & parent ) {
-		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
-		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
-		spIUMC umcParent = ConvertNode< IUMC >( parent );
-		if ( !umcParent ) THROW_PARENT_CANT_BE_NULL;
-		mwpUMC = umcParent;
+	spcICustomData SourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool SourceImpl::SetCustomData( const spICustomData & customData ) {
+		return mNode->SetCustomData( customData );
+	}
+
+	pINodeI SourceImpl::GetInternalNode() {
+		return mNode->GetInternalNode();
+	}
+
+	pcINodeI SourceImpl::GetInternalNode() const {
+		return mNode->GetInternalNode();
 	}
 
 	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mUniqueID( uniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeSource ) )
-		, mspUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
-		, mspUniqueIDGenerator( uniqueIDGenerator )
-	{
-		if ( !mspUniqueIDAndReferenceTracker ) THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL;
-		if ( !mspUniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
-	}
+		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource ) ){ }
 
+	spISource CreateSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< SourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+	}
 }

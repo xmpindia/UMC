@@ -96,6 +96,9 @@ namespace UMC {
 		static spIUMC CreateEmptyUMC();
 		static spIUMC CreateUMCFromBuffer( const std::string & uniqueID );
 
+		static bool RegisterCustomNodeHandler( const std::string & customDataNameSpace, const std::string & customDataName,
+			const spICustomDataHandler & customDataHandler );
+
 		//TODO:
 		//virtual void RegisterUniqueIDGenerator( const spIUniqueIDGenerator & uniqueIDGenerator );
 		// virtual size_t OptimizeSources();

@@ -18,7 +18,7 @@
 namespace INT_UMC {
 
 	const std::string & OutputImpl::GetUniqueID() const {
-		return mUniqueID;
+		return mNode->GetUniqueID();
 	}
 
 	spITrack OutputImpl::GetTrack( const std::string & uniqueID ) {
@@ -100,31 +100,75 @@ namespace INT_UMC {
 	}
 
 	size_t OutputImpl::GetReferenceCount() const {
-		return mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
+		return mNode->GetReferenceCount();
+	}
+
+	spICustomData OutputImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	spcICustomData OutputImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool OutputImpl::SetCustomData( const spICustomData & customData ) {
+		return mNode->SetCustomData( customData );
+	}
+
+	pINodeI OutputImpl::GetInternalNode() {
+		return this;
+	}
+
+	pcINodeI OutputImpl::GetInternalNode() const {
+		return this;
+	}
+
+	void OutputImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
+		mNode->GetInternalNode()->SetExtensionNode( structureNode );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode OutputImpl::GetExtensionNode(bool create /*= false */) const {
+		return mNode->GetInternalNode()->GetExtensionNode( create );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode OutputImpl::GetMergedExtensionNode() const {
+		return mNode->GetInternalNode()->GetMergedExtensionNode();
+	}
+
+	spIUniqueIDAndReferenceTracker OutputImpl::GetUniqueIDAndReferenceTracker() {
+		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	}
+
+	spcIUniqueIDAndReferenceTracker OutputImpl::GetUniqueIDAndReferenceTracker() const {
+		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	}
+
+	spIUniqueIDGenerator OutputImpl::GetUniqueIDGenerator() {
+		return mNode->GetInternalNode()->GetUniqueIDGenerator();
+	}
+
+	spcIUniqueIDGenerator OutputImpl::GetUniqueIDGenerator() const {
+		return mNode->GetInternalNode()->GetUniqueIDGenerator();
 	}
 
 	void OutputImpl::RemoveFromDOM() {
 		ClearMap( mVideoTrackMap );
 		ClearMap( mAudioTrackMap );
-		mspUniqueIDAndReferenceTracker->RemoveUniqueID( mUniqueID );
+		mNode->GetInternalNode()->RemoveFromDOM();
 	}
 
 	void OutputImpl::AddToDOM( const spINode & parent ) {
-		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
-		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
-		spIUMC umcParent = ConvertNode< IUMC >( parent );
-		if ( !umcParent ) THROW_PARENT_CANT_BE_NULL;
-		mwpUMC = umcParent;
+		mNode->GetInternalNode()->AddToDOM( parent );
 	}
 
 	spIVideoTrack OutputImpl::AddVideoTrack() {
-		spIVideoTrack track = CreateVideoTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		spIVideoTrack track = CreateVideoTrack( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator() );
 		AddElementToMap( mVideoTrackMap, track, shared_from_this() );
 		return track;
 	}
 
 	spIAudioTrack OutputImpl::AddAudioTrack() {
-		spIAudioTrack track = CreateAudioTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
+		spIAudioTrack track = CreateAudioTrack( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator() );
 		AddElementToMap( mAudioTrackMap, track, shared_from_this() );
 		return track;
 	}
@@ -230,11 +274,11 @@ namespace INT_UMC {
 	}
 
 	spcINode OutputImpl::GetParentNode() const  {
-		return spcIUMC( mwpUMC );
+		return mNode->GetParentNode();
 	}
 
 	spINode OutputImpl::GetParentNode() {
-		return spIUMC( mwpUMC );
+		return mNode->GetParentNode();
 	}
 
 	size_t OutputImpl::TrackCount() const {
@@ -275,17 +319,11 @@ namespace INT_UMC {
 
 	OutputImpl::OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mUniqueID( uniqueIDGenerator->GenerateUniqueID( INode::kNodeTypeOutput ) )
+		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeOutput ) )
 		, mCanvasAspectRatio( 1 )
 		, mImageAspectRatio( 1 )
 		, mVideoEditRate( 1 )
-		, mAudioEditRate( 1 )
-		, mspUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
-		, mspUniqueIDGenerator( uniqueIDGenerator )
-	{
-		if ( !mspUniqueIDAndReferenceTracker ) THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL;
-		if ( !mspUniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
-	}
+		, mAudioEditRate( 1 ) { }
 
 
 	spIOutput CreateOutput( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,

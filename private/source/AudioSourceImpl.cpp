@@ -14,7 +14,7 @@ namespace INT_UMC {
 
 	AudioSourceImpl::AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mSourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
+		: mSource( CreateSource( uniqueIDAndReferenceTracker, uniqueIDGenerator ) )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd )
 		, mAudioEditRate( 48000 )
@@ -57,27 +57,27 @@ namespace INT_UMC {
 	}
 
 	void AudioSourceImpl::SetClipName( const std::string & clipName ) {
-		mSourceImpl.SetClipName( clipName );
+		mSource->SetClipName( clipName );
 	}
 
 	std::string AudioSourceImpl::GetClipName() const {
-		return mSourceImpl.GetClipName();
+		return mSource->GetClipName();
 	}
 
 	INode::eNodeTypes AudioSourceImpl::GetNodeType() const {
-		return mSourceImpl.GetNodeType();
+		return mSource->GetNodeType();
 	}
 
 	const std::string & AudioSourceImpl::GetUniqueID() const {
-		return mSourceImpl.GetUniqueID();
+		return mSource->GetUniqueID();
 	}
 
 	spcINode AudioSourceImpl::GetParentNode() const {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spINode AudioSourceImpl::GetParentNode() {
-		return mSourceImpl.GetParentNode();
+		return mSource->GetParentNode();
 	}
 
 	spcINode AudioSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
@@ -97,31 +97,43 @@ namespace INT_UMC {
 	}
 
 	INode::NodeList AudioSourceImpl::GetAllChildren() {
-		return mSourceImpl.GetAllChildren();
+		return mSource->GetAllChildren();
 	}
 
 	INode::cNodeList AudioSourceImpl::GetAllChildren() const {
-		return mSourceImpl.GetAllChildren();
+		return const_pointer_cast< const ISource >( mSource )->GetAllChildren();
 	}
 
 	INode::NodeList AudioSourceImpl::GetAllDecendants() {
-		return mSourceImpl.GetAllDecendants();
+		return mSource->GetAllDecendants();
 	}
 
 	INode::cNodeList AudioSourceImpl::GetAllDecendants() const {
-		return mSourceImpl.GetAllDecendants();
+		return const_pointer_cast< const ISource >( mSource )->GetAllDecendants();
 	}
 
 	size_t AudioSourceImpl::GetReferenceCount() const {
-		return mSourceImpl.GetReferenceCount();
+		return mSource->GetReferenceCount();
 	}
 
-	void AudioSourceImpl::RemoveFromDOM() {
-		return mSourceImpl.RemoveFromDOM();
+	spICustomData AudioSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	void AudioSourceImpl::AddToDOM( const spINode & parent ) {
-		return mSourceImpl.AddToDOM( parent );
+	spcICustomData AudioSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mSource->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool AudioSourceImpl::SetCustomData( const spICustomData & customData ) {
+		return mSource->SetCustomData( customData );
+	}
+
+	pINodeI AudioSourceImpl::GetInternalNode() {
+		return mSource->GetInternalNode();
+	}
+
+	pcINodeI AudioSourceImpl::GetInternalNode() const {
+		return mSource->GetInternalNode();
 	}
 
 	spIAudioSource CreateAudioSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,

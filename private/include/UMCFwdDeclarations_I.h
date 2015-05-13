@@ -12,6 +12,9 @@
 
 #include "UMCFwdDeclarations.h"
 #include "UMCDefines_I.h"
+#include "interfaces/INode.h"
+#include "XMPCore/XMPCoreFwdDeclarations.h"
+
 
 #include <set>
 #include <string>
@@ -19,12 +22,34 @@
 namespace INT_UMC {
 	using namespace UMC;
 
+	// INodeI
+	class INodeI;
+	typedef INodeI *											pINodeI;
+	typedef const INodeI *										pcINodeI;
+	typedef shared_ptr< INodeI >								spINodeI;
+	typedef shared_ptr< const INodeI >							spcINodeI;
+	
 	// IUniqueIDAndReferenceTracker
 	class IUniqueIDAndReferenceTracker;
 	typedef IUniqueIDAndReferenceTracker *						pIUniqueIDAndReferenceTracker;
 	typedef const IUniqueIDAndReferenceTracker *				pcIUniqueIDAndReferenceTracker;
 	typedef shared_ptr< IUniqueIDAndReferenceTracker >			spIUniqueIDAndReferenceTracker;
 	typedef shared_ptr< const IUniqueIDAndReferenceTracker >	spcIUniqueIDAndReferenceTracker;
+
+	// ICustomDataHandlerRegistry
+	class ICustomDataHandlerRegistry;
+	typedef ICustomDataHandlerRegistry *						pICustomDataHandlerRegistry;
+	typedef const ICustomDataHandlerRegistry *					pcICustomDataHandlerRegistry;
+	typedef shared_ptr< ICustomDataHandlerRegistry >			spICustomDataHandlerRegistry;
+	typedef shared_ptr< const ICustomDataHandlerRegistry >		spcICustomDataHandlerRegistry;
+
+	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData,
+		const NS_XMPCORE::spIXMPStructureNode & baseNode );
+
+	spINode CreateNode( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType );
+	spISource CreateSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
 
 	spIUniqueIDAndReferenceTracker CreateUniqueIDAndReferenceTracker();
 	spIUniqueIDGenerator CreateUniqueIDGenerator( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker );

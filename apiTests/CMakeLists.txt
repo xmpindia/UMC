@@ -35,6 +35,7 @@ list(APPEND UMC_FILES
 
 list( APPEND TEST_FILES ${API_TEST_CASES_HEADERS} ${API_TEST_CASES_SOURCES} )
 
+include_directories( ${PROJECT_SOURCE_DIR})
 include_directories(${UMC_PUBLIC_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../imports/cppunit/include)
 

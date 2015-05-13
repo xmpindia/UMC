@@ -12,7 +12,7 @@
 
 #include "interfaces/ITrack.h"
 #include "interfaces/IShot.h"
-#include "UMCFwdDeclarations_I.h"
+#include "interfaces/INodeI.h"
 
 #include <string>
 #include <map>
@@ -22,6 +22,7 @@ namespace INT_UMC {
 
 	class TrackImpl
 		: public ITrack
+		, public INodeI
 	{
 	public:
 		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
@@ -83,21 +84,35 @@ namespace INT_UMC {
 		virtual size_t GetReferenceCount() const;
 
 		virtual void RemoveFromDOM();
-
 		virtual void AddToDOM( const spINode & parent );
+
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const spICustomData & customData );
+
+		virtual pINodeI GetInternalNode();
+		virtual pcINodeI GetInternalNode() const;
+
+		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
+
+		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
+		virtual spIXMPStructureNode GetMergedExtensionNode() const;
+
+		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
+		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+
+		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
+		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	protected:
 
 		typedef std::map< const std::string, spIShot > ShotMap;
 
-		std::string						mUniqueID;
+		spINode							mNode;
+
 		std::string						mName;
 		ShotMap							mShotMap;
-
-		weak_ptr< IOutput >				mwpOutput;
-		spIUniqueIDGenerator			mspUniqueIDGenerator;
-		spIUniqueIDAndReferenceTracker	mspUniqueIDAndReferenceTracker;
-
 	};
 }
 
