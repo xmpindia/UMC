@@ -64,11 +64,11 @@ namespace INT_UMC {
 		return mSource->GetUniqueID();
 	}
 
-	spcINode VideoFrameSourceImpl::GetParentNode() const {
+	wpcINode VideoFrameSourceImpl::GetParentNode() const {
 		return mSource->GetParentNode();
 	}
 
-	spINode VideoFrameSourceImpl::GetParentNode() {
+	wpINode VideoFrameSourceImpl::GetParentNode() {
 		return mSource->GetParentNode();
 	}
 

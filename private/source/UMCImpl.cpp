@@ -53,11 +53,11 @@ namespace INT_UMC {
 		return kEmptyString;
 	}
 
-	spcINode UMCImpl::GetParentNode() const {
+	wpcINode UMCImpl::GetParentNode() const {
 		return spcINode();
 	}
 
-	spINode UMCImpl::GetParentNode() {
+	wpINode UMCImpl::GetParentNode() {
 		return spINode();
 	}
 

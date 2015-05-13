@@ -28,10 +28,10 @@ namespace DoVi {
 		double getDiagonalSize();
 		void setDiagonalSize( const double & dz );
 
-		virtual void SetParentNode( const spINode & parentNode );
+		virtual void SetParentNode( const wpINode & parentNode );
 
-		virtual spcINode GetParentNode() const;
-		virtual spINode GetParentNode();
+		virtual wpcINode GetParentNode() const;
+		virtual wpINode GetParentNode();
 
 		virtual ~Display();
 
@@ -42,7 +42,7 @@ namespace DoVi {
 		std::string		_id;
 		std::string		_name;
 		double			_diagonalSize;
-		spINode			_parent;
+		wpINode			_parent;
 	};
 }
 

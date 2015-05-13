@@ -58,10 +58,10 @@ namespace UMC {
 		virtual const std::string & GetUniqueID() const = 0;
 
 		template< typename requiredNodeType >
-		shared_ptr< requiredNodeType > GetParent();
+		weak_ptr< requiredNodeType > GetParent();
 
 		template< typename requiredNodeType >
-		shared_ptr< const requiredNodeType > GetParent() const;
+		weak_ptr< const requiredNodeType > GetParent() const;
 
 		template< typename requiredNodeType >
 		shared_ptr< requiredNodeType > GetChild( const std::string & uniqueID );
@@ -75,8 +75,8 @@ namespace UMC {
 		template< typename requiredNodeType >
 		shared_ptr< const requiredNodeType > GetDecendant( const std::string & uniqueID ) const;
 
-		virtual spcINode GetParentNode() const = 0;
-		virtual spINode GetParentNode() = 0;
+		virtual wpcINode GetParentNode() const = 0;
+		virtual wpINode GetParentNode() = 0;
 
 		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const = 0;
 		virtual spINode GetDecendantNode( const std::string & uniqueID ) = 0;
@@ -152,18 +152,19 @@ namespace UMC {
 	}
 
 	template< typename requiredNodeType >
-	shared_ptr< const requiredNodeType > UMC::INode::GetParent() const {
+	weak_ptr< const requiredNodeType > UMC::INode::GetParent() const {
 		return const_cast< INode * >( this )->GetParent< requiredNodeType >();
 	}
 
 	template< typename requiredNodeType >
-	shared_ptr< requiredNodeType > UMC::INode::GetParent() {
+	weak_ptr< requiredNodeType > UMC::INode::GetParent() {
 		auto node = GetParentNode();
 		if ( node ) {
-			return ConvertNode< requiredNodeType >( node );
-		} else {
-			return shared_ptr< requiredNodeType >();
+			auto spNode = node.lock();
+			if ( spNode )
+				return ConvertNode< requiredNodeType >( spNode );
 		}
+		return weak_ptr< requiredNodeType >();
 	}
 }
 

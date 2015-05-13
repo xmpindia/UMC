@@ -72,11 +72,11 @@ namespace INT_UMC {
 		return mSource->GetUniqueID();
 	}
 
-	spcINode AudioSourceImpl::GetParentNode() const {
+	wpcINode AudioSourceImpl::GetParentNode() const {
 		return mSource->GetParentNode();
 	}
 
-	spINode AudioSourceImpl::GetParentNode() {
+	wpINode AudioSourceImpl::GetParentNode() {
 		return mSource->GetParentNode();
 	}
 

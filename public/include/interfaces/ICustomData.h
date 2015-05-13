@@ -17,10 +17,10 @@ namespace UMC {
 	class ICustomData {
 	
 	public:
-		virtual void SetParentNode( const spINode & parentNode ) = 0;
+		virtual void SetParentNode( const wpINode & parentNode ) = 0;
 
-		virtual spcINode GetParentNode() const = 0;
-		virtual spINode GetParentNode() = 0;
+		virtual wpcINode GetParentNode() const = 0;
+		virtual wpINode GetParentNode() = 0;
 	};
 }
 

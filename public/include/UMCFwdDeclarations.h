@@ -31,6 +31,8 @@ namespace UMC {
 	typedef const INode *							pcINode;
 	typedef shared_ptr< INode >						spINode;
 	typedef shared_ptr< const INode >				spcINode;
+	typedef weak_ptr< INode >						wpINode;
+	typedef weak_ptr< const INode >					wpcINode;
 
 
 	// ISource

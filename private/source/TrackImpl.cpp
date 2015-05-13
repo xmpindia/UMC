@@ -129,11 +129,11 @@ namespace INT_UMC {
 		return INode::kNodeTypeTrack;
 	}
 
-	spcINode TrackImpl::GetParentNode() const {
+	wpcINode TrackImpl::GetParentNode() const {
 		return mNode->GetParentNode();
 	}
 
-	spINode TrackImpl::GetParentNode() {
+	wpINode TrackImpl::GetParentNode() {
 		return mNode->GetParentNode();
 	}
 

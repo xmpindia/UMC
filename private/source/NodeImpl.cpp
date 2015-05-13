@@ -38,12 +38,12 @@ namespace INT_UMC {
 		return mUniqueID;
 	}
 
-	spcINode NodeImpl::GetParentNode() const {
-		return spcINode( mwpParentNode );
+	wpcINode NodeImpl::GetParentNode() const {
+		return mwpParentNode;
 	}
 
-	spINode NodeImpl::GetParentNode() {
-		return spINode( mwpParentNode );
+	wpINode NodeImpl::GetParentNode() {
+		return mwpParentNode;
 	}
 
 	spcINode NodeImpl::GetDecendantNode( const std::string & ) const {

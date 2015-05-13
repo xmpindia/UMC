@@ -27,11 +27,11 @@ namespace INT_UMC {
 		return mClipName;
 	}
 
-	spcINode SourceImpl::GetParentNode() const  {
+	wpcINode SourceImpl::GetParentNode() const  {
 		return mNode->GetParentNode();
 	}
 
-	spINode SourceImpl::GetParentNode() {
+	wpINode SourceImpl::GetParentNode() {
 		return mNode->GetParentNode();
 	}
 

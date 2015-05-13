@@ -78,8 +78,8 @@ namespace INT_UMC {
 
 		virtual eNodeTypes GetNodeType() const;
 
-		virtual spcINode GetParentNode() const;
-		virtual spINode GetParentNode();
+		virtual wpcINode GetParentNode() const;
+		virtual wpINode GetParentNode();
 
 		virtual spcINode GetDecendantNode( const std::string & id ) const;
 		virtual spINode GetDecendantNode( const std::string & id );

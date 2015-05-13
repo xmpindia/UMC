@@ -273,11 +273,11 @@ namespace INT_UMC {
 		return TryAndRemoveElementFromMap( mAudioTrackMap, uniqueID );
 	}
 
-	spcINode OutputImpl::GetParentNode() const  {
+	wpcINode OutputImpl::GetParentNode() const  {
 		return mNode->GetParentNode();
 	}
 
-	spINode OutputImpl::GetParentNode() {
+	wpINode OutputImpl::GetParentNode() {
 		return mNode->GetParentNode();
 	}
 

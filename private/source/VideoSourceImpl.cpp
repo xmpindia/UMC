@@ -80,11 +80,11 @@ namespace INT_UMC {
 		return mSource->GetUniqueID();
 	}
 
-	spcINode VideoSourceImpl::GetParentNode() const {
+	wpcINode VideoSourceImpl::GetParentNode() const {
 		return mSource->GetParentNode();
 	}
 
-	spINode VideoSourceImpl::GetParentNode() {
+	wpINode VideoSourceImpl::GetParentNode() {
 		return mSource->GetParentNode();
 	}
 

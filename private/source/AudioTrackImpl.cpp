@@ -137,11 +137,11 @@ namespace INT_UMC {
 		return mTrackImpl.GetUniqueID();
 	}
 
-	spcINode AudioTrackImpl::GetParentNode() const {
+	wpcINode AudioTrackImpl::GetParentNode() const {
 		return mTrackImpl.GetParentNode();
 	}
 
-	spINode AudioTrackImpl::GetParentNode() {
+	wpINode AudioTrackImpl::GetParentNode() {
 		return mTrackImpl.GetParentNode();
 	}
 

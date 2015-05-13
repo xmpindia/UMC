@@ -146,11 +146,11 @@ namespace INT_UMC {
 		return mTrackImpl.GetUniqueID();
 	}
 
-	spcINode VideoTrackImpl::GetParentNode() const {
+	wpcINode VideoTrackImpl::GetParentNode() const {
 		return mTrackImpl.GetParentNode();
 	}
 
-	spINode VideoTrackImpl::GetParentNode() {
+	wpINode VideoTrackImpl::GetParentNode() {
 		return mTrackImpl.GetParentNode();
 	}
 

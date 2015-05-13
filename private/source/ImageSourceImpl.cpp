@@ -36,11 +36,11 @@ namespace INT_UMC {
 		return mSource->GetUniqueID();
 	}
 
-	spcINode ImageSourceImpl::GetParentNode() const {
+	wpcINode ImageSourceImpl::GetParentNode() const {
 		return mSource->GetParentNode();
 	}
 
-	spINode ImageSourceImpl::GetParentNode() {
+	wpINode ImageSourceImpl::GetParentNode() {
 		return mSource->GetParentNode();
 	}
 

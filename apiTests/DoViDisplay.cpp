@@ -12,15 +12,15 @@
 
 namespace DoVi {
 
-	void Display::SetParentNode( const spINode & parentNode ) {
+	void Display::SetParentNode( const wpINode & parentNode ) {
 		_parent = parentNode;
 	}
 
-	spcINode Display::GetParentNode() const {
+	wpcINode Display::GetParentNode() const {
 		return _parent;
 	}
 
-	spINode Display::GetParentNode() {
+	wpINode Display::GetParentNode() {
 		return _parent;
 	}
 

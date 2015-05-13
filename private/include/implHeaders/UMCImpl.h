@@ -27,8 +27,8 @@ namespace INT_UMC {
 
 		virtual const std::string & GetUniqueID() const;
 
-		virtual spcINode GetParentNode() const;
-		virtual spINode GetParentNode();
+		virtual wpcINode GetParentNode() const;
+		virtual wpINode GetParentNode();
 
 		virtual spcINode GetDecendantNode( const std::string & id ) const;
 		virtual spINode GetDecendantNode( const std::string & id );
