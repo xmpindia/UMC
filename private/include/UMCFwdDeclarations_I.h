@@ -67,6 +67,9 @@ namespace INT_UMC {
 	spIOutput CreateOutput( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator );
 
+	spITrack CreateTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator );
+
 	spIVideoTrack CreateVideoTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator );
 	spIAudioTrack CreateAudioTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,

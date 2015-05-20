@@ -12,9 +12,9 @@
 
 namespace INT_UMC {
 
-	VideoTrackImpl::VideoTrackImpl( const std::string & uniqueID, const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent )
-		: mTrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator )
+	VideoTrackImpl::VideoTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mTrack( CreateTrack( uniqueIDAndReferenceTracker, uniqueIDGenerator ) )
 		, mVideoEditRate( 1 )
 		, mAudioEditRate( 1 ) {}
 
@@ -39,141 +39,181 @@ namespace INT_UMC {
 	}
 
 	spIShot VideoTrackImpl::AddClipShot() {
-		return mTrackImpl.AddClipShot();
+		return mTrack->AddClipShot();
 	}
 
 	spIShot VideoTrackImpl::AddTransitionShot() {
-		return mTrackImpl.AddTransitionShot();
+		return mTrack->AddTransitionShot();
 	}
 
 	void VideoTrackImpl::SetName( const std::string & uniqueID ) {
-		return mTrackImpl.SetName( uniqueID );
+		return mTrack->SetName( uniqueID );
 	}
 
 	std::string VideoTrackImpl::GetName() const {
-		return mTrackImpl.GetName();
+		return mTrack->GetName();
 	}
 
 	size_t VideoTrackImpl::ShotCount() const {
-		return mTrackImpl.ShotCount();
+		return mTrack->ShotCount();
 	}
 
 	ITrack::ShotList VideoTrackImpl::GetAllShots() {
-		return mTrackImpl.GetAllShots();
+		return mTrack->GetAllShots();
 	}
 
 	ITrack::cShotList VideoTrackImpl::GetAllShots() const {
-		return mTrackImpl.GetAllShots();
+		return const_pointer_cast< const ITrack >( mTrack )->GetAllShots();
 	}
 
 	spIShot VideoTrackImpl::GetShot( const std::string & uniqueID ) {
-		return mTrackImpl.GetShot( uniqueID );
+		return mTrack->GetShot( uniqueID );
 	}
 
 	spcIShot VideoTrackImpl::GetShot( const std::string & uniqueID ) const {
-		return mTrackImpl.GetShot( uniqueID );
+		return mTrack->GetShot( uniqueID );
 	}
 
 	size_t VideoTrackImpl::ClipShotCount() const {
-		return mTrackImpl.ClipShotCount();
+		return mTrack->ClipShotCount();
 	}
 
 	ITrack::ShotList VideoTrackImpl::GetAllClipShots() {
-		return mTrackImpl.GetAllClipShots();
+		return mTrack->GetAllClipShots();
 	}
 
 	ITrack::cShotList VideoTrackImpl::GetAllClipShots() const {
-		return mTrackImpl.GetAllClipShots();
+		return const_pointer_cast< const ITrack >( mTrack )->GetAllClipShots();
 	}
 
 	spIShot VideoTrackImpl::GetClipShot( const std::string & uniqueID ) {
-		return mTrackImpl.GetClipShot( uniqueID );
+		return mTrack->GetClipShot( uniqueID );
 	}
 
 	spcIShot VideoTrackImpl::GetClipShot( const std::string & uniqueID ) const {
-		return mTrackImpl.GetClipShot( uniqueID );
+		return mTrack->GetClipShot( uniqueID );
 	}
 
 	size_t VideoTrackImpl::TransitionShotCount() const {
-		return mTrackImpl.TransitionShotCount();
+		return mTrack->TransitionShotCount();
 	}
 
 	ITrack::ShotList VideoTrackImpl::GetAllTransitionShots() {
-		return mTrackImpl.GetAllTransitionShots();
+		return mTrack->GetAllTransitionShots();
 	}
 
 	ITrack::cShotList VideoTrackImpl::GetAllTransitionShots() const {
-		return mTrackImpl.GetAllTransitionShots();
+		return const_pointer_cast< const ITrack >( mTrack )->GetAllTransitionShots();
 	}
 
 	spIShot VideoTrackImpl::GetTransitionShot( const std::string & uniqueID ) {
-		return mTrackImpl.GetTransitionShot( uniqueID );
+		return mTrack->GetTransitionShot( uniqueID );
 	}
 
 	spcIShot VideoTrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
-		return mTrackImpl.GetTransitionShot( uniqueID );
+		return mTrack->GetTransitionShot( uniqueID );
 	}
 
 	size_t VideoTrackImpl::RemoveAllShots() {
-		return mTrackImpl.RemoveAllShots();
+		return mTrack->RemoveAllShots();
 	}
 
 	size_t VideoTrackImpl::RemoveAllClipShots() {
-		return mTrackImpl.RemoveAllClipShots();
+		return mTrack->RemoveAllClipShots();
 	}
 
 	size_t VideoTrackImpl::RemoveAllTransitionShots() {
-		return mTrackImpl.RemoveAllTransitionShots();
+		return mTrack->RemoveAllTransitionShots();
 	}
 
 	size_t VideoTrackImpl::RemoveShot( const std::string & uniqueID ) {
-		return mTrackImpl.RemoveShot( uniqueID );
+		return mTrack->RemoveShot( uniqueID );
 	}
 
 	size_t VideoTrackImpl::RemoveClipShot( const std::string & uniqueID ) {
-		return mTrackImpl.RemoveClipShot( uniqueID );
+		return mTrack->RemoveClipShot( uniqueID );
 	}
 
 	size_t VideoTrackImpl::RemoveTransitionShot( const std::string & uniqueID ) {
-		return mTrackImpl.RemoveTransitionShot( uniqueID );
+		return mTrack->RemoveTransitionShot( uniqueID );
 	}
 
 	INode::eNodeTypes VideoTrackImpl::GetNodeType() const {
-		return mTrackImpl.GetNodeType();
+		return mTrack->GetNodeType();
 	}
 
 	const std::string & VideoTrackImpl::GetUniqueID() const {
-		return mTrackImpl.GetUniqueID();
+		return mTrack->GetUniqueID();
 	}
 
 	wpcINode VideoTrackImpl::GetParentNode() const {
-		return mTrackImpl.GetParentNode();
+		return mTrack->GetParentNode();
 	}
 
 	wpINode VideoTrackImpl::GetParentNode() {
-		return mTrackImpl.GetParentNode();
+		return mTrack->GetParentNode();
 	}
 
 	spcINode VideoTrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
-		return mTrackImpl.GetDecendantNode( uniqueID );
+		return mTrack->GetDecendantNode( uniqueID );
 	}
 
 	spINode VideoTrackImpl::GetDecendantNode( const std::string & uniqueID ) {
-		return mTrackImpl.GetDecendantNode( uniqueID );
+		return mTrack->GetDecendantNode( uniqueID );
 	}
 
 	spcINode VideoTrackImpl::GetChildNode( const std::string & uniqueID ) const {
-		return mTrackImpl.GetChildNode( uniqueID );
+		return mTrack->GetChildNode( uniqueID );
 	}
 
 	spINode VideoTrackImpl::GetChildNode( const std::string & uniqueID ) {
-		return mTrackImpl.GetChildNode( uniqueID );
+		return mTrack->GetChildNode( uniqueID );
+	}
+
+	INode::NodeList VideoTrackImpl::GetAllChildren() {
+		return mTrack->GetAllChildren();
+	}
+
+	INode::cNodeList VideoTrackImpl::GetAllChildren() const {
+		return const_pointer_cast< const ITrack >( mTrack )->GetAllChildren();
+	}
+
+	INode::NodeList VideoTrackImpl::GetAllDecendants() {
+		return mTrack->GetAllDecendants();
+	}
+
+	INode::cNodeList VideoTrackImpl::GetAllDecendants() const {
+		return const_pointer_cast< const ITrack >( mTrack )->GetAllDecendants();
+	}
+
+	size_t VideoTrackImpl::GetReferenceCount() const {
+		return mTrack->GetReferenceCount();
+	}
+
+	pcINodeI VideoTrackImpl::GetInternalNode() const {
+		return mTrack->GetInternalNode();
+	}
+
+	pINodeI VideoTrackImpl::GetInternalNode() {
+		return mTrack->GetInternalNode();
+	}
+
+	bool VideoTrackImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mTrack->SetCustomData( customDataNameSpace, customDataName, customData );
+	}
+
+	spcICustomData VideoTrackImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mTrack->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	spICustomData VideoTrackImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mTrack->GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	spIVideoTrack CreateVideoTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
 	{
-		return spIVideoTrack(); //std::make_shared< VideoTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		return std::make_shared< VideoTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 	}
 
 }

@@ -14,8 +14,8 @@
 
 namespace INT_UMC {
 
-	std::string ShotImpl::GetUniqueID() const {
-		return mUniqueID;
+	const std::string & ShotImpl::GetUniqueID() const {
+		return mNode->GetUniqueID();
 	}
 
 	IShot::eShotTypes ShotImpl::GetType() const {
@@ -38,19 +38,9 @@ namespace INT_UMC {
 		return mDuration;
 	}
 
-	spIFrame ShotImpl::AddFrame( const spISource & frameSource, const char * uniqueID,
-		size_t lengthOfID, const EditUnitInCount & sourceInCount,
-		const EditUnitInCount shotInCount )
+	spIFrame ShotImpl::AddFrame()
 	{
-		std::string strID( uniqueID);
-		if ( mFrameMap.find( strID ) == mFrameMap.end() ) {
-			spIFrame frame = shared_ptr< FrameImpl >( new FrameImpl( strID, frameSource,
-				shared_from_this(), sourceInCount, shotInCount ) );
-			mFrameMap[ strID ] = frame;
-			return frame;
-		} else {
-			return spIFrame();
-		}
+		return spIFrame();
 	}
 
 	size_t ShotImpl::FrameCount() const {
@@ -77,27 +67,9 @@ namespace INT_UMC {
 		return list;
 	}
 
-	spcITrack ShotImpl::GetParent() const  {
-		return spcITrack( mwpTrack );
-	}
-
-	spITrack ShotImpl::GetParent() {
-		return spITrack( mwpTrack );
-	}
-
-	spIShotSource ShotImpl::AddShotSource( const spISource & source,
-		const EditUnitInCount & sourceInCount, const EditUnitDuration sourceDuration,
-		const EditUnitInCount shotInCount )
+	spIShotSource ShotImpl::AddShotSource()
 	{
-		std::string strID( GetUniqueID() );
-		if ( mShotSourceMap.find( strID ) == mShotSourceMap.end() ) {
-			auto shotSource = shared_ptr< ShotSourceImpl >( new ShotSourceImpl( source,
-				shared_from_this(), sourceInCount, sourceDuration, shotInCount ) );
-			mShotSourceMap[ strID ] = shotSource;
-			return shotSource;
-		} else {
-			return spIShotSource();
-		}
+		return spIShotSource();
 	}
 
 	size_t ShotImpl::ShotSourceCount() const {
@@ -124,12 +96,161 @@ namespace INT_UMC {
 		return list;
 	}
 
-	ShotImpl::ShotImpl( const std::string & uniqueID, eShotTypes type, const spITrack & parent )
-		: mwpTrack( parent )
-		, mUniqueID( uniqueID )
-		, mShotType( type )
+
+	spIShotSource ShotImpl::GetShotSource( const std::string & uniqueID ) {
+		return GetElementFromMap< spIShotSource >( mShotSourceMap, uniqueID );
+	}
+
+	spcIShotSource ShotImpl::GetShotSource( const std::string & uniqueID ) const {
+		return const_cast< ShotImpl *>( this )->GetShotSource( uniqueID );
+	}
+
+
+
+	wpcINode ShotImpl::GetParentNode() const {
+		return mNode->GetParentNode();
+	}
+
+	wpINode ShotImpl::GetParentNode() {
+		return mNode->GetParentNode();
+	}
+
+
+
+
+	INode::eNodeTypes ShotImpl::GetNodeType() const {
+		return kNodeTypeOutput;
+	}
+
+	spcINode ShotImpl::GetDecendantNode( const std::string & id ) const {
+		return const_cast< ShotImpl * >( this )->GetDecendantNode( id );
+	}
+
+	spINode ShotImpl::GetDecendantNode( const std::string & id ) {
+		auto node = GetChildNode( id );
+		if ( node ) return node;
+		node = GetDecendantFromMap( mShotSourceMap, id );
+		return node;
+	}
+
+	spcINode ShotImpl::GetChildNode( const std::string & id ) const {
+		return const_cast< ShotImpl * >( this )->GetChildNode( id );
+	}
+
+	spINode ShotImpl::GetChildNode( const std::string & id ) {
+		return GetShotSource( id );
+	}
+
+	INode::NodeList ShotImpl::GetAllChildren() {
+		NodeList list;
+		AppendToListFromMap< spINode, ShotSourceMap >( list, mShotSourceMap );
+		return list;
+	}
+
+	INode::cNodeList ShotImpl::GetAllChildren() const {
+		cNodeList list;
+		AppendToListFromMap< spcINode, ShotSourceMap >( list, mShotSourceMap );
+		return list;
+	}
+
+	INode::NodeList ShotImpl::GetAllDecendants() {
+		NodeList list;
+		AppendDecendantsFromMapToList< spINode >( list, mShotSourceMap );
+		return list;
+	}
+
+	INode::cNodeList ShotImpl::GetAllDecendants() const {
+		cNodeList list;
+		AppendDecendantsFromMapToList< spcINode >( list, mShotSourceMap );
+		return list;
+	}
+
+	size_t ShotImpl::GetReferenceCount() const {
+		return mNode->GetReferenceCount();
+	}
+
+	spICustomData ShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	spcICustomData ShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	bool ShotImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
+		return mNode->SetCustomData( customDataNameSpace, customDataName, customData );
+	}
+
+	pINodeI ShotImpl::GetInternalNode() {
+		return this;
+	}
+
+	pcINodeI ShotImpl::GetInternalNode() const {
+		return this;
+	}
+
+	void ShotImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
+		mNode->GetInternalNode()->SetExtensionNode( structureNode );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode ShotImpl::GetExtensionNode(bool create /*= false */) const {
+		return mNode->GetInternalNode()->GetExtensionNode( create );
+	}
+
+	NS_XMPCORE::spIXMPStructureNode ShotImpl::GetMergedExtensionNode() const {
+		return mNode->GetInternalNode()->GetMergedExtensionNode();
+	}
+
+	spIUniqueIDAndReferenceTracker ShotImpl::GetUniqueIDAndReferenceTracker() {
+		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	}
+
+	spcIUniqueIDAndReferenceTracker ShotImpl::GetUniqueIDAndReferenceTracker() const {
+		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	}
+
+	spIUniqueIDGenerator ShotImpl::GetUniqueIDGenerator() {
+		return mNode->GetInternalNode()->GetUniqueIDGenerator();
+	}
+
+	spcIUniqueIDGenerator ShotImpl::GetUniqueIDGenerator() const {
+		return mNode->GetInternalNode()->GetUniqueIDGenerator();
+	}
+
+	void ShotImpl::RemoveFromDOM() {
+		ClearMap( mShotSourceMap );
+		mNode->GetInternalNode()->RemoveFromDOM();
+	}
+
+	void ShotImpl::AddToDOM( const spINode & parent ) {
+		mNode->GetInternalNode()->AddToDOM( parent );
+	}
+
+
+
+
+
+
+
+
+
+	ShotImpl::ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeOutput ) )
+		, mShotType( kShotTypeClip )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd ) { }
+
+
+	spIShot CreateShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< ShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+	}
+
+
+
+
 
 	spIFrame ShotImpl::GetFrame( const char * uniqueID, size_t length ) {
 		return spIFrame();

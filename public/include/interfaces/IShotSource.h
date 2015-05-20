@@ -11,13 +11,16 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
+#include "interfaces/INode.h"
 
 namespace UMC {
-	class IShotSource {
+	class IShotSource
+		: public INode
+	{
 
 	public:
-		virtual spISource GetSource() = 0;
-		virtual spcISource GetSource() const = 0;
+		/*virtual spISource GetSource() = 0;
+		virtual spcISource GetSource() const = 0;*/
 
 		virtual void SetSourceInCount( const EditUnitInCount & sourceInCount ) = 0;
 		virtual EditUnitInCount GetSourceInCount() const = 0;
@@ -27,9 +30,6 @@ namespace UMC {
 
 		virtual void SetShotInCount( const EditUnitInCount & shotInCount ) = 0;
 		virtual EditUnitInCount GetShotInCount() const = 0;
-
-		virtual spcIShot GetParent() const = 0;
-		virtual spIShot GetParent() = 0;
 
 		virtual ~IShotSource() = 0;
 

@@ -11,6 +11,7 @@
 // =================================================================================================
 
 #include "interfaces/IShotSource.h"
+#include "interfaces/INodeI.h"
 #include "UMCDefines_I.h"
 
 namespace INT_UMC {
@@ -18,16 +19,12 @@ namespace INT_UMC {
 
 	class ShotSourceImpl
 		: public IShotSource
+		, public INodeI
 		, public enable_shared_from_this< ShotSourceImpl >
 	{
 	public:
-		ShotSourceImpl( const spISource & shotSource, const spIShot & parentShot,
-			const EditUnitInCount & sourceInCount = kEditUnitInCountFromBeginning,
-			const EditUnitDuration sourceDuration = kEditUnitDurationTillEnd,
-			const EditUnitInCount shotInCount = kEditUnitInCountFromBeginning );
-	
-		virtual spISource GetSource();
-		virtual spcISource GetSource() const;
+		ShotSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
 		
 		virtual void SetSourceInCount( const EditUnitInCount & sourceInCount );
 		virtual EditUnitInCount GetSourceInCount() const;
@@ -38,12 +35,54 @@ namespace INT_UMC {
 		virtual void SetShotInCount( const EditUnitInCount & shotInCount );
 		virtual EditUnitInCount GetShotInCount() const;
 
-		virtual spcIShot GetParent() const;
-		virtual spIShot GetParent();
+		// INODEI
+
+		virtual eNodeTypes GetNodeType() const;
+
+		virtual const std::string & GetUniqueID() const;
+
+		virtual wpcINode GetParentNode() const;
+		virtual wpINode GetParentNode();
+
+		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const;
+		virtual spINode GetDecendantNode( const std::string & uniqueID );
+
+		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
+		virtual spINode GetChildNode( const std::string & uniqueID );
+
+		virtual NodeList GetAllChildren();
+		virtual cNodeList GetAllChildren() const;
+
+		virtual NodeList GetAllDecendants();
+		virtual cNodeList GetAllDecendants() const;
+
+		virtual size_t GetReferenceCount() const;
+
+		virtual void AddToDOM( const spINode & parent );
+		virtual void RemoveFromDOM();
+
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
+
+		virtual INT_UMC::pINodeI GetInternalNode();
+		virtual INT_UMC::pcINodeI GetInternalNode() const;
+
+		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
+		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
+		virtual spIXMPStructureNode GetMergedExtensionNode() const;
+
+		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
+
+		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+
+		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
+
+		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	private:
-		weak_ptr< IShot >		mwpShot;
-		weak_ptr< ISource >		mwpSource;
+		spINode					mNode;
 		EditUnitInCount			mSourceInCount;
 		EditUnitDuration		mSourceDuration;
 		EditUnitInCount			mShotInCount;

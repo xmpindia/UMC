@@ -44,7 +44,7 @@ static UMC::spIUMC CreateDefaultUMC() {
 	spIUMC sp = IUMC::CreateEmptyUMC();
 	auto output1 = sp->AddOutput();
 	auto videoTrack1 = output1->AddVideoTrack();
-	/*videoTrack1->SetName( "videoTrack1" );
+	videoTrack1->SetName( "videoTrack1" );
 	videoTrack1->SetVideoEditRate( EditRate( 24000, 1001 ) );
 	videoTrack1->SetAudioEditRate( 48000 );
 	output1->AddVideoTrack();
@@ -56,8 +56,8 @@ static UMC::spIUMC CreateDefaultUMC() {
 	auto audioTrack2 = output1->AddAudioTrack();
 	audioTrack2->SetName( "audioTrack2" );
 	output1->AddAudioTrack();
-	output1->AddAudioTrack();*/
-
+	output1->AddAudioTrack();
+	
 	return sp;
 }
 

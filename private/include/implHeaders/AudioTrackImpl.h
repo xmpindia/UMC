@@ -12,16 +12,18 @@
 
 #include "interfaces/IAudioTrack.h"
 #include "implHeaders/TrackImpl.h"
+#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
-
 	class AudioTrackImpl
 		: public IAudioTrack
-		, enable_shared_from_this < AudioTrackImpl >
+		, public enable_shared_from_this < AudioTrackImpl >
 	{
 	public:
-		AudioTrackImpl( const std::string & uniqueID, const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent );
+		AudioTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
+
+		virtual ~AudioTrackImpl() {}
 
 		virtual void SetAudioEditRate( const EditRate & editRate );
 		virtual EditRate GetAudioEditRate() const;
@@ -60,9 +62,16 @@ namespace INT_UMC {
 		virtual size_t RemoveClipShot( const std::string & uniqueID );
 		virtual size_t RemoveTransitionShot( const std::string & uniqueID );
 
+		// INODEI
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual const std::string & GetUniqueID() const;
+
+		virtual NodeList GetAllChildren();
+		virtual cNodeList GetAllChildren() const;
+
+		virtual NodeList GetAllDecendants();
+		virtual cNodeList GetAllDecendants() const;
 
 		virtual wpcINode GetParentNode() const;
 		virtual wpINode GetParentNode();
@@ -73,10 +82,18 @@ namespace INT_UMC {
 		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
 		virtual spINode GetChildNode( const std::string & uniqueID );
 
-		virtual ~AudioTrackImpl() {}
+		virtual size_t GetReferenceCount() const;
+
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
+
+		virtual INT_UMC::pINodeI GetInternalNode();
+		virtual INT_UMC::pcINodeI GetInternalNode() const;
 
 	protected:
-		TrackImpl				mTrackImpl;
+		spITrack				mTrack;
 		EditRate				mAudioEditRate;
 	};
 }

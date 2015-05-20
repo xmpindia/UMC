@@ -263,4 +263,10 @@ namespace INT_UMC {
 		return ITrack::kTrackTypeAll;
 	}
 
+	spITrack CreateTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< TrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+	}
+
 }
