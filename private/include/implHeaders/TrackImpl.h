@@ -64,6 +64,8 @@ namespace INT_UMC {
 		virtual size_t RemoveClipShot( const std::string & uniqueID );
 		virtual size_t RemoveTransitionShot( const std::string & uniqueID );
 
+		// INODEI
+
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual wpcINode GetParentNode() const;
@@ -106,11 +108,9 @@ namespace INT_UMC {
 		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	protected:
-
 		typedef std::map< const std::string, spIShot > ShotMap;
 
 		spINode							mNode;
-
 		std::string						mName;
 		ShotMap							mShotMap;
 	};

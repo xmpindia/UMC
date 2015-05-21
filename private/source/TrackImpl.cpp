@@ -13,6 +13,8 @@
 #include "interfaces/IUniqueIDGenerator.h"
 #include "utils/Utils.h"
 
+#include <iostream>
+
 
 namespace INT_UMC {
 
@@ -20,14 +22,13 @@ namespace INT_UMC {
 		return mNode->GetUniqueID();
 	}
 
-
 	spIShot TrackImpl::AddClipShot() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented. 0" );
 		return spIShot();
 	}
 
 	spIShot TrackImpl::AddTransitionShot() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented. 1" );
 		return spIShot();
 	}
 
@@ -36,92 +37,92 @@ namespace INT_UMC {
 	}
 
 	spIShot TrackImpl::GetShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.2" );
 		return spIShot();
 	}
 
 	spcIShot TrackImpl::GetShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.3" );
 		return spIShot();
 	}
 
 	size_t TrackImpl::ClipShotCount() const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.4" );
 		return 0;
 	}
 
 	ITrack::ShotList TrackImpl::GetAllClipShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.5" );
 		return ITrack::ShotList();
 	}
 
 	ITrack::cShotList TrackImpl::GetAllClipShots() const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.6" );
 		return cShotList();
 	}
 
 	spIShot TrackImpl::GetClipShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.7" );
 		return spIShot();
 	}
 
 	spcIShot TrackImpl::GetClipShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.8" );
 		return spIShot();
 	}
 
 	size_t TrackImpl::TransitionShotCount() const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented9." );
 		return 0;
 	}
 
 	ITrack::ShotList TrackImpl::GetAllTransitionShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented10." );
 		return ShotList();
 	}
 
 	ITrack::cShotList TrackImpl::GetAllTransitionShots() const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented11." );
 		return cShotList();
 	}
 
 	spIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented12." );
 		return spIShot();
 	}
 
 	spcIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented13." );
 		return spcIShot();
 	}
 
 	size_t TrackImpl::RemoveAllShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented14." );
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveAllClipShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented15." );
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveAllTransitionShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented16." );
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented17." );
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveClipShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented18." );
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveTransitionShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.19" );
 		return 0;
 	}
 
@@ -179,22 +180,22 @@ namespace INT_UMC {
 	}
 
 	INode::NodeList TrackImpl::GetAllChildren() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.20" );
 		return NodeList();
 	}
 
 	INode::cNodeList TrackImpl::GetAllChildren() const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		//throw std::logic_error( "The method or operation is not implemented.21" );
 		return cNodeList();
 	}
 
 	INode::NodeList TrackImpl::GetAllDecendants() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.22" );
 		return NodeList();
 	}
 
 	INode::cNodeList TrackImpl::GetAllDecendants() const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		throw std::logic_error( "The method or operation is not implemented.23" );
 		return cNodeList();
 	}
 

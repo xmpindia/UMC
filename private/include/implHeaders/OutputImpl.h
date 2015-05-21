@@ -122,7 +122,6 @@ namespace INT_UMC {
 		typedef std::map< const std::string, spIVideoTrack > VideoTrackMap;
 		typedef std::map< const std::string, spIAudioTrack > AudioTrackMap;
 
-	protected:
 		spINode							mNode;
 		std::string						mName;
 		std::string						mTitle;
