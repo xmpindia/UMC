@@ -19,7 +19,7 @@ namespace INT_UMC {
 	}
 
 	IShot::eShotTypes ShotImpl::GetType() const {
-		return mShotType;
+		return IShot::kShotTypeAll;
 	}
 
 	void ShotImpl::SetInCount( const EditUnitInCount & inCount ) {
@@ -96,7 +96,6 @@ namespace INT_UMC {
 		return list;
 	}
 
-
 	spIShotSource ShotImpl::GetShotSource( const std::string & uniqueID ) {
 		return GetElementFromMap< spIShotSource >( mShotSourceMap, uniqueID );
 	}
@@ -105,8 +104,6 @@ namespace INT_UMC {
 		return const_cast< ShotImpl *>( this )->GetShotSource( uniqueID );
 	}
 
-
-
 	wpcINode ShotImpl::GetParentNode() const {
 		return mNode->GetParentNode();
 	}
@@ -114,9 +111,6 @@ namespace INT_UMC {
 	wpINode ShotImpl::GetParentNode() {
 		return mNode->GetParentNode();
 	}
-
-
-
 
 	INode::eNodeTypes ShotImpl::GetNodeType() const {
 		return kNodeTypeOutput;
@@ -226,21 +220,13 @@ namespace INT_UMC {
 		mNode->GetInternalNode()->AddToDOM( parent );
 	}
 
-
-
-
-
-
-
-
-
 	ShotImpl::ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
 		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeOutput ) )
-		, mShotType( kShotTypeClip )
 		, mInCount( kEditUnitInCountFromBeginning )
-		, mDuration( kEditUnitDurationTillEnd ) { }
-
+		, mDuration( kEditUnitDurationTillEnd )
+		, mFrameMap()
+		, mShotSourceMap() { }
 
 	spIShot CreateShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
@@ -248,12 +234,5 @@ namespace INT_UMC {
 		return std::make_shared< ShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 	}
 
-
-
-
-
-	spIFrame ShotImpl::GetFrame( const char * uniqueID, size_t length ) {
-		return spIFrame();
-	}
 }
 

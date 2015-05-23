@@ -12,6 +12,8 @@
 
 #include "interfaces/ITrack.h"
 #include "interfaces/IShot.h"
+#include "interfaces/IClipShot.h"
+#include "interfaces/ITransitionShot.h"
 #include "interfaces/INodeI.h"
 
 #include <string>
@@ -23,6 +25,7 @@ namespace INT_UMC {
 	class TrackImpl
 		: public ITrack
 		, public INodeI
+		, public enable_shared_from_this< TrackImpl >
 	{
 	public:
 		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
@@ -32,8 +35,8 @@ namespace INT_UMC {
 
 		virtual eTrackTypes GetType() const;
 
-		virtual spIShot AddClipShot();
-		virtual spIShot AddTransitionShot();
+		virtual spIClipShot AddClipShot();
+		virtual spITransitionShot AddTransitionShot();
 
 		virtual void SetName( const std::string & uniqueID );
 		virtual std::string GetName() const;
@@ -108,11 +111,13 @@ namespace INT_UMC {
 		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	protected:
-		typedef std::map< const std::string, spIShot > ShotMap;
+		typedef std::map< const std::string, spIClipShot > ClipShotMap;
+		typedef std::map< const std::string, spITransitionShot > TransitionShotMap;
 
 		spINode							mNode;
 		std::string						mName;
-		ShotMap							mShotMap;
+		ClipShotMap						mClipShotMap;
+		TransitionShotMap				mTransitionShotMap;
 	};
 }
 

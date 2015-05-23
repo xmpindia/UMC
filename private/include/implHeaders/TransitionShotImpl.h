@@ -1,5 +1,5 @@
-#ifndef ShotImpl_h__
-#define ShotImpl_h__ 1
+#ifndef TransitionShotImpl_h__
+#define TransitionShotImpl_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,26 +10,20 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "interfaces/IShot.h"
-#include "interfaces/IFrame.h"
-#include "interfaces/ISource.h"
-#include "interfaces/INodeI.h"
-
-#include <string>
-#include <map>
+#include "interfaces/ITransitionShot.h"
+#include "implHeaders/ShotImpl.h"
+#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
-	using namespace UMC;
-
-	class ShotImpl
-		: public IShot
-		, public INodeI
+	class TransitionShotImpl
+		: public ITransitionShot
+		, public enable_shared_from_this< TransitionShotImpl >
 	{
 	public:
-		ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		TransitionShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
-		const std::string & GetUniqueID() const;
+		virtual ~TransitionShotImpl() {}
 
 		virtual eShotTypes GetType() const ;
 
@@ -56,6 +50,8 @@ namespace INT_UMC {
 
 		// INODEI
 
+		virtual const std::string & GetUniqueID() const;
+
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual wpcINode GetParentNode() const;
@@ -75,9 +71,6 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
-		virtual void AddToDOM( const spINode & parent );
-		virtual void RemoveFromDOM();
-
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
@@ -86,26 +79,9 @@ namespace INT_UMC {
 		virtual pINodeI GetInternalNode();
 		virtual pcINodeI GetInternalNode() const;
 
-		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
-		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
-		virtual spIXMPStructureNode GetMergedExtensionNode() const;
-
-		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
-		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
-
-		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
-
 	protected:
-		typedef std::map< const std::string, spIFrame > FrameMap;
-		typedef std::map< const std::string, spIShotSource > ShotSourceMap;
-
-		spINode					mNode;
-		EditUnitInCount			mInCount;
-		EditUnitDuration		mDuration;
-		FrameMap				mFrameMap;
-		ShotSourceMap			mShotSourceMap;
+		spIShot					mShot;
 	};
 }
 
-#endif  // ShotImpl_h__
+#endif  // TransitionShotImpl_h__

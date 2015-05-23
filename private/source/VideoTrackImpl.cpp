@@ -38,11 +38,11 @@ namespace INT_UMC {
 		return ITrack::kTrackTypeVideo;
 	}
 
-	spIShot VideoTrackImpl::AddClipShot() {
+	spIClipShot VideoTrackImpl::AddClipShot() {
 		return mTrack->AddClipShot();
 	}
 
-	spIShot VideoTrackImpl::AddTransitionShot() {
+	spITransitionShot VideoTrackImpl::AddTransitionShot() {
 		return mTrack->AddTransitionShot();
 	}
 

@@ -40,6 +40,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AddingShotsToTracksTests );
 #include "interfaces/IAudioTrack.h"
 #include "interfaces/IShot.h"
 #include "interfaces/IShotSource.h"
+#include "interfaces/IClipShot.h"
+#include "interfaces/ITransitionShot.h"
 
 static UMC::spIUMC CreateDefaultUMC() {
 	using namespace UMC;
@@ -68,13 +70,13 @@ void AddingShotsToTracksTests::CountOfShots() {
 	std::cout<< "********** AddingShotsToTracksTests::CountOfShots **********"<<"\n";
 	using namespace UMC;
 
-	/*auto sp = CreateDefaultUMC();
+	auto sp = CreateDefaultUMC();
 	auto outputs = sp->GetAllOutputs();
 	auto videoTracks = outputs[0]->GetAllVideoTracks();
 
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 5 );
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
-	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 2 );*/
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 2 );
 
 }
 

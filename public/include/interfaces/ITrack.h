@@ -34,8 +34,8 @@ namespace UMC {
 
 		virtual eTrackTypes GetType() const = 0;
 
-		virtual spIShot AddClipShot() = 0;
-		virtual spIShot AddTransitionShot() = 0;
+		virtual spIClipShot AddClipShot() = 0;
+		virtual spITransitionShot AddTransitionShot() = 0;
 
 		virtual void SetName( const std::string & name ) = 0;
 		virtual std::string GetName() const = 0;

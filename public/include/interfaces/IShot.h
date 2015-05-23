@@ -52,11 +52,13 @@ namespace UMC {
 		virtual size_t FrameCount() const = 0;
 		virtual FrameList GetFrames() = 0;
 		virtual cFrameList GetFrames() const = 0;
-		virtual spIFrame GetFrame( const char * uniqueID, size_t length = npos ) = 0;
 
 		virtual size_t ShotSourceCount() const = 0;
 		virtual ShotSourceList GetShotSources() = 0;
 		virtual cShotSourceList GetShotSources() const = 0;
+
+		virtual spIShotSource GetShotSource( const std::string & uniqueID ) = 0;
+		virtual spcIShotSource GetShotSource( const std::string & uniqueID ) const = 0;
 
 		virtual ~IShot() = 0;
 

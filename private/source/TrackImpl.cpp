@@ -11,10 +11,9 @@
 #include "implHeaders/ShotImpl.h"
 #include "interfaces/IOutput.h"
 #include "interfaces/IUniqueIDGenerator.h"
+#include "interfaces/IUMC.h"
+
 #include "utils/Utils.h"
-
-#include <iostream>
-
 
 namespace INT_UMC {
 
@@ -22,14 +21,16 @@ namespace INT_UMC {
 		return mNode->GetUniqueID();
 	}
 
-	spIShot TrackImpl::AddClipShot() {
-		throw std::logic_error( "The method or operation is not implemented. 0" );
-		return spIShot();
+	spIClipShot TrackImpl::AddClipShot() {
+		spIClipShot shot = CreateClipShot( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator() );
+		AddElementToMap( mClipShotMap, shot, shared_from_this() );
+		return shot;
 	}
 
-	spIShot TrackImpl::AddTransitionShot() {
-		throw std::logic_error( "The method or operation is not implemented. 1" );
-		return spIShot();
+	spITransitionShot TrackImpl::AddTransitionShot() {
+		spITransitionShot shot = CreateTransitionShot( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator() );
+		AddElementToMap( mTransitionShotMap, shot, shared_from_this() );
+		return shot;
 	}
 
 	void TrackImpl::SetName( const std::string & uniqueID ) {
@@ -152,22 +153,29 @@ namespace INT_UMC {
 	}
 
 	size_t TrackImpl::ShotCount() const {
-		return mShotMap.size();
+		return mClipShotMap.size() + mTransitionShotMap.size();
 	}
 
 	ITrack::ShotList TrackImpl::GetAllShots() {
-		return CreateListFromMap< spIShot >( mShotMap );
+		ShotList list;
+		AppendToListFromMap< spIShot, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spIShot, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	ITrack::cShotList TrackImpl::GetAllShots() const {
-		return CreateListFromMap< spcIShot >( mShotMap );
+		cShotList list;
+		AppendToListFromMap< spcIShot, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spcIShot, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
 		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeTrack ) )
 		, mName()
-		, mShotMap() { }
+		, mClipShotMap()
+		, mTransitionShotMap() { }
 
 	spcINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return const_cast< TrackImpl * >( this )->GetDecendantNode( uniqueID );

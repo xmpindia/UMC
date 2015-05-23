@@ -29,11 +29,11 @@ namespace INT_UMC {
 		return ITrack::kTrackTypeAudio;
 	}
 
-	spIShot AudioTrackImpl::AddClipShot() {
+	spIClipShot AudioTrackImpl::AddClipShot() {
 		return mTrack->AddClipShot();
 	}
 
-	spIShot AudioTrackImpl::AddTransitionShot() {
+	spITransitionShot AudioTrackImpl::AddTransitionShot() {
 		return mTrack->AddTransitionShot();
 	}
 

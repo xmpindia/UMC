@@ -30,8 +30,8 @@ namespace INT_UMC {
 
 		virtual eTrackTypes GetType() const;
 
-		virtual spIShot AddClipShot();
-		virtual spIShot AddTransitionShot();
+		virtual spIClipShot AddClipShot();
+		virtual spITransitionShot AddTransitionShot();
 
 		virtual void SetName( const std::string & uniqueID );
 		virtual std::string GetName() const;
