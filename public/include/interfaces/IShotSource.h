@@ -19,8 +19,8 @@ namespace UMC {
 	{
 
 	public:
-		/*virtual spISource GetSource() = 0;
-		virtual spcISource GetSource() const = 0;*/
+		virtual spISource GetSource() = 0;
+		virtual spcISource GetSource() const = 0;
 
 		virtual void SetSourceInCount( const EditUnitInCount & sourceInCount ) = 0;
 		virtual EditUnitInCount GetSourceInCount() const = 0;

@@ -69,19 +69,19 @@ namespace INT_UMC {
 		return mTrack->ClipShotCount();
 	}
 
-	ITrack::ShotList AudioTrackImpl::GetAllClipShots() {
+	ITrack::ClipShotList AudioTrackImpl::GetAllClipShots() {
 		return mTrack->GetAllClipShots();
 	}
 
-	ITrack::cShotList AudioTrackImpl::GetAllClipShots() const {
+	ITrack::cClipShotList AudioTrackImpl::GetAllClipShots() const {
 		return const_pointer_cast< const ITrack >( mTrack )->GetAllClipShots();
 	}
 
-	spIShot AudioTrackImpl::GetClipShot( const std::string & uniqueID ) {
+	spIClipShot AudioTrackImpl::GetClipShot( const std::string & uniqueID ) {
 		return mTrack->GetClipShot( uniqueID );
 	}
 
-	spcIShot AudioTrackImpl::GetClipShot( const std::string & uniqueID ) const {
+	spcIClipShot AudioTrackImpl::GetClipShot( const std::string & uniqueID ) const {
 		return mTrack->GetClipShot( uniqueID );
 	}
 
@@ -89,19 +89,19 @@ namespace INT_UMC {
 		return mTrack->TransitionShotCount();
 	}
 
-	ITrack::ShotList AudioTrackImpl::GetAllTransitionShots() {
+	ITrack::TransitionShotList AudioTrackImpl::GetAllTransitionShots() {
 		return mTrack->GetAllTransitionShots();
 	}
 
-	ITrack::cShotList AudioTrackImpl::GetAllTransitionShots() const {
+	ITrack::cTransitionShotList AudioTrackImpl::GetAllTransitionShots() const {
 		return const_pointer_cast< const ITrack >( mTrack )->GetAllTransitionShots();
 	}
 
-	spIShot AudioTrackImpl::GetTransitionShot( const std::string & uniqueID ) {
+	spITransitionShot AudioTrackImpl::GetTransitionShot( const std::string & uniqueID ) {
 		return mTrack->GetTransitionShot( uniqueID );
 	}
 
-	spcIShot AudioTrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
+	spcITransitionShot AudioTrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
 		return mTrack->GetTransitionShot( uniqueID );
 	}
 

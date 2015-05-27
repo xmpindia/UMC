@@ -39,9 +39,9 @@ namespace INT_UMC {
 		return mShot->GetDuration();
 	}
 
-	spIFrame TransitionShotImpl::AddFrame()
+	spIFrame TransitionShotImpl::AddFrame( const spISource & source )
 	{
-		return mShot->AddFrame();
+		return mShot->AddFrame( source );
 	}
 
 	size_t TransitionShotImpl::FrameCount() const {
@@ -56,9 +56,9 @@ namespace INT_UMC {
 		return const_pointer_cast< const IShot >( mShot )->GetFrames();
 	}
 
-	spIShotSource TransitionShotImpl::AddShotSource()
+	spIShotSource TransitionShotImpl::AddShotSource( const spISource & source )
 	{
-		return mShot->AddShotSource();
+		return mShot->AddShotSource( source );
 	}
 
 	size_t TransitionShotImpl::ShotSourceCount() const {

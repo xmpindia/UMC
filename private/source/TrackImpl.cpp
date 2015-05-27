@@ -38,94 +38,101 @@ namespace INT_UMC {
 	}
 
 	spIShot TrackImpl::GetShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented.2" );
-		return spIShot();
+		spIShot shot = GetClipShot( uniqueID );
+		if ( shot ) return shot;
+		shot = GetTransitionShot( uniqueID );
+		return shot;
 	}
 
 	spcIShot TrackImpl::GetShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented.3" );
-		return spIShot();
+		return const_cast< TrackImpl *>( this )->GetShot( uniqueID );
 	}
 
 	size_t TrackImpl::ClipShotCount() const {
-		throw std::logic_error( "The method or operation is not implemented.4" );
-		return 0;
+		return mClipShotMap.size();
 	}
 
-	ITrack::ShotList TrackImpl::GetAllClipShots() {
-		throw std::logic_error( "The method or operation is not implemented.5" );
-		return ITrack::ShotList();
+	ITrack::ClipShotList TrackImpl::GetAllClipShots() {
+		return CreateListFromMap< spIClipShot >( mClipShotMap );
 	}
 
-	ITrack::cShotList TrackImpl::GetAllClipShots() const {
-		throw std::logic_error( "The method or operation is not implemented.6" );
-		return cShotList();
+	ITrack::cClipShotList TrackImpl::GetAllClipShots() const {
+		return CreateListFromMap< spcIClipShot >( mClipShotMap );
 	}
 
-	spIShot TrackImpl::GetClipShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented.7" );
-		return spIShot();
+	spIClipShot TrackImpl::GetClipShot( const std::string & uniqueID ) {
+		return GetElementFromMap< spIClipShot >( mClipShotMap, uniqueID );
 	}
 
-	spcIShot TrackImpl::GetClipShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented.8" );
-		return spIShot();
+	spcIClipShot TrackImpl::GetClipShot( const std::string & uniqueID ) const {
+		return GetElementFromMap< spcIClipShot >( mClipShotMap, uniqueID );
 	}
 
 	size_t TrackImpl::TransitionShotCount() const {
-		throw std::logic_error( "The method or operation is not implemented9." );
-		return 0;
+		return mTransitionShotMap.size();
 	}
 
-	ITrack::ShotList TrackImpl::GetAllTransitionShots() {
-		throw std::logic_error( "The method or operation is not implemented10." );
-		return ShotList();
+	ITrack::TransitionShotList TrackImpl::GetAllTransitionShots() {
+		return CreateListFromMap< spITransitionShot >( mTransitionShotMap );
 	}
 
-	ITrack::cShotList TrackImpl::GetAllTransitionShots() const {
-		throw std::logic_error( "The method or operation is not implemented11." );
-		return cShotList();
+	ITrack::cTransitionShotList TrackImpl::GetAllTransitionShots() const {
+		return CreateListFromMap< spcITransitionShot >( mTransitionShotMap );
 	}
 
-	spIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented12." );
-		return spIShot();
+	spITransitionShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) {
+		return GetElementFromMap< spITransitionShot >( mTransitionShotMap, uniqueID );
 	}
 
-	spcIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented13." );
-		return spcIShot();
+	spcITransitionShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
+		return GetElementFromMap< spcITransitionShot >( mTransitionShotMap, uniqueID );
 	}
 
 	size_t TrackImpl::RemoveAllShots() {
-		throw std::logic_error( "The method or operation is not implemented14." );
+		bool safeToClear( false );
+		safeToClear = SafeToClearMap( mClipShotMap );
+		if ( safeToClear ) SafeToClearMap( mTransitionShotMap ); else return 0;
+		if ( safeToClear ) {
+			size_t expectedCount = ShotCount();
+			size_t count( 0 );
+			count += ClearMap( mClipShotMap );
+			count += ClearMap( mTransitionShotMap );
+			assert( expectedCount == count );
+			return count;
+		}
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveAllClipShots() {
-		throw std::logic_error( "The method or operation is not implemented15." );
+		if ( SafeToClearMap( mClipShotMap ) ) {
+			return ClearMap( mClipShotMap );
+		}
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveAllTransitionShots() {
-		throw std::logic_error( "The method or operation is not implemented16." );
+		if ( SafeToClearMap( mTransitionShotMap ) ) {
+			return ClearMap( mTransitionShotMap );
+		}
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented17." );
-		return 0;
+		size_t count = RemoveClipShot( uniqueID );
+		if ( count > 0 ) return count;
+		count = RemoveTransitionShot( uniqueID );
+		return count;
 	}
 
 	size_t TrackImpl::RemoveClipShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented18." );
-		return 0;
+		return TryAndRemoveElementFromMap( mClipShotMap, uniqueID );
 	}
 
 	size_t TrackImpl::RemoveTransitionShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented.19" );
-		return 0;
+		return TryAndRemoveElementFromMap( mTransitionShotMap, uniqueID );
 	}
+
+	// INODEI
 
 	INode::eNodeTypes TrackImpl::GetNodeType() const {
 		return INode::kNodeTypeTrack;
@@ -144,8 +151,7 @@ namespace INT_UMC {
 	}
 
 	spINode TrackImpl::GetChildNode( const std::string & uniqueID ) {
-		spINode node;/*TODO = GetElementFromMap< spINode > ( mShotMap, uniqueID ); */
-		return node;
+		return GetShot( uniqueID );
 	}
 
 	std::string TrackImpl::GetName() const {
@@ -182,29 +188,40 @@ namespace INT_UMC {
 	}
 
 	spINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) {
-		spINode node = GetChildNode( uniqueID );
-		return node; /* TODO if ( node ) return node;
-		node = GetDecendantFromMap< spINode >( mShotMap, uniqueID ); */
+		auto node = GetChildNode( uniqueID );
+		if ( node ) return node;
+		node = GetDecendantFromMap( mClipShotMap, uniqueID );
+		if ( node ) return node;
+		node = GetDecendantFromMap( mTransitionShotMap, uniqueID );
+		return node;
 	}
 
 	INode::NodeList TrackImpl::GetAllChildren() {
-		throw std::logic_error( "The method or operation is not implemented.20" );
-		return NodeList();
+		NodeList list;
+		AppendToListFromMap< spINode, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spINode, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	INode::cNodeList TrackImpl::GetAllChildren() const {
-		//throw std::logic_error( "The method or operation is not implemented.21" );
-		return cNodeList();
+		cNodeList list;
+		AppendToListFromMap< spcINode, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spcINode, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	INode::NodeList TrackImpl::GetAllDecendants() {
-		throw std::logic_error( "The method or operation is not implemented.22" );
-		return NodeList();
+		NodeList list;
+		AppendDecendantsFromMapToList< spINode >( list, mClipShotMap );
+		AppendDecendantsFromMapToList< spINode >( list, mTransitionShotMap );
+		return list;
 	}
 
 	INode::cNodeList TrackImpl::GetAllDecendants() const {
-		throw std::logic_error( "The method or operation is not implemented.23" );
-		return cNodeList();
+		cNodeList list;
+		AppendDecendantsFromMapToList< spcINode >( list, mClipShotMap );
+		AppendDecendantsFromMapToList< spcINode >( list, mTransitionShotMap );
+		return list;
 	}
 
 	size_t TrackImpl::GetReferenceCount() const {
@@ -212,7 +229,8 @@ namespace INT_UMC {
 	}
 
 	void TrackImpl::RemoveFromDOM() {
-		//ClearMap( mShotMap );
+		ClearMap( mClipShotMap );
+		ClearMap( mTransitionShotMap );
 		mNode->GetInternalNode()->RemoveFromDOM();
 	}
 

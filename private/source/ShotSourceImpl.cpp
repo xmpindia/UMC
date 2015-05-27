@@ -14,12 +14,20 @@
 namespace INT_UMC {
 	
 	ShotSourceImpl::ShotSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator )
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source )
 		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeShotSource ) )
+		, mwpSource( source )
 		, mSourceInCount( kEditUnitInCountFromBeginning )
 		, mSourceDuration( kEditUnitDurationTillEnd )
 		, mShotInCount( kEditUnitInCountFromBeginning ) { }
 
+	spISource ShotSourceImpl::GetSource() {
+		return spISource( mwpSource );
+	}
+
+	spcISource ShotSourceImpl::GetSource() const {
+		return spcISource( mwpSource );
+	}
 
 	void ShotSourceImpl::SetSourceInCount( const EditUnitInCount & sourceInCount ) {
 		mSourceInCount = sourceInCount;
@@ -44,9 +52,6 @@ namespace INT_UMC {
 	UMC::EditUnitInCount ShotSourceImpl::GetShotInCount() const {
 		return mShotInCount;
 	}
-
-
-
 
 	// INODEI
 
@@ -132,8 +137,6 @@ namespace INT_UMC {
 		return mNode->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-
-
 	void ShotSourceImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
 		mNode->GetInternalNode()->SetExtensionNode( structureNode );
 	}
@@ -162,16 +165,10 @@ namespace INT_UMC {
 		return mNode->GetInternalNode()->GetUniqueIDGenerator();
 	}
 
-
-
-
-
-
-
 	spIShotSource CreateShotSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source )
 	{
-		return std::make_shared< ShotSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		return std::make_shared< ShotSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, source );
 	}
 
 }

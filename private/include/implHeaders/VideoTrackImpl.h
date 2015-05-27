@@ -46,16 +46,16 @@ namespace INT_UMC {
 		virtual spcIShot GetShot( const std::string & uniqueID ) const;
 
 		virtual size_t ClipShotCount() const;
-		virtual ShotList GetAllClipShots();
-		virtual cShotList GetAllClipShots() const;
-		virtual spIShot GetClipShot( const std::string & uniqueID );
-		virtual spcIShot GetClipShot( const std::string & uniqueID ) const;
+		virtual ClipShotList GetAllClipShots();
+		virtual cClipShotList GetAllClipShots() const;
+		virtual spIClipShot GetClipShot( const std::string & uniqueID );
+		virtual spcIClipShot GetClipShot( const std::string & uniqueID ) const;
 
 		virtual size_t TransitionShotCount() const;
-		virtual ShotList GetAllTransitionShots();
-		virtual cShotList GetAllTransitionShots() const;
-		virtual spIShot GetTransitionShot( const std::string & uniqueID );
-		virtual spcIShot GetTransitionShot( const std::string & uniqueID ) const;
+		virtual TransitionShotList GetAllTransitionShots();
+		virtual cTransitionShotList GetAllTransitionShots() const;
+		virtual spITransitionShot GetTransitionShot( const std::string & uniqueID );
+		virtual spcITransitionShot GetTransitionShot( const std::string & uniqueID ) const;
 
 		virtual size_t RemoveAllShots();
 		virtual size_t RemoveAllClipShots();

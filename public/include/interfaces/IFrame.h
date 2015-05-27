@@ -11,16 +11,17 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
+#include "interfaces/INode.h"
 
 #include <string>
 
 namespace UMC {
 
-	class IFrame {
+	class IFrame 
+		: public INode
+	{
 
 	public:
-		virtual std::string GetUniqueID() const = 0;
-
 		virtual spISource GetSource() = 0;
 		virtual spcISource GetSource() const = 0;
 
@@ -29,9 +30,6 @@ namespace UMC {
 
 		virtual void SetShotInCount( const EditUnitInCount & shotInCount ) = 0;
 		virtual EditUnitInCount GetShotInCount() const = 0;
-
-		virtual spcIShot GetParent() const = 0;
-		virtual spIShot GetParent() = 0;
 
 		virtual ~IFrame() = 0;
 

@@ -111,11 +111,9 @@ namespace INT_UMC {
 		virtual spIXMPStructureNode GetMergedExtensionNode() const;
 
 		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
-
 		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
 
 		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-
 		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	protected:

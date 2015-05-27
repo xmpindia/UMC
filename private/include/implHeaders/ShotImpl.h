@@ -24,6 +24,7 @@ namespace INT_UMC {
 	class ShotImpl
 		: public IShot
 		, public INodeI
+		, public enable_shared_from_this< ShotImpl >
 	{
 	public:
 		ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
@@ -39,13 +40,13 @@ namespace INT_UMC {
 		virtual void SetDuration( const EditUnitDuration & duration );
 		virtual EditUnitDuration GetDuration() const;
 
-		virtual spIFrame AddFrame();
+		virtual spIFrame AddFrame( const spISource & source );
 
 		virtual size_t FrameCount() const;
 		virtual FrameList GetFrames();
 		virtual cFrameList GetFrames() const;
 
-		virtual spIShotSource AddShotSource();
+		virtual spIShotSource AddShotSource( const spISource & source );
 
 		virtual size_t ShotSourceCount() const;
 		virtual ShotSourceList GetShotSources();

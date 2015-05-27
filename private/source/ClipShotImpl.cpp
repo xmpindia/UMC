@@ -39,9 +39,9 @@ namespace INT_UMC {
 		return mShot->GetDuration();
 	}
 
-	spIFrame ClipShotImpl::AddFrame()
+	spIFrame ClipShotImpl::AddFrame( const spISource & source )
 	{
-		return mShot->AddFrame();
+		return mShot->AddFrame( source );
 	}
 
 	size_t ClipShotImpl::FrameCount() const {
@@ -56,9 +56,9 @@ namespace INT_UMC {
 		return const_pointer_cast< const IShot >( mShot )->GetFrames();
 	}
 
-	spIShotSource ClipShotImpl::AddShotSource()
+	spIShotSource ClipShotImpl::AddShotSource( const spISource & source )
 	{
-		return mShot->AddShotSource();
+		return mShot->AddShotSource( source );
 	}
 
 	size_t ClipShotImpl::ShotSourceCount() const {

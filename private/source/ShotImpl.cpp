@@ -38,9 +38,11 @@ namespace INT_UMC {
 		return mDuration;
 	}
 
-	spIFrame ShotImpl::AddFrame()
+	spIFrame ShotImpl::AddFrame( const spISource & source )
 	{
-		return spIFrame();
+		spIFrame frame = CreateFrame( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator(), source );
+		AddElementToMap( mFrameMap, frame, shared_from_this() );
+		return frame;
 	}
 
 	size_t ShotImpl::FrameCount() const {
@@ -48,28 +50,18 @@ namespace INT_UMC {
 	}
 
 	IShot::FrameList ShotImpl::GetFrames() {
-		FrameList list;
-		auto it = mFrameMap.begin();
-		auto endIt = mFrameMap.end();
-		for ( ; it != endIt; it++ ) {
-			list.push_back( it->second );
-		}
-		return list;
+		return CreateListFromMap< spIFrame >( mFrameMap );
 	}
 
 	IShot::cFrameList ShotImpl::GetFrames() const {
-		cFrameList list;
-		auto it = mFrameMap.begin();
-		auto endIt = mFrameMap.end();
-		for ( ; it != endIt; it++ ) {
-			list.push_back( it->second );
-		}
-		return list;
+		return CreateListFromMap< spcIFrame >( mFrameMap );
 	}
 
-	spIShotSource ShotImpl::AddShotSource()
+	spIShotSource ShotImpl::AddShotSource( const spISource & source )
 	{
-		return spIShotSource();
+		spIShotSource shotSource = CreateShotSource( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator(), source );
+		AddElementToMap( mShotSourceMap, shotSource, shared_from_this() );
+		return shotSource;
 	}
 
 	size_t ShotImpl::ShotSourceCount() const {
@@ -77,23 +69,11 @@ namespace INT_UMC {
 	}
 
 	IShot::ShotSourceList ShotImpl::GetShotSources() {
-		ShotSourceList list;
-		auto it = mShotSourceMap.begin();
-		auto endIt = mShotSourceMap.end();
-		for ( ; it != endIt; it++ ) {
-			list.push_back( it->second );
-		}
-		return list;
+		return CreateListFromMap< spIShotSource >( mShotSourceMap );
 	}
 
 	IShot::cShotSourceList ShotImpl::GetShotSources() const {
-		cShotSourceList list;
-		auto it = mShotSourceMap.begin();
-		auto endIt = mShotSourceMap.end();
-		for ( ; it != endIt; it++ ) {
-			list.push_back( it->second );
-		}
-		return list;
+		return CreateListFromMap< spcIShotSource >( mShotSourceMap );
 	}
 
 	spIShotSource ShotImpl::GetShotSource( const std::string & uniqueID ) {

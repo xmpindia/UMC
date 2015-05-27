@@ -46,8 +46,8 @@ namespace UMC {
 		virtual void SetDuration( const EditUnitDuration & duration ) = 0;
 		virtual EditUnitDuration GetDuration() const = 0;
 
-		virtual spIFrame AddFrame() = 0;
-		virtual spIShotSource AddShotSource() = 0;
+		virtual spIFrame AddFrame( const spISource & source ) = 0;
+		virtual spIShotSource AddShotSource( const spISource & source ) = 0;
 
 		virtual size_t FrameCount() const = 0;
 		virtual FrameList GetFrames() = 0;

@@ -24,7 +24,10 @@ namespace INT_UMC {
 	{
 	public:
 		ShotSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator );
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source );
+
+		virtual spISource GetSource();
+		virtual spcISource GetSource() const;
 		
 		virtual void SetSourceInCount( const EditUnitInCount & sourceInCount );
 		virtual EditUnitInCount GetSourceInCount() const;
@@ -83,6 +86,7 @@ namespace INT_UMC {
 
 	private:
 		spINode					mNode;
+		weak_ptr< ISource >     mwpSource;
 		EditUnitInCount			mSourceInCount;
 		EditUnitDuration		mSourceDuration;
 		EditUnitInCount			mShotInCount;

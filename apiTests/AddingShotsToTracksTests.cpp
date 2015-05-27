@@ -78,6 +78,73 @@ void AddingShotsToTracksTests::CountOfShots() {
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 2 );
 
+	auto clipShot = videoTracks[0]->AddClipShot();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 6 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 4 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 2 );
+
+	auto transitionShot = videoTracks[0]->AddTransitionShot();
+	videoTracks[0]->AddTransitionShot();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 8 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 4 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 4 );
+
+	videoTracks[0]->RemoveShot( clipShot->GetUniqueID() );
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 7 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 4 );
+
+	videoTracks[0]->RemoveTransitionShot( transitionShot->GetUniqueID() );
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 6 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 3 );
+
+	clipShot = videoTracks[0]->AddClipShot();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 7 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 4 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 3 );
+
+	videoTracks[0]->RemoveClipShot( clipShot->GetUniqueID() );
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 6 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 3 );
+
+	videoTracks[0]->RemoveShot( "notAvailable" );
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 6 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 3 );
+
+	videoTracks[0]->RemoveAllClipShots();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 3 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 0 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 3 );
+
+	videoTracks[0]->RemoveAllTransitionShots();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 0 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 0 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 0 );
+
+	videoTracks[0]->AddClipShot();
+	videoTracks[0]->AddTransitionShot();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 2 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 1 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 1 );
+
+	videoTracks[0]->RemoveAllShots();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 0 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 0 );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 0 );
 }
 
 
@@ -85,7 +152,25 @@ void AddingShotsToTracksTests::ShotsContent() {
 	std::cout<< "********** AddingShotsToTracksTests::ShotsContent **********"<<"\n";
 	using namespace UMC;
 
+	auto sp = CreateDefaultUMC();
+	auto outputs = sp->GetAllOutputs();
+	auto videoTracks = outputs[0]->GetAllVideoTracks();
+	auto shots = videoTracks[0]->GetAllShots();
 
+	CPPUNIT_ASSERT_EQUAL( shots[0]->GetInCount(), (EditUnitInCount) 10 );
+	CPPUNIT_ASSERT_EQUAL( shots[0]->GetDuration(), (EditUnitDuration) 15 );
+
+	CPPUNIT_ASSERT_EQUAL( shots[1]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( shots[1]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
+
+	CPPUNIT_ASSERT_EQUAL( shots[2]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( shots[2]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
+
+	CPPUNIT_ASSERT_EQUAL( shots[3]->GetInCount(), (EditUnitInCount) 8 );
+	CPPUNIT_ASSERT_EQUAL( shots[3]->GetDuration(), (EditUnitDuration) 3 );
+
+	CPPUNIT_ASSERT_EQUAL( shots[4]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( shots[4]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
 }
 
 
