@@ -14,12 +14,14 @@ class AddingOutputsToUMCTests : public CppUnit::TestCase {
 
 	CPPUNIT_TEST_SUITE( AddingOutputsToUMCTests );
 	CPPUNIT_TEST( CountOfOutputs );
+	CPPUNIT_TEST( OutputsContent );
 	CPPUNIT_TEST( SerializeOutputs );
 	CPPUNIT_TEST_SUITE_END();
 
 
 protected:
 	void CountOfOutputs();
+	void OutputsContent();
 	void SerializeOutputs();
 
 public:
@@ -112,11 +114,50 @@ void AddingOutputsToUMCTests::CountOfOutputs() {
 	CPPUNIT_ASSERT_EQUAL( sp->OutputCount(), ( size_t ) 0 );
 }
 
+void AddingOutputsToUMCTests::OutputsContent() {
+	std::cout<< "********** AddingOutputsToUMCTests::OuputsContent **********"<<"\n";
+	using namespace UMC;
+	spIUMC sp = IUMC::CreateEmptyUMC();
+
+	auto output1 = sp->AddOutput();
+	output1->SetAudioEditRate( EditRate( 48000 ) );
+	output1->SetVideoEditRate( EditRate( 24 ) );
+	output1->SetName( "Output One" );
+	output1->SetTitle( "Video for Output One" );
+	output1->SetImageAspectRatio( AspectRatio( 1080, 720 ) );
+	output1->SetCanvasAspectRatio( AspectRatio( 640, 480 ) );
+
+	auto output2 = sp->AddOutput();
+	output2->SetAudioEditRate( EditRate( 240000 ) );
+	output2->SetVideoEditRate( EditRate( 50 ) );
+	output2->SetName( "O Two" );
+	output2->SetTitle( "Output Two Title" );
+	output2->SetImageAspectRatio( AspectRatio( 1920, 1080 ) );
+	output2->SetCanvasAspectRatio( AspectRatio( 1000, 500 ) );
+
+	IUMC::OutputList outputs = sp->GetAllOutputs();
+	CPPUNIT_ASSERT_EQUAL( outputs.size(), (size_t) 2 );
+
+	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetName(), std::string( "Output One" ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetTitle(), std::string( "Video for Output One" ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetVideoEditRate(), EditRate( 24 ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetImageAspectRatio(), AspectRatio( 1080, 720 ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetCanvasAspectRatio(), AspectRatio( 640, 480 ) );
+
+	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetName(), std::string( "O Two" ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetTitle(), std::string( "Output Two Title" ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetAudioEditRate(), EditRate( 240000 ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetVideoEditRate(), EditRate( 50 ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetImageAspectRatio(), AspectRatio( 1920, 1080 ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetCanvasAspectRatio(), AspectRatio( 1000, 500 ) );
+}
+
 void AddingOutputsToUMCTests::SerializeOutputs() {
 	std::cout<< "********** AddingOutputsToUMCTests::SerializeOutputs **********"<<"\n";
 	auto sp = CreateDefaultUMC();
 	std::string rdf = sp->SerializeToBuffer();
-	std::cout << rdf << "\n";
+	//std::cout << rdf << "\n";
 }
 
 void AddingOutputsToUMCTests::setUp() {

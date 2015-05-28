@@ -17,9 +17,13 @@
 #include "interfaces/IFrame.h"
 #include "interfaces/IShot.h"
 #include "interfaces/ITrack.h"
+#include "interfaces/IVideoTrack.h"
+#include "interfaces/IAudioTrack.h"
+#include "interfaces/ITrack.h"
 #include "interfaces/IOutput.h"
 #include "interfaces/IUMC.h"
 #include "interfaces/INodeI.h"
+#include "interfaces/IShotSource.h"
 
 #include "XMPCore/Interfaces/IXMPMetadata.h"
 #include "XMPCore/Interfaces/IXMPArrayNode.h"
@@ -89,23 +93,24 @@ namespace INT_UMC {
 		}
 
 		spIXMPStructureNode Convert ( const spcIVideoSource & videoSource ) {
-			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "source" );
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "source" );
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "type", "video" ) );
 
 			std::stringstream buf;
 			if ( videoSource->GetInCount() != 0 ) {
 				buf << videoSource->GetInCount();
-				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "startTime", buf.str().c_str() ) );
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "inCount", buf.str().c_str() ) );
 			}
 
 			if ( videoSource->GetDuration() != npos ) {
 				buf.str( "" );
 				buf << videoSource->GetDuration();
-				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "duration", buf.str().c_str() ) );
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "duration", buf.str().c_str() ) );
 			}
 
 			auto node = Convert( videoSource->GetVideoEditRate(), "videoEditRate" );
 			if ( node ) sp->AppendNode( node );
+			
 			node = Convert( videoSource->GetAudioEditRate(), "audioEditRate" );
 			if ( node ) sp->AppendNode( node );
 
@@ -115,19 +120,19 @@ namespace INT_UMC {
 		}
 
 		spIXMPStructureNode Convert( const spcIAudioSource & audioSource ) {
-			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "source" );
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "source" );
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "type", "audio" ) );
 
 			std::stringstream buf;
 			if ( audioSource->GetInCount() != 0 ) {
 				buf << audioSource->GetInCount();
-				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "startTime", buf.str().c_str() ) );
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "inCount", buf.str().c_str() ) );
 			}
 
 			if ( audioSource->GetDuration() != npos ) {
 				buf.str( "" );
 				buf << audioSource->GetDuration();
-				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "duration", buf.str().c_str() ) );
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "duration", buf.str().c_str() ) );
 			}
 
 			auto node = Convert( audioSource->GetAudioEditRate(), "audioEditRate" );
@@ -139,19 +144,19 @@ namespace INT_UMC {
 		}
 
 		spIXMPStructureNode Convert( const spcIImageSource & imageSource ) {
-			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "source" );
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "source" );
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "type", "image" ) );
 			return sp;
 		}
 
 		spIXMPStructureNode Convert( const spcIVideoFrameSource & videoFrameSource ) {
-			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "source" );
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "source" );
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "type", "videoFrame" ) );
 
 			std::stringstream buf;
 			if ( videoFrameSource->GetInCount() != 0 ) {
 				buf << videoFrameSource->GetInCount();
-				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "startTime", buf.str().c_str() ) );
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "inCount", buf.str().c_str() ) );
 			}
 
 			buf.str( "" );
@@ -190,18 +195,36 @@ namespace INT_UMC {
 		}
 
 		spIXMPNode Convert( const spcIFrame & frame ) {
-			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "frame" );
-#if WORK_IN_PROGRESS
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "frame" );
+
+			EditUnitInCount inCount( frame->GetShotInCount() );
+			auto source = frame->GetSource();
+
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_XMP_MM, "DocumentID",
-				frame->GetUniqueID().c_str() ) );
+				source->GetUniqueID().c_str() ) );
 
-			std::stringstream buf;
-
-			if ( frame->GetEditOffset() != 0 ) {
-				buf << frame->GetEditOffset();
-				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "editOffset", buf.str().c_str() ) );
+			if ( inCount != kEditUnitInCountFromBeginning ) {
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "inCount",
+					ConvertToString( inCount ).c_str() ) );
 			}
-#endif
+
+			return sp;
+		}
+
+		spIXMPNode Convert( const spcIShotSource & shotSource ) {
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "shotSource" );
+
+			EditUnitInCount inCount( shotSource->GetShotInCount() );
+			auto source = shotSource->GetSource();
+
+			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_XMP_MM, "DocumentID",
+				source->GetUniqueID().c_str() ) );
+
+			if ( inCount != kEditUnitInCountFromBeginning ) {
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "inCount",
+					ConvertToString( inCount ).c_str() ) );
+			}
+
 			return sp;
 		}
 
@@ -228,37 +251,40 @@ namespace INT_UMC {
 			if ( inCount != kEditUnitInCountFromBeginning || duration != kEditUnitDurationTillEnd ) {
 				auto recordSp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "record" );
 				if ( inCount != kEditUnitInCountFromBeginning ) {
-					recordSp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "startTime",
+					recordSp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "inCount",
 						ConvertToString( inCount ).c_str() ) );
 				}
 				if ( duration != kEditUnitDurationTillEnd ) {
-					recordSp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "duration",
+					recordSp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_UMC, "duration",
 						ConvertToString( duration ).c_str() ) );
 				}
 				sp->AppendNode( recordSp );
 			}
 
-#if WORK_IN_PROGRESS
 			if ( shot->ShotSourceCount() > 0 ) {
-				auto shotSourceList = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "shotSources" );
+				auto shotSourceArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "shotSourceList" );
+				auto shotSources = shot->GetShotSources();
 
+				for ( size_t i = 0, count = shotSources.size(); i < count; i++ ) {
+					shotSourceArray->AppendNode( Convert( shotSources[ i ] ) );
+				}
+
+				sp->AppendNode( shotSourceArray );
 			}
 
 			if ( shot->FrameCount() > 0 ) {
-				auto framesArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "frames" );
+				auto framesArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "frameList" );
 				IShot::cFrameList frames = shot->GetFrames();
 				for ( size_t i = 0, count = frames.size(); i < count; i++ ) {
 					framesArray->AppendNode( Convert( frames[ i ] ) );
 				}
 				sp->AppendNode( framesArray );
 			}
-#endif
 			return sp;
 		}
 
-		spIXMPNode Convert( const spcITrack & track ) {
-#if WORK_IN_PROGRESS
-			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_DM, "track" );
+		spIXMPNode Convert( const spcIVideoTrack & track ) {
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "track" );
 			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_XMP_MM, "DocumentID",
 				track->GetUniqueID().c_str() ) );
 			std::string temp;
@@ -266,12 +292,15 @@ namespace INT_UMC {
 			if ( temp.size() > 0 )
 				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "description", temp.c_str() ) );
 
-			auto node = Convert( track->GetEditRate(), "editRate" );
+			auto node = Convert( track->GetVideoEditRate(), "videoEditRate" );
+			if ( node ) sp->AppendNode( node );
+
+			node = Convert( track->GetAudioEditRate(), "audioEditRate" );
 			if ( node ) sp->AppendNode( node );
 
 			if ( track->ShotCount() > 0 ) {
-				auto shotsArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "shots" );
-				ITrack::cShotList shots = track->GetShots();
+				auto shotsArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "shotList" );
+				ITrack::cShotList shots = track->GetAllShots();
 				for ( size_t i = 0, count = shots.size(); i < count; i++ ) {
 					shotsArray->AppendNode( Convert( shots[ i ] ) );
 				}
@@ -279,8 +308,30 @@ namespace INT_UMC {
 			}
 
 			return sp;
-#endif
-			return spIXMPNode();
+		}
+
+		spIXMPNode Convert( const spcIAudioTrack & track ) {
+			auto sp = IXMPStructureNode::CreateStructureNode( kXMP_NS_UMC, "track" );
+			sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_XMP_MM, "DocumentID",
+				track->GetUniqueID().c_str() ) );
+			std::string temp;
+			temp = track->GetName();
+			if ( temp.size() > 0 )
+				sp->AppendNode( IXMPSimpleNode::CreateSimpleNode( kXMP_NS_DM, "description", temp.c_str() ) );
+
+			auto node = Convert( track->GetAudioEditRate(), "audioEditRate" );
+			if ( node ) sp->AppendNode( node );
+
+			if ( track->ShotCount() > 0 ) {
+				auto shotsArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "shotList" );
+				ITrack::cShotList shots = track->GetAllShots();
+				for ( size_t i = 0, count = shots.size(); i < count; i++ ) {
+					shotsArray->AppendNode( Convert( shots[ i ] ) );
+				}
+				sp->AppendNode( shotsArray );
+			}
+
+			return sp;
 		}
 
 		spIXMPNode Convert( const spcIOutput & output ) {
@@ -308,10 +359,10 @@ namespace INT_UMC {
 			if ( node ) videoSp->AppendNode( node );
 
 			if ( output->VideoTrackCount() > 0 ) {
-				auto tracksArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "tracks" );
+				auto tracksArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "trackList" );
 				IOutput::cVideoTrackList tracks = output->GetAllVideoTracks();
 				for ( size_t i = 0, count = tracks.size(); i < count; i++ ) {
-					//tracksArray->AppendNode( Convert( tracks[ i ] ) );
+					tracksArray->AppendNode( Convert( tracks[ i ] ) );
 				}
 				videoSp->AppendNode( tracksArray );
 			}
@@ -323,10 +374,10 @@ namespace INT_UMC {
 			if ( node ) audioSp->AppendNode( node );
 
 			if ( output->AudioTrackCount() > 0 ) {
-				auto tracksArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "tracks" );
+				auto tracksArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "trackList" );
 				IOutput::cAudioTrackList tracks = output->GetAllAudioTracks();
 				for ( size_t i = 0, count = tracks.size(); i < count; i++ ) {
-					//tracksArray->AppendNode( Convert( tracks[ i ] ) );
+					tracksArray->AppendNode( Convert( tracks[ i ] ) );
 				}
 				audioSp->AppendNode( tracksArray );
 			}
@@ -346,7 +397,7 @@ namespace INT_UMC {
 			}
 
 			if ( umc->OutputCount() > 0 ) {
-				auto outputArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "compositions" );
+				auto outputArray = IXMPArrayNode::CreateUnorderedArrayNode( kXMP_NS_UMC, "outputList" );
 				IUMC::cOutputList outputs = umc->GetAllOutputs();
 				for ( size_t i = 0, count = outputs.size(); i < count; i++ ) {
 					outputArray->AppendNode( Convert( outputs[ i ] ) );

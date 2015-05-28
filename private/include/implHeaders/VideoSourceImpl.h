@@ -43,6 +43,8 @@ namespace INT_UMC {
 		virtual void SetClipName( const std::string & clipName );
 		virtual std::string GetClipName() const;
 
+		// INODEI
+
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual const std::string & GetUniqueID() const;

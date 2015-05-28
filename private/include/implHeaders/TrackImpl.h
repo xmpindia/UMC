@@ -12,6 +12,8 @@
 
 #include "interfaces/ITrack.h"
 #include "interfaces/IShot.h"
+#include "interfaces/IClipShot.h"
+#include "interfaces/ITransitionShot.h"
 #include "interfaces/INodeI.h"
 
 #include <string>
@@ -23,6 +25,7 @@ namespace INT_UMC {
 	class TrackImpl
 		: public ITrack
 		, public INodeI
+		, public enable_shared_from_this< TrackImpl >
 	{
 	public:
 		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
@@ -32,8 +35,8 @@ namespace INT_UMC {
 
 		virtual eTrackTypes GetType() const;
 
-		virtual spIShot AddClipShot();
-		virtual spIShot AddTransitionShot();
+		virtual spIClipShot AddClipShot();
+		virtual spITransitionShot AddTransitionShot();
 
 		virtual void SetName( const std::string & uniqueID );
 		virtual std::string GetName() const;
@@ -44,17 +47,17 @@ namespace INT_UMC {
 
 		virtual ShotList GetAllShots();
 		virtual cShotList GetAllShots() const;
-		virtual ShotList GetAllClipShots();
-		virtual cShotList GetAllClipShots() const;
-		virtual ShotList GetAllTransitionShots();
-		virtual cShotList GetAllTransitionShots() const;
+		virtual ClipShotList GetAllClipShots();
+		virtual cClipShotList GetAllClipShots() const;
+		virtual TransitionShotList GetAllTransitionShots();
+		virtual cTransitionShotList GetAllTransitionShots() const;
 
 		virtual spIShot GetShot( const std::string & uniqueID );
 		virtual spcIShot GetShot( const std::string & uniqueID ) const;
-		virtual spIShot GetClipShot( const std::string & uniqueID );
-		virtual spcIShot GetClipShot( const std::string & uniqueID ) const;
-		virtual spIShot GetTransitionShot( const std::string & uniqueID );
-		virtual spcIShot GetTransitionShot( const std::string & uniqueID ) const;
+		virtual spIClipShot GetClipShot( const std::string & uniqueID );
+		virtual spcIClipShot GetClipShot( const std::string & uniqueID ) const;
+		virtual spITransitionShot GetTransitionShot( const std::string & uniqueID );
+		virtual spcITransitionShot GetTransitionShot( const std::string & uniqueID ) const;
 
 		virtual size_t RemoveAllShots();
 		virtual size_t RemoveAllClipShots();
@@ -63,6 +66,8 @@ namespace INT_UMC {
 		virtual size_t RemoveShot( const std::string & uniqueID );
 		virtual size_t RemoveClipShot( const std::string & uniqueID );
 		virtual size_t RemoveTransitionShot( const std::string & uniqueID );
+
+		// INODEI
 
 		virtual eNodeTypes GetNodeType() const;
 
@@ -106,13 +111,13 @@ namespace INT_UMC {
 		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	protected:
-
-		typedef std::map< const std::string, spIShot > ShotMap;
+		typedef std::map< const std::string, spIClipShot > ClipShotMap;
+		typedef std::map< const std::string, spITransitionShot > TransitionShotMap;
 
 		spINode							mNode;
-
 		std::string						mName;
-		ShotMap							mShotMap;
+		ClipShotMap						mClipShotMap;
+		TransitionShotMap				mTransitionShotMap;
 	};
 }
 

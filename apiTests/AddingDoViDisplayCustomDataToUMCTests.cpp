@@ -45,8 +45,8 @@ void AddingDoViDisplayCustomDataToUMC::Test() {
 	umc->SetCustomData( DoVi::Display::GetNameSpace(), DoVi::Display::GetPropertyName(), display );
 
 	auto rdfRep = umc->SerializeToBuffer();
-	std::cout<<" ******* AddingDoViDisplayCustomDataToUMC::Test *****\n";
-	std::cout<<rdfRep<<"\n\n\n\n\n";
+	//std::cout<<" ******* AddingDoViDisplayCustomDataToUMC::Test *****\n";
+	//std::cout<<rdfRep<<"\n\n\n\n\n";
 }
 
 void AddingDoViDisplayCustomDataToUMC::tearDown() {

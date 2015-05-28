@@ -12,16 +12,18 @@
 
 #include "interfaces/IVideoTrack.h"
 #include "implHeaders/TrackImpl.h"
+#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
-
 	class VideoTrackImpl
 		: public IVideoTrack
-		, enable_shared_from_this< VideoTrackImpl >
+		, public enable_shared_from_this < VideoTrackImpl >
 	{
 	public:
-		VideoTrackImpl( const std::string & uniqueID, const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIOutput & parent );
+		VideoTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
+
+		virtual ~VideoTrackImpl() {}
 
 		virtual void SetVideoEditRate( const EditRate & editRate );
 		virtual EditRate GetVideoEditRate() const;
@@ -31,8 +33,8 @@ namespace INT_UMC {
 
 		virtual eTrackTypes GetType() const;
 
-		virtual spIShot AddClipShot();
-		virtual spIShot AddTransitionShot();
+		virtual spIClipShot AddClipShot();
+		virtual spITransitionShot AddTransitionShot();
 
 		virtual void SetName( const std::string & uniqueID );
 		virtual std::string GetName() const;
@@ -44,16 +46,16 @@ namespace INT_UMC {
 		virtual spcIShot GetShot( const std::string & uniqueID ) const;
 
 		virtual size_t ClipShotCount() const;
-		virtual ShotList GetAllClipShots();
-		virtual cShotList GetAllClipShots() const;
-		virtual spIShot GetClipShot( const std::string & uniqueID );
-		virtual spcIShot GetClipShot( const std::string & uniqueID ) const;
+		virtual ClipShotList GetAllClipShots();
+		virtual cClipShotList GetAllClipShots() const;
+		virtual spIClipShot GetClipShot( const std::string & uniqueID );
+		virtual spcIClipShot GetClipShot( const std::string & uniqueID ) const;
 
 		virtual size_t TransitionShotCount() const;
-		virtual ShotList GetAllTransitionShots();
-		virtual cShotList GetAllTransitionShots() const;
-		virtual spIShot GetTransitionShot( const std::string & uniqueID );
-		virtual spcIShot GetTransitionShot( const std::string & uniqueID ) const;
+		virtual TransitionShotList GetAllTransitionShots();
+		virtual cTransitionShotList GetAllTransitionShots() const;
+		virtual spITransitionShot GetTransitionShot( const std::string & uniqueID );
+		virtual spcITransitionShot GetTransitionShot( const std::string & uniqueID ) const;
 
 		virtual size_t RemoveAllShots();
 		virtual size_t RemoveAllClipShots();
@@ -63,9 +65,16 @@ namespace INT_UMC {
 		virtual size_t RemoveClipShot( const std::string & uniqueID );
 		virtual size_t RemoveTransitionShot( const std::string & uniqueID );
 
+		// INODEI
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual const std::string & GetUniqueID() const;
+
+		virtual NodeList GetAllChildren();
+		virtual cNodeList GetAllChildren() const;
+
+		virtual NodeList GetAllDecendants();
+		virtual cNodeList GetAllDecendants() const;
 
 		virtual wpcINode GetParentNode() const;
 		virtual wpINode GetParentNode();
@@ -76,10 +85,17 @@ namespace INT_UMC {
 		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
 		virtual spINode GetChildNode( const std::string & uniqueID );
 
-		virtual ~VideoTrackImpl() {}
+		virtual size_t GetReferenceCount() const;
 
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
+
+		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
+
+		virtual INT_UMC::pINodeI GetInternalNode();
+		virtual INT_UMC::pcINodeI GetInternalNode() const;
 	protected:
-		TrackImpl				mTrackImpl;
+		spITrack				mTrack;
 		EditRate				mVideoEditRate;
 		EditRate				mAudioEditRate;
 	};

@@ -31,6 +31,10 @@ namespace UMC {
 			return *this;
 		}
 
+		bool operator == ( const TRationalType & right ) const {
+			return ( ( mNumerator * right.mDenominator ) == ( mDenominator * right.mNumerator ) );
+		}
+
 		void Numerator( const BaseType & value ) { mNumerator = value; }
 		void Denominator( const BaseType & value ) { /* assert( denominator != 0 ); */ mDenominator = value; }
 
@@ -49,6 +53,15 @@ namespace UMC {
 	typedef Unsigned64RationalType FrameRate;
 	typedef Unsigned64RationalType AspectRatio;
 
+	inline std::ostream& operator <<( std::ostream& os, const Unsigned64RationalType& rt )
+	{
+		os << rt.Numerator() << '/' << rt.Denominator();
+		return os;
+	}
 }
 
 #endif  // RationalType_h__
+
+
+
+

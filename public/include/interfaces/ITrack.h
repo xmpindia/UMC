@@ -23,6 +23,10 @@ namespace UMC {
 	public:
 		typedef std::vector< spIShot > ShotList;
 		typedef std::vector< spcIShot > cShotList;
+		typedef std::vector< spIClipShot > ClipShotList;
+		typedef std::vector< spcIClipShot > cClipShotList;
+		typedef std::vector< spITransitionShot > TransitionShotList;
+		typedef std::vector< spcITransitionShot > cTransitionShotList;
 
 		typedef enum {
 			kTrackTypeVideo		= 0,
@@ -34,8 +38,8 @@ namespace UMC {
 
 		virtual eTrackTypes GetType() const = 0;
 
-		virtual spIShot AddClipShot() = 0;
-		virtual spIShot AddTransitionShot() = 0;
+		virtual spIClipShot AddClipShot() = 0;
+		virtual spITransitionShot AddTransitionShot() = 0;
 
 		virtual void SetName( const std::string & name ) = 0;
 		virtual std::string GetName() const = 0;
@@ -47,16 +51,16 @@ namespace UMC {
 		virtual spcIShot GetShot( const std::string & uniqueID ) const = 0;
 
 		virtual size_t ClipShotCount() const = 0;
-		virtual ShotList GetAllClipShots() = 0;
-		virtual cShotList GetAllClipShots() const = 0;
-		virtual spIShot GetClipShot( const std::string & uniqueID ) = 0;
-		virtual spcIShot GetClipShot( const std::string & uniqueID ) const = 0;
+		virtual ClipShotList GetAllClipShots() = 0;
+		virtual cClipShotList GetAllClipShots() const = 0;
+		virtual spIClipShot GetClipShot( const std::string & uniqueID ) = 0;
+		virtual spcIClipShot GetClipShot( const std::string & uniqueID ) const = 0;
 
 		virtual size_t TransitionShotCount() const = 0;
-		virtual ShotList GetAllTransitionShots() = 0;
-		virtual cShotList GetAllTransitionShots() const = 0;
-		virtual spIShot GetTransitionShot( const std::string & uniqueID ) = 0;
-		virtual spcIShot GetTransitionShot( const std::string & uniqueID ) const = 0;
+		virtual TransitionShotList GetAllTransitionShots() = 0;
+		virtual cTransitionShotList GetAllTransitionShots() const = 0;
+		virtual spITransitionShot GetTransitionShot( const std::string & uniqueID ) = 0;
+		virtual spcITransitionShot GetTransitionShot( const std::string & uniqueID ) const = 0;
 
 		virtual size_t RemoveAllShots() = 0;
 		virtual size_t RemoveAllClipShots() = 0;
