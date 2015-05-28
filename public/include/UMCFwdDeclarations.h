@@ -98,7 +98,7 @@ namespace UMC {
 	typedef shared_ptr< IVideoTrack >				spIVideoTrack;
 	typedef shared_ptr< const IVideoTrack >			spcIVideoTrack;
 
-	// ITrack
+	// IAudioTrack
 	class IAudioTrack;
 	typedef IAudioTrack *							pIAudioTrack;
 	typedef const IAudioTrack *						pcIAudioTrack;
@@ -111,6 +111,20 @@ namespace UMC {
 	typedef const IShot *							pcIShot;
 	typedef shared_ptr< IShot >						spIShot;
 	typedef shared_ptr< const IShot >				spcIShot;
+
+	// IClipShot
+	class IClipShot;
+	typedef IClipShot *								pIClipShot;
+	typedef const IClipShot *						pcIClipShot;
+	typedef shared_ptr< IClipShot >					spIClipShot;
+	typedef shared_ptr< const IClipShot >			spcIClipShot;
+
+	// ITransitionShot
+	class ITransitionShot;
+	typedef ITransitionShot *						pITransitionShot;
+	typedef const ITransitionShot *					pcITransitionShot;
+	typedef shared_ptr< ITransitionShot >			spITransitionShot;
+	typedef shared_ptr< const ITransitionShot >		spcITransitionShot;
 
 	// IFrame
 	class IFrame;

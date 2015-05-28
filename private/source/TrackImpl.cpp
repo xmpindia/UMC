@@ -11,8 +11,9 @@
 #include "implHeaders/ShotImpl.h"
 #include "interfaces/IOutput.h"
 #include "interfaces/IUniqueIDGenerator.h"
-#include "utils/Utils.h"
+#include "interfaces/IUMC.h"
 
+#include "utils/Utils.h"
 
 namespace INT_UMC {
 
@@ -20,15 +21,16 @@ namespace INT_UMC {
 		return mNode->GetUniqueID();
 	}
 
-
-	spIShot TrackImpl::AddClipShot() {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spIShot();
+	spIClipShot TrackImpl::AddClipShot() {
+		spIClipShot shot = CreateClipShot( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator() );
+		AddElementToMap( mClipShotMap, shot, shared_from_this() );
+		return shot;
 	}
 
-	spIShot TrackImpl::AddTransitionShot() {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spIShot();
+	spITransitionShot TrackImpl::AddTransitionShot() {
+		spITransitionShot shot = CreateTransitionShot( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator() );
+		AddElementToMap( mTransitionShotMap, shot, shared_from_this() );
+		return shot;
 	}
 
 	void TrackImpl::SetName( const std::string & uniqueID ) {
@@ -36,94 +38,101 @@ namespace INT_UMC {
 	}
 
 	spIShot TrackImpl::GetShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spIShot();
+		spIShot shot = GetClipShot( uniqueID );
+		if ( shot ) return shot;
+		shot = GetTransitionShot( uniqueID );
+		return shot;
 	}
 
 	spcIShot TrackImpl::GetShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spIShot();
+		return const_cast< TrackImpl *>( this )->GetShot( uniqueID );
 	}
 
 	size_t TrackImpl::ClipShotCount() const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return 0;
+		return mClipShotMap.size();
 	}
 
-	ITrack::ShotList TrackImpl::GetAllClipShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return ITrack::ShotList();
+	ITrack::ClipShotList TrackImpl::GetAllClipShots() {
+		return CreateListFromMap< spIClipShot >( mClipShotMap );
 	}
 
-	ITrack::cShotList TrackImpl::GetAllClipShots() const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return cShotList();
+	ITrack::cClipShotList TrackImpl::GetAllClipShots() const {
+		return CreateListFromMap< spcIClipShot >( mClipShotMap );
 	}
 
-	spIShot TrackImpl::GetClipShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spIShot();
+	spIClipShot TrackImpl::GetClipShot( const std::string & uniqueID ) {
+		return GetElementFromMap< spIClipShot >( mClipShotMap, uniqueID );
 	}
 
-	spcIShot TrackImpl::GetClipShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spIShot();
+	spcIClipShot TrackImpl::GetClipShot( const std::string & uniqueID ) const {
+		return GetElementFromMap< spcIClipShot >( mClipShotMap, uniqueID );
 	}
 
 	size_t TrackImpl::TransitionShotCount() const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return 0;
+		return mTransitionShotMap.size();
 	}
 
-	ITrack::ShotList TrackImpl::GetAllTransitionShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return ShotList();
+	ITrack::TransitionShotList TrackImpl::GetAllTransitionShots() {
+		return CreateListFromMap< spITransitionShot >( mTransitionShotMap );
 	}
 
-	ITrack::cShotList TrackImpl::GetAllTransitionShots() const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return cShotList();
+	ITrack::cTransitionShotList TrackImpl::GetAllTransitionShots() const {
+		return CreateListFromMap< spcITransitionShot >( mTransitionShotMap );
 	}
 
-	spIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spIShot();
+	spITransitionShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) {
+		return GetElementFromMap< spITransitionShot >( mTransitionShotMap, uniqueID );
 	}
 
-	spcIShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return spcIShot();
+	spcITransitionShot TrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
+		return GetElementFromMap< spcITransitionShot >( mTransitionShotMap, uniqueID );
 	}
 
 	size_t TrackImpl::RemoveAllShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		bool safeToClear( false );
+		safeToClear = SafeToClearMap( mClipShotMap );
+		if ( safeToClear ) SafeToClearMap( mTransitionShotMap ); else return 0;
+		if ( safeToClear ) {
+			size_t expectedCount = ShotCount();
+			size_t count( 0 );
+			count += ClearMap( mClipShotMap );
+			count += ClearMap( mTransitionShotMap );
+			assert( expectedCount == count );
+			return count;
+		}
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveAllClipShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		if ( SafeToClearMap( mClipShotMap ) ) {
+			return ClearMap( mClipShotMap );
+		}
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveAllTransitionShots() {
-		throw std::logic_error( "The method or operation is not implemented." );
+		if ( SafeToClearMap( mTransitionShotMap ) ) {
+			return ClearMap( mTransitionShotMap );
+		}
 		return 0;
 	}
 
 	size_t TrackImpl::RemoveShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return 0;
+		size_t count = RemoveClipShot( uniqueID );
+		if ( count > 0 ) return count;
+		count = RemoveTransitionShot( uniqueID );
+		return count;
 	}
 
 	size_t TrackImpl::RemoveClipShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return 0;
+		return TryAndRemoveElementFromMap( mClipShotMap, uniqueID );
 	}
 
 	size_t TrackImpl::RemoveTransitionShot( const std::string & uniqueID ) {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return 0;
+		return TryAndRemoveElementFromMap( mTransitionShotMap, uniqueID );
 	}
+
+	// INODEI
 
 	INode::eNodeTypes TrackImpl::GetNodeType() const {
 		return INode::kNodeTypeTrack;
@@ -142,8 +151,7 @@ namespace INT_UMC {
 	}
 
 	spINode TrackImpl::GetChildNode( const std::string & uniqueID ) {
-		spINode node;/*TODO = GetElementFromMap< spINode > ( mShotMap, uniqueID ); */
-		return node;
+		return GetShot( uniqueID );
 	}
 
 	std::string TrackImpl::GetName() const {
@@ -151,51 +159,69 @@ namespace INT_UMC {
 	}
 
 	size_t TrackImpl::ShotCount() const {
-		return mShotMap.size();
+		return mClipShotMap.size() + mTransitionShotMap.size();
 	}
 
 	ITrack::ShotList TrackImpl::GetAllShots() {
-		return CreateListFromMap< spIShot >( mShotMap );
+		ShotList list;
+		AppendToListFromMap< spIShot, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spIShot, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	ITrack::cShotList TrackImpl::GetAllShots() const {
-		return CreateListFromMap< spcIShot >( mShotMap );
+		cShotList list;
+		AppendToListFromMap< spcIShot, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spcIShot, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
 		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeTrack ) )
 		, mName()
-		, mShotMap() { }
+		, mClipShotMap()
+		, mTransitionShotMap() { }
 
 	spcINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return const_cast< TrackImpl * >( this )->GetDecendantNode( uniqueID );
 	}
 
 	spINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) {
-		spINode node = GetChildNode( uniqueID );
-		return node; /* TODO if ( node ) return node;
-		node = GetDecendantFromMap< spINode >( mShotMap, uniqueID ); */
+		auto node = GetChildNode( uniqueID );
+		if ( node ) return node;
+		node = GetDecendantFromMap( mClipShotMap, uniqueID );
+		if ( node ) return node;
+		node = GetDecendantFromMap( mTransitionShotMap, uniqueID );
+		return node;
 	}
 
 	INode::NodeList TrackImpl::GetAllChildren() {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return NodeList();
+		NodeList list;
+		AppendToListFromMap< spINode, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spINode, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	INode::cNodeList TrackImpl::GetAllChildren() const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return cNodeList();
+		cNodeList list;
+		AppendToListFromMap< spcINode, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spcINode, TransitionShotMap >( list, mTransitionShotMap );
+		return list;
 	}
 
 	INode::NodeList TrackImpl::GetAllDecendants() {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return NodeList();
+		NodeList list;
+		AppendDecendantsFromMapToList< spINode >( list, mClipShotMap );
+		AppendDecendantsFromMapToList< spINode >( list, mTransitionShotMap );
+		return list;
 	}
 
 	INode::cNodeList TrackImpl::GetAllDecendants() const {
-		throw std::logic_error( "The method or operation is not implemented." );
-		return cNodeList();
+		cNodeList list;
+		AppendDecendantsFromMapToList< spcINode >( list, mClipShotMap );
+		AppendDecendantsFromMapToList< spcINode >( list, mTransitionShotMap );
+		return list;
 	}
 
 	size_t TrackImpl::GetReferenceCount() const {
@@ -203,7 +229,8 @@ namespace INT_UMC {
 	}
 
 	void TrackImpl::RemoveFromDOM() {
-		//ClearMap( mShotMap );
+		ClearMap( mClipShotMap );
+		ClearMap( mTransitionShotMap );
 		mNode->GetInternalNode()->RemoveFromDOM();
 	}
 
@@ -261,6 +288,12 @@ namespace INT_UMC {
 
 	ITrack::eTrackTypes TrackImpl::GetType() const {
 		return ITrack::kTrackTypeAll;
+	}
+
+	spITrack CreateTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator )
+	{
+		return std::make_shared< TrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 	}
 
 }

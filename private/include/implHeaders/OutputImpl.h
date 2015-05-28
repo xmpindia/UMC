@@ -111,18 +111,15 @@ namespace INT_UMC {
 		virtual spIXMPStructureNode GetMergedExtensionNode() const;
 
 		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
-
 		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
 
 		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-
 		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
 
 	protected:
 		typedef std::map< const std::string, spIVideoTrack > VideoTrackMap;
 		typedef std::map< const std::string, spIAudioTrack > AudioTrackMap;
 
-	protected:
 		spINode							mNode;
 		std::string						mName;
 		std::string						mTitle;

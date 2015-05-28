@@ -65,6 +65,17 @@ namespace UMC {
 
 		std::string SMPTETimecode() const;
 
+		bool operator == ( const TimeCode & right ) const {
+			return ( mFrameRate == right.mFrameRate &&
+				mIsDropFrame == right.mIsDropFrame &&
+				mHours == right.mHours &&
+				mMinutes == right.mMinutes &&
+				mSeconds == right.mSeconds &&
+				mFrames == right.mFrames &&
+				mStandardFrameRate == right.mStandardFrameRate
+				);
+		}
+
 	protected:
 		UMC::FrameRate			mFrameRate;
 		bool					mIsDropFrame;
@@ -74,5 +85,12 @@ namespace UMC {
 		UMC_Uns64				mFrames;
 		eStandardFrameRates		mStandardFrameRate;
 	};
+
+
+	inline std::ostream& operator <<( std::ostream& os, const TimeCode& tc )
+	{
+		os << tc.SMPTETimecode();
+		return os;
+	}
 }
 #endif  // TimeCode_h__
