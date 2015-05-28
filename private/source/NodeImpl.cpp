@@ -16,6 +16,7 @@
 #include "interfaces/ICustomData.h"
 
 #include "XMPCore/Interfaces/IXMPStructureNode.h"
+#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
 #include <assert.h>
 
 namespace INT_UMC {
