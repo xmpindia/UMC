@@ -21,7 +21,7 @@ namespace INT_UMC {
 
 	std::string UniqueIDGeneratorImpl::GenerateUniqueID( INode::eNodeTypes nodeType ) {
 		static char buffer[ 32 ] = "";
-	#if UMC_UNIXBuild
+	#if UMC_UNIXBuild || UMC_MacBuild
 		snprintf ( buffer, 32, "%d", mCurrentID );
 	#elif UMC_WinBuild
 		sprintf_s( buffer, 32, "%d", mCurrentID );

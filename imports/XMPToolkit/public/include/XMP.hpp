@@ -19,6 +19,8 @@
 //
 // mm/dd/yy who Description of changes, most recent on top.
 //
+// 03-16-15 AJ  5.6-c048 Fixing build break due to XMPCore.def
+// 03-02-15 AJ  5.6-c039 Marker Extensibility - Backward compatibility for extensions in GetBulkMarkers() and SetBulkMarkers()
 // 05-19-09 AWL 5.0-c031-f039 First part of threading improvements. Force full rebuilds.
 //
 // 10-31-07 AWL 4.2-c023 Add new class XMPDocOps.

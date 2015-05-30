@@ -21,6 +21,9 @@
 //
 // mm-dd-yy who Description of changes, most recent first.
 //
+// 12-03-15 AJ  5.6-c045 Reworking glue code for Get/SetBulkMarkers()
+// 12-03-15 AJ  5.6-c045 Reworking glue code for Get/SetBulkMarkers()
+// 03-02-15 AJ  5.6-c039 Marker Extensibility - Backward compatibility for extensions in GetBulkMarkers() and SetBulkMarkers()
 // 08-07-14 ANS 5.6-c023 Fixing compile time issues in XMPCore headers on Mac 32 bit.
 // 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
 // 05-19-14 ADC 5.6-c012 Refactoring XMPCommon code and appropriate changes in XMPCore and XMPCompareAndMerge.
@@ -414,11 +417,10 @@ namespace NS_XMPCORE {
 		class CLIENT_IXMPDOMIMPLEMENTATIONREGISTRY_VERSION;
 		typedef CLIENT_IXMPDOMIMPLEMENTATIONREGISTRY_VERSION	IXMPDOMImplementationRegistry;
 	#endif
-typedef IXMPDOMImplementationRegistry *							pIXMPDOMImplementationRegistry;
-typedef const IXMPDOMImplementationRegistry *					pcIXMPDOMImplementationRegistry;
-typedef shared_ptr< IXMPDOMImplementationRegistry >				spIXMPDOMImplementationRegistry;
-typedef shared_ptr< const IXMPDOMImplementationRegistry >		spcIXMPDOMImplementationRegistry;
-
+	typedef IXMPDOMImplementationRegistry *							pIXMPDOMImplementationRegistry;
+	typedef const IXMPDOMImplementationRegistry *					pcIXMPDOMImplementationRegistry;
+	typedef shared_ptr< IXMPDOMImplementationRegistry >				spIXMPDOMImplementationRegistry;
+	typedef shared_ptr< const IXMPDOMImplementationRegistry >		spcIXMPDOMImplementationRegistry;
 
 	typedef enum {
 		//! Indicates that IXMPNameSpacePrefixMap has an entry missing.
@@ -481,3 +483,4 @@ typedef shared_ptr< const IXMPDOMImplementationRegistry >		spcIXMPDOMImplementat
 }
 
 #endif // XMPCoreFwdDeclarations_h__
+

@@ -217,6 +217,7 @@ Initialize ( XMP_AllocateProc AllocateProc /* = 0 */,
              XMP_DeleteProc   DeleteProc /* = 0 */ )
 {
 	// Verify critical type sizes.
+#if XMP_DebugBuild
 	int moot= 2 * 2;
 	int moot2=moot*2 - 8; // equals zero
 	(void) moot2;	// Suppress warning.
@@ -229,7 +230,18 @@ Initialize ( XMP_AllocateProc AllocateProc /* = 0 */,
 	XMP_TypeCheck ( ((sizeof(XMP_Uns32) == 4) + moot2), "Size wrong for critical type XMP_Uns32" );
 	XMP_TypeCheck ( ((sizeof(XMP_Uns64) == 8) + moot2), "Size wrong for critical type XMP_Uns64" );
 	XMP_TypeCheck ( (sizeof(XMP_Bool)  == 1), "Size wrong for critical type XMP_Bool" );
+#else
+	XMP_TypeCheck ( (sizeof(XMP_Int8)  == 1), "Size wrong for critical type XMP_Int8" );
+	XMP_TypeCheck ( (sizeof(XMP_Int16) == 2), "Size wrong for critical type XMP_Int16" );
+	XMP_TypeCheck ( (sizeof(XMP_Int32) == 4), "Size wrong for critical type XMP_Int32" );
+	XMP_TypeCheck ( (sizeof(XMP_Int64) == 8), "Size wrong for critical type XMP_Int64" );
+	XMP_TypeCheck ( (sizeof(XMP_Uns8)  == 1), "Size wrong for critical type XMP_Uns8" );
+	XMP_TypeCheck ( (sizeof(XMP_Uns16) == 2), "Size wrong for critical type XMP_Uns16" );
+	XMP_TypeCheck ( (sizeof(XMP_Uns32) == 4), "Size wrong for critical type XMP_Uns32" );
+	XMP_TypeCheck ( (sizeof(XMP_Uns64) == 8), "Size wrong for critical type XMP_Uns64" );
+	XMP_TypeCheck ( (sizeof(XMP_Bool)  == 1), "Size wrong for critical type XMP_Bool" );
 
+#endif //#if XMP_DebugBuild
 	#if XMP_TraceClientCallsToFile
 		xmpClientLog = fopen ( "XMPClientLog.txt", "w" );
 		if ( xmpClientLog == 0 ) xmpClientLog = stderr;

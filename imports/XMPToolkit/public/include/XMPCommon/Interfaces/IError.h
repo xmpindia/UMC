@@ -19,6 +19,7 @@
 //
 // mm/dd/yy who Description of changes, most recent on top.
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 12-30-14 ADC 5.6-c032 Adding IConfigurable Interface to XMPCommon.
 // 12-07-14 ADC 1.0-a041 Refactored Part Classes and Adding support for IAssetArtboardPart.
 // 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.

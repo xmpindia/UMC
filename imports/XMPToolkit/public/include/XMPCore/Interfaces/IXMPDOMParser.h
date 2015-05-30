@@ -20,6 +20,7 @@
 //
 // mm-dd-yy who Description of changes, most recent first.
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 11-05-14 ADC 5.6-c026 [3847480] New DOM : IXMPDOMParser and IXMPDOMSerializer interfaces should include all the dependencies.
 // 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
 //

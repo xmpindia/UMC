@@ -21,6 +21,7 @@
 //
 // mm-dd-yy who Description of changes, most recent first.
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 11-05-14 ADC 5.6-c025 Added some utility functions to IXMPArrayNode and IXMPStructureNode.
 // 07-10-14 ADC 5.6-c017 Fixing issues related to Mac build.
 // 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.

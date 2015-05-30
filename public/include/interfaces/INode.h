@@ -159,7 +159,7 @@ namespace UMC {
 	template< typename requiredNodeType >
 	weak_ptr< requiredNodeType > UMC::INode::GetParent() {
 		auto node = GetParentNode();
-		if ( node ) {
+		if ( !node.expired() ) {
 			auto spNode = node.lock();
 			if ( spNode )
 				return ConvertNode< requiredNodeType >( spNode );

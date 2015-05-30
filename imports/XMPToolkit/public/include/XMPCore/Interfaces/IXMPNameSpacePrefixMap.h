@@ -20,6 +20,7 @@
 //
 // mm-dd-yy who Description of changes, most recent first.
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
 //
 // =================================================================================================
@@ -158,7 +159,6 @@ namespace NS_XMPCORE {
 		virtual ~IXMPNameSpacePrefixMap_v1() __NOTHROW__ = 0;
 
 		REQ_FRIEND_CLASS_DECLARATION();
-
 	};
 
 	inline IXMPNameSpacePrefixMap_v1::~IXMPNameSpacePrefixMap_v1() __NOTHROW__ { }

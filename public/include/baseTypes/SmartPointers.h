@@ -16,8 +16,8 @@
 	#include <memory>
 	#define SMART_PTR_NAMESPACE std
 #elif UMC_MacBuild || UMC_iOSBuild
-	#include <tr1/memory>
-	#define SMART_PTR_NAMESPACE std::tr1
+	#include <memory>
+	#define SMART_PTR_NAMESPACE std
 #else
 	#error "location of shared pointer stuff is unknown"
 #endif

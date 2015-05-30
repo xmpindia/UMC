@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest version="2.0">
+ <versioninfo>
+  <build build="34401" compilertarget="Debug" datetime="2015/03/30:23:40:42" format="Folder" lang="mul" licensemodel="None" platform="osx10-64" product="XMP" subproduct="Library" version="Green">
+   <repository authority="ssl:dub-ham.corp.adobe.com:13050" path="//branches/green/xmp/toolkit/..." query="@157747" scheme="p4"/>
+   <metadata>
+    <item key="BuildVersion" value="79.157747"/>
+    <item key="compiler.version" value="Xcode 5.0.2"/>
+   </metadata>
+   <repository authority="ssl:dub-ham.corp.adobe.com:13050" path="-//branches/green/xmp/toolkit/.settings/..." query="@157747" scheme="p4"/>
+   <repository authority="ssl:dub-ham.corp.adobe.com:13050" path="-//branches/green/xmp/toolkit/test/..." query="@157747" scheme="p4"/>
+   <repository authority="ssl:dub-ham.corp.adobe.com:13050" path="-//branches/green/xmp/toolkit/documents/..." query="@157747" scheme="p4"/>
+   <repository authority="ssl:dub-ham.corp.adobe.com:13050" path="-//branches/green/xmp/toolkit/testtools/..." query="@157747" scheme="p4"/>
+   <repository authority="ssl:dub-ham.corp.adobe.com:13050" path="-//branches/green/xmp/toolkit/XMPforPHP/..." query="@157747" scheme="p4"/>
+  </build>
+ </versioninfo>
+</manifest>

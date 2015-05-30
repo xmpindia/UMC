@@ -19,6 +19,7 @@
 //
 // mm/dd/yy who Description of changes, most recent on top.
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
 // 05-19-14 ADC 5.6-c012 Refactoring XMPCommon code and appropriate changes in XMPCore and XMPCompareAndMerge.
 // 05-19-14 ADC 1.0-m020 Refactoring XMPCommon code and appropriate changes in XMPCore and XMPCompareAndMerge.
@@ -101,7 +102,7 @@ namespace NS_XMPCOMMON {
 		XMP_PRIVATE VIRTUAL_IF_SOURCE_COMPILED spIUTF8String assign( const spcIUTF8String & src, SizeT srcPos = 0,
 			SizeT count = std::string::npos ) MARK_PURE_VIRTUAL_IF_SOURCE_COMPILED;
 
-#if NOT_YET_IMPLEMENTED
+#if XMP_NOT_YET_IMPLEMENTED
 		//!
 		//! Inserts additional characters into the string right before the character indicated by pos.
 		//! \param[in] pos Insertion point: The new contents are inserted before the character at position pos.
@@ -299,7 +300,7 @@ namespace NS_XMPCOMMON {
 		//!
 		XMP_PRIVATE VIRTUAL_IF_SOURCE_COMPILED UInt32 compare( const spcIUTF8String & src, SizeT pos = 0,
 			SizeT count = std::string::npos, SizeT srcPos = 0, SizeT srcCount = std::string::npos ) const MARK_PURE_VIRTUAL_IF_SOURCE_COMPILED;
-#endif  // NOT_YET_IMPLEMENTED
+#endif  // XMP_NOT_YET_IMPLEMENTED
 
 		//!
 		//! Virtual Copy Constructor.
@@ -347,7 +348,7 @@ namespace NS_XMPCOMMON {
 		virtual pIUTF8String_base append( const char * buffer, SizeT count, pcIError_base & error ) __NOTHROW__ = 0;
 		virtual pIUTF8String_base append( const pcIUTF8String_base str, SizeT srcPos, SizeT count, pcIError_base & error ) __NOTHROW__ = 0;
 
-#if NOT_YET_IMPLEMENTED
+#if XMP_NOT_YET_IMPLEMENTED
 		virtual pIUTF8String_base insert( SizeT pos, const char * buf, SizeT count, pcIError_base & error ) __NOTHROW__ = 0;
 		virtual pIUTF8String_base insert( SizeT pos, pcIUTF8String_base src, SizeT srcPos, SizeT count, pcIError_base & error ) __NOTHROW__ = 0;
 
@@ -366,7 +367,7 @@ namespace NS_XMPCOMMON {
 
 		virtual UInt32 compare( const char * buf, SizeT pos, SizeT count, SizeT srcCount, pcIError_base & error ) const __NOTHROW__ = 0;
 		virtual UInt32 compare( pcIUTF8String_base src, SizeT pos, SizeT count, SizeT srcPos, SizeT srcCount, pcIError_base & error ) const __NOTHROW__ = 0;
-#endif  // NOT_YET_IMPLEMENTED
+#endif  // XMP_NOT_YET_IMPLEMENTED
 
 		virtual pIUTF8String_base clone( SizeT pos, SizeT count, UInt32 multiThreadingSupport, pcIError_base & error ) const __NOTHROW__ = 0;
 
@@ -412,7 +413,7 @@ namespace NS_XMPCOMMON {
 			this, &IUTF8String_v1::assign, src.get(), srcPos, count );
 	}
 
-#if NOT_YET_IMPLEMENTED
+#if XMP_NOT_YET_IMPLEMENTED
 	inline spIUTF8String IUTF8String_v1::insert( SizeT pos, const char * buf, SizeT count ) {
 		return NS_XMPCOMMON::CallSafeFunctionReturningPointer< IUTF8String_v1, pIUTF8String_base, IUTF8String, SizeT, const char *, SizeT >(
 			this, &IUTF8String_v1::insert, pos, buf, count );
@@ -451,7 +452,7 @@ namespace NS_XMPCOMMON {
 	inline SizeT IUTF8String_v1::find( const spcIUTF8String & src, SizeT pos, SizeT srcPos, SizeT count ) const {
 
 	}
-#endif  // NOT_YET_IMPLEMENTED
+#endif  // XMP_NOT_YET_IMPLEMENTED
 
 	inline spIUTF8String IUTF8String_v1::clone( SizeT pos, SizeT count, eMultiThreadingSupport multithreadingSupport ) const {
 		return NS_XMPCOMMON::CallConstSafeFunctionReturningPointer< IUTF8String_v1, pIUTF8String_base, IUTF8String, SizeT, SizeT, UInt32 >(

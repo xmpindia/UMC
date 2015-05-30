@@ -19,6 +19,7 @@
 //
 // mm-dd-yy who Description of changes, most recent on top
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 08-03-14 ADC 1.0-m029 Fixing crashers on Macintosh.
 // 07-10-14 ADC 5.6-c017 Fixing issues related to Mac build.
 // 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.

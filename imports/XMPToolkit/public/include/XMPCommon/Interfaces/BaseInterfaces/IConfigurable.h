@@ -20,6 +20,7 @@
 //
 // mm-dd-yy who Description of changes, most recent first.
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 12-30-14 ADC 5.6-c032 Adding IConfigurable Interface to XMPCommon.
 //
 // =================================================================================================
@@ -171,13 +172,11 @@ namespace NS_XMPCOMMON {
 		//! protected Virtual Destructor
 		//!
 		virtual ~IConfigurable_v1() __NOTHROW__ = 0;
-		
-		REQ_FRIEND_CLASS_DECLARATION();
 
 	#if GENERATE_XMPCOMMON_CLIENT_LAYER_CODE
 		friend class IConfigurable;
 	#endif
-	
+		REQ_FRIEND_CLASS_DECLARATION();
 	};
 
 	inline IConfigurable_v1::~IConfigurable_v1() __NOTHROW__ { }

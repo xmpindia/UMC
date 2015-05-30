@@ -64,10 +64,17 @@ set(LIB_ADOBEXMP "AdobeXMP")
 target_link_libraries( UnitTests
 	${PROJECT_BINARY_DIR}/../imports/cppunit/${BUILD_CONFIGURATION}/${STATIC_LIB_PREFIX}CPPUnitStatic.${STATIC_LIB_EXTENSION}
 	${PROJECT_BINARY_DIR}/../private/${BUILD_CONFIGURATION}/${STATIC_LIB_PREFIX}UMC.${STATIC_LIB_EXTENSION}
-	${LIB_ADOBEXMP}
 )
 
-if (UNIX AND NOT APPLE)
+if ( UNIX AND APPLE )
+	set_target_properties( UnitTests PROPERTIES LINK_FLAGS 
+		"-Wl,-F${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION}" )
+	target_link_libraries( UnitTests "-framework ${LIB_ADOBEXMP}" )
+else()
+	target_link_libraries( UnitTests ${LIB_ADOBEXMP} )
+endif()
+
+if (UNIX OR APPLE)
 	set_target_properties(UnitTests PROPERTIES
 		RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
 endif()
