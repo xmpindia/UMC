@@ -52,11 +52,11 @@
 // =================================================================================================
 #endif // AdobePrivate
 
+#include "XMP_Environment.h"
+
 // =================================================================================================
 // All Platform Settings
 // ===========================
-#include "XMP_Environment.h"
-#include "XMP_Const.h"
 
 // =================================================================================================
 // Macintosh Specific Settings
@@ -199,7 +199,7 @@
 	#define BASE_CLASS(classNameWithoutVersionNumber, versionNumber) JOIN_CLASSNAME_WITH_VERSION_NUMBER(classNameWithoutVersionNumber, versionNumber)
 
 	//! \endcond
-
+	#include "XMP_Const.h"
 	namespace NS_XMPCOMMON {
 
 		typedef XMP_Int64 Int64;
