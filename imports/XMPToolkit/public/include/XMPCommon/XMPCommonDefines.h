@@ -27,6 +27,7 @@
 //
 // mm/dd/yy who Description of changes, most recent on top.
 //
+// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
 // 12-30-14 ADC 5.6-c032 Adding IConfigurable Interface to XMPCommon.
 // 11-19-14 ADC 1.0-a001 Framework in place for Asset Management Library.
 // 08-03-14 ADC 1.0-m029 Fixing crashers on Macintosh.
@@ -52,11 +53,11 @@
 // =================================================================================================
 #endif // AdobePrivate
 
-#include "XMP_Environment.h"
-
 // =================================================================================================
 // All Platform Settings
 // ===========================
+#include "XMP_Environment.h"
+#include "XMP_Const.h"
 
 // =================================================================================================
 // Macintosh Specific Settings
@@ -65,7 +66,7 @@
 	#define ENABLE_XMP_COMMON_CODE 1
 	#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
 	#define SUPPORT_SHARED_POINTERS_IN_TR1 0
-	#define SUPPORT_SHARED_POINTERS_IN_STD 1 
+	#define SUPPORT_SHARED_POINTERS_IN_STD 1
 	#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
 	#define BAD_EXCEPTION_SUPPORT_STRINGS 0
 	#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 0
@@ -78,8 +79,8 @@
 #if XMP_iOSBuild
 	#define ENABLE_XMP_COMMON_CODE 1
 	#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
-	#define SUPPORT_SHARED_POINTERS_IN_TR1 1
-	#define SUPPORT_SHARED_POINTERS_IN_STD 0
+	#define SUPPORT_SHARED_POINTERS_IN_TR1 0
+	#define SUPPORT_SHARED_POINTERS_IN_STD 1
 	#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
 	#define BAD_EXCEPTION_SUPPORT_STRINGS 0
 	#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 0
@@ -111,7 +112,14 @@
 // ======================
 #if XMP_UNIXBuild
 	#define ENABLE_XMP_COMMON_CODE 1
-	#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
+	#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+	#if GCC_VERSION >= 40800
+		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 1
+	#else
+		#define REQ_FRIEND_CLASS_DECLARATION() template<typename _Ptr, std::_Lock_policy _Lp> friend class std::_Sp_counted_ptr;
+		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
+	#endif
+
 	#define SUPPORT_SHARED_POINTERS_IN_TR1 0
 	#define SUPPORT_SHARED_POINTERS_IN_STD 1
 	#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
@@ -119,8 +127,6 @@
 	#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 1
 	#define SUPPORT_DYNAMIC_CAST_OPTIMIZATION 0
 	#define SHARED_POINTERS_REQUIRE_ACCESS_TO_DESTRUCTOR 1
-	#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-	#define REQ_FRIEND_CLASS_DECLARATION() template<typename _Ptr, std::_Lock_policy _Lp> friend class std::_Sp_counted_ptr;
 #endif
 
 #ifndef REQ_FRIEND_CLASS_DECLARATION
@@ -199,7 +205,7 @@
 	#define BASE_CLASS(classNameWithoutVersionNumber, versionNumber) JOIN_CLASSNAME_WITH_VERSION_NUMBER(classNameWithoutVersionNumber, versionNumber)
 
 	//! \endcond
-	#include "XMP_Const.h"
+
 	namespace NS_XMPCOMMON {
 
 		typedef XMP_Int64 Int64;

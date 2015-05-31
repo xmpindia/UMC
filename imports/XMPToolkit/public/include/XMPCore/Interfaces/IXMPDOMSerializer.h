@@ -97,4 +97,3 @@ namespace NS_XMPCORE {
 #endif  // !SOURCE_COMPILED && !BUILDING_XMPCORE_LIB
 
 #endif // IXMPDOMSerializer_h__
-

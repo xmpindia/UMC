@@ -23,12 +23,6 @@
 //
 // mm-dd-yy who Description of changes, most recent on top.
 //
-// 03-27-15 ADC 5.5-c066 Porting changes to gcc 4.4.4.
-// 03-24-15 ADC 5.6-c061 Adding inbuilt support for ixml namespace.
-// 03-18-15 AJ  5.6-c052 Adding shared ptr for the private data in the marker structure
-// 03-16-15 AJ  5.6-c050 Fixing build break in pdfl due to warning encountered
-// 03-16-15 AJ  5.6-c049 Adding a copy constructor and assignment operator to MarkerStructure to handle shallow copy scenarios for extensions
-// 03-16-15 AJ  5.6-c047 Completing Rework of Get/SetBulkMarkers()
 // 10-21-14 AB  5.6.f120 [3836549] Making kXMPFiles_OptimizeFileLayout flag public for XMP SDK.
 // 01-31-14 IJS 5.5-c022 Adding serialize flag kXMP_IncludeRDFHash to  include the  hash of the RDF in xmppacket.
 // 01-31-14 IJS 5.6-f091 Reverting Changes Done in 5.6-f089
@@ -510,7 +504,7 @@ enum {
 #define kXMP_NS_BWF        "http://ns.adobe.com/bwf/bext/1.0/"
 #define kXMP_NS_AEScart    "http://ns.adobe.com/aes/cart/"
 #define kXMP_NS_RIFFINFO   "http://ns.adobe.com/riff/info/"
-#define kXMP_NS_iXML       "http://ns.adobe.com/ixml/1.0/"
+
 #define kXMP_NS_XMP_Note   "http://ns.adobe.com/xmp/note/"
 
 #define kXMP_NS_AdobeStockPhoto "http://ns.adobe.com/StockPhoto/1.0/"
@@ -1141,8 +1135,6 @@ enum {
     kXMP_XMLFile             = 0x584D4C20UL,
 	/// Public file format constant:  'text'
     kXMP_TextFile            = 0x74657874UL,
-	/// Public file format constant:  'SVG '
-	kXMP_SVGFile			 = 0x53564720UL,
 
 	// -------------------------------
     // Adobe application file formats.
@@ -1877,17 +1869,9 @@ typedef struct XMP_VersionInfo {
 } // extern "C"
 #endif
 
+#include <vector>
 
 #if AdobePrivate
-
-#include <vector>
-#include "XMPCore/XMPCoreDefines.h"
-
-#if ENABLE_NEW_DOM_MODEL
-namespace NS_XMPCORE {
-	class IXMPStructureNode_v1;
-};
-#endif
 
 struct XMPDMO_StringInfo {
 	XMP_StringPtr ptr;
@@ -1900,8 +1884,7 @@ struct XMPDMO_CuePointInfo {
 	XMPDMO_StringInfo value;
 };
 
-struct XMPDMO_MarkerInfo_v1 {
-
+struct XMPDMO_MarkerInfo {
 	XMPDMO_StringInfo startTime;
 	XMPDMO_StringInfo duration;
 	XMPDMO_StringInfo comment;
@@ -1913,66 +1896,6 @@ struct XMPDMO_MarkerInfo_v1 {
 	XMPDMO_StringInfo speaker;
 	XMPDMO_StringInfo probability;
 	std::vector<XMPDMO_CuePointInfo> cuePointParams;
-
-};
-
-#if SUPPORT_SHARED_POINTERS_IN_STD
-#include <memory>
-#include <functional>
-#elif SUPPORT_SHARED_POINTERS_IN_TR1
-#if XMP_WinBuild
-#include <memory>
-#include <functional>
-#else
-#include <tr1/memory>
-#include <tr1/functional>
-#endif
-#else
-#error "location of shared pointer stuff is unknown"
-#endif
-
-#if ENABLE_NEW_DOM_MODEL
-#if SUPPORT_SHARED_POINTERS_IN_STD
-using std::shared_ptr;
-#elif SUPPORT_SHARED_POINTERS_IN_TR1
-using std::tr1::shared_ptr;
-#endif
-#endif
-
-struct XMPDMO_MarkerInfo : public XMPDMO_MarkerInfo_v1 {
-	XMPDMO_StringInfo guid;
-
-
-	typedef void(*ReleaseExtensionDataProc)(void * extension);
-#if ENABLE_NEW_DOM_MODEL
-	shared_ptr<void>    spExtension;
-#endif
-	
-private:
-#if ENABLE_NEW_DOM_MODEL
-	void *							extension;
-	ReleaseExtensionDataProc		extensionReleaseProc;
-	void SetPrivateData(void * extension, ReleaseExtensionDataProc extensionReleaseProc) {
-		this->extension = extension;
-		this->extensionReleaseProc = extensionReleaseProc;
-	}
-
-	void * GetPrivateData() {
-
-		return  extension;
-	}
-#endif
-public:
-#if ENABLE_NEW_DOM_MODEL
-	XMPDMO_MarkerInfo()
-		: extension(NULL)
-		, extensionReleaseProc(NULL) {}
-#endif
-
-private:
-	template< typename t> friend class TXMPUtils;
-	friend class XMPUtils;
-	
 };
 
 #endif // AdobePrivate

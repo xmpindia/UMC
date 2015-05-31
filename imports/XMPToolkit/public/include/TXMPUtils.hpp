@@ -24,9 +24,6 @@
 //
 // mm-dd-yy who Description of changes, most recent on top
 //
-// 03-16-15 AJ  5.6-c047 Completing Rework of Get/SetBulkMarkers()
-// 12-03-15 AJ  5.6-c045 Reworking glue code for Get/SetBulkMarkers()
-// 03-02-15 AJ  5.6-c039 Marker Extensibility - Backward compatibility for extensions in GetBulkMarkers() and SetBulkMarkers()
 // 07-21-09 AWL 5.0-c047 Add XMPUtils::ApplyTemplate.
 // 05-21-09 AWL 5.0-c032 Revamp glue again to pass SetClientString with each function.
 //
@@ -1215,7 +1212,6 @@ public:
 	static void SetBulkMarkers ( TXMPMeta<tStringObj> * xmp,
 								 XMP_StringPtr ns, XMP_StringPtr path,
 								 const std::vector<XMPDMO_MarkerInfo> & markers );
-
 
 #endif	// AdobePrivate
 

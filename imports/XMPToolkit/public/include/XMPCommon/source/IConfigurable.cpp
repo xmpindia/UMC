@@ -28,7 +28,6 @@
 
 #include "XMPCommon/Utilities/TWrapperFunctions.h"
 #include "XMPCommon/Interfaces/IError.h"
-
 #include <stdlib.h>
 
 namespace NS_XMPCOMMON {

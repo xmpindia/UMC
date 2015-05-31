@@ -110,4 +110,3 @@ namespace NS_XMPCOMMON {
 #endif  // !SOURCE_COMPILED && !BUILDING_XMPCOMMON_LIB
 
 #endif // IConfigurationManager_h__
-
