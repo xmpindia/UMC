@@ -14,7 +14,12 @@ namespace INT_UMC {
 
 	AudioTrackImpl::AudioTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mTrack( CreateTrack( uniqueIDAndReferenceTracker, uniqueIDGenerator ) )
+		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeAudio )
+		, mAudioEditRate( 1 ) {}
+
+	AudioTrackImpl::AudioTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeAudio, node )
 		, mAudioEditRate( 1 ) {}
 
 	void AudioTrackImpl::SetAudioEditRate( const EditRate & editRate ) {
@@ -30,188 +35,235 @@ namespace INT_UMC {
 	}
 
 	spIClipShot AudioTrackImpl::AddClipShot() {
-		return mTrack->AddClipShot();
+		return TrackImpl::AddClipShot( shared_from_this() );
+	}
+
+	UMC::spIClipShot AudioTrackImpl::AddClipShot( const std::string & buffer ) {
+		return TrackImpl::AddClipShot( buffer, shared_from_this() );
 	}
 
 	spITransitionShot AudioTrackImpl::AddTransitionShot() {
-		return mTrack->AddTransitionShot();
+		return TrackImpl::AddTransitionShot( shared_from_this() );
+	}
+
+	UMC::spITransitionShot AudioTrackImpl::AddTransitionShot( const std::string & buffer ) {
+		return TrackImpl::AddTransitionShot( buffer, shared_from_this() );
 	}
 
 	void AudioTrackImpl::SetName( const std::string & uniqueID ) {
-		return mTrack->SetName( uniqueID );
+		return TrackImpl::SetName( uniqueID );
 	}
 
 	std::string AudioTrackImpl::GetName() const {
-		return mTrack->GetName();
+		return TrackImpl::GetName();
 	}
 
 	size_t AudioTrackImpl::ShotCount() const {
-		return mTrack->ShotCount();
+		return TrackImpl::ShotCount();
 	}
 
 	ITrack::ShotList AudioTrackImpl::GetAllShots() {
-		return mTrack->GetAllShots();
+		return TrackImpl::GetAllShots();
 	}
 
 	ITrack::cShotList AudioTrackImpl::GetAllShots() const {
-		return const_pointer_cast< const ITrack >( mTrack )->GetAllShots();
+		return TrackImpl::GetAllShots();
 	}
 
 	spIShot AudioTrackImpl::GetShot( const std::string & uniqueID ) {
-		return mTrack->GetShot( uniqueID );
+		return TrackImpl::GetShot( uniqueID );
 	}
 
 	spcIShot AudioTrackImpl::GetShot( const std::string & uniqueID ) const {
-		return mTrack->GetShot( uniqueID );
+		return TrackImpl::GetShot( uniqueID );
 	}
 
 	size_t AudioTrackImpl::ClipShotCount() const {
-		return mTrack->ClipShotCount();
+		return TrackImpl::ClipShotCount();
 	}
 
 	ITrack::ClipShotList AudioTrackImpl::GetAllClipShots() {
-		return mTrack->GetAllClipShots();
+		return TrackImpl::GetAllClipShots();
 	}
 
 	ITrack::cClipShotList AudioTrackImpl::GetAllClipShots() const {
-		return const_pointer_cast< const ITrack >( mTrack )->GetAllClipShots();
+		return TrackImpl::GetAllClipShots();
 	}
 
 	spIClipShot AudioTrackImpl::GetClipShot( const std::string & uniqueID ) {
-		return mTrack->GetClipShot( uniqueID );
+		return TrackImpl::GetClipShot( uniqueID );
 	}
 
 	spcIClipShot AudioTrackImpl::GetClipShot( const std::string & uniqueID ) const {
-		return mTrack->GetClipShot( uniqueID );
+		return TrackImpl::GetClipShot( uniqueID );
 	}
 
 	size_t AudioTrackImpl::TransitionShotCount() const {
-		return mTrack->TransitionShotCount();
+		return TrackImpl::TransitionShotCount();
 	}
 
 	ITrack::TransitionShotList AudioTrackImpl::GetAllTransitionShots() {
-		return mTrack->GetAllTransitionShots();
+		return TrackImpl::GetAllTransitionShots();
 	}
 
 	ITrack::cTransitionShotList AudioTrackImpl::GetAllTransitionShots() const {
-		return const_pointer_cast< const ITrack >( mTrack )->GetAllTransitionShots();
+		return TrackImpl::GetAllTransitionShots();
 	}
 
 	spITransitionShot AudioTrackImpl::GetTransitionShot( const std::string & uniqueID ) {
-		return mTrack->GetTransitionShot( uniqueID );
+		return TrackImpl::GetTransitionShot( uniqueID );
 	}
 
 	spcITransitionShot AudioTrackImpl::GetTransitionShot( const std::string & uniqueID ) const {
-		return mTrack->GetTransitionShot( uniqueID );
+		return TrackImpl::GetTransitionShot( uniqueID );
 	}
 
 	size_t AudioTrackImpl::RemoveAllShots() {
-		return mTrack->RemoveAllShots();
+		return TrackImpl::RemoveAllShots();
 	}
 
 	size_t AudioTrackImpl::RemoveAllClipShots() {
-		return mTrack->RemoveAllClipShots();
+		return TrackImpl::RemoveAllClipShots();
 	}
 
 	size_t AudioTrackImpl::RemoveAllTransitionShots() {
-		return mTrack->RemoveAllTransitionShots();
+		return TrackImpl::RemoveAllTransitionShots();
 	}
 
 	size_t AudioTrackImpl::RemoveShot( const std::string & uniqueID ) {
-		return mTrack->RemoveShot( uniqueID );
+		return TrackImpl::RemoveShot( uniqueID );
 	}
 
 	size_t AudioTrackImpl::RemoveClipShot( const std::string & uniqueID ) {
-		return mTrack->RemoveClipShot( uniqueID );
+		return TrackImpl::RemoveClipShot( uniqueID );
 	}
 
 	size_t AudioTrackImpl::RemoveTransitionShot( const std::string & uniqueID ) {
-		return mTrack->RemoveTransitionShot( uniqueID );
+		return TrackImpl::RemoveTransitionShot( uniqueID );
 	}
 
-
-
-
 	INode::eNodeTypes AudioTrackImpl::GetNodeType() const {
-		return mTrack->GetNodeType();
+		return TrackImpl::GetNodeType();
 	}
 
 	const std::string & AudioTrackImpl::GetUniqueID() const {
-		return mTrack->GetUniqueID();
+		return TrackImpl::GetUniqueID();
 	}
 
 	wpcINode AudioTrackImpl::GetParentNode() const {
-		return mTrack->GetParentNode();
+		return TrackImpl::GetParentNode();
 	}
 
 	wpINode AudioTrackImpl::GetParentNode() {
-		return mTrack->GetParentNode();
+		return TrackImpl::GetParentNode();
 	}
 
 	spcINode AudioTrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
-		return mTrack->GetDecendantNode( uniqueID );
+		return TrackImpl::GetDecendantNode( uniqueID );
 	}
 
 	spINode AudioTrackImpl::GetDecendantNode( const std::string & uniqueID ) {
-		return mTrack->GetDecendantNode( uniqueID );
+		return TrackImpl::GetDecendantNode( uniqueID );
 	}
 
 	spcINode AudioTrackImpl::GetChildNode( const std::string & uniqueID ) const {
-		return mTrack->GetChildNode( uniqueID );
+		return TrackImpl::GetChildNode( uniqueID );
 	}
 
 	spINode AudioTrackImpl::GetChildNode( const std::string & uniqueID ) {
-		return mTrack->GetChildNode( uniqueID );
+		return TrackImpl::GetChildNode( uniqueID );
 	}
 
 	INode::NodeList AudioTrackImpl::GetAllChildren() {
-		return mTrack->GetAllChildren();
+		return TrackImpl::GetAllChildren();
 	}
 
 	INode::cNodeList AudioTrackImpl::GetAllChildren() const {
-		return const_pointer_cast< const ITrack >( mTrack )->GetAllChildren();
+		return TrackImpl::GetAllChildren();
 	}
 
 	INode::NodeList AudioTrackImpl::GetAllDecendants() {
-		return mTrack->GetAllDecendants();
+		return TrackImpl::GetAllDecendants();
 	}
 
 	INode::cNodeList AudioTrackImpl::GetAllDecendants() const {
-		return const_pointer_cast< const ITrack >( mTrack )->GetAllDecendants();
+		return TrackImpl::GetAllDecendants();
 	}
 
 	size_t AudioTrackImpl::GetReferenceCount() const {
-		return mTrack->GetReferenceCount();
+		return TrackImpl::GetReferenceCount();
+	}
+
+	std::string AudioTrackImpl::Serialize() const {
+		return TrackImpl::SerializeXMP();
 	}
 
 	pcINodeI AudioTrackImpl::GetInternalNode() const {
-		return mTrack->GetInternalNode();
+		return this;
 	}
 
 	pINodeI AudioTrackImpl::GetInternalNode() {
-		return mTrack->GetInternalNode();
+		return this;
+	}
+
+	void AudioTrackImpl::CleanUpOnRemovalFromDOM() { }
+
+	void AudioTrackImpl::SetUpOnAdditionToDOM() { }
+
+	void AudioTrackImpl::SyncInternalStuffToXMP() const {
+		TrackImpl::SyncInternalStuffToXMP();
+		AddOrUpdateDataToXMPDOM( mAudioEditRate, kAudioEditRatePair, mXMPStructureNode );
+	}
+
+	void AudioTrackImpl::SyncXMPToInternalStuff() {
+		TrackImpl::SyncXMPToInternalStuff( shared_from_this() );
+		UpdateDataFromXMPDOM( mAudioEditRate, kAudioEditRatePair, mXMPStructureNode, stou64rt );
+	}
+
+	INT_UMC::spIXMPStructureNode AudioTrackImpl::GetXMPNode() const {
+		return mXMPStructureNode;
+	}
+
+	bool AudioTrackImpl::ValidateXMPNode() const {
+		if ( TrackImpl::ValidateXMPNode() )
+			return true;
+		return false;
+	}
+
+	UMC::pINode AudioTrackImpl::GetNode() {
+		return this;
+	}
+
+	UMC::pcINode AudioTrackImpl::GetNode() const {
+		return this;
+	}
+
+	UMC::spIShot AudioTrackImpl::AddShot( const std::string & buffer ) {
+		return TrackImpl::AddShot( buffer, shared_from_this() );
 	}
 
 	bool AudioTrackImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		return mTrack->SetCustomData( customDataNameSpace, customDataName, customData );
+		return TrackImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	spcICustomData AudioTrackImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
-		return mTrack->GetCustomData( customDataNameSpace, customDataName );
+		return TrackImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	spICustomData AudioTrackImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
-		return mTrack->GetCustomData( customDataNameSpace, customDataName );
+		return TrackImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
-
-
-
-
 	spIAudioTrack CreateAudioTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-	const spIUniqueIDGenerator & uniqueIDGenerator )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
 	{
-		return std::make_shared< AudioTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		if ( node ) {
+			auto retValue = std::make_shared< AudioTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
+			retValue->SyncXMPToUMC();
+			return retValue;
+		} else {
+			return std::make_shared< AudioTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		}
 	}
 
 }

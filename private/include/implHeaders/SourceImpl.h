@@ -11,62 +11,35 @@
 // =================================================================================================
 
 #include "interfaces/ISource.h"
-#include "UMCFwdDeclarations_I.h"
-#include "interfaces/INodeI.h"
+#include "implHeaders/NodeImpl.h"
 
 namespace INT_UMC {
 	using namespace UMC;
 
 	class SourceImpl
-		: public ISource
+		: public NodeImpl
 	{
 	public:
 		SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator );
+			const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType );
 
-		virtual const std::string & GetUniqueID() const;
+		SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType,
+			const spIXMPStructureNode & xmpStructureNode );
 
 		virtual void SetClipName( const std::string & clipName );
 		virtual std::string GetClipName() const;
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		virtual INode::eNodeTypes GetNodeType() const { return INode::kNodeTypeSource; }
 
-		virtual spcINode GetDecendantNode( const std::string & id ) const;
-		virtual spINode GetDecendantNode( const std::string & id );
+		virtual void SyncInternalStuffToXMP() const = 0;
+		virtual void SyncXMPToInternalStuff() = 0;
 
-		virtual spcINode GetChildNode( const std::string & id ) const;
-		virtual spINode GetChildNode( const std::string & id );
-
-		virtual eNodeTypes GetNodeType() const { return kNodeTypeSource; }
-
-		virtual eSourceTypes GetType() const { return ISource::kSourceTypeAll; }
-
-		virtual NodeList GetAllChildren();
-
-		virtual cNodeList GetAllChildren() const;
-
-		virtual NodeList GetAllDecendants();
-
-		virtual cNodeList GetAllDecendants() const;
-
-		virtual size_t GetReferenceCount() const;
-
-		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
-
-		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
-
-		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
-
-		virtual INT_UMC::pINodeI GetInternalNode();
-
-		virtual INT_UMC::pcINodeI GetInternalNode() const;
+		virtual bool ValidateXMPNode() const = 0;
 
 	protected:
-		spINode								mNode;
 		std::string							mClipName;
 
-		friend class VideoFrameSourceImpl;
 	};
 }
 

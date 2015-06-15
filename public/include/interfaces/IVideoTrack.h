@@ -11,6 +11,7 @@
 // =================================================================================================
 
 #include "interfaces/ITrack.h"
+#include "baseTypes/RationalType.h"
 
 namespace UMC {
 

@@ -13,146 +13,220 @@ namespace INT_UMC {
 
 	TransitionShotImpl::TransitionShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mShot( CreateShot( uniqueIDAndReferenceTracker, uniqueIDGenerator ) ) {}
+		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator ) { }
 
-	const std::string & TransitionShotImpl::GetUniqueID() const {
-		return mShot->GetUniqueID();
-	}
+	TransitionShotImpl::TransitionShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, node ) { }
 
 	IShot::eShotTypes TransitionShotImpl::GetType() const {
-		return IShot::kShotTypeTransition;
-	}
-
-	void TransitionShotImpl::SetInCount( const EditUnitInCount & inCount ) {
-		mShot->SetInCount( inCount );
-	}
-
-	EditUnitInCount TransitionShotImpl::GetInCount() const {
-		return mShot->GetInCount();
-	}
-
-	void TransitionShotImpl::SetDuration( const EditUnitDuration & duration ) {
-		mShot->SetDuration( duration );
-	}
-
-	EditUnitDuration TransitionShotImpl::GetDuration() const {
-		return mShot->GetDuration();
-	}
-
-	spIFrame TransitionShotImpl::AddFrame( const spISource & source )
-	{
-		return mShot->AddFrame( source );
-	}
-
-	size_t TransitionShotImpl::FrameCount() const {
-		return mShot->FrameCount();
-	}
-
-	IShot::FrameList TransitionShotImpl::GetFrames() {
-		return mShot->GetFrames();
-	}
-
-	IShot::cFrameList TransitionShotImpl::GetFrames() const {
-		return const_pointer_cast< const IShot >( mShot )->GetFrames();
-	}
-
-	spIShotSource TransitionShotImpl::AddShotSource( const spISource & source )
-	{
-		return mShot->AddShotSource( source );
-	}
-
-	size_t TransitionShotImpl::ShotSourceCount() const {
-		return mShot->ShotSourceCount();
-	}
-
-	IShot::ShotSourceList TransitionShotImpl::GetShotSources() {
-		return mShot->GetShotSources();
-	}
-
-	IShot::cShotSourceList TransitionShotImpl::GetShotSources() const {
-		return const_pointer_cast< const IShot >( mShot )->GetShotSources();
-	}
-
-	spIShotSource TransitionShotImpl::GetShotSource( const std::string & uniqueID ) {
-		return mShot->GetShotSource( uniqueID );
-	}
-
-	spcIShotSource TransitionShotImpl::GetShotSource( const std::string & uniqueID ) const {
-		return const_pointer_cast< const IShot >( mShot )->GetShotSource( uniqueID );
-	}
-
-	wpcINode TransitionShotImpl::GetParentNode() const {
-		return mShot->GetParentNode();
-	}
-
-	wpINode TransitionShotImpl::GetParentNode() {
-		return mShot->GetParentNode();
+		return IShot::kShotTypeClip;
 	}
 
 	INode::eNodeTypes TransitionShotImpl::GetNodeType() const {
-		return mShot->GetNodeType();
+		return INode::kNodeTypeShot;
 	}
 
-	spcINode TransitionShotImpl::GetDecendantNode( const std::string & id ) const {
-		return mShot->GetDecendantNode( id );
+	const std::string & TransitionShotImpl::GetUniqueID() const {
+		return ShotImpl::GetUniqueID();
 	}
 
-	spINode TransitionShotImpl::GetDecendantNode( const std::string & id ) {
-		return mShot->GetDecendantNode( id );
+	UMC::wpcINode TransitionShotImpl::GetParentNode() const {
+		return ShotImpl::GetParentNode();
 	}
 
-	spcINode TransitionShotImpl::GetChildNode( const std::string & id ) const {
-		return mShot->GetChildNode( id );
+	UMC::wpINode TransitionShotImpl::GetParentNode() {
+		return ShotImpl::GetParentNode();
 	}
 
-	spINode TransitionShotImpl::GetChildNode( const std::string & id ) {
-		return mShot->GetChildNode( id );
+	UMC::spcINode TransitionShotImpl::GetDecendantNode( const std::string & uniqueID ) const {
+		return ShotImpl::GetDecendantNode( uniqueID );
+	}
+
+	UMC::spINode TransitionShotImpl::GetDecendantNode( const std::string & uniqueID ) {
+		return ShotImpl::GetDecendantNode( uniqueID );
+	}
+
+	UMC::spcINode TransitionShotImpl::GetChildNode( const std::string & uniqueID ) const {
+		return ShotImpl::GetChildNode( uniqueID );
+	}
+
+	UMC::spINode TransitionShotImpl::GetChildNode( const std::string & uniqueID ) {
+		return ShotImpl::GetChildNode( uniqueID );
 	}
 
 	INode::NodeList TransitionShotImpl::GetAllChildren() {
-		return mShot->GetAllChildren();
+		return ShotImpl::GetAllChildren();
 	}
 
 	INode::cNodeList TransitionShotImpl::GetAllChildren() const {
-		return const_pointer_cast< const IShot >( mShot )->GetAllChildren();
+		return ShotImpl::GetAllChildren();
 	}
 
 	INode::NodeList TransitionShotImpl::GetAllDecendants() {
-		return mShot->GetAllDecendants();
+		return ShotImpl::GetAllDecendants();
 	}
 
 	INode::cNodeList TransitionShotImpl::GetAllDecendants() const {
-		return const_pointer_cast< const IShot >( mShot )->GetAllDecendants();
+		return ShotImpl::GetAllDecendants();
 	}
 
 	size_t TransitionShotImpl::GetReferenceCount() const {
-		return mShot->GetReferenceCount();
+		return ShotImpl::GetReferenceCount();
 	}
 
-	spICustomData TransitionShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
-		return mShot->GetCustomData( customDataNameSpace, customDataName );
+	std::string TransitionShotImpl::Serialize() const {
+		return ShotImpl::SerializeXMP();
 	}
 
-	spcICustomData TransitionShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
-		return mShot->GetCustomData( customDataNameSpace, customDataName );
+	UMC::spICustomData TransitionShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return ShotImpl::GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	UMC::spcICustomData TransitionShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return ShotImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	bool TransitionShotImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		return mShot->SetCustomData( customDataNameSpace, customDataName, customData );
+		return ShotImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
-	pINodeI TransitionShotImpl::GetInternalNode() {
-		return mShot->GetInternalNode();
+	INT_UMC::pINodeI TransitionShotImpl::GetInternalNode() {
+		return this;
 	}
 
-	pcINodeI TransitionShotImpl::GetInternalNode() const {
-		return mShot->GetInternalNode();
+	INT_UMC::pcINodeI TransitionShotImpl::GetInternalNode() const {
+		return this;
+	}
+
+	void TransitionShotImpl::CleanUpOnRemovalFromDOM() {
+		ShotImpl::CleanUpOnRemovalFromDOM();
+	}
+
+	void TransitionShotImpl::SetUpOnAdditionToDOM() {
+		ShotImpl::SetUpOnAdditionToDOM();
+	}
+
+	void TransitionShotImpl::SyncXMPToInternalStuff() {
+		ShotImpl::SyncXMPToInternalStuff( shared_from_this() );
+	}
+
+	void TransitionShotImpl::SyncInternalStuffToXMP() const {
+		ShotImpl::SyncInternalStuffToXMP();
+	}
+
+	UMC::pINode TransitionShotImpl::GetNode() {
+		return this;
+	}
+
+	UMC::pcINode TransitionShotImpl::GetNode() const {
+		return this;
+	}
+
+	INT_UMC::spIXMPStructureNode TransitionShotImpl::GetXMPNode() const {
+		return mXMPStructureNode;
+	}
+
+	TransitionShotImpl::~TransitionShotImpl() { }
+
+	size_t TransitionShotImpl::RemoveShotSource( const std::string & uniqueID ) {
+		return ShotImpl::RemoveShotSource( uniqueID );
+	}
+
+	size_t TransitionShotImpl::RemoveFrame( const std::string & uniqueID ) {
+		return ShotImpl::RemoveFrame( uniqueID );
+	}
+
+	size_t TransitionShotImpl::RemoveAllFrames() {
+		return ShotImpl::RemoveAllFrames();
+	}
+
+	size_t TransitionShotImpl::RemoveAllShotSources() {
+		return ShotImpl::RemoveAllFrames();
+	}
+
+	UMC::spcIShotSource TransitionShotImpl::GetShotSource( const std::string & uniqueID ) const {
+		return ShotImpl::GetShotSource( uniqueID );
+	}
+
+	UMC::spIShotSource TransitionShotImpl::GetShotSource( const std::string & uniqueID ) {
+		return ShotImpl::GetShotSource( uniqueID );
+	}
+
+	IShot::cShotSourceList TransitionShotImpl::GetAllShotSources() const {
+		return ShotImpl::GetAllShotSources();
+	}
+
+	IShot::ShotSourceList TransitionShotImpl::GetAllShotSources() {
+		return ShotImpl::GetAllShotSources();
+	}
+
+	size_t TransitionShotImpl::ShotSourceCount() const {
+		return ShotImpl::ShotSourceCount();
+	}
+
+	UMC::spcIFrame TransitionShotImpl::GetFrame( const std::string & uniqueID ) const {
+		return ShotImpl::GetFrame( uniqueID );
+	}
+
+	UMC::spIFrame TransitionShotImpl::GetFrame( const std::string & uniqueID ) {
+		return ShotImpl::GetFrame( uniqueID );
+	}
+
+	IShot::cFrameList TransitionShotImpl::GetAllFrames() const {
+		return ShotImpl::GetAllFrames();
+	}
+
+	IShot::FrameList TransitionShotImpl::GetAllFrames() {
+		return ShotImpl::GetAllFrames();
+	}
+
+	size_t TransitionShotImpl::FrameCount() const {
+		return ShotImpl::FrameCount();
+	}
+
+	UMC::spIShotSource TransitionShotImpl::AddShotSource( const std::string & buffer ) {
+		return ShotImpl::AddShotSource( buffer, shared_from_this() );
+	}
+
+	UMC::spIShotSource TransitionShotImpl::AddShotSource( const spISource & source ) {
+		return ShotImpl::AddShotSource( source, shared_from_this() );
+	}
+
+	UMC::spIFrame TransitionShotImpl::AddFrame( const std::string & buffer ) {
+		return ShotImpl::AddFrame( buffer, shared_from_this() );
+	}
+
+	UMC::spIFrame TransitionShotImpl::AddFrame( const spISource & source ) {
+		return ShotImpl::AddFrame( source, shared_from_this() );
+	}
+
+	UMC::EditUnitDuration TransitionShotImpl::GetDuration() const {
+		return ShotImpl::GetDuration();
+	}
+
+	void TransitionShotImpl::SetDuration( const EditUnitDuration & duration ) {
+		return ShotImpl::SetDuration( duration );
+	}
+
+	UMC::EditUnitInCount TransitionShotImpl::GetInCount() const {
+		return ShotImpl::GetInCount();
+	}
+
+	void TransitionShotImpl::SetInCount( const EditUnitInCount & inCount ) {
+		return ShotImpl::SetInCount( inCount );
 	}
 
 	spITransitionShot CreateTransitionShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
 	{
-		return std::make_shared< TransitionShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		if ( node ) {
+			auto retValue = std::make_shared< TransitionShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
+			retValue->SyncXMPToUMC();
+			return retValue;
+		} else {
+			return std::make_shared< TransitionShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		}
 	}
 
 }

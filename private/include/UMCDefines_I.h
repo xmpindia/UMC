@@ -27,6 +27,10 @@ namespace INT_UMC {
 	#define THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL throw std::logic_error( "uniqueIDAndReferenceTracker can't be null" );
 	#define THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL throw std::logic_error( "uniqueID generator can't be null" );
 	#define THROW_NODE_IS_REFERENCED( operation ) throw std::logic_error( "can't " operation " as node is referenced somewhere in the DOM" );
+	#define THROW_WRONG_FUNCTION_CALLED( operation ) throw std::bad_function_call( operation " is not supposed to be invoked" );
+	#define THROW_PARSING_ERROR throw std::bad_exception( "parsing error occured" );
+	#define THROW_UNIQUE_ID_IS_MISSING throw std::bad_exception( "validation of serialized buffer failed since uniqueID is missing" );
+	#define THROW_XMPSTRUCTURE_NODE_VALIDATION_FAILED( reason ) throw std::bad_exception( "validation of serialized buffer failed since " reason );
 }
 
 #endif  // UMCDefines_I_h__

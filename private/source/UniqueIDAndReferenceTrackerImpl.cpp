@@ -70,6 +70,21 @@ namespace INT_UMC {
 		}
 	}
 
+	bool UniqueIDAndReferenceTrackerImpl::GetUserUniqueID( const std::string & userUniqueID, std::string & uniqueID ) const {
+		auto it = mUserAndActualUniqueIDMap.find ( userUniqueID );
+		if ( it != mUserAndActualUniqueIDMap.end() ) {
+			uniqueID = it->second;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	bool UniqueIDAndReferenceTrackerImpl::AddUserUniqueID( const std::string & userUniqueID, const std::string & uniqueID ) {
+		auto retVal = mUserAndActualUniqueIDMap.insert( std::make_pair( userUniqueID, uniqueID ) );
+		return retVal.second;
+	}
+
 	spIUniqueIDAndReferenceTracker CreateUniqueIDAndReferenceTracker() {
 		return std::make_shared< UniqueIDAndReferenceTrackerImpl >();
 	}

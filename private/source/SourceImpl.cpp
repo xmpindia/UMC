@@ -8,16 +8,11 @@
 // =================================================================================================
 
 #include "implHeaders/SourceImpl.h"
-
-#include "interfaces/IUniqueIDAndReferenceTracker.h"
-#include "interfaces/IUniqueIDGenerator.h"
-#include "interfaces/IUMC.h"
+#include "utils/UMCAndXMPMapping.h"
 
 namespace INT_UMC {
 
-	const std::string & SourceImpl::GetUniqueID() const {
-		return mNode->GetUniqueID();
-	}
+	static NamespacePropertyNamePair sourcePairs[4] = { kVideoSourcesPair, kAudioSourcesPair, kVideoFrameSourcesPair, kImageSourcesPair };
 
 	void SourceImpl::SetClipName( const std::string & clipName ) {
 		mClipName = clipName;
@@ -27,77 +22,25 @@ namespace INT_UMC {
 		return mClipName;
 	}
 
-	wpcINode SourceImpl::GetParentNode() const  {
-		return mNode->GetParentNode();
+	void SourceImpl::SyncInternalStuffToXMP() const {
+		AddOrUpdateDataToXMPDOM( mClipName, kTitlePair, mXMPStructureNode );
 	}
 
-	wpINode SourceImpl::GetParentNode() {
-		return mNode->GetParentNode();
+	void SourceImpl::SyncXMPToInternalStuff() {
+		UpdateDataFromXMPDOM( mClipName, kTitlePair, mXMPStructureNode, kEmptyString );
 	}
 
-	spcINode SourceImpl::GetDecendantNode( const std::string & id ) const {
-		return spcINode();
-	}
-
-	spINode SourceImpl::GetDecendantNode( const std::string & id ) {
-		return spINode();
-	}
-
-	spcINode SourceImpl::GetChildNode( const std::string & id ) const {
-		return spcINode();
-	}
-
-	spINode SourceImpl::GetChildNode( const std::string & id ) {
-		return spINode();
-	}
-
-	INode::NodeList SourceImpl::GetAllChildren() {
-		return NodeList();
-	}
-
-	INode::cNodeList SourceImpl::GetAllChildren() const {
-		return cNodeList();
-	}
-
-	INode::NodeList SourceImpl::GetAllDecendants() {
-		return NodeList();
-	}
-
-	INode::cNodeList SourceImpl::GetAllDecendants() const {
-		return cNodeList();
-	}
-
-	size_t SourceImpl::GetReferenceCount() const {
-		return mNode->GetReferenceCount();
-	}
-
-	spICustomData SourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
-		return mNode->GetCustomData( customDataNameSpace, customDataName );
-	}
-
-	spcICustomData SourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
-		return mNode->GetCustomData( customDataNameSpace, customDataName );
-	}
-
-	bool SourceImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		return mNode->SetCustomData( customDataNameSpace, customDataName, customData );
-	}
-
-	pINodeI SourceImpl::GetInternalNode() {
-		return mNode->GetInternalNode();
-	}
-
-	pcINodeI SourceImpl::GetInternalNode() const {
-		return mNode->GetInternalNode();
+	bool SourceImpl::ValidateXMPNode() const {
+		return true;
 	}
 
 	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource ) ){ }
+		const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource, sourcePairs[sourceType] ) { }
 
-	spISource CreateSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
-	{
-		return std::make_shared< SourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
-	}
+	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes,
+		const spIXMPStructureNode & xmpStructureNode ) 
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource, xmpStructureNode ) { }
+
 }

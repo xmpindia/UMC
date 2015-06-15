@@ -12,16 +12,19 @@
 
 #include "interfaces/IVideoTrack.h"
 #include "implHeaders/TrackImpl.h"
-#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
 	class VideoTrackImpl
 		: public IVideoTrack
+		, public TrackImpl
 		, public enable_shared_from_this < VideoTrackImpl >
 	{
 	public:
 		VideoTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
+
+		VideoTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
 
 		virtual ~VideoTrackImpl() {}
 
@@ -33,8 +36,13 @@ namespace INT_UMC {
 
 		virtual eTrackTypes GetType() const;
 
+		virtual spIShot AddShot( const std::string & buffer );
+
 		virtual spIClipShot AddClipShot();
+		virtual spIClipShot AddClipShot( const std::string & buffer );
+
 		virtual spITransitionShot AddTransitionShot();
+				virtual spITransitionShot AddTransitionShot( const std::string & buffer );
 
 		virtual void SetName( const std::string & uniqueID );
 		virtual std::string GetName() const;
@@ -60,12 +68,11 @@ namespace INT_UMC {
 		virtual size_t RemoveAllShots();
 		virtual size_t RemoveAllClipShots();
 		virtual size_t RemoveAllTransitionShots();
-		virtual size_t RemoveShot( const std::string & uniqueID );
 
+		virtual size_t RemoveShot( const std::string & uniqueID );
 		virtual size_t RemoveClipShot( const std::string & uniqueID );
 		virtual size_t RemoveTransitionShot( const std::string & uniqueID );
 
-		// INODEI
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual const std::string & GetUniqueID() const;
@@ -87,6 +94,8 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
+		virtual std::string Serialize() const;
+
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
@@ -94,8 +103,22 @@ namespace INT_UMC {
 
 		virtual INT_UMC::pINodeI GetInternalNode();
 		virtual INT_UMC::pcINodeI GetInternalNode() const;
+
+		virtual void CleanUpOnRemovalFromDOM();
+		virtual void SetUpOnAdditionToDOM();
+
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff();
+
+		virtual spIXMPStructureNode GetXMPNode() const;
+
 	protected:
-		spITrack				mTrack;
+		virtual bool ValidateXMPNode() const;
+
+		virtual pINode GetNode();
+
+		virtual pcINode GetNode() const;
+
 		EditRate				mVideoEditRate;
 		EditRate				mAudioEditRate;
 	};

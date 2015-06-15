@@ -11,17 +11,20 @@
 // =================================================================================================
 
 #include "interfaces/IAudioSource.h"
-#include "interfaces/ISource.h"
-#include "UMCFwdDeclarations_I.h"
+#include "implHeaders/SourceImpl.h"
 
 namespace INT_UMC {
 	class AudioSourceImpl
 		: public IAudioSource
+		, public SourceImpl
 		, public enable_shared_from_this < AudioSourceImpl >
 	{
 	public:
 		AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
+
+		AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
 
 		virtual void SetAudioEditRate( const EditRate & editRate );
 		virtual EditRate GetAudioEditRate() const;
@@ -61,18 +64,31 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
-		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+		virtual std::string Serialize() const;
 
+		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
 		virtual INT_UMC::pINodeI GetInternalNode();
-
 		virtual INT_UMC::pcINodeI GetInternalNode() const;
+		
+		virtual void CleanUpOnRemovalFromDOM();
+		virtual void SetUpOnAdditionToDOM();
+
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff();
+
+		virtual spIXMPStructureNode GetXMPNode() const;
+
+		virtual bool ValidateXMPNode() const;
+
+		virtual pINode GetNode();
+
+		virtual pcINode GetNode() const;
 
 	protected:
-		spISource					mSource;
 		EditUnitInCount				mInCount;
 		EditUnitDuration			mDuration;
 		EditRate					mAudioEditRate;

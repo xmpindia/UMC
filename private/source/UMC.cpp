@@ -9,6 +9,7 @@
 
 #include "UMCDefines_I.h"
 #include "interfaces/ICustomDataHandlerRegistry.h"
+#include "utils/Utils.h"
 
 #define TXMP_STRING_TYPE std::string
 #include "XMP.incl_cpp"
@@ -21,6 +22,8 @@ extern "C" void UMC_Initialize() {
 }
 
 extern "C" void UMC_Terminate() {
+	INT_UMC::GetSerializer( true );
+	INT_UMC::GetParser( true );
 	INT_UMC::ICustomDataHandlerRegistry::DestroyInstance();
 	SXMPMeta::Terminate();
 }

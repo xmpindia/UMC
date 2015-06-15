@@ -11,23 +11,23 @@
 // =================================================================================================
 
 #include "interfaces/IFrame.h"
-#include "interfaces/ISource.h"
-#include "interfaces/INodeI.h"
-
-#include <string>
-#include <map>
+#include "implHeaders/NodeImpl.h"
 
 namespace INT_UMC {
 	using namespace UMC;
 	
 	class FrameImpl
 		: public IFrame
-		, public INodeI
+		, public NodeImpl
 		, public enable_shared_from_this< FrameImpl >
 	{
 	public:
 		FrameImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source );
+
+		FrameImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source,
+			const spIXMPStructureNode & node );
 
 		const std::string & GetUniqueID() const;
 
@@ -39,8 +39,6 @@ namespace INT_UMC {
 
 		virtual void SetShotInCount( const EditUnitInCount & shotInCount );
 		virtual EditUnitInCount GetShotInCount() const;
-
-		// INODEI
 
 		virtual eNodeTypes GetNodeType() const;
 
@@ -61,9 +59,6 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
-		virtual void AddToDOM( const spINode & parent );
-		virtual void RemoveFromDOM();
-
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
@@ -72,19 +67,21 @@ namespace INT_UMC {
 		virtual pINodeI GetInternalNode();
 		virtual pcINodeI GetInternalNode() const;
 
-		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
-		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
-		virtual spIXMPStructureNode GetMergedExtensionNode() const;
+		virtual std::string Serialize() const;
 
-		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
-		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+		virtual void CleanUpOnRemovalFromDOM();
+		virtual void SetUpOnAdditionToDOM();
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff();
+		virtual bool ValidateXMPNode() const;
 
-		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
+		virtual pINode GetNode();
+		virtual pcINode GetNode() const;
+
+		virtual spIXMPStructureNode GetXMPNode() const;
 
 	protected:
-		spINode					mNode;
-		weak_ptr< ISource >     mwpSource;
+		spISource				mSource;
 		EditUnitInCount			mSourceInCount;
 		EditUnitInCount			mShotInCount;
 	};

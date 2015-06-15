@@ -10,6 +10,8 @@
 
 #include "utils/Utils.h"
 #include "interfaces/INode.h"
+#include "XMPCore/Interfaces/IXMPDOMImplementationRegistry.h"
+#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
 
 namespace INT_UMC {
 
@@ -25,6 +27,78 @@ namespace INT_UMC {
 			return true;
 		}
 		return false;
+	}
+
+	NS_XMPCORE::spIXMPDOMSerializer GetSerializer( bool reset /*= false */ ) {
+		static spIXMPDOMSerializer serializer;
+		if ( reset ) {
+			serializer.reset();
+			return serializer;
+		}
+
+		if ( serializer )
+			return serializer;
+		else {
+			serializer = IXMPDOMImplementationRegistry::GetDOMImplementationRegistry()->CreateSerializer( "rdf" );
+			return serializer;
+		}
+	}
+
+	NS_XMPCORE::spIXMPDOMParser GetParser( bool reset /*= false */ ) {
+		static spIXMPDOMParser parser;
+		if ( reset ) {
+			parser.reset();
+			return parser;
+		}
+
+		if ( parser )
+			return parser;
+		else {
+			parser = IXMPDOMImplementationRegistry::GetDOMImplementationRegistry()->CreateParser( "rdf" );
+			return parser;
+		}
+	}
+
+	void CreateEquivalentXMPNodes( const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode,
+		const NamespacePropertyNamePair & arrayPair, spIXMPStructureNode & containerNode /*= spIXMPStructureNode()*/,
+		const NamespacePropertyNamePair & containerPair /*= NamespacePropertyNamePair()*/ )
+	{
+		if ( !arrayNode ) {
+			arrayNode = IXMPArrayNode::CreateUnorderedArrayNode( arrayPair.first, arrayPair.second );
+			if ( containerPair.first ) {
+				if ( !containerNode ) {
+					containerNode = IXMPStructureNode::CreateStructureNode( containerPair.first, containerPair.second );
+					parent->AppendNode( containerNode );
+				}
+				containerNode->AppendNode( arrayNode );
+			} else {
+				parent->AppendNode( arrayNode );
+			}
+		}
+	}
+
+	NS_XMPCORE::spIXMPArrayNode TryToGetArrayNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
+		try {
+			return parentNode->GetArrayNode( pair.first, pair.second );
+		} catch ( ... ) {
+			return spIXMPArrayNode();
+		}
+	}
+
+	NS_XMPCORE::spIXMPStructureNode TryToGetStructNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
+		try {
+			return parentNode->GetStructureNode( pair.first, pair.second );
+		} catch ( ... ) {
+			return spIXMPStructureNode();
+		}
+	}
+
+	NS_XMPCORE::spIXMPSimpleNode TryToGetSimpleNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
+		try {
+			return parentNode->GetSimpleNode( pair.first, pair.second );
+		} catch ( ... ) {
+			return spIXMPSimpleNode();
+		}
 	}
 
 }

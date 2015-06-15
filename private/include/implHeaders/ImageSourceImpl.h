@@ -11,24 +11,27 @@
 // =================================================================================================
 
 #include "interfaces/IImageSource.h"
-#include "interfaces/ISource.h"
-#include "UMCFwdDeclarations_I.h"
+#include "implHeaders/SourceImpl.h"
 
 namespace INT_UMC {
 
 	class ImageSourceImpl
 		: public IImageSource
+		, public SourceImpl
 		, public enable_shared_from_this < ImageSourceImpl >
 	{
 	public:
 		ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
-		virtual eSourceTypes GetType() const;
+		ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
 
 		virtual void SetClipName( const std::string & clipName );
 		virtual std::string GetClipName() const;
 
+		virtual eSourceTypes GetType() const;
+		
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual const std::string & GetUniqueID() const;
@@ -50,6 +53,8 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
+		virtual std::string Serialize() const;
+
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
@@ -58,8 +63,21 @@ namespace INT_UMC {
 		virtual INT_UMC::pINodeI GetInternalNode();
 		virtual INT_UMC::pcINodeI GetInternalNode() const;
 
+		virtual void CleanUpOnRemovalFromDOM();
+		virtual void SetUpOnAdditionToDOM();
+
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff();
+
+		virtual spIXMPStructureNode GetXMPNode() const;
+
+		virtual bool ValidateXMPNode() const;
+
+		virtual pINode GetNode();
+
+		virtual pcINode GetNode() const;
+
 	protected:
-		spISource					mSource;
 	};
 }
 

@@ -11,18 +11,21 @@
 // =================================================================================================
 
 #include "interfaces/IVideoFrameSource.h"
-#include "interfaces/ISource.h"
-#include "interfaces/INodeI.h"
+#include "implHeaders/SourceImpl.h"
 
 namespace INT_UMC {
 	class VideoFrameSourceImpl
 		: public IVideoFrameSource
-		, public INodeI
+		, public SourceImpl
 		, public enable_shared_from_this < VideoFrameSourceImpl >
 	{
 	public:
 		VideoFrameSourceImpl( const spIVideoSource & videoSource,
-			const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker, const spIUniqueIDGenerator & uniqueIDGenerator );
+			const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator );
+
+		VideoFrameSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
 
 		virtual void SetInCount( const EditUnitInCount & inCount );
 		virtual EditUnitInCount GetInCount() const;
@@ -32,10 +35,10 @@ namespace INT_UMC {
 		virtual spIVideoSource GetVideoSource();
 		virtual spcIVideoSource GetVideoSource() const;
 
-		virtual eSourceTypes GetType() const;
-
 		virtual void SetClipName( const std::string & clipName );
 		virtual std::string GetClipName() const;
+
+		virtual eSourceTypes GetType() const;
 
 		virtual eNodeTypes GetNodeType() const;
 
@@ -58,6 +61,8 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
+		virtual std::string Serialize() const;
+
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
@@ -66,24 +71,21 @@ namespace INT_UMC {
 		virtual pINodeI GetInternalNode();
 		virtual pcINodeI GetInternalNode() const;
 
-		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
+		virtual void CleanUpOnRemovalFromDOM();
+		virtual void SetUpOnAdditionToDOM();
 
-		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
-		virtual spIXMPStructureNode GetMergedExtensionNode() const;
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff();
 
-		virtual void RemoveFromDOM();
-		virtual void AddToDOM( const spINode & parent );
+		virtual spIXMPStructureNode GetXMPNode() const;
 
-		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
+		virtual bool ValidateXMPNode() const;
 
-		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+		virtual pINode GetNode();
 
-		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-
-		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
+		virtual pcINode GetNode() const;
 
 	protected:
-		spISource					mSource;
 		spIVideoSource				mVideoSource;
 		EditUnitInCount				mInCount;
 	};

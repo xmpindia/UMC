@@ -11,28 +11,22 @@
 // =================================================================================================
 
 #include "interfaces/IShot.h"
-#include "interfaces/IFrame.h"
-#include "interfaces/ISource.h"
-#include "interfaces/INodeI.h"
+#include "implHeaders/NodeImpl.h"
 
-#include <string>
 #include <map>
 
 namespace INT_UMC {
 	using namespace UMC;
 
 	class ShotImpl
-		: public IShot
-		, public INodeI
-		, public enable_shared_from_this< ShotImpl >
+		: public NodeImpl
 	{
 	public:
 		ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
-		const std::string & GetUniqueID() const;
-
-		virtual eShotTypes GetType() const ;
+		ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
 
 		virtual void SetInCount( const EditUnitInCount & inCount );
 		virtual EditUnitInCount GetInCount() const;
@@ -40,68 +34,60 @@ namespace INT_UMC {
 		virtual void SetDuration( const EditUnitDuration & duration );
 		virtual EditUnitDuration GetDuration() const;
 
-		virtual spIFrame AddFrame( const spISource & source );
+		virtual spIFrame AddFrame( const spISource & source, const spINode & spSelf );
+		virtual spIFrame AddFrame( const std::string & buffer, const spINode & spSelf );
+
+		virtual spIShotSource AddShotSource( const spISource & source, const spINode & spSelf );
+		virtual spIShotSource AddShotSource( const std::string & buffer, const spINode & spSelf );
 
 		virtual size_t FrameCount() const;
-		virtual FrameList GetFrames();
-		virtual cFrameList GetFrames() const;
-
-		virtual spIShotSource AddShotSource( const spISource & source );
+		virtual IShot::FrameList GetAllFrames();
+		virtual IShot::cFrameList GetAllFrames() const;
+		virtual spIFrame GetFrame( const std::string & uniqueID );
+		virtual spcIFrame GetFrame( const std::string & uniqueID ) const;
 
 		virtual size_t ShotSourceCount() const;
-		virtual ShotSourceList GetShotSources();
-		virtual cShotSourceList GetShotSources() const;
-
+		virtual IShot::ShotSourceList GetAllShotSources();
+		virtual IShot::cShotSourceList GetAllShotSources() const;
 		virtual spIShotSource GetShotSource( const std::string & uniqueID );
 		virtual spcIShotSource GetShotSource( const std::string & uniqueID ) const;
 
-		// INODEI
+		virtual size_t RemoveAllShotSources();
+		virtual size_t RemoveAllFrames();
 
-		virtual eNodeTypes GetNodeType() const;
+		virtual size_t RemoveShotSource( const std::string & uniqueID );
+		virtual size_t RemoveFrame( const std::string & uniqueID );
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		spcINode GetDecendantNode( const std::string & uniqueID ) const;
+		spINode GetDecendantNode( const std::string & uniqueID );
 
-		virtual spcINode GetDecendantNode( const std::string & id ) const;
-		virtual spINode GetDecendantNode( const std::string & id );
+		spcINode GetChildNode( const std::string & uniqueID ) const;
+		spINode GetChildNode( const std::string & uniqueID );
 
-		virtual spcINode GetChildNode( const std::string & id ) const;
-		virtual spINode GetChildNode( const std::string & id );
+		INode::NodeList GetAllChildren();
+		INode::cNodeList GetAllChildren() const;
 
-		virtual NodeList GetAllChildren();
-		virtual cNodeList GetAllChildren() const;
+		INode::NodeList GetAllDecendants();
+		INode::cNodeList GetAllDecendants() const;
 
-		virtual NodeList GetAllDecendants();
-		virtual cNodeList GetAllDecendants() const;
+		void CleanUpOnRemovalFromDOM();
+		void SetUpOnAdditionToDOM();
 
-		virtual size_t GetReferenceCount() const;
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff( const spINode & spSelf );
 
-		virtual void AddToDOM( const spINode & parent );
-		virtual void RemoveFromDOM();
-
-		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
-		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
-
-		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
-
-		virtual pINodeI GetInternalNode();
-		virtual pcINodeI GetInternalNode() const;
-
-		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
-		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
-		virtual spIXMPStructureNode GetMergedExtensionNode() const;
-
-		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
-		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
-
-		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
+		virtual bool ValidateXMPNode() const;
 
 	protected:
 		typedef std::map< const std::string, spIFrame > FrameMap;
 		typedef std::map< const std::string, spIShotSource > ShotSourceMap;
 
-		spINode					mNode;
+		spIXMPArrayNode			mFrames;
+		spIXMPArrayNode			mShotSources;
+
+		spIShotSource AddShotSource( const spIXMPStructureNode & node, const spINode & spSelf );
+		spIFrame AddFrame( const spIXMPStructureNode & node, const spINode & spSelf );
+
 		EditUnitInCount			mInCount;
 		EditUnitDuration		mDuration;
 		FrameMap				mFrameMap;

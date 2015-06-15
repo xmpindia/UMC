@@ -12,26 +12,33 @@
 
 #include "interfaces/IOutput.h"
 #include "interfaces/ITrack.h"
-#include "interfaces/INodeI.h"
-
-#include <map>
+#include "implHeaders/NodeImpl.h"
 
 namespace INT_UMC {
 	using namespace UMC;
 
 	class OutputImpl
 		: public IOutput
-		, public INodeI
+		, public NodeImpl
 		, public enable_shared_from_this< OutputImpl >
 	{
 	public:
 		OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
+		OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator,
+			const spIXMPStructureNode & xmpStructureNode );
+
 		virtual const std::string & GetUniqueID() const;
 
+		virtual spITrack AddTrack( const std::string & buffer );
+
 		virtual spIVideoTrack AddVideoTrack();
+		virtual spIVideoTrack AddVideoTrack( const std::string & buffer );
+
 		virtual spIAudioTrack AddAudioTrack();
+		virtual spIAudioTrack AddAudioTrack( const std::string & buffer );
 
 		virtual void SetName( const std::string & name );
 		virtual std::string GetName() const;
@@ -51,7 +58,7 @@ namespace INT_UMC {
 		virtual void SetAudioEditRate( const EditRate & audioEditRate );
 		virtual EditRate GetAudioEditRate() const;
 
-		virtual size_t	TrackCount() const;
+		virtual size_t TrackCount() const;
 		virtual TrackList GetAllTracks();
 		virtual cTrackList GetAllTracks() const;
 		virtual spITrack GetTrack( const std::string & uniqueID );
@@ -95,9 +102,6 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
-		virtual void AddToDOM( const spINode & parent );
-		virtual void RemoveFromDOM();
-
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
@@ -106,21 +110,34 @@ namespace INT_UMC {
 		virtual pINodeI GetInternalNode();
 		virtual pcINodeI GetInternalNode() const;
 
-		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
-		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
-		virtual spIXMPStructureNode GetMergedExtensionNode() const;
 
-		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
-		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
+		virtual void CleanUpOnRemovalFromDOM();
+		virtual void SetUpOnAdditionToDOM();
 
-		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff();
+
+		virtual spIXMPStructureNode GetXMPNode() const;
 
 	protected:
+		spIAudioTrack AddAudioTrack( const spIXMPStructureNode & xmpStructureNode );
+		spIVideoTrack AddVideoTrack( const spIXMPStructureNode & xmpStructureNode );
+
+		virtual bool ValidateXMPNode() const;
+
+		virtual std::string Serialize() const;
+
+		virtual pINode GetNode();
+
+		virtual pcINode GetNode() const;
+
 		typedef std::map< const std::string, spIVideoTrack > VideoTrackMap;
 		typedef std::map< const std::string, spIAudioTrack > AudioTrackMap;
 
-		spINode							mNode;
+		spIXMPArrayNode					mVideoTracks;
+		spIXMPArrayNode					mAudioTracks;
+		spIXMPStructureNode				mTracks;
+
 		std::string						mName;
 		std::string						mTitle;
 		AspectRatio						mCanvasAspectRatio;

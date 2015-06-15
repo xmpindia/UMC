@@ -12,75 +12,119 @@
 
 #include "interfaces/IClipShot.h"
 #include "implHeaders/ShotImpl.h"
-#include "UMCFwdDeclarations_I.h"
 
 namespace INT_UMC {
 	class ClipShotImpl
 		: public IClipShot
+		, public ShotImpl
 		, public enable_shared_from_this< ClipShotImpl >
 	{
 	public:
 		ClipShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
-		virtual ~ClipShotImpl() {}
+		ClipShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
 
-		virtual eShotTypes GetType() const ;
-
-		virtual void SetInCount( const EditUnitInCount & inCount );
-		virtual EditUnitInCount GetInCount() const;
-
-		virtual void SetDuration( const EditUnitDuration & duration );
-		virtual EditUnitDuration GetDuration() const;
-
-		virtual spIFrame AddFrame( const spISource & source );
-
-		virtual size_t FrameCount() const;
-		virtual FrameList GetFrames();
-		virtual cFrameList GetFrames() const;
-
-		virtual spIShotSource AddShotSource( const spISource & source );
-
-		virtual size_t ShotSourceCount() const;
-		virtual ShotSourceList GetShotSources();
-		virtual cShotSourceList GetShotSources() const;
-
-		virtual spIShotSource GetShotSource( const std::string & uniqueID );
-		virtual spcIShotSource GetShotSource( const std::string & uniqueID ) const;
-
-		// INODEI
-
-		virtual const std::string & GetUniqueID() const;
+		virtual eShotTypes GetType() const;
 
 		virtual eNodeTypes GetNodeType() const;
 
+		virtual const std::string & GetUniqueID() const;
+
 		virtual wpcINode GetParentNode() const;
+
 		virtual wpINode GetParentNode();
 
-		virtual spcINode GetDecendantNode( const std::string & id ) const;
-		virtual spINode GetDecendantNode( const std::string & id );
+		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const;
 
-		virtual spcINode GetChildNode( const std::string & id ) const;
-		virtual spINode GetChildNode( const std::string & id );
+		virtual spINode GetDecendantNode( const std::string & uniqueID );
+
+		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
+
+		virtual spINode GetChildNode( const std::string & uniqueID );
 
 		virtual NodeList GetAllChildren();
+
 		virtual cNodeList GetAllChildren() const;
 
 		virtual NodeList GetAllDecendants();
+
 		virtual cNodeList GetAllDecendants() const;
 
 		virtual size_t GetReferenceCount() const;
 
+		virtual std::string Serialize() const;
+
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
+
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
-		virtual pINodeI GetInternalNode();
-		virtual pcINodeI GetInternalNode() const;
+		virtual INT_UMC::pINodeI GetInternalNode();
 
-	protected:
-		spIShot					mShot;
+		virtual INT_UMC::pcINodeI GetInternalNode() const;
+
+		virtual void CleanUpOnRemovalFromDOM();
+
+		virtual void SetUpOnAdditionToDOM();
+
+		virtual void SyncXMPToInternalStuff();
+
+		virtual void SyncInternalStuffToXMP() const;
+
+		virtual pINode GetNode();
+
+		virtual pcINode GetNode() const;
+
+		virtual spIXMPStructureNode GetXMPNode() const;
+
+		virtual void SetInCount( const EditUnitInCount & inCount );
+
+		virtual EditUnitInCount GetInCount() const;
+
+		virtual void SetDuration( const EditUnitDuration & duration );
+
+		virtual EditUnitDuration GetDuration() const;
+
+		virtual spIFrame AddFrame( const spISource & source );
+
+		virtual spIFrame AddFrame( const std::string & buffer );
+
+		virtual spIShotSource AddShotSource( const spISource & source );
+
+		virtual spIShotSource AddShotSource( const std::string & buffer );
+
+		virtual size_t FrameCount() const;
+
+		virtual FrameList GetAllFrames();
+
+		virtual cFrameList GetAllFrames() const;
+
+		virtual spIFrame GetFrame( const std::string & uniqueID );
+
+		virtual spcIFrame GetFrame( const std::string & uniqueID ) const;
+
+		virtual size_t ShotSourceCount() const;
+
+		virtual ShotSourceList GetAllShotSources();
+
+		virtual cShotSourceList GetAllShotSources() const;
+
+		virtual spIShotSource GetShotSource( const std::string & uniqueID );
+
+		virtual spcIShotSource GetShotSource( const std::string & uniqueID ) const;
+
+		virtual size_t RemoveAllShotSources();
+
+		virtual size_t RemoveAllFrames();
+
+		virtual size_t RemoveFrame( const std::string & uniqueID );
+
+		virtual size_t RemoveShotSource( const std::string & uniqueID );
+
+		~ClipShotImpl();
 	};
 }
 

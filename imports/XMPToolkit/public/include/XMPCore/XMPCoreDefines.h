@@ -35,12 +35,14 @@
 // 01-30-14 ADC 1.0-m001 First version
 //
 // =================================================================================================
-//#endif // AdobePrivate
+#endif // AdobePrivate
+
+#include "XMPCommon/XMPCommonDefines.h"
 
 // =================================================================================================
 // All Platform Settings
 // ===========================
-#include "XMPCommon/XMPCommonDefines.h"
+#define NS_XMPCORE AdobeXMPCore
 
 // =================================================================================================
 // Macintosh Specific Settings
@@ -70,14 +72,8 @@
 	#define ENABLE_NEW_DOM_MODEL 1
 #endif
 
-#endif // AdobePrivate
-
 #ifndef ENABLE_NEW_DOM_MODEL
 	#define ENABLE_NEW_DOM_MODEL 0
-#endif
-
-#if ENABLE_NEW_DOM_MODEL
-	#define NS_XMPCORE AdobeXMPCore
 #endif
 
 #if SOURCE_COMPILED

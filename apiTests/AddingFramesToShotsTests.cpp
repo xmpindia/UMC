@@ -80,7 +80,7 @@ void AddingFramesToShotsTests::FramesContent() {
 	auto outputs = sp->GetAllOutputs();
 	auto tracks = outputs[0]->GetAllTracks();
 	auto shots = tracks[0]->GetAllShots();
-	auto frames = shots[0]->GetFrames();
+	auto frames = shots[0]->GetAllFrames();
 	auto source = frames[0]->GetSource();
 
 	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );

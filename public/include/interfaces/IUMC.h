@@ -14,6 +14,7 @@
 #include "INode.h"
 
 namespace UMC {
+
 	class IUMC
 		: public INode
 	{
@@ -37,7 +38,14 @@ namespace UMC {
 		virtual spIVideoFrameSource AddVideoFrameSource( const spIVideoSource & videoSource ) = 0;
 		virtual spIImageSource AddImageSource() = 0;
 
+		virtual spISource AddSource( const std::string & buffer ) = 0;
+		virtual spIVideoSource AddVideoSource( const std::string & buffer ) = 0;
+		virtual spIAudioSource AddAudioSource( const std::string & buffer ) = 0;
+		virtual spIVideoFrameSource AddVideoFrameSource( const std::string & buffer ) = 0;
+		virtual spIImageSource AddImageSource( const std::string & buffer ) = 0;
+
 		virtual spIOutput AddOutput() = 0;
+		virtual spIOutput AddOutput( const std::string & buffer ) = 0;
 
 		virtual size_t SourceCount() const = 0;
 		virtual size_t VideoSourceCount() const = 0;
@@ -94,15 +102,11 @@ namespace UMC {
 		virtual std::string SerializeToBuffer() const = 0;
 
 		static spIUMC CreateEmptyUMC();
-		static spIUMC CreateUMCFromBuffer( const std::string & uniqueID );
+		static spIUMC CreateUMCFromBuffer( const std::string & buffer );
 
 		static bool RegisterCustomNodeHandler( const std::string & customDataNameSpace, const std::string & customDataName,
 			const spICustomDataHandler & customDataHandler );
 
-		//TODO:
-		//virtual void RegisterUniqueIDGenerator( const spIUniqueIDGenerator & uniqueIDGenerator );
-		// virtual size_t OptimizeSources();
-	
 		virtual ~IUMC() = 0;
 	};
 

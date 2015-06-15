@@ -13,146 +13,221 @@ namespace INT_UMC {
 
 	ClipShotImpl::ClipShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mShot( CreateShot( uniqueIDAndReferenceTracker, uniqueIDGenerator ) ) {}
+		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator ) { }
 
-	const std::string & ClipShotImpl::GetUniqueID() const {
-		return mShot->GetUniqueID();
-	}
+	ClipShotImpl::ClipShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, node ) { }
 
 	IShot::eShotTypes ClipShotImpl::GetType() const {
 		return IShot::kShotTypeClip;
 	}
 
-	void ClipShotImpl::SetInCount( const EditUnitInCount & inCount ) {
-		mShot->SetInCount( inCount );
-	}
-
-	EditUnitInCount ClipShotImpl::GetInCount() const {
-		return mShot->GetInCount();
-	}
-
-	void ClipShotImpl::SetDuration( const EditUnitDuration & duration ) {
-		mShot->SetDuration( duration );
-	}
-
-	EditUnitDuration ClipShotImpl::GetDuration() const {
-		return mShot->GetDuration();
-	}
-
-	spIFrame ClipShotImpl::AddFrame( const spISource & source )
-	{
-		return mShot->AddFrame( source );
-	}
-
-	size_t ClipShotImpl::FrameCount() const {
-		return mShot->FrameCount();
-	}
-
-	IShot::FrameList ClipShotImpl::GetFrames() {
-		return mShot->GetFrames();
-	}
-
-	IShot::cFrameList ClipShotImpl::GetFrames() const {
-		return const_pointer_cast< const IShot >( mShot )->GetFrames();
-	}
-
-	spIShotSource ClipShotImpl::AddShotSource( const spISource & source )
-	{
-		return mShot->AddShotSource( source );
-	}
-
-	size_t ClipShotImpl::ShotSourceCount() const {
-		return mShot->ShotSourceCount();
-	}
-
-	IShot::ShotSourceList ClipShotImpl::GetShotSources() {
-		return mShot->GetShotSources();
-	}
-
-	IShot::cShotSourceList ClipShotImpl::GetShotSources() const {
-		return const_pointer_cast< const IShot >( mShot )->GetShotSources();
-	}
-
-	spIShotSource ClipShotImpl::GetShotSource( const std::string & uniqueID ) {
-		return mShot->GetShotSource( uniqueID );
-	}
-
-	spcIShotSource ClipShotImpl::GetShotSource( const std::string & uniqueID ) const {
-		return const_pointer_cast< const IShot >( mShot )->GetShotSource( uniqueID );
-	}
-
-	wpcINode ClipShotImpl::GetParentNode() const {
-		return mShot->GetParentNode();
-	}
-
-	wpINode ClipShotImpl::GetParentNode() {
-		return mShot->GetParentNode();
-	}
-
 	INode::eNodeTypes ClipShotImpl::GetNodeType() const {
-		return mShot->GetNodeType();
+		return INode::kNodeTypeShot;
 	}
 
-	spcINode ClipShotImpl::GetDecendantNode( const std::string & id ) const {
-		return mShot->GetDecendantNode( id );
+	const std::string & ClipShotImpl::GetUniqueID() const {
+		return ShotImpl::GetUniqueID();
 	}
 
-	spINode ClipShotImpl::GetDecendantNode( const std::string & id ) {
-		return mShot->GetDecendantNode( id );
+	UMC::wpcINode ClipShotImpl::GetParentNode() const {
+		return ShotImpl::GetParentNode();
 	}
 
-	spcINode ClipShotImpl::GetChildNode( const std::string & id ) const {
-		return mShot->GetChildNode( id );
+	UMC::wpINode ClipShotImpl::GetParentNode() {
+		return ShotImpl::GetParentNode();
 	}
 
-	spINode ClipShotImpl::GetChildNode( const std::string & id ) {
-		return mShot->GetChildNode( id );
+	UMC::spcINode ClipShotImpl::GetDecendantNode( const std::string & uniqueID ) const {
+		return ShotImpl::GetDecendantNode( uniqueID );
+	}
+
+	UMC::spINode ClipShotImpl::GetDecendantNode( const std::string & uniqueID ) {
+		return ShotImpl::GetDecendantNode( uniqueID );
+	}
+
+	UMC::spcINode ClipShotImpl::GetChildNode( const std::string & uniqueID ) const {
+		return ShotImpl::GetChildNode( uniqueID );
+	}
+
+	UMC::spINode ClipShotImpl::GetChildNode( const std::string & uniqueID ) {
+		return ShotImpl::GetChildNode( uniqueID );
 	}
 
 	INode::NodeList ClipShotImpl::GetAllChildren() {
-		return mShot->GetAllChildren();
+		return ShotImpl::GetAllChildren();
 	}
 
 	INode::cNodeList ClipShotImpl::GetAllChildren() const {
-		return const_pointer_cast< const IShot >( mShot )->GetAllChildren();
+		return ShotImpl::GetAllChildren();
 	}
 
 	INode::NodeList ClipShotImpl::GetAllDecendants() {
-		return mShot->GetAllDecendants();
+		return ShotImpl::GetAllDecendants();
 	}
 
 	INode::cNodeList ClipShotImpl::GetAllDecendants() const {
-		return const_pointer_cast< const IShot >( mShot )->GetAllDecendants();
+		return ShotImpl::GetAllDecendants();
 	}
 
 	size_t ClipShotImpl::GetReferenceCount() const {
-		return mShot->GetReferenceCount();
+		return ShotImpl::GetReferenceCount();
 	}
 
-	spICustomData ClipShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
-		return mShot->GetCustomData( customDataNameSpace, customDataName );
+	std::string ClipShotImpl::Serialize() const {
+		return ShotImpl::SerializeXMP();
 	}
 
-	spcICustomData ClipShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
-		return mShot->GetCustomData( customDataNameSpace, customDataName );
+	UMC::spICustomData ClipShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
+		return ShotImpl::GetCustomData( customDataNameSpace, customDataName );
+	}
+
+	UMC::spcICustomData ClipShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
+		return ShotImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	bool ClipShotImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		return mShot->SetCustomData( customDataNameSpace, customDataName, customData );
+		return ShotImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
-	pINodeI ClipShotImpl::GetInternalNode() {
-		return mShot->GetInternalNode();
+	INT_UMC::pINodeI ClipShotImpl::GetInternalNode() {
+		return this;
 	}
 
-	pcINodeI ClipShotImpl::GetInternalNode() const {
-		return mShot->GetInternalNode();
+	INT_UMC::pcINodeI ClipShotImpl::GetInternalNode() const {
+		return this;
 	}
+
+	void ClipShotImpl::CleanUpOnRemovalFromDOM() {
+		ShotImpl::CleanUpOnRemovalFromDOM();
+	}
+
+	void ClipShotImpl::SetUpOnAdditionToDOM() {
+		ShotImpl::SetUpOnAdditionToDOM();
+	}
+
+	void ClipShotImpl::SyncXMPToInternalStuff() {
+		ShotImpl::SyncXMPToInternalStuff( shared_from_this() );
+	}
+
+	void ClipShotImpl::SyncInternalStuffToXMP() const {
+		ShotImpl::SyncInternalStuffToXMP();
+	}
+
+	UMC::pINode ClipShotImpl::GetNode() {
+		return this;
+	}
+
+	UMC::pcINode ClipShotImpl::GetNode() const {
+		return this;
+	}
+
+	INT_UMC::spIXMPStructureNode ClipShotImpl::GetXMPNode() const {
+		return mXMPStructureNode;
+	}
+
+	ClipShotImpl::~ClipShotImpl() { }
+
+	size_t ClipShotImpl::RemoveShotSource( const std::string & uniqueID ) {
+		return ShotImpl::RemoveShotSource( uniqueID );
+	}
+
+	size_t ClipShotImpl::RemoveFrame( const std::string & uniqueID ) {
+		return ShotImpl::RemoveFrame( uniqueID );
+	}
+
+	size_t ClipShotImpl::RemoveAllFrames() {
+		return ShotImpl::RemoveAllFrames();
+	}
+
+	size_t ClipShotImpl::RemoveAllShotSources() {
+		return ShotImpl::RemoveAllFrames();
+	}
+
+	UMC::spcIShotSource ClipShotImpl::GetShotSource( const std::string & uniqueID ) const {
+		return ShotImpl::GetShotSource( uniqueID );
+	}
+
+	UMC::spIShotSource ClipShotImpl::GetShotSource( const std::string & uniqueID ) {
+		return ShotImpl::GetShotSource( uniqueID );
+	}
+
+	IShot::cShotSourceList ClipShotImpl::GetAllShotSources() const {
+		return ShotImpl::GetAllShotSources();
+	}
+
+	IShot::ShotSourceList ClipShotImpl::GetAllShotSources() {
+		return ShotImpl::GetAllShotSources();
+	}
+
+	size_t ClipShotImpl::ShotSourceCount() const {
+		return ShotImpl::ShotSourceCount();
+	}
+
+	UMC::spcIFrame ClipShotImpl::GetFrame( const std::string & uniqueID ) const {
+		return ShotImpl::GetFrame( uniqueID );
+	}
+
+	UMC::spIFrame ClipShotImpl::GetFrame( const std::string & uniqueID ) {
+		return ShotImpl::GetFrame( uniqueID );
+	}
+
+	IShot::cFrameList ClipShotImpl::GetAllFrames() const {
+		return ShotImpl::GetAllFrames();
+	}
+
+	IShot::FrameList ClipShotImpl::GetAllFrames() {
+		return ShotImpl::GetAllFrames();
+	}
+
+	size_t ClipShotImpl::FrameCount() const {
+		return ShotImpl::FrameCount();
+	}
+
+	UMC::spIShotSource ClipShotImpl::AddShotSource( const std::string & buffer ) {
+		return ShotImpl::AddShotSource( buffer, shared_from_this() );
+	}
+
+	UMC::spIShotSource ClipShotImpl::AddShotSource( const spISource & source ) {
+		return ShotImpl::AddShotSource( source, shared_from_this() );
+	}
+
+	UMC::spIFrame ClipShotImpl::AddFrame( const std::string & buffer ) {
+		return ShotImpl::AddFrame( buffer, shared_from_this() );
+	}
+
+	UMC::spIFrame ClipShotImpl::AddFrame( const spISource & source ) {
+		return ShotImpl::AddFrame( source, shared_from_this() );
+	}
+
+	UMC::EditUnitDuration ClipShotImpl::GetDuration() const {
+		return ShotImpl::GetDuration();
+	}
+
+	void ClipShotImpl::SetDuration( const EditUnitDuration & duration ) {
+		return ShotImpl::SetDuration( duration );
+	}
+
+	UMC::EditUnitInCount ClipShotImpl::GetInCount() const {
+		return ShotImpl::GetInCount();
+	}
+
+	void ClipShotImpl::SetInCount( const EditUnitInCount & inCount ) {
+		return ShotImpl::SetInCount( inCount );
+	}
+
 
 	spIClipShot CreateClipShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
 	{
-		return std::make_shared< ClipShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		if ( node ) {
+			auto retValue = std::make_shared< ClipShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
+			retValue->SyncXMPToUMC();
+			return retValue;
+		} else {
+			return std::make_shared< ClipShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		}
 	}
 
 }

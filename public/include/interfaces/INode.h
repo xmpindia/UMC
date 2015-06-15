@@ -19,13 +19,6 @@ namespace INT_UMC {
 	class INodeI;
 	typedef INodeI *		pINodeI;
 	typedef const INodeI *	pcINodeI;
-	//using namespace UMC;
-	//template< typename mapType, typename mapElementType >
-	//void AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent );
-	//template< typename mapType >
-	//size_t ClearMap( mapType & map );
-	//template< typename mapType >
-	//void RemoveElementFromMap( mapType & map, typename mapType::iterator it );
 };
 
 namespace UMC {
@@ -91,6 +84,8 @@ namespace UMC {
 		virtual cNodeList GetAllDecendants() const = 0;
 
 		virtual size_t GetReferenceCount() const = 0;
+
+		virtual std::string Serialize() const = 0;
 
 		// plugin-able extension node handling
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) = 0;

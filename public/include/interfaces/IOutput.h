@@ -31,6 +31,10 @@ namespace UMC {
 		virtual spIVideoTrack AddVideoTrack() = 0;
 		virtual spIAudioTrack AddAudioTrack() = 0;
 
+		virtual spIVideoTrack AddVideoTrack( const std::string & buffer ) = 0;
+		virtual spIAudioTrack AddAudioTrack( const std::string & buffer ) = 0;
+		virtual spITrack AddTrack( const std::string & buffer ) = 0;
+
 		virtual void SetName( const std::string & name ) = 0;
 		virtual std::string GetName() const = 0;
 

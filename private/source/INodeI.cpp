@@ -1,6 +1,3 @@
-#ifndef IAudioTrack_h__
-#define IAudioTrack_h__ 1
-
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
 // Copyright 2015 Adobe Systems Incorporated
@@ -10,21 +7,24 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "interfaces/ITrack.h"
-#include "baseTypes/RationalType.h"
 
-namespace UMC {
+#include "interfaces/INodeI.h"
+#include "utils/Utils.h"
 
-	class IAudioTrack
-		: public ITrack
-	{
-	public:
-		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
-		virtual EditRate GetAudioEditRate() const = 0;
+#include "XMPCore/Interfaces/IXMPDOMSerializer.h"
 
-		virtual ~IAudioTrack() = 0;
-	};
+namespace INT_UMC {
 
-	inline IAudioTrack::~IAudioTrack() {}
+	std::string INodeI::SerializeXMP() const {
+		auto serializer = GetSerializer();
+		SyncUMCToXMP();
+		auto sp = GetXMPNode();
+		auto spString = serializer->Serialize( sp );
+		return std::string( spString->c_str(), spString->size() );
+	}
+
+	INodeI::~INodeI() {
+
+	}
+
 }
-#endif  // IAudioTrack_h__

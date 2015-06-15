@@ -63,6 +63,8 @@ namespace UMC {
 		void Frames( const UMC_Uns64 & frames ) { /*assert( mFrames < mFrameRate.Numerator() / mFrameRate.Denominator() );*/ mFrames = frames; }
 		UMC_Uns64 Frames() const { return mFrames; }
 
+		void SMPTETimecode( const char * smpteTimeCode );
+
 		std::string SMPTETimecode() const;
 
 		bool operator == ( const TimeCode & right ) const {

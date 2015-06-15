@@ -21,6 +21,7 @@
 
 namespace INT_UMC {
 	using namespace UMC;
+	using NS_XMPCORE::spIXMPStructureNode;
 
 	// INodeI
 	class INodeI;
@@ -46,46 +47,39 @@ namespace INT_UMC {
 	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData, const std::string & customDataNameSpace,
 		const std::string & customDataName, const NS_XMPCORE::spIXMPStructureNode & baseNode );
 
-	spINode CreateNode( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType );
-
 	spIUniqueIDAndReferenceTracker CreateUniqueIDAndReferenceTracker();
 	spIUniqueIDGenerator CreateUniqueIDGenerator( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker );
 
 	spISource CreateSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 	spIVideoSource CreateVideoSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 	spIAudioSource CreateAudioSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 	spIImageSource CreateImageSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
-	spIVideoFrameSource CreateVideoFrameSource( const spIVideoSource & videoSource,
-		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+	spIVideoFrameSource CreateVideoFrameSource(const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIVideoSource & videoSource,
+		const spIXMPStructureNode & node = spIXMPStructureNode() );
 
 	spIOutput CreateOutput( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 
-	spITrack CreateTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
 	spIVideoTrack CreateVideoTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 	spIAudioTrack CreateAudioTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 
-	spIShot CreateShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
 	spIClipShot CreateClipShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 	spITransitionShot CreateTransitionShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
 
 	spIFrame CreateFrame( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node = spIXMPStructureNode() );
 
 	spIShotSource CreateShotSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node = spIXMPStructureNode() );
 
 }
 #endif  // UMCFwdDeclarations_I_h__

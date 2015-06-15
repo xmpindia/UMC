@@ -9,39 +9,45 @@
 
 
 #include "implHeaders/ImageSourceImpl.h"
+#include "XMPCore/Interfaces/IXMPStructureNode.h"
+#include "utils/UMCAndXMPMapping.h"
 
 namespace INT_UMC {
 
 	ImageSourceImpl::ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mSource( CreateSource( uniqueIDAndReferenceTracker, uniqueIDGenerator ) ) { }
+		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeImage ) { }
+
+	ImageSourceImpl::ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeImage, node ) { }
 
 	ISource::eSourceTypes ImageSourceImpl::GetType() const {
 		return ISource::kSourceTypeImage;
 	}
 
 	void ImageSourceImpl::SetClipName( const std::string & clipName ) {
-		mSource->SetClipName( clipName );
+		SourceImpl::SetClipName( clipName );
 	}
 
 	std::string ImageSourceImpl::GetClipName() const {
-		return mSource->GetClipName();
+		return SourceImpl::GetClipName();
 	}
 
 	INode::eNodeTypes ImageSourceImpl::GetNodeType() const {
-		return mSource->GetNodeType();
+		return SourceImpl::GetNodeType();
 	}
 
 	const std::string & ImageSourceImpl::GetUniqueID() const {
-		return mSource->GetUniqueID();
+		return SourceImpl::GetUniqueID();
 	}
 
 	wpcINode ImageSourceImpl::GetParentNode() const {
-		return mSource->GetParentNode();
+		return SourceImpl::GetParentNode();
 	}
 
 	wpINode ImageSourceImpl::GetParentNode() {
-		return mSource->GetParentNode();
+		return SourceImpl::GetParentNode();
 	}
 
 	spcINode ImageSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
@@ -61,49 +67,89 @@ namespace INT_UMC {
 	}
 
 	INode::NodeList ImageSourceImpl::GetAllChildren() {
-		return mSource->GetAllChildren();
+		return NodeList();
 	}
 
 	INode::cNodeList ImageSourceImpl::GetAllChildren() const {
-		return const_pointer_cast< const ISource >( mSource )->GetAllChildren();
+		return cNodeList();
 	}
 
 	INode::NodeList ImageSourceImpl::GetAllDecendants() {
-		return mSource->GetAllDecendants();
+		return NodeList();
 	}
 
 	INode::cNodeList ImageSourceImpl::GetAllDecendants() const {
-		return const_pointer_cast< const ISource >( mSource )->GetAllDecendants();
+		return cNodeList();
 	}
 
 	size_t ImageSourceImpl::GetReferenceCount() const {
-		return mSource->GetReferenceCount();
+		return SourceImpl::GetReferenceCount();
 	}
 
 	spICustomData ImageSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
-		return mSource->GetCustomData( customDataNameSpace, customDataName );
+		return SourceImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	spcICustomData ImageSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
-		return mSource->GetCustomData( customDataNameSpace, customDataName );
+		return SourceImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	bool ImageSourceImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		return mSource->SetCustomData( customDataNameSpace, customDataName, customData );
+		return SourceImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI ImageSourceImpl::GetInternalNode() {
-		return mSource->GetInternalNode();
+		return this;
 	}
 
 	pcINodeI ImageSourceImpl::GetInternalNode() const {
-		return mSource->GetInternalNode();
+		return this;
+	}
+
+	NS_XMPCORE::spIXMPStructureNode ImageSourceImpl::GetXMPNode() const {
+		return mXMPStructureNode;
+	}
+
+	bool ImageSourceImpl::ValidateXMPNode() const {
+		if ( SourceImpl::ValidateXMPNode() )
+			return true;
+		return false;
+	}
+
+	UMC::pINode ImageSourceImpl::GetNode() {
+		return this;
+	}
+
+	UMC::pcINode ImageSourceImpl::GetNode() const {
+		return this;
+	}
+
+	void ImageSourceImpl::SyncXMPToInternalStuff() {
+		SourceImpl::SyncXMPToInternalStuff();
+	}
+
+	void ImageSourceImpl::SyncInternalStuffToXMP() const {
+		SourceImpl::SyncInternalStuffToXMP();
+	}
+
+	void ImageSourceImpl::SetUpOnAdditionToDOM() { }
+
+	void ImageSourceImpl::CleanUpOnRemovalFromDOM() { }
+
+	std::string ImageSourceImpl::Serialize() const {
+		return SerializeXMP();
 	}
 
 	spIImageSource CreateImageSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
 	{
-		return std::make_shared< ImageSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		if ( node ) {
+			auto retValue = std::make_shared< ImageSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
+			retValue->SyncXMPToUMC();
+			return retValue;
+		} else {
+			return std::make_shared< ImageSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		}
 	}
 
 }

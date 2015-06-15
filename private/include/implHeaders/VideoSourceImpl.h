@@ -11,17 +11,21 @@
 // =================================================================================================
 
 #include "interfaces/IVideoSource.h"
-#include "interfaces/ISource.h"
-#include "UMCFwdDeclarations_I.h"
+#include "implHeaders/SourceImpl.h"
 
 namespace INT_UMC {
+
 	class VideoSourceImpl
 		: public IVideoSource
+		, public SourceImpl
 		, public enable_shared_from_this < VideoSourceImpl >
 	{
 	public:
 		VideoSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator );
+
+		VideoSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
 
 		virtual void SetVideoEditRate( const EditRate & editRate );
 		virtual EditRate GetVideoEditRate() const;
@@ -38,12 +42,10 @@ namespace INT_UMC {
 		virtual void SetTimeCode( const TimeCode & timeCode );
 		virtual TimeCode GetTimeCode() const;
 
-		virtual eSourceTypes GetType() const;
-
 		virtual void SetClipName( const std::string & clipName );
 		virtual std::string GetClipName() const;
 
-		// INODEI
+		virtual eSourceTypes GetType() const;
 
 		virtual eNodeTypes GetNodeType() const;
 
@@ -66,6 +68,8 @@ namespace INT_UMC {
 
 		virtual size_t GetReferenceCount() const;
 
+		virtual std::string Serialize() const;
+
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
@@ -74,8 +78,21 @@ namespace INT_UMC {
 		virtual INT_UMC::pINodeI GetInternalNode();
 		virtual INT_UMC::pcINodeI GetInternalNode() const;
 
+		virtual void CleanUpOnRemovalFromDOM();
+		virtual void SetUpOnAdditionToDOM();
+
+		virtual void SyncInternalStuffToXMP() const;
+		virtual void SyncXMPToInternalStuff();
+
+		virtual spIXMPStructureNode GetXMPNode() const;
+
+		virtual bool ValidateXMPNode() const;
+
+		virtual pINode GetNode();
+
+		virtual pcINode GetNode() const;
+
 	protected:
-		spISource					mSource;
 		EditUnitInCount				mInCount;
 		EditUnitDuration			mDuration;
 		EditRate					mVideoEditRate,

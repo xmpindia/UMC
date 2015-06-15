@@ -47,18 +47,26 @@ namespace UMC {
 		virtual EditUnitDuration GetDuration() const = 0;
 
 		virtual spIFrame AddFrame( const spISource & source ) = 0;
+		virtual spIFrame AddFrame( const std::string & buffer ) = 0;
 		virtual spIShotSource AddShotSource( const spISource & source ) = 0;
+		virtual spIShotSource AddShotSource( const std::string & buffer ) = 0;
 
 		virtual size_t FrameCount() const = 0;
-		virtual FrameList GetFrames() = 0;
-		virtual cFrameList GetFrames() const = 0;
+		virtual FrameList GetAllFrames() = 0;
+		virtual cFrameList GetAllFrames() const = 0;
+		virtual spIFrame GetFrame( const std::string & uniqueID ) = 0;
+		virtual spcIFrame GetFrame( const std::string & uniqueID ) const = 0;
 
 		virtual size_t ShotSourceCount() const = 0;
-		virtual ShotSourceList GetShotSources() = 0;
-		virtual cShotSourceList GetShotSources() const = 0;
-
+		virtual ShotSourceList GetAllShotSources() = 0;
+		virtual cShotSourceList GetAllShotSources() const = 0;
 		virtual spIShotSource GetShotSource( const std::string & uniqueID ) = 0;
 		virtual spcIShotSource GetShotSource( const std::string & uniqueID ) const = 0;
+
+		virtual size_t RemoveAllShotSources() = 0;
+		virtual size_t RemoveAllFrames() = 0;
+		virtual size_t RemoveFrame( const std::string & uniqueID ) = 0;
+		virtual size_t RemoveShotSource( const std::string & uniqueID ) = 0;
 
 		virtual ~IShot() = 0;
 

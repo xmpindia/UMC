@@ -13,6 +13,7 @@
 #include "UMCFwdDeclarations_I.h"
 #include "interfaces/IUniqueIDAndReferenceTracker.h"
 #include "interfaces/INodeI.h"
+#include "utils/UMCAndXMPMapping.h"
 
 #include <vector>
 #include <assert.h>
@@ -47,12 +48,19 @@ namespace INT_UMC {
 	}
 
 	template< typename mapType, typename mapElementType >
-	void AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent ) {
+	void AddElementToMap( mapType & map, const mapElementType & element, const spINode & parent,
+		const spIXMPArrayNode & parentXMPArrayNode = spIXMPArrayNode() ) {
 		assert( element );
 		const std::string & elementID = element->GetUniqueID();
 		assert( map.find( elementID ) == map.end() );
 		map[ elementID ] = element;
-		element->GetInternalNode()->AddToDOM( parent );
+		auto internalPtr = element->GetInternalNode();
+		internalPtr->AddToDOM( parent );
+		spIXMPStructureNode xmpNode = internalPtr->GetXMPNode();
+		if ( !xmpNode->GetParent() ) {
+			parentXMPArrayNode->AppendNode( internalPtr->GetXMPNode() );
+			internalPtr->SetIndex( parentXMPArrayNode->GetChildCount() );
+		}
 		assert( map.find( elementID ) != map.end() );
 	}
 
@@ -68,17 +76,29 @@ namespace INT_UMC {
 	bool SafeToRemoveElement( const spcINode & node );
 
 	template< typename mapType >
-	void RemoveElementFromMap( mapType & map, typename mapType::iterator it ) {
+	void RemoveElementFromMap( mapType & map, typename mapType::iterator it, const spIXMPArrayNode & parentArrayNode ) {
 		it->second->GetInternalNode()->RemoveFromDOM();
+		// search for the entry in the array node
+		pINodeI ptr = it->second->GetInternalNode();
+		auto index = ptr->GetIndex();
+		parentArrayNode->RemoveNode( index );
 		map.erase( it );
+		auto it2 = map.begin();
+		auto itEnd = map.end();
+		for ( ; it2 != itEnd; ++it2 ) {
+			pINodeI ptr2 = it2->second->GetInternalNode();
+			size_t currentIndex = ptr2->GetIndex();
+			if ( currentIndex > index )
+				ptr2->SetIndex( currentIndex - 1 );
+		}
 	}
 
 	template< typename mapType >
-	size_t TryAndRemoveElementFromMap( mapType & map, const std::string & elementID ) {
+	size_t TryAndRemoveElementFromMap( mapType & map, const std::string & elementID, const spIXMPArrayNode & parentNode ) {
 		auto it = map.find( elementID );
 		if ( it != map.end() ) {
 			if ( SafeToRemoveElement( it->second ) ) {
-				RemoveElementFromMap( map, it );
+				RemoveElementFromMap( map, it, parentNode );
 				return 1;
 			} else {
 				// element is still referenced somewhere in the node, so can't be removed.
@@ -87,6 +107,15 @@ namespace INT_UMC {
 			}
 		}
 		return 0;
+	}
+
+	template< typename MapType >
+	void CallSyncUMCToXMPOnMapElements( const MapType & map ) {
+		auto it = map.begin();
+		auto endIt = map.end();
+		for ( ; it != endIt; it++ ) {
+			it->second->GetInternalNode()->SyncUMCToXMP();
+		}
 	}
 
 	template< typename OutputListElementType, typename MapType >
@@ -117,7 +146,7 @@ namespace INT_UMC {
 	}
 
 	template< typename mapType >
-	size_t ClearMap( mapType & map ) {
+	size_t ClearMap( mapType & map, const spIXMPArrayNode & arrayNode ) {
 		size_t nCount( map.size() );
 		if ( nCount > 0 ) {
 			auto it = map.begin(); auto itEnd = map.end();
@@ -125,6 +154,7 @@ namespace INT_UMC {
 				it->second->GetInternalNode()->RemoveFromDOM();
 			}
 			map.clear();
+			arrayNode->Clear();
 		}
 		return nCount;
 	}
@@ -152,5 +182,55 @@ namespace INT_UMC {
 		return list;
 	}
 
+	NS_XMPCORE::spIXMPDOMSerializer GetSerializer( bool reset = false );
+	NS_XMPCORE::spIXMPDOMParser GetParser( bool reset = false );
+
+	void CreateEquivalentXMPNodes(
+		const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode, const NamespacePropertyNamePair & arrayPair,
+		spIXMPStructureNode & containerNode = spIXMPStructureNode(), const NamespacePropertyNamePair & containerPair = NamespacePropertyNamePair() );
+
+	spIXMPArrayNode TryToGetArrayNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair );
+	spIXMPStructureNode TryToGetStructNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair );
+	spIXMPSimpleNode TryToGetSimpleNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair );
+
+	template < typename mapElementType, typename className >
+	size_t PopulateMapFromXMPArrayNode( className * obj, mapElementType( className::*AddFuncPtr )( const spIXMPStructureNode & ),
+		const spIXMPArrayNode & arrayNode )
+	{
+		size_t count( 0 );
+		if ( arrayNode && arrayNode->GetChildCount() > 0 ) {
+			for ( size_t i = 1, total = arrayNode->GetChildCount(); i <= total; ++i ) {
+				try {
+					spIXMPStructureNode childNode = arrayNode->GetStructureNode( i );
+					spINode umcNode = ( obj->*AddFuncPtr )( childNode );
+					if ( umcNode ) {
+						count++;
+						umcNode->GetInternalNode()->SetIndex( i );
+					}
+				} catch ( ... ) {}
+			}
+		}
+		return count;
+	}
+
+	template < typename mapElementType, typename className >
+	size_t PopulateMapFromXMPArrayNode( className * obj, mapElementType( className::*AddFuncPtr )( const spIXMPStructureNode &, const spINode & ),
+		const spIXMPArrayNode & arrayNode, const spINode & spNode )
+	{
+		size_t count( 0 );
+		if ( arrayNode && arrayNode->GetChildCount() > 0 ) {
+			for ( size_t i = 1, total = arrayNode->GetChildCount(); i <= total; ++i ) {
+				try {
+					spIXMPStructureNode childNode = arrayNode->GetStructureNode( i );
+					spINode umcNode = ( obj->*AddFuncPtr )( childNode, spNode );
+					if ( umcNode ) {
+						count++;
+						umcNode->GetInternalNode()->SetIndex( i );
+					}
+				} catch ( ... ) {}
+			}
+		}
+		return count;
+	}
 }
 #endif  // Utils_h__

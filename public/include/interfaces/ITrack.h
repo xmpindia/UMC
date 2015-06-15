@@ -11,7 +11,6 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
-#include "baseTypes/RationalType.h"
 #include "interfaces/INode.h"
 
 namespace UMC {
@@ -19,7 +18,6 @@ namespace UMC {
 	class ITrack
 		: public INode
 	{
-
 	public:
 		typedef std::vector< spIShot > ShotList;
 		typedef std::vector< spcIShot > cShotList;
@@ -40,6 +38,10 @@ namespace UMC {
 
 		virtual spIClipShot AddClipShot() = 0;
 		virtual spITransitionShot AddTransitionShot() = 0;
+
+		virtual spIShot AddShot( const std::string & buffer ) = 0;
+		virtual spIClipShot AddClipShot( const std::string & buffer ) = 0;
+		virtual spITransitionShot AddTransitionShot( const std::string & buffer ) = 0;
 
 		virtual void SetName( const std::string & name ) = 0;
 		virtual std::string GetName() const = 0;
@@ -65,6 +67,7 @@ namespace UMC {
 		virtual size_t RemoveAllShots() = 0;
 		virtual size_t RemoveAllClipShots() = 0;
 		virtual size_t RemoveAllTransitionShots() = 0;
+
 		virtual size_t RemoveShot( const std::string & uniqueID ) = 0;
 		virtual size_t RemoveClipShot( const std::string & uniqueID ) = 0;
 		virtual size_t RemoveTransitionShot( const std::string & uniqueID ) = 0;

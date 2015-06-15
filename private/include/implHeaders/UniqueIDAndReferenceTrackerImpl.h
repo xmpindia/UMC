@@ -25,9 +25,12 @@ namespace INT_UMC {
 		virtual size_t RemoveReference( const std::string & uniqueID );
 		virtual size_t GetReferenceCount( const std::string & uniqueID );
 		virtual bool IsReferenced( const std::string & uniqueID ) const;
+		virtual bool AddUserUniqueID( const std::string & userUniqueID, const std::string & uniqueID );
+		virtual bool GetUserUniqueID( const std::string & userUniqueID, std::string & uniqueID ) const;
 
 	protected:
 		std::map< std::string, size_t >		mUniqueIDAndRefernceCountMap;
+		std::map< std::string, std::string > mUserAndActualUniqueIDMap;
 	};
 }
 

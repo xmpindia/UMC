@@ -11,110 +11,91 @@
 // =================================================================================================
 
 #include "interfaces/ITrack.h"
-#include "interfaces/IShot.h"
-#include "interfaces/IClipShot.h"
-#include "interfaces/ITransitionShot.h"
-#include "interfaces/INodeI.h"
-
-#include <string>
-#include <map>
+#include "implHeaders/NodeImpl.h"
 
 namespace INT_UMC {
 	using namespace UMC;
 
 	class TrackImpl
-		: public ITrack
-		, public INodeI
-		, public enable_shared_from_this< TrackImpl >
+		: public NodeImpl
 	{
 	public:
 		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator );
+			const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType );
 
-		const std::string & GetUniqueID() const;
+		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+			const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType,
+			const spIXMPStructureNode & xmpStructureNode );
 
-		virtual eTrackTypes GetType() const;
+		INode::eNodeTypes GetNodeType() const;
 
-		virtual spIClipShot AddClipShot();
-		virtual spITransitionShot AddTransitionShot();
+		void CleanUpOnRemovalFromDOM();
+		void SetUpOnAdditionToDOM();
 
-		virtual void SetName( const std::string & uniqueID );
-		virtual std::string GetName() const;
+		void SyncInternalStuffToXMP() const;
+		void SyncXMPToInternalStuff( const spINode & node );
 
-		virtual size_t ShotCount() const;
-		virtual size_t ClipShotCount() const;
-		virtual size_t TransitionShotCount() const;
+		spIClipShot AddClipShot( const spINode & node );
+		spITransitionShot AddTransitionShot( const spINode & node );
 
-		virtual ShotList GetAllShots();
-		virtual cShotList GetAllShots() const;
-		virtual ClipShotList GetAllClipShots();
-		virtual cClipShotList GetAllClipShots() const;
-		virtual TransitionShotList GetAllTransitionShots();
-		virtual cTransitionShotList GetAllTransitionShots() const;
+		spIShot AddShot( const std::string & buffer, const spINode & node );
+		spIClipShot AddClipShot( const std::string & buffer, const spINode & node );
+		spITransitionShot AddTransitionShot( const std::string & buffer, const spINode & node );
 
-		virtual spIShot GetShot( const std::string & uniqueID );
-		virtual spcIShot GetShot( const std::string & uniqueID ) const;
-		virtual spIClipShot GetClipShot( const std::string & uniqueID );
-		virtual spcIClipShot GetClipShot( const std::string & uniqueID ) const;
-		virtual spITransitionShot GetTransitionShot( const std::string & uniqueID );
-		virtual spcITransitionShot GetTransitionShot( const std::string & uniqueID ) const;
+		void SetName( const std::string & name );
+		std::string GetName() const;
 
-		virtual size_t RemoveAllShots();
-		virtual size_t RemoveAllClipShots();
-		virtual size_t RemoveAllTransitionShots();
+		size_t ShotCount() const;
+		ITrack::ShotList GetAllShots();
+		ITrack::cShotList GetAllShots() const;
+		spIShot GetShot( const std::string & uniqueID );
+		spcIShot GetShot( const std::string & uniqueID ) const;
 
-		virtual size_t RemoveShot( const std::string & uniqueID );
-		virtual size_t RemoveClipShot( const std::string & uniqueID );
-		virtual size_t RemoveTransitionShot( const std::string & uniqueID );
+		size_t ClipShotCount() const;
+		ITrack::ClipShotList GetAllClipShots();
+		ITrack::cClipShotList GetAllClipShots() const;
+		spIClipShot GetClipShot( const std::string & uniqueID );
+		spcIClipShot GetClipShot( const std::string & uniqueID ) const;
 
-		// INODEI
+		size_t TransitionShotCount() const;
+		ITrack::TransitionShotList GetAllTransitionShots();
+		ITrack::cTransitionShotList GetAllTransitionShots() const;
+		spITransitionShot GetTransitionShot( const std::string & uniqueID );
+		spcITransitionShot GetTransitionShot( const std::string & uniqueID ) const;
 
-		virtual eNodeTypes GetNodeType() const;
+		size_t RemoveAllShots();
+		size_t RemoveAllClipShots();
+		size_t RemoveAllTransitionShots();
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		size_t RemoveShot( const std::string & uniqueID );
+		size_t RemoveClipShot( const std::string & uniqueID );
+		size_t RemoveTransitionShot( const std::string & uniqueID );
 
-		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
-		virtual spINode GetChildNode( const std::string & uniqueID );
+		spcINode GetDecendantNode( const std::string & uniqueID ) const;
+		spINode GetDecendantNode( const std::string & uniqueID );
 
-		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const;
-		virtual spINode GetDecendantNode( const std::string & uniqueID );
+		spcINode GetChildNode( const std::string & uniqueID ) const;
+		spINode GetChildNode( const std::string & uniqueID );
 
-		virtual NodeList GetAllChildren();
-		virtual cNodeList GetAllChildren() const;
+		INode::NodeList GetAllChildren();
+		INode::cNodeList GetAllChildren() const;
 
-		virtual NodeList GetAllDecendants();
-		virtual cNodeList GetAllDecendants() const;
-
-		virtual size_t GetReferenceCount() const;
-
-		virtual void RemoveFromDOM();
-		virtual void AddToDOM( const spINode & parent );
-
-		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName );
-		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
-
-		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
-
-		virtual pINodeI GetInternalNode();
-		virtual pcINodeI GetInternalNode() const;
-
-		virtual void SetExtensionNode( const spIXMPStructureNode & structureNode );
-
-		virtual spIXMPStructureNode GetExtensionNode(bool create = false) const;
-		virtual spIXMPStructureNode GetMergedExtensionNode() const;
-
-		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker();
-		virtual spcIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() const;
-
-		virtual spIUniqueIDGenerator GetUniqueIDGenerator();
-		virtual spcIUniqueIDGenerator GetUniqueIDGenerator() const;
+		INode::NodeList GetAllDecendants();
+		INode::cNodeList GetAllDecendants() const;
 
 	protected:
-		typedef std::map< const std::string, spIClipShot > ClipShotMap;
-		typedef std::map< const std::string, spITransitionShot > TransitionShotMap;
+		spIClipShot AddClipShot( const spIXMPStructureNode & node, const spINode & node2 );
+		spITransitionShot AddTransitionShot( const spIXMPStructureNode & node, const spINode & node2 );
 
-		spINode							mNode;
+		bool ValidateXMPNode() const = 0;
+
+		typedef std::map< const std::string, spIClipShot >			ClipShotMap;
+		typedef std::map< const std::string, spITransitionShot >	TransitionShotMap;
+
+		spIXMPStructureNode				mShots;
+		spIXMPArrayNode					mClipShots;
+		spIXMPArrayNode					mTransitionShots;
+
 		std::string						mName;
 		ClipShotMap						mClipShotMap;
 		TransitionShotMap				mTransitionShotMap;

@@ -215,6 +215,10 @@ namespace UMC {
 
 	}
 
+	void TimeCode::SMPTETimecode( const char * smpteTimeCode ) {
+		ParseSMPTETimeCode( smpteTimeCode, *this );
+	}
+
 	void TimeCode::FrameRate( const UMC::FrameRate & frameRate ) {
 		mFrameRate = frameRate;
 		mStandardFrameRate = ConvertToStandardFrameRate( frameRate );

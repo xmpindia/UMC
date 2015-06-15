@@ -14,6 +14,8 @@
 #include "interfaces/ICustomDataHandlerRegistry.h"
 #include "interfaces/ICustomDataHandler.h"
 #include "interfaces/ICustomData.h"
+#include "utils/UMCAndXMPMapping.h"
+#include "utils/Utils.h"
 
 #include "XMPCore/Interfaces/IXMPStructureNode.h"
 #include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
@@ -21,18 +23,40 @@
 
 namespace INT_UMC {
 
+	NodeImpl::NodeImpl()
+		: mXMPStructureNode( IXMPMetadata::CreateMetadata() )
+		, mIndex( size_t(-1) ) { }
+
+	NodeImpl::NodeImpl( const spIXMPStructureNode & structureNode )
+		: mXMPStructureNode( structureNode )
+		, mIndex( size_t(-1) ) { }
+	
 	NodeImpl::NodeImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, eNodeTypes nodeType )
-		: mUniqueID( uniqueIDGenerator->GenerateUniqueID( nodeType ) )
-		, mspUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
-		, mspUniqueIDGenerator( uniqueIDGenerator )
+		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType,
+		const NamespacePropertyNamePair & namespacePropertyNamePair )
+		: mXMPStructureNode( IXMPStructureNode::CreateStructureNode( namespacePropertyNamePair.first, namespacePropertyNamePair.second ) )
+		, mIndex( size_t(-1) ) 
 	{
-		if ( !mspUniqueIDAndReferenceTracker ) THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL;
-		if ( !mspUniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
+		Init( uniqueIDAndReferenceTracker, uniqueIDGenerator, nodeType );
 	}
 
-	INode::eNodeTypes NodeImpl::GetNodeType() const {
-		return INode::kNodeTypeNone;
+	NodeImpl::NodeImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType,
+		const spIXMPStructureNode & xmpStructureNode )
+		: mXMPStructureNode( xmpStructureNode )
+		, mIndex( size_t(-1) ) 
+	{
+		Init( uniqueIDAndReferenceTracker, uniqueIDGenerator, nodeType );
+	}
+
+	void NodeImpl::Init( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType )
+	{
+		if ( !uniqueIDAndReferenceTracker ) THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL;
+		if ( !uniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
+		mspUniqueIDAndReferenceTracker = uniqueIDAndReferenceTracker;
+		mspUniqueIDGenerator = uniqueIDGenerator;
+		mUniqueID = mspUniqueIDGenerator->GenerateUniqueID( nodeType );
 	}
 
 	const std::string & NodeImpl::GetUniqueID() const {
@@ -45,38 +69,6 @@ namespace INT_UMC {
 
 	wpINode NodeImpl::GetParentNode() {
 		return mwpParentNode;
-	}
-
-	spcINode NodeImpl::GetDecendantNode( const std::string & ) const {
-		return spcINode();
-	}
-
-	spINode NodeImpl::GetDecendantNode( const std::string & ) {
-		return spINode();
-	}
-
-	spcINode NodeImpl::GetChildNode( const std::string & ) const {
-		return spcINode();
-	}
-
-	spINode NodeImpl::GetChildNode( const std::string & ) {
-		return spINode();
-	}
-
-	INode::NodeList NodeImpl::GetAllChildren() {
-		return NodeList();
-	}
-
-	INode::cNodeList NodeImpl::GetAllChildren() const {
-		return cNodeList();
-	}
-
-	INode::NodeList NodeImpl::GetAllDecendants() {
-		return NodeList();
-	}
-
-	INode::cNodeList NodeImpl::GetAllDecendants() const {
-		return cNodeList();
 	}
 
 	size_t NodeImpl::GetReferenceCount() const {
@@ -156,7 +148,8 @@ namespace INT_UMC {
 			auto node = mExtensionNode->GetNode( customDataNameSpace.c_str(), customDataName.c_str() );
 			if ( handler && node ) {
 				auto returnValue = ParseNode( handler, node );
-				if ( returnValue ) SetCustomData(customDataNameSpace, customDataName, returnValue );
+				mCustomDataMap[ combinedString ] = returnValue;
+				returnValue->SetParentNode( mwpParentNode.lock() );
 				return returnValue;
 			}
 		}
@@ -167,21 +160,26 @@ namespace INT_UMC {
 		return const_cast< NodeImpl * >( this )->GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	bool NodeImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		if ( customData &&
-			ICustomDataHandlerRegistry::GetInstance()->IsHandlerRegistered( customDataNameSpace, customDataName ) ) 
-		{
-			std::string combinedString = GetCombinedString( customDataNameSpace, customDataName );
-			mCustomDataMap[ combinedString ] = customData;
-			customData->SetParentNode( shared_from_this() );
-			if ( mExtensionNode )
+	bool NodeImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData )
+	{
+		if ( customData ) {
+			auto handler = ICustomDataHandlerRegistry::GetInstance()->GetHandler( customDataNameSpace, customDataName );
+			if ( handler ) {
+				CreateExtensionNodeIfRequired();
+				std::string combinedString = GetCombinedString( customDataNameSpace, customDataName );
+				mCustomDataMap[ combinedString ] = customData;
+				customData->SetParentNode( mwpParentNode.lock() );
 				mExtensionNode->RemoveNode( customDataNameSpace.c_str(), customDataName.c_str() );
-			return true;
+				auto serializerHandler = CreateSerializerHandler( customData, customDataNameSpace, customDataName, mExtensionNode );
+				handler->Serialize( customData, serializerHandler );
+				return true;
+			}
 		}
 		return false;
 	}
 
 	void NodeImpl::RemoveFromDOM() {
+		CleanUpOnRemovalFromDOM();
 		mspUniqueIDAndReferenceTracker->RemoveUniqueID( mUniqueID );
 		mwpParentNode.reset();
 	}
@@ -190,27 +188,7 @@ namespace INT_UMC {
 		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
 		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
 		mwpParentNode = parent;
-	}
-
-	pINodeI NodeImpl::GetInternalNode() {
-		return this;
-	}
-
-	pcINodeI NodeImpl::GetInternalNode() const {
-		return this;
-	}
-
-	void NodeImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
-		if ( structureNode )
-			mExtensionNode = IXMPNode::AdaptNodeTo< IXMPStructureNode >( structureNode->Clone(), IXMPNode::kXMPNodeTypeStructure );
-		else
-			mExtensionNode.reset();
-	}
-
-	NS_XMPCORE::spIXMPStructureNode NodeImpl::GetExtensionNode( bool create /*= false */ ) const {
-		if ( !mExtensionNode && create )
-			mExtensionNode = IXMPStructureNode::CreateStructureNode( kXMP_NS_XMP, "extension" );
-		return mExtensionNode;
+		SetUpOnAdditionToDOM();
 	}
 
 	spcIUniqueIDGenerator NodeImpl::GetUniqueIDGenerator() const {
@@ -221,22 +199,12 @@ namespace INT_UMC {
 		return mspUniqueIDGenerator;
 	}
 
-	NS_XMPCORE::spIXMPStructureNode NodeImpl::GetMergedExtensionNode() const {
-		if ( mCustomDataMap.size() > 0 ) {
-			auto node = GetExtensionNode( true );
-			auto it = mCustomDataMap.begin(); auto itEnd = mCustomDataMap.end();
-			for ( ; it != itEnd; ++it ) {
-				std::string nameSpace, name;
-				if ( GetSplitStrings( it->first, nameSpace, name ) ) {
-					auto handler = ICustomDataHandlerRegistry::GetInstance()->GetHandler( nameSpace, name );
-					assert(  handler );
-					auto serializerHandler = CreateSerializerHandler( it->second, nameSpace, name, node );
-					handler->Serialize( it->second, serializerHandler );
-				}
-			}
-			return node;
-		} else {
-			return GetExtensionNode( false );
+	NodeImpl::~NodeImpl() { }
+
+	void NodeImpl::CreateExtensionNodeIfRequired() {
+		if ( !mExtensionNode ) {
+			mExtensionNode = IXMPStructureNode::CreateStructureNode( kExtensionPair.first, kExtensionPair.second );
+			mXMPStructureNode->AppendNode( mExtensionNode );
 		}
 	}
 
@@ -256,18 +224,40 @@ namespace INT_UMC {
 		return false;
 	}
 
+	void NodeImpl::SetIndex( size_t index ) {
+		mIndex = index;
+	}
+
+	size_t NodeImpl::GetIndex() const {
+		return mIndex;
+	}
+
+	void NodeImpl::SyncUMCToXMP() const {
+		AddOrUpdateDataToXMPDOM( mUniqueID, kUniqueIDPair, mXMPStructureNode );
+		SyncInternalStuffToXMP();
+	}
+
+	void NodeImpl::SyncXMPToUMC() {
+		mExtensionNode = TryToGetStructNode( mXMPStructureNode, kExtensionPair );
+		auto uniqueIDNode = TryToGetSimpleNode( mXMPStructureNode, kUniqueIDPair );
+		if ( uniqueIDNode ) {
+			auto oldUniqueID = uniqueIDNode->GetValue();
+			mspUniqueIDAndReferenceTracker->AddUserUniqueID( oldUniqueID->c_str(), mUniqueID );
+		} else {
+			THROW_UNIQUE_ID_IS_MISSING;
+		}
+		if ( ValidateXMPNode() )
+			SyncXMPToInternalStuff();
+		else
+			THROW_XMPSTRUCTURE_NODE_VALIDATION_FAILED( "unknown reason" );
+	}
+
 	spcIUniqueIDAndReferenceTracker NodeImpl::GetUniqueIDAndReferenceTracker() const {
 		return mspUniqueIDAndReferenceTracker;
 	}
 
 	spIUniqueIDAndReferenceTracker NodeImpl::GetUniqueIDAndReferenceTracker() {
 		return mspUniqueIDAndReferenceTracker;
-	}
-
-	spINode CreateNode( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType )
-	{
-		return std::make_shared< NodeImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, nodeType );
 	}
 
 }

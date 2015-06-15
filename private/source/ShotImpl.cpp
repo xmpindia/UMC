@@ -8,19 +8,14 @@
 // =================================================================================================
 
 #include "implHeaders/ShotImpl.h"
-#include "implHeaders/FrameImpl.h"
-#include "implHeaders/ShotSourceImpl.h"
+#include "interfaces/IShotSource.h"
+#include "interfaces/IFrame.h"
+#include "interfaces/IUMC.h"
+
 #include "utils/Utils.h"
+#include "utils/UMCAndXMPMapping.h"
 
 namespace INT_UMC {
-
-	const std::string & ShotImpl::GetUniqueID() const {
-		return mNode->GetUniqueID();
-	}
-
-	IShot::eShotTypes ShotImpl::GetType() const {
-		return IShot::kShotTypeAll;
-	}
 
 	void ShotImpl::SetInCount( const EditUnitInCount & inCount ) {
 		mInCount = inCount;
@@ -38,10 +33,24 @@ namespace INT_UMC {
 		return mDuration;
 	}
 
-	spIFrame ShotImpl::AddFrame( const spISource & source )
-	{
-		spIFrame frame = CreateFrame( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator(), source );
-		AddElementToMap( mFrameMap, frame, shared_from_this() );
+	spIFrame ShotImpl::AddFrame( const spISource & source, const spINode & spSelf ) {
+		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, source );
+		CreateEquivalentXMPNodes( mXMPStructureNode, mFrames, kFramesPair );
+		AddElementToMap( mFrameMap, frame, spSelf, mFrames );
+		return frame;
+	}
+
+	UMC::spIFrame ShotImpl::AddFrame( const std::string & buffer, const spINode & spSelf ) {
+		spIXMPStructureNode xmpNode = ParseRDF( buffer );
+		return AddFrame( xmpNode, spSelf );
+	}
+
+	UMC::spIFrame ShotImpl::AddFrame( const spIXMPStructureNode & node, const spINode & spSelf ) {
+		auto actualNode = TryToGetActualNode( node, kFramesPair );
+		if ( !actualNode ) THROW_PARSING_ERROR;
+		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
+		CreateEquivalentXMPNodes( mXMPStructureNode, mFrames, kFramesPair );
+		AddElementToMap( mFrameMap, frame, spSelf, mFrames );
 		return frame;
 	}
 
@@ -49,30 +58,52 @@ namespace INT_UMC {
 		return mFrameMap.size();
 	}
 
-	IShot::FrameList ShotImpl::GetFrames() {
+	IShot::FrameList ShotImpl::GetAllFrames() {
 		return CreateListFromMap< spIFrame >( mFrameMap );
 	}
 
-	IShot::cFrameList ShotImpl::GetFrames() const {
+	IShot::cFrameList ShotImpl::GetAllFrames() const {
 		return CreateListFromMap< spcIFrame >( mFrameMap );
 	}
 
-	spIShotSource ShotImpl::AddShotSource( const spISource & source )
-	{
-		spIShotSource shotSource = CreateShotSource( GetUniqueIDAndReferenceTracker(), GetUniqueIDGenerator(), source );
-		AddElementToMap( mShotSourceMap, shotSource, shared_from_this() );
+	spIShotSource ShotImpl::AddShotSource( const spISource & source, const spINode & spSelf ) {
+		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, source );
+		CreateEquivalentXMPNodes( mXMPStructureNode, mShotSources, kShotSourcesPair );
+		AddElementToMap( mShotSourceMap, shotSource, spSelf, mShotSources );
 		return shotSource;
+	}
+
+	UMC::spIShotSource ShotImpl::AddShotSource( const std::string & buffer, const spINode & spSelf ) {
+		spIXMPStructureNode xmpNode = ParseRDF( buffer );
+		return AddShotSource( xmpNode, spSelf );
+	}
+
+	UMC::spIShotSource ShotImpl::AddShotSource( const spIXMPStructureNode & node, const spINode & spSelf ) {
+		auto actualNode = TryToGetActualNode( node, kShotSourcesPair );
+		if ( !actualNode ) THROW_PARSING_ERROR;
+		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
+		CreateEquivalentXMPNodes( mXMPStructureNode, mShotSources, kShotSourcesPair );
+		AddElementToMap( mShotSourceMap, shotSource, spSelf, mShotSources );
+		return shotSource;
+	}
+
+	UMC::spIFrame ShotImpl::GetFrame( const std::string & uniqueID ) {
+		return GetElementFromMap< spIFrame >( mFrameMap, uniqueID );
+	}
+
+	UMC::spcIFrame ShotImpl::GetFrame( const std::string & uniqueID ) const {
+		return GetElementFromMap< spcIFrame >( mFrameMap, uniqueID );
 	}
 
 	size_t ShotImpl::ShotSourceCount() const {
 		return mShotSourceMap.size();
 	}
 
-	IShot::ShotSourceList ShotImpl::GetShotSources() {
+	IShot::ShotSourceList ShotImpl::GetAllShotSources() {
 		return CreateListFromMap< spIShotSource >( mShotSourceMap );
 	}
 
-	IShot::cShotSourceList ShotImpl::GetShotSources() const {
+	IShot::cShotSourceList ShotImpl::GetAllShotSources() const {
 		return CreateListFromMap< spcIShotSource >( mShotSourceMap );
 	}
 
@@ -84,16 +115,26 @@ namespace INT_UMC {
 		return const_cast< ShotImpl *>( this )->GetShotSource( uniqueID );
 	}
 
-	wpcINode ShotImpl::GetParentNode() const {
-		return mNode->GetParentNode();
+	size_t ShotImpl::RemoveAllShotSources() {
+		if ( SafeToClearMap( mShotSourceMap ) ) {
+			return ClearMap( mShotSourceMap, mShotSources );
+		}
+		return 0;
 	}
 
-	wpINode ShotImpl::GetParentNode() {
-		return mNode->GetParentNode();
+	size_t ShotImpl::RemoveAllFrames() {
+		if ( SafeToClearMap( mFrameMap ) ) {
+			return ClearMap( mFrameMap, mFrames );
+		}
+		return 0;
 	}
 
-	INode::eNodeTypes ShotImpl::GetNodeType() const {
-		return kNodeTypeOutput;
+	size_t ShotImpl::RemoveShotSource( const std::string & uniqueID ) {
+		return TryAndRemoveElementFromMap( mShotSourceMap, uniqueID, mShotSources );
+	}
+
+	size_t ShotImpl::RemoveFrame( const std::string & uniqueID ) {
+		return TryAndRemoveElementFromMap( mFrameMap, uniqueID, mFrames );
 	}
 
 	spcINode ShotImpl::GetDecendantNode( const std::string & id ) const {
@@ -104,6 +145,8 @@ namespace INT_UMC {
 		auto node = GetChildNode( id );
 		if ( node ) return node;
 		node = GetDecendantFromMap( mShotSourceMap, id );
+		if ( node ) return node;
+		node = GetDecendantFromMap( mFrameMap, id );
 		return node;
 	}
 
@@ -112,107 +155,91 @@ namespace INT_UMC {
 	}
 
 	spINode ShotImpl::GetChildNode( const std::string & id ) {
-		return GetShotSource( id );
+		spINode node = GetShotSource( id );
+		if ( node ) return node;
+		node = GetFrame( id );
+		return node;
 	}
 
 	INode::NodeList ShotImpl::GetAllChildren() {
-		NodeList list;
-		AppendToListFromMap< spINode, ShotSourceMap >( list, mShotSourceMap );
+		INode::NodeList list;
+		AppendToListFromMap< spINode >( list, mShotSourceMap );
+		AppendToListFromMap< spINode >( list, mFrameMap );
 		return list;
 	}
 
 	INode::cNodeList ShotImpl::GetAllChildren() const {
-		cNodeList list;
-		AppendToListFromMap< spcINode, ShotSourceMap >( list, mShotSourceMap );
+		INode::cNodeList list;
+		AppendToListFromMap< spcINode >( list, mShotSourceMap );
+		AppendToListFromMap< spcINode >( list, mFrameMap );
 		return list;
 	}
 
 	INode::NodeList ShotImpl::GetAllDecendants() {
-		NodeList list;
+		INode::NodeList list;
 		AppendDecendantsFromMapToList< spINode >( list, mShotSourceMap );
+		AppendDecendantsFromMapToList< spINode >( list, mFrameMap );
 		return list;
 	}
 
 	INode::cNodeList ShotImpl::GetAllDecendants() const {
-		cNodeList list;
+		INode::cNodeList list;
 		AppendDecendantsFromMapToList< spcINode >( list, mShotSourceMap );
+		AppendDecendantsFromMapToList< spcINode >( list, mFrameMap );
 		return list;
 	}
 
-	size_t ShotImpl::GetReferenceCount() const {
-		return mNode->GetReferenceCount();
+	void ShotImpl::CleanUpOnRemovalFromDOM() {
+		ClearMap( mShotSourceMap, mShotSources );
+		ClearMap( mFrameMap, mFrames );
 	}
 
-	spICustomData ShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
-		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	void ShotImpl::SetUpOnAdditionToDOM() { }
+
+	void ShotImpl::SyncInternalStuffToXMP() const {
+		if ( mInCount != kEditUnitInCountFromBeginning || mDuration != kEditUnitDurationTillEnd ) {
+			spIXMPStructureNode record = TryToGetStructNode( mXMPStructureNode, kRecordPair );
+			if ( !record ) {
+				record = IXMPStructureNode::CreateStructureNode( kRecordPair.first, kRecordPair.second );
+				mXMPStructureNode->AppendNode( record );
+			}
+			AddOrUpdateDataToXMPDOM( mInCount, kInCountPair, record, IgnoreEditUnitInCount );
+			AddOrUpdateDataToXMPDOM( mDuration, kDurationPair, record, IgnoreEditUnitDuration );
+		}
+
+		CallSyncUMCToXMPOnMapElements( mShotSourceMap );
+		CallSyncUMCToXMPOnMapElements( mFrameMap );
 	}
 
-	spcICustomData ShotImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
-		return mNode->GetCustomData( customDataNameSpace, customDataName );
+	void ShotImpl::SyncXMPToInternalStuff( const spINode & spSelf ) {
+		mShotSources = TryToGetArrayNode( mXMPStructureNode, kShotSourcesPair );
+		mFrames = TryToGetArrayNode( mXMPStructureNode, kFramesPair );
+
+		auto record = TryToGetStructNode( mXMPStructureNode, kRecordPair );
+		if ( record ) {
+			UpdateDataFromXMPDOM( mInCount, kInCountPair, record, stoi64 );
+			UpdateDataFromXMPDOM( mDuration, kDurationPair, record, stou64 );
+		}
+
+		PopulateMapFromXMPArrayNode< spIShotSource, ShotImpl >( this, &ShotImpl::AddShotSource, mShotSources, spSelf );
+		PopulateMapFromXMPArrayNode< spIFrame, ShotImpl >( this, &ShotImpl::AddFrame, mFrames, spSelf );
 	}
 
-	bool ShotImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		return mNode->SetCustomData( customDataNameSpace, customDataName, customData );
-	}
-
-	pINodeI ShotImpl::GetInternalNode() {
-		return this;
-	}
-
-	pcINodeI ShotImpl::GetInternalNode() const {
-		return this;
-	}
-
-	void ShotImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
-		mNode->GetInternalNode()->SetExtensionNode( structureNode );
-	}
-
-	NS_XMPCORE::spIXMPStructureNode ShotImpl::GetExtensionNode(bool create /*= false */) const {
-		return mNode->GetInternalNode()->GetExtensionNode( create );
-	}
-
-	NS_XMPCORE::spIXMPStructureNode ShotImpl::GetMergedExtensionNode() const {
-		return mNode->GetInternalNode()->GetMergedExtensionNode();
-	}
-
-	spIUniqueIDAndReferenceTracker ShotImpl::GetUniqueIDAndReferenceTracker() {
-		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
-	}
-
-	spcIUniqueIDAndReferenceTracker ShotImpl::GetUniqueIDAndReferenceTracker() const {
-		return mNode->GetInternalNode()->GetUniqueIDAndReferenceTracker();
-	}
-
-	spIUniqueIDGenerator ShotImpl::GetUniqueIDGenerator() {
-		return mNode->GetInternalNode()->GetUniqueIDGenerator();
-	}
-
-	spcIUniqueIDGenerator ShotImpl::GetUniqueIDGenerator() const {
-		return mNode->GetInternalNode()->GetUniqueIDGenerator();
-	}
-
-	void ShotImpl::RemoveFromDOM() {
-		ClearMap( mShotSourceMap );
-		mNode->GetInternalNode()->RemoveFromDOM();
-	}
-
-	void ShotImpl::AddToDOM( const spINode & parent ) {
-		mNode->GetInternalNode()->AddToDOM( parent );
+	bool ShotImpl::ValidateXMPNode() const {
+		return true;
 	}
 
 	ShotImpl::ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mNode( CreateNode( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeOutput ) )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeShot, node )
 		, mInCount( kEditUnitInCountFromBeginning )
-		, mDuration( kEditUnitDurationTillEnd )
-		, mFrameMap()
-		, mShotSourceMap() { }
+		, mDuration( kEditUnitDurationTillEnd ) { }
 
-	spIShot CreateShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+	ShotImpl::ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-	{
-		return std::make_shared< ShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
-	}
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeShot, kShotsPair )
+		, mInCount( kEditUnitInCountFromBeginning )
+		, mDuration( kEditUnitDurationTillEnd ) { }
 
 }
 

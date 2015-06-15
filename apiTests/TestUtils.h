@@ -1,5 +1,5 @@
-#ifndef IAudioTrack_h__
-#define IAudioTrack_h__ 1
+#ifndef TestUtils_h__
+#define TestUtils_h__ 1
 
 // =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
@@ -10,21 +10,9 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#include "interfaces/ITrack.h"
-#include "baseTypes/RationalType.h"
+#include "UMCFwdDeclarations.h"
 
-namespace UMC {
-
-	class IAudioTrack
-		: public ITrack
-	{
-	public:
-		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
-		virtual EditRate GetAudioEditRate() const = 0;
-
-		virtual ~IAudioTrack() = 0;
-	};
-
-	inline IAudioTrack::~IAudioTrack() {}
+namespace TestUtils {
+	UMC::spIUMC CreateDefaultUMC();
 }
-#endif  // IAudioTrack_h__
+#endif  // TestUtils_h__

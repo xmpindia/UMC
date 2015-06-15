@@ -39,7 +39,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AddingSourcesToUMCTests );
 #include "interfaces/IImageSource.h"
 #include "interfaces/IVideoFrameSource.h"
 
-static UMC::spIUMC CreateDefaultUMC() {
+UMC::spIUMC CreateDefaultUMC() {
 	using namespace UMC;
 	spIUMC sp = IUMC::CreateEmptyUMC();
 
@@ -345,9 +345,34 @@ void AddingSourcesToUMCTests::SourcesContent() {
 
 void AddingSourcesToUMCTests::SerializeSources() {
 	auto sp = CreateDefaultUMC();
+	sp->AddSource( "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\"Adobe XMP Core 5.6-c036 1.000000, 0000/00/00-00:00:00 (debug)\">\n"
+		"<rdf:RDF xmlns:rdf = \"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n"
+		"<rdf:Description rdf:about = \"\"\n"
+			"xmlns:umc = \"http://ns.umc.com/xmp/1.0/UniversalMetadataContainer/\"\n"
+			"xmlns:xmpMM = \"http://ns.adobe.com/xap/1.0/mm/\"\n"
+			"xmlns:xmpDM = \"http://ns.adobe.com/xmp/1.0/DynamicMedia/\">\n"
+				"<umc:videoSources rdf:parseType = \"Resource\">\n"
+					"<xmpMM:DocumentID>1</xmpMM:DocumentID >\n"
+					"<xmpDM:startTimeCode rdf:parseType = \"Resource\">\n"
+						"<xmpDM:timeFormat>23976Timecode</xmpDM:timeFormat>\n"
+						"<xmpDM:timeValue>02:04:12:21</xmpDM:timeValue >\n"
+					"</xmpDM:startTimeCode>\n"
+					"<xmpDM:title>clipNameUser</xmpDM:title>\n"
+					"<umc:audioEditRate>49000</umc:audioEditRate>\n"
+					"<umc:duration>500</umc:duration>\n"
+					"<umc:inCount>52</umc:inCount>\n"
+					"<umc:sourceType>video</umc:sourceType>\n"
+					"<umc:videoEditRate>24000/1001</umc:videoEditRate>\n"
+					"<umc:oldData>DolbyOldData</umc:oldData>\n"
+				"</umc:videoSources>\n"
+			"</rdf:Description>\n"
+			"</rdf:RDF>\n"
+			"</x:xmpmeta>" );
 	std::string rdf = sp->SerializeToBuffer();
-	//std::cout<<rdf<<"\n";
-	
+	//std::cout<<"\n\n*** Old Output:\n\n"<<rdf<<"\n";
+	auto s2 = UMC::IUMC::CreateUMCFromBuffer( rdf );
+	rdf = s2->SerializeToBuffer();
+	//std::cout << "\n\n*** Parsed Output:\n\n" << rdf << "\n";
 }
 
 void AddingSourcesToUMCTests::setUp() {

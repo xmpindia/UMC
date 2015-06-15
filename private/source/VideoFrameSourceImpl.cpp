@@ -11,18 +11,27 @@
 #include "implHeaders/VideoFrameSourceImpl.h"
 #include "interfaces/IVideoSource.h"
 #include "interfaces/IUniqueIDAndReferenceTracker.h"
+#include "XMPCore/Interfaces/IXMPStructureNode.h"
+#include "utils/UMCAndXMPMapping.h"
+#include "utils/Utils.h"
+#include "interfaces/IUMC.h"
 
 namespace INT_UMC {
 
 	VideoFrameSourceImpl::VideoFrameSourceImpl( const spIVideoSource & videoSource,
 		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: mSource( CreateSource( uniqueIDAndReferenceTracker, uniqueIDGenerator ) )
+		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeVideoFrame )
 		, mVideoSource( videoSource )
 		, mInCount( kEditUnitInCountFromBeginning )
 	{
 		if ( !mVideoSource ) THROW_PARENT_CANT_BE_NULL;
 	}
+
+	VideoFrameSourceImpl::VideoFrameSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeVideoFrame, node )
+		, mInCount( kEditUnitInCountFromBeginning ) { }
 
 	void VideoFrameSourceImpl::SetInCount( const EditUnitInCount & inCount ) {
 		mInCount = inCount;
@@ -49,27 +58,27 @@ namespace INT_UMC {
 	}
 
 	void VideoFrameSourceImpl::SetClipName( const std::string & clipName ) {
-		mSource->SetClipName( clipName );
+		SourceImpl::SetClipName( clipName );
 	}
 
 	std::string VideoFrameSourceImpl::GetClipName() const {
-		return mSource->GetClipName();
+		return SourceImpl::GetClipName();
 	}
 
 	INode::eNodeTypes VideoFrameSourceImpl::GetNodeType() const {
-		return mSource->GetNodeType();
+		return SourceImpl::GetNodeType();
 	}
 
 	const std::string & VideoFrameSourceImpl::GetUniqueID() const {
-		return mSource->GetUniqueID();
+		return SourceImpl::GetUniqueID();
 	}
 
 	wpcINode VideoFrameSourceImpl::GetParentNode() const {
-		return mSource->GetParentNode();
+		return SourceImpl::GetParentNode();
 	}
 
 	wpINode VideoFrameSourceImpl::GetParentNode() {
-		return mSource->GetParentNode();
+		return SourceImpl::GetParentNode();
 	}
 
 	spcINode VideoFrameSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
@@ -105,19 +114,19 @@ namespace INT_UMC {
 	}
 
 	size_t VideoFrameSourceImpl::GetReferenceCount() const {
-		return mSource->GetReferenceCount();
+		return SourceImpl::GetReferenceCount();
 	}
 
 	spICustomData VideoFrameSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) {
-		return mSource->GetCustomData( customDataNameSpace, customDataName );
+		return SourceImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	spcICustomData VideoFrameSourceImpl::GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const {
-		return mSource->GetCustomData( customDataNameSpace, customDataName );
+		return SourceImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
 	bool VideoFrameSourceImpl::SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) {
-		return mSource->SetCustomData( customDataNameSpace, customDataName, customData );
+		return SourceImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
 	pINodeI VideoFrameSourceImpl::GetInternalNode() {
@@ -128,48 +137,80 @@ namespace INT_UMC {
 		return this;
 	}
 
-	spcIUniqueIDGenerator VideoFrameSourceImpl::GetUniqueIDGenerator() const {
-		return mSource->GetInternalNode()->GetUniqueIDGenerator();
+	std::string VideoFrameSourceImpl::Serialize() const {
+		return SerializeXMP();
 	}
 
-	spIUniqueIDGenerator VideoFrameSourceImpl::GetUniqueIDGenerator() {
-		return mSource->GetInternalNode()->GetUniqueIDGenerator();
+	void VideoFrameSourceImpl::CleanUpOnRemovalFromDOM() {
+		mspUniqueIDAndReferenceTracker->RemoveReference( mVideoSource->GetUniqueID() );
 	}
 
-	spcIUniqueIDAndReferenceTracker VideoFrameSourceImpl::GetUniqueIDAndReferenceTracker() const {
-		return mSource->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	void VideoFrameSourceImpl::SetUpOnAdditionToDOM() {
+		if ( !mVideoSource ) {
+			std::string userUniqueID;
+			auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
+			UpdateDataFromXMPDOM( userUniqueID, kUniqueIDPair, source, kEmptyString );
+			std::string sourceID;
+			mspUniqueIDAndReferenceTracker->GetUserUniqueID( userUniqueID, sourceID );
+			spIUMC umc = GetParent< IUMC >().lock();
+			mVideoSource = umc->GetVideoSource( sourceID );
+		}
+		mspUniqueIDAndReferenceTracker->AddReference( mVideoSource->GetUniqueID() );
 	}
 
-	spIUniqueIDAndReferenceTracker VideoFrameSourceImpl::GetUniqueIDAndReferenceTracker() {
-		return mSource->GetInternalNode()->GetUniqueIDAndReferenceTracker();
+	void VideoFrameSourceImpl::SyncInternalStuffToXMP() const {
+		SourceImpl::SyncInternalStuffToXMP();
+		auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
+		if ( !source ) {
+			source = IXMPStructureNode::CreateStructureNode( kSourcePair.first, kSourcePair.second );
+			mXMPStructureNode->AppendNode( source );
+		}
+		AddOrUpdateDataToXMPDOM( mVideoSource->GetUniqueID(), kUniqueIDPair, source );
+		AddOrUpdateDataToXMPDOM( mInCount, kInCountPair, source, IgnoreEditUnitInCount );
 	}
 
-	void VideoFrameSourceImpl::AddToDOM( const spINode & parent ) {
-		mSource->GetInternalNode()->AddToDOM( parent );
-		GetUniqueIDAndReferenceTracker()->AddReference( mVideoSource->GetUniqueID() );
+	void VideoFrameSourceImpl::SyncXMPToInternalStuff() {
+		SourceImpl::SyncXMPToInternalStuff();
+		auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
+		if ( source ) {
+			UpdateDataFromXMPDOM( mInCount, kInCountPair, source, stoi64 );
+		}
 	}
 
-	void VideoFrameSourceImpl::RemoveFromDOM() {
-		mSource->GetInternalNode()->RemoveFromDOM();
-		GetUniqueIDAndReferenceTracker()->RemoveReference( mVideoSource->GetUniqueID() );
+	NS_XMPCORE::spIXMPStructureNode VideoFrameSourceImpl::GetXMPNode() const {
+		return mXMPStructureNode;
 	}
 
-	NS_XMPCORE::spIXMPStructureNode VideoFrameSourceImpl::GetExtensionNode(bool create /*= false */) const {
-		return mSource->GetInternalNode()->GetExtensionNode( create );
+	bool VideoFrameSourceImpl::ValidateXMPNode() const {
+		std::string userUniqueID;
+		auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
+		if ( source ) return false;
+		UpdateDataFromXMPDOM( userUniqueID, kUniqueIDPair, source, kEmptyString );
+		if ( userUniqueID.empty() ) return false;
+		std::string sourceID;
+		mspUniqueIDAndReferenceTracker->GetUserUniqueID( userUniqueID, sourceID );
+		if ( sourceID.empty() ) return false;
+		return mspUniqueIDAndReferenceTracker->IsUniqueIDPresent( sourceID );
 	}
 
-	NS_XMPCORE::spIXMPStructureNode VideoFrameSourceImpl::GetMergedExtensionNode() const {
-		return mSource->GetInternalNode()->GetMergedExtensionNode();
+	UMC::pcINode VideoFrameSourceImpl::GetNode() const {
+		return this;
 	}
 
-	void VideoFrameSourceImpl::SetExtensionNode( const spIXMPStructureNode & structureNode ) {
-		mSource->GetInternalNode()->SetExtensionNode( structureNode );
+	UMC::pINode VideoFrameSourceImpl::GetNode() {
+		return this;
 	}
 
-	spIVideoFrameSource CreateVideoFrameSource( const spIVideoSource & videoSource,
-		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator )
+	spIVideoFrameSource CreateVideoFrameSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIVideoSource & videoSource, const spIXMPStructureNode & node )
 	{
-		return std::make_shared< VideoFrameSourceImpl >( videoSource, uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		if ( node ) {
+			auto retValue = std::make_shared< VideoFrameSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
+			retValue->SyncXMPToUMC();
+			return retValue;
+		}
+		else {
+			return std::make_shared< VideoFrameSourceImpl >( videoSource, uniqueIDAndReferenceTracker, uniqueIDGenerator );
+		}
 	}
 }
