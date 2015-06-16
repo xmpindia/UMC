@@ -9,12 +9,13 @@
 
 
 #include "implHeaders/AudioTrackImpl.h"
+#include "utils/UMCAndXMPMapping.h"
 
 namespace INT_UMC {
 
 	AudioTrackImpl::AudioTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeAudio )
+		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeAudio, kAudioTracksPair )
 		, mAudioEditRate( 1 ) {}
 
 	AudioTrackImpl::AudioTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,

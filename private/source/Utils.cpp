@@ -60,8 +60,16 @@ namespace INT_UMC {
 	}
 
 	void CreateEquivalentXMPNodes( const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode,
-		const NamespacePropertyNamePair & arrayPair, spIXMPStructureNode & containerNode /*= spIXMPStructureNode()*/,
-		const NamespacePropertyNamePair & containerPair /*= NamespacePropertyNamePair()*/ )
+		const NamespacePropertyNamePair & arrayPair )
+	{
+		if ( !arrayNode ) {
+			arrayNode = IXMPArrayNode::CreateUnorderedArrayNode( arrayPair.first, arrayPair.second );
+			parent->AppendNode( arrayNode );
+		}
+	}
+
+	void CreateEquivalentXMPNodes( const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode,
+		const NamespacePropertyNamePair & arrayPair, spIXMPStructureNode & containerNode, const NamespacePropertyNamePair & containerPair )
 	{
 		if ( !arrayNode ) {
 			arrayNode = IXMPArrayNode::CreateUnorderedArrayNode( arrayPair.first, arrayPair.second );

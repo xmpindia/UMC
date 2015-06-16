@@ -20,11 +20,9 @@
 
 namespace INT_UMC {
 
-	static NamespacePropertyNamePair sTrackPairArray[2] = { kVideoTracksPair, kAudioTracksPair };
-
 	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeTrack, sTrackPairArray[trackType] ) { }
+		const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType, const NamespacePropertyNamePair & pair )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeTrack, pair ) { }
 
 	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType,

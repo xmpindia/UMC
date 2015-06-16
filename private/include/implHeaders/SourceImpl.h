@@ -21,7 +21,8 @@ namespace INT_UMC {
 	{
 	public:
 		SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType );
+			const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType,
+			const NamespacePropertyNamePair & pair );
 
 		SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType,

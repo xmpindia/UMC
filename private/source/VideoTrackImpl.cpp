@@ -9,12 +9,13 @@
 
 
 #include "implHeaders/VideoTrackImpl.h"
+#include "utils/UMCAndXMPMapping.h"
 
 namespace INT_UMC {
 
 	VideoTrackImpl::VideoTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeVideo )
+		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeVideo, kVideoTracksPair )
 		, mVideoEditRate( 1 )
 		, mAudioEditRate( 1 ) {}
 

@@ -11,11 +11,13 @@
 // =================================================================================================
 
 #include "UMCDefines_I.h"
+#include "UMCFwdDeclarations.h"
 #include "baseTypes/RationalType.h"
 #include "baseTypes/TimeCode.h"
 
 #include "XMPCore/Interfaces/IXMPStructureNode.h"
-#include "XMPCore/interfaces/IXMPSimpleNode.h"
+#include "XMPCore/Interfaces/IXMPSimpleNode.h"
+#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
 
 namespace INT_UMC {
 	using namespace UMC;

@@ -21,7 +21,7 @@ namespace INT_UMC {
 	{
 	public:
 		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType );
+			const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType, const NamespacePropertyNamePair & pair );
 
 		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType,

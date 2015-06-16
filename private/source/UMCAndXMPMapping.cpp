@@ -13,7 +13,7 @@
 #include <sstream>
 
 #include "XMPCore/Interfaces/IXMPDOMImplementationRegistry.h"
-#include "XMPCOre/Interfaces/IXMPDOMParser.h"
+#include "XMPCore/Interfaces/IXMPDOMParser.h"
 
 namespace INT_UMC {
 	const NamespacePropertyNamePair kSourcesPair( kXMP_NS_UMC, "sources" );

@@ -12,8 +12,6 @@
 
 namespace INT_UMC {
 
-	static NamespacePropertyNamePair sourcePairs[4] = { kVideoSourcesPair, kAudioSourcesPair, kVideoFrameSourcesPair, kImageSourcesPair };
-
 	void SourceImpl::SetClipName( const std::string & clipName ) {
 		mClipName = clipName;
 	}
@@ -35,8 +33,9 @@ namespace INT_UMC {
 	}
 
 	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource, sourcePairs[sourceType] ) { }
+		const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType,
+		const NamespacePropertyNamePair & pair )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource, pair ) { }
 
 	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes,

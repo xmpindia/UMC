@@ -186,8 +186,11 @@ namespace INT_UMC {
 	NS_XMPCORE::spIXMPDOMParser GetParser( bool reset = false );
 
 	void CreateEquivalentXMPNodes(
+		const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode, const NamespacePropertyNamePair & arrayPair );
+	
+	void CreateEquivalentXMPNodes(
 		const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode, const NamespacePropertyNamePair & arrayPair,
-		spIXMPStructureNode & containerNode = spIXMPStructureNode(), const NamespacePropertyNamePair & containerPair = NamespacePropertyNamePair() );
+		spIXMPStructureNode & containerNode, const NamespacePropertyNamePair & containerPair );
 
 	spIXMPArrayNode TryToGetArrayNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair );
 	spIXMPStructureNode TryToGetStructNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair );

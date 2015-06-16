@@ -21,7 +21,7 @@ namespace INT_UMC {
 	VideoFrameSourceImpl::VideoFrameSourceImpl( const spIVideoSource & videoSource,
 		const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeVideoFrame )
+		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeVideoFrame, kVideoFrameSourcesPair )
 		, mVideoSource( videoSource )
 		, mInCount( kEditUnitInCountFromBeginning )
 	{

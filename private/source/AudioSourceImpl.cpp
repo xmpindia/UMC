@@ -16,7 +16,7 @@ namespace INT_UMC {
 
 	AudioSourceImpl::AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ISource::kSourceTypeAudio )
+		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ISource::kSourceTypeAudio, kAudioSourcesPair )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd )
 		, mAudioEditRate( 48000 )
