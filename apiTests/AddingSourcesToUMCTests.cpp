@@ -10,6 +10,7 @@
 #include "cppunit/TestCase.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include <stdexcept>
+#include "TestUtils.h"
 
 class AddingSourcesToUMCTests : public CppUnit::TestCase {
 
@@ -17,6 +18,7 @@ class AddingSourcesToUMCTests : public CppUnit::TestCase {
 		CPPUNIT_TEST( CountOfSources );
 		CPPUNIT_TEST( SourcesContent );
 		CPPUNIT_TEST( SerializeSources );
+		CPPUNIT_TEST( ParseSources );
 	CPPUNIT_TEST_SUITE_END();
 
 
@@ -24,6 +26,7 @@ protected:
 	void CountOfSources();
 	void SourcesContent();
 	void SerializeSources();
+	void ParseSources();
 
 public:
 	virtual void setUp();
@@ -345,34 +348,90 @@ void AddingSourcesToUMCTests::SourcesContent() {
 
 void AddingSourcesToUMCTests::SerializeSources() {
 	auto sp = CreateDefaultUMC();
-	sp->AddSource( "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\"Adobe XMP Core 5.6-c036 1.000000, 0000/00/00-00:00:00 (debug)\">\n"
-		"<rdf:RDF xmlns:rdf = \"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n"
-		"<rdf:Description rdf:about = \"\"\n"
-			"xmlns:umc = \"http://ns.umc.com/xmp/1.0/UniversalMetadataContainer/\"\n"
-			"xmlns:xmpMM = \"http://ns.adobe.com/xap/1.0/mm/\"\n"
-			"xmlns:xmpDM = \"http://ns.adobe.com/xmp/1.0/DynamicMedia/\">\n"
-				"<umc:videoSources rdf:parseType = \"Resource\">\n"
-					"<xmpMM:DocumentID>1</xmpMM:DocumentID >\n"
-					"<xmpDM:startTimeCode rdf:parseType = \"Resource\">\n"
-						"<xmpDM:timeFormat>23976Timecode</xmpDM:timeFormat>\n"
-						"<xmpDM:timeValue>02:04:12:21</xmpDM:timeValue >\n"
-					"</xmpDM:startTimeCode>\n"
-					"<xmpDM:title>clipNameUser</xmpDM:title>\n"
-					"<umc:audioEditRate>49000</umc:audioEditRate>\n"
-					"<umc:duration>500</umc:duration>\n"
-					"<umc:inCount>52</umc:inCount>\n"
-					"<umc:sourceType>video</umc:sourceType>\n"
-					"<umc:videoEditRate>24000/1001</umc:videoEditRate>\n"
-					"<umc:oldData>DolbyOldData</umc:oldData>\n"
-				"</umc:videoSources>\n"
-			"</rdf:Description>\n"
-			"</rdf:RDF>\n"
-			"</x:xmpmeta>" );
-	std::string rdf = sp->SerializeToBuffer();
-	//std::cout<<"\n\n*** Old Output:\n\n"<<rdf<<"\n";
-	auto s2 = UMC::IUMC::CreateUMCFromBuffer( rdf );
-	rdf = s2->SerializeToBuffer();
-	//std::cout << "\n\n*** Parsed Output:\n\n" << rdf << "\n";
+
+	using namespace TestUtils;
+	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingSources.xml" ) );
+	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+}
+
+void AddingSourcesToUMCTests::ParseSources() {
+	std::cout<< "********** AddingOutputsToUMCTests::ParseSources **********"<<"\n";
+	using namespace TestUtils;
+	using namespace UMC;
+	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingSources.xml" ) ) );
+
+	std::cout << sp->SourceCount() << std::endl;
+
+	/*auto videoSources = sp->GetAllVideoSources();
+	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetClipName(), std::string( "clipNamev1" ) );
+	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetType(), ISource::kSourceTypeVideo );
+	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetVideoEditRate(), EditRate( 24000, 1001 ) );
+	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetInCount(), ( EditUnitInCount ) 5 );
+	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetDuration(), ( EditUnitDuration ) 50 );
+	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetTimeCode(), TimeCode( TimeCode::k23_976Fps, "02:04:12:21" ) );
+
+	for( int i= 1; i<sp->VideoSourceCount(); i++)
+	{
+		CPPUNIT_ASSERT_EQUAL( videoSources[i]->GetClipName(), std::string( "" ) );
+		CPPUNIT_ASSERT_EQUAL( videoSources[i]->GetType(), ISource::kSourceTypeVideo );
+		CPPUNIT_ASSERT_EQUAL( videoSources[i]->GetVideoEditRate(), EditRate( 1 ) );
+		CPPUNIT_ASSERT_EQUAL( videoSources[i]->GetAudioEditRate(), EditRate( 48000 ) );
+		CPPUNIT_ASSERT_EQUAL( videoSources[i]->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+		CPPUNIT_ASSERT_EQUAL( videoSources[i]->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+		CPPUNIT_ASSERT_EQUAL( videoSources[i]->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
+	}
+
+	auto audioSources = sp->GetAllAudioSources();
+	CPPUNIT_ASSERT_EQUAL( audioSources[1]->GetClipName(), std::string( "clipNamea1" ) );
+	CPPUNIT_ASSERT_EQUAL( audioSources[1]->GetType(), ISource::kSourceTypeAudio );
+	CPPUNIT_ASSERT_EQUAL( audioSources[1]->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( audioSources[1]->GetInCount(), ( EditUnitInCount ) 10 );
+	CPPUNIT_ASSERT_EQUAL( audioSources[1]->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+	CPPUNIT_ASSERT_EQUAL( audioSources[1]->GetTimeCode(), TimeCode( TimeCode::k25Fps, 1, 2, 3, 4 ) );
+
+	CPPUNIT_ASSERT_EQUAL( audioSources[2]->GetClipName(), std::string( "clipNamea2" ) );
+	CPPUNIT_ASSERT_EQUAL( audioSources[2]->GetType(), ISource::kSourceTypeAudio );
+	CPPUNIT_ASSERT_EQUAL( audioSources[2]->GetAudioEditRate(), EditRate( 44100 ) );
+	CPPUNIT_ASSERT_EQUAL( audioSources[2]->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( audioSources[2]->GetDuration(), ( EditUnitDuration ) 200 );
+	CPPUNIT_ASSERT_EQUAL( audioSources[2]->GetTimeCode(), TimeCode( TimeCode::k29_97Fps, 1, 2, 3, 4, true ) );
+
+	for( int i= 0; i<sp->VideoSourceCount(); i++)
+	{
+		if( i == 1 || i == 2 )
+			continue;
+		CPPUNIT_ASSERT_EQUAL( audioSources[i]->GetClipName(), std::string( "" ) );
+		CPPUNIT_ASSERT_EQUAL( audioSources[i]->GetType(), ISource::kSourceTypeAudio );
+		CPPUNIT_ASSERT_EQUAL( audioSources[i]->GetAudioEditRate(), EditRate( 48000 ) );
+		CPPUNIT_ASSERT_EQUAL( audioSources[i]->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+		CPPUNIT_ASSERT_EQUAL( audioSources[i]->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+		CPPUNIT_ASSERT_EQUAL( audioSources[i]->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
+	}
+
+	auto videoFrameSources = sp->GetAllVideoFrameSources();
+	CPPUNIT_ASSERT_EQUAL( videoFrameSources[0]->GetClipName(), std::string( "clipNamevf1" ) );
+	CPPUNIT_ASSERT_EQUAL( videoFrameSources[0]->GetType(), ISource::kSourceTypeVideoFrame );
+	CPPUNIT_ASSERT_EQUAL( videoFrameSources[0]->GetInCount(), ( EditUnitInCount ) 5 );
+	CPPUNIT_ASSERT_EQUAL( videoFrameSources[0]->GetTimeCode(), TimeCode( TimeCode::k23_976Fps, "02:04:12:21" ) );
+
+	for( int i= 1; i<sp->VideoFrameSourceCount(); i++)
+	{
+		CPPUNIT_ASSERT_EQUAL( videoFrameSources[i]->GetClipName(), std::string( "" ) );
+		CPPUNIT_ASSERT_EQUAL( videoFrameSources[i]->GetType(), ISource::kSourceTypeVideoFrame );
+		CPPUNIT_ASSERT_EQUAL( videoFrameSources[i]->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+		CPPUNIT_ASSERT_EQUAL( videoFrameSources[i]->GetTimeCode(), TimeCode( TimeCode::k23_976Fps, "02:04:12:21" ) );
+	}
+
+	auto imageSources = sp->GetAllImageSources();
+	CPPUNIT_ASSERT_EQUAL( imageSources[0]->GetClipName(), std::string( "clipNamei1" ) );
+	CPPUNIT_ASSERT_EQUAL( imageSources[0]->GetType(), ISource::kSourceTypeImage );
+
+	for( int i= 1; i<sp->ImageSourceCount(); i++)
+	{
+		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetClipName(), std::string( "" ) );
+		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetType(), ISource::kSourceTypeImage );
+	}*/
 }
 
 void AddingSourcesToUMCTests::setUp() {

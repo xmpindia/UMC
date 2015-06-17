@@ -9,18 +9,23 @@
 
 #include "cppunit/TestCase.h"
 #include "cppunit/extensions/HelperMacros.h"
+#include "TestUtils.h"
 
 class AddingTracksToOuputsTests : public CppUnit::TestCase {
 
 	CPPUNIT_TEST_SUITE( AddingTracksToOuputsTests );
 	CPPUNIT_TEST( CountOfTracks );
 	CPPUNIT_TEST( TracksContent );
+	CPPUNIT_TEST( SerializeTracks );
+	CPPUNIT_TEST( ParseTracks );
 	CPPUNIT_TEST_SUITE_END();
 
 
 protected:
 	void CountOfTracks();
 	void TracksContent();
+	void SerializeTracks();
+	void ParseTracks();
 
 public:
 	virtual void setUp();
@@ -194,6 +199,55 @@ void AddingTracksToOuputsTests::TracksContent() {
 		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetName(), std::string( "" ) );
 		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetAudioEditRate(), EditRate( 1 ) );
 	}
+}
+
+void AddingTracksToOuputsTests::SerializeTracks() {
+	std::cout<< "********** AddingTracksToOuputsTests::SerializeTracks **********"<<"\n";
+	auto sp = CreateDefaultUMC();
+
+	using namespace TestUtils;
+	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingTracks.xml" ) );
+	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+}
+
+void AddingTracksToOuputsTests::ParseTracks() {
+	std::cout<< "********** AddingTracksToOuputsTests::ParseTracks **********"<<"\n";
+	using namespace TestUtils;
+	using namespace UMC;
+	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingTracks.xml" ) ) );
+
+	auto outputs = sp->GetAllOutputs();
+	/*auto videoTracks = outputs[0]->GetAllVideoTracks();
+
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->GetType(), ITrack::kTrackTypeVideo );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->GetName(), std::string( "videoTrack1" ) );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->GetVideoEditRate(), EditRate( 24000, 1001 ) );
+	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->GetAudioEditRate(), EditRate( 48000 ) );
+
+	for( int i = 1; i < outputs[0]->VideoTrackCount(); i++ )
+	{
+		CPPUNIT_ASSERT_EQUAL( videoTracks[i]->GetType(), ITrack::kTrackTypeVideo );
+		CPPUNIT_ASSERT_EQUAL( videoTracks[i]->GetName(), std::string( "" ) );
+		CPPUNIT_ASSERT_EQUAL( videoTracks[i]->GetVideoEditRate(), EditRate( 1 ) );
+		CPPUNIT_ASSERT_EQUAL( videoTracks[i]->GetAudioEditRate(), EditRate( 1 ) );
+	}
+
+	auto audioTracks = outputs[0]->GetAllAudioTracks();
+
+	CPPUNIT_ASSERT_EQUAL( audioTracks[0]->GetType(), ITrack::kTrackTypeAudio );
+	CPPUNIT_ASSERT_EQUAL( audioTracks[0]->GetName(), std::string( "audioTrack1" ) );
+	CPPUNIT_ASSERT_EQUAL( audioTracks[0]->GetAudioEditRate(), EditRate( 44000 ) );
+
+	CPPUNIT_ASSERT_EQUAL( audioTracks[1]->GetType(), ITrack::kTrackTypeAudio );
+	CPPUNIT_ASSERT_EQUAL( audioTracks[1]->GetName(), std::string( "audioTrack2" ) );
+	CPPUNIT_ASSERT_EQUAL( audioTracks[1]->GetAudioEditRate(), EditRate( 1 ) );
+
+	for( int i = 2; i < outputs[0]->VideoTrackCount(); i++ )
+	{
+		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetType(), ITrack::kTrackTypeAudio );
+		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetName(), std::string( "" ) );
+		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetAudioEditRate(), EditRate( 1 ) );
+	}*/
 }
 
 

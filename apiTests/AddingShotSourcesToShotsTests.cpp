@@ -95,8 +95,8 @@ void AddingShotSourcesToShotsTests::ShotSourcesContent() {
 	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
 
 	auto rdfRep = sp->SerializeToBuffer();
-	std::cout<<" ******* AddingDoViDisplayCustomDataToUMC::Test *****\n";
-	std::cout<<rdfRep<<"\n\n\n\n\n";
+	//std::cout<<" ******* AddingDoViDisplayCustomDataToUMC::Test *****\n";
+	//std::cout<<rdfRep<<"\n\n\n\n\n";
 }
 
 
