@@ -217,7 +217,7 @@ void AddingTracksToOuputsTests::ParseTracks() {
 	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingTracks.xml" ) ) );
 
 	auto outputs = sp->GetAllOutputs();
-	/*auto videoTracks = outputs[0]->GetAllVideoTracks();
+	auto videoTracks = outputs[0]->GetAllVideoTracks();
 
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->GetType(), ITrack::kTrackTypeVideo );
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->GetName(), std::string( "videoTrack1" ) );
@@ -247,7 +247,7 @@ void AddingTracksToOuputsTests::ParseTracks() {
 		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetType(), ITrack::kTrackTypeAudio );
 		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetName(), std::string( "" ) );
 		CPPUNIT_ASSERT_EQUAL( audioTracks[i]->GetAudioEditRate(), EditRate( 1 ) );
-	}*/
+	}
 }
 
 

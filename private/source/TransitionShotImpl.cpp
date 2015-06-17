@@ -142,7 +142,7 @@ namespace INT_UMC {
 	}
 
 	size_t TransitionShotImpl::RemoveAllShotSources() {
-		return ShotImpl::RemoveAllFrames();
+		return ShotImpl::RemoveAllShotSources();
 	}
 
 	UMC::spcIShotSource TransitionShotImpl::GetShotSource( const std::string & uniqueID ) const {

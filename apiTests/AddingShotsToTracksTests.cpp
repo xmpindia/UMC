@@ -9,18 +9,23 @@
 
 #include "cppunit/TestCase.h"
 #include "cppunit/extensions/HelperMacros.h"
+#include "TestUtils.h"
 
 class AddingShotsToTracksTests : public CppUnit::TestCase {
 
 	CPPUNIT_TEST_SUITE( AddingShotsToTracksTests );
 	CPPUNIT_TEST( CountOfShots );
 	CPPUNIT_TEST( ShotsContent );
+	CPPUNIT_TEST( SerializeShots );
+	CPPUNIT_TEST( ParseShots );
 	CPPUNIT_TEST_SUITE_END();
 
 
 protected:
 	void CountOfShots();
 	void ShotsContent();
+	void SerializeShots();
+	void ParseShots();
 
 public:
 	virtual void setUp();
@@ -153,6 +158,43 @@ void AddingShotsToTracksTests::ShotsContent() {
 	using namespace UMC;
 
 	auto sp = CreateDefaultUMC();
+	auto outputs = sp->GetAllOutputs();
+	auto videoTracks = outputs[0]->GetAllVideoTracks();
+	auto shots = videoTracks[0]->GetAllShots();
+
+	CPPUNIT_ASSERT_EQUAL( shots[0]->GetInCount(), (EditUnitInCount) 10 );
+	CPPUNIT_ASSERT_EQUAL( shots[0]->GetDuration(), (EditUnitDuration) 15 );
+
+	CPPUNIT_ASSERT_EQUAL( shots[1]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( shots[1]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
+
+	CPPUNIT_ASSERT_EQUAL( shots[2]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( shots[2]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
+
+	CPPUNIT_ASSERT_EQUAL( shots[3]->GetInCount(), (EditUnitInCount) 8 );
+	CPPUNIT_ASSERT_EQUAL( shots[3]->GetDuration(), (EditUnitDuration) 3 );
+
+	CPPUNIT_ASSERT_EQUAL( shots[4]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( shots[4]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
+}
+
+void AddingShotsToTracksTests::SerializeShots()
+{
+	std::cout<< "********** AddingShotsToTracksTests::SerializeShots **********"<<"\n";
+	auto sp = CreateDefaultUMC();
+
+	using namespace TestUtils;
+	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShots.xml" ) );
+	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+}
+
+void AddingShotsToTracksTests::ParseShots()
+{
+	std::cout<< "********** AddingShotsToTracksTests::ParseShots **********"<<"\n";
+	using namespace TestUtils;
+	using namespace UMC;
+	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShots.xml" ) ) );
+
 	auto outputs = sp->GetAllOutputs();
 	auto videoTracks = outputs[0]->GetAllVideoTracks();
 	auto shots = videoTracks[0]->GetAllShots();

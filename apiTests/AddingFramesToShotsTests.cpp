@@ -9,18 +9,23 @@
 
 #include "cppunit/TestCase.h"
 #include "cppunit/extensions/HelperMacros.h"
+#include "TestUtils.h"
 
 class AddingFramesToShotsTests : public CppUnit::TestCase {
 
 	CPPUNIT_TEST_SUITE( AddingFramesToShotsTests );
 	CPPUNIT_TEST( CountOfFrames );
 	CPPUNIT_TEST( FramesContent );
+	CPPUNIT_TEST( SerializeFrames );
+	CPPUNIT_TEST( ParseFrames );
 	CPPUNIT_TEST_SUITE_END();
 
 
 protected:
 	void CountOfFrames();
 	void FramesContent();
+	void SerializeFrames();
+	void ParseFrames();
 
 public:
 	virtual void setUp();
@@ -57,7 +62,14 @@ static UMC::spIUMC CreateDefaultUMC() {
 	clipShot1->SetInCount( 10 );
 	clipShot1->SetDuration( 15 );
 
-	auto frame = clipShot1->AddFrame( source1 );
+	auto frame1 = clipShot1->AddFrame( source1 );
+	frame1->SetShotInCount( 12 );
+
+	auto frame2 = clipShot1->AddFrame( source1 );
+	frame2->SetShotInCount( 13 );
+
+	auto frame3 = clipShot1->AddFrame( source1 );
+	frame3->SetShotInCount( 14 );
 
 	return sp;
 }
@@ -67,7 +79,26 @@ void AddingFramesToShotsTests::CountOfFrames() {
 	using namespace UMC;
 
 	auto sp = CreateDefaultUMC();
+	auto sources = sp->GetAllSources();
+	auto outputs = sp->GetAllOutputs();
+	auto tracks = outputs[0]->GetAllTracks();
+	auto shots = tracks[0]->GetAllShots();
+	auto frames = shots[0]->GetAllFrames();
 
+	CPPUNIT_ASSERT_EQUAL( shots[0]->FrameCount(), ( size_t ) 3 );
+
+	auto frame1 = shots[0]->AddFrame( sources[0] );
+	frame1->SetShotInCount( 15 );
+
+	CPPUNIT_ASSERT_EQUAL( shots[0]->FrameCount(), ( size_t ) 4 );
+
+	shots[0]->RemoveFrame( frame1->GetUniqueID() );
+
+	CPPUNIT_ASSERT_EQUAL( shots[0]->FrameCount(), ( size_t ) 3 );
+
+	shots[0]->RemoveAllFrames();
+
+	CPPUNIT_ASSERT_EQUAL( shots[0]->FrameCount(), ( size_t ) 0 );
 }
 
 
@@ -83,6 +114,8 @@ void AddingFramesToShotsTests::FramesContent() {
 	auto frames = shots[0]->GetAllFrames();
 	auto source = frames[0]->GetSource();
 
+	CPPUNIT_ASSERT_EQUAL( frames[0]->GetShotInCount(), ( EditUnitInCount ) 12 );
+
 	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );
 	CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
 
@@ -94,7 +127,103 @@ void AddingFramesToShotsTests::FramesContent() {
 	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
 	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
 
+	source = frames[1]->GetSource();
 
+	CPPUNIT_ASSERT_EQUAL( frames[1]->GetShotInCount(), ( EditUnitInCount ) 13 );
+
+	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );
+	CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
+
+	vsource = dynamic_pointer_cast< const IVideoSource >( source );
+	
+	CPPUNIT_ASSERT_EQUAL( vsource->GetVideoEditRate(), EditRate( 1 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
+
+	source = frames[2]->GetSource();
+
+	CPPUNIT_ASSERT_EQUAL( frames[2]->GetShotInCount(), ( EditUnitInCount ) 14 );
+
+	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );
+	CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
+
+	vsource = dynamic_pointer_cast< const IVideoSource >( source );
+	
+	CPPUNIT_ASSERT_EQUAL( vsource->GetVideoEditRate(), EditRate( 1 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
+}
+
+void AddingFramesToShotsTests::SerializeFrames() {
+	std::cout<< "********** AddingFramesToShotsTests::SerializeFrames **********"<<"\n";
+	auto sp = CreateDefaultUMC();
+
+	using namespace TestUtils;
+	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingFrames.xml" ) );
+	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+}
+
+void AddingFramesToShotsTests::ParseFrames() {
+	std::cout<< "********** AddingFramesToShotsTests::ParseFrames **********"<<"\n";
+	using namespace TestUtils;
+	using namespace UMC;
+	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingFrames.xml" ) ) );
+
+	auto outputs = sp->GetAllOutputs();
+	auto tracks = outputs[0]->GetAllTracks();
+	auto shots = tracks[0]->GetAllShots();
+	auto frames = shots[0]->GetAllFrames();
+
+	std::cout << shots[0]->FrameCount() << std::endl;
+	
+	/*auto source = frames[0]->GetSource();
+
+	CPPUNIT_ASSERT_EQUAL( frames[0]->GetShotInCount(), ( EditUnitInCount ) 12 );
+
+	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );
+	CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
+
+	auto vsource = dynamic_pointer_cast< const IVideoSource >( source );
+	
+	CPPUNIT_ASSERT_EQUAL( vsource->GetVideoEditRate(), EditRate( 1 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
+
+	source = frames[1]->GetSource();
+
+	CPPUNIT_ASSERT_EQUAL( frames[1]->GetShotInCount(), ( EditUnitInCount ) 13 );
+
+	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );
+	CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
+
+	vsource = dynamic_pointer_cast< const IVideoSource >( source );
+	
+	CPPUNIT_ASSERT_EQUAL( vsource->GetVideoEditRate(), EditRate( 1 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
+
+	source = frames[2]->GetSource();
+
+	CPPUNIT_ASSERT_EQUAL( frames[2]->GetShotInCount(), ( EditUnitInCount ) 14 );
+
+	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );
+	CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
+
+	vsource = dynamic_pointer_cast< const IVideoSource >( source );
+	
+	CPPUNIT_ASSERT_EQUAL( vsource->GetVideoEditRate(), EditRate( 1 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetAudioEditRate(), EditRate( 48000 ) );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
+	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );*/
 }
 
 
