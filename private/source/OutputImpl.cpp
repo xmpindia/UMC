@@ -135,6 +135,7 @@ namespace INT_UMC {
 
 	void OutputImpl::SyncInternalStuffToXMP() const {
 		AddOrUpdateDataToXMPDOM( mTitle, kTitlePair, mXMPStructureNode );
+		AddOrUpdateDataToXMPDOM( mName, kNamePair, mXMPStructureNode );
 		AddOrUpdateDataToXMPDOM( mCanvasAspectRatio, kCanvasAspectRatioPair, mXMPStructureNode );
 		AddOrUpdateDataToXMPDOM( mImageAspectRatio, kImageAspectRatioPair, mXMPStructureNode );
 		AddOrUpdateDataToXMPDOM( mVideoEditRate, kVideoEditRatePair, mXMPStructureNode );
@@ -152,6 +153,7 @@ namespace INT_UMC {
 		}
 
 		UpdateDataFromXMPDOM( mTitle, kTitlePair, mXMPStructureNode, kEmptyString );
+		UpdateDataFromXMPDOM( mName, kNamePair, mXMPStructureNode, kEmptyString );
 		UpdateDataFromXMPDOM( mCanvasAspectRatio, kCanvasAspectRatioPair, mXMPStructureNode, &stou64rt );
 		UpdateDataFromXMPDOM( mImageAspectRatio, kImageAspectRatioPair, mXMPStructureNode, &stou64rt );
 		UpdateDataFromXMPDOM( mVideoEditRate, kVideoEditRatePair, mXMPStructureNode, &stou64rt );

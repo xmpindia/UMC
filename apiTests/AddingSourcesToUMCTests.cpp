@@ -360,9 +360,7 @@ void AddingSourcesToUMCTests::ParseSources() {
 	using namespace UMC;
 	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingSources.xml" ) ) );
 
-	std::cout << sp->SourceCount() << std::endl;
-
-	/*auto videoSources = sp->GetAllVideoSources();
+	auto videoSources = sp->GetAllVideoSources();
 	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetClipName(), std::string( "clipNamev1" ) );
 	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetType(), ISource::kSourceTypeVideo );
 	CPPUNIT_ASSERT_EQUAL( videoSources[0]->GetVideoEditRate(), EditRate( 24000, 1001 ) );
@@ -431,7 +429,7 @@ void AddingSourcesToUMCTests::ParseSources() {
 	{
 		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetClipName(), std::string( "" ) );
 		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetType(), ISource::kSourceTypeImage );
-	}*/
+	}
 }
 
 void AddingSourcesToUMCTests::setUp() {

@@ -216,8 +216,8 @@ namespace INT_UMC {
 						return true;
 					} else if ( strcmp( timeFormatValue, "25Timecode" ) == 0 ) {
 						dataValue.NonDropFrame();
-						return true;
 						dataValue.StandardFrameRate( TimeCode::k25Fps );
+						return true;
 					} else if ( strcmp( timeFormatValue, "2997DropTimecode" ) == 0 ) {
 						dataValue.DropFrame();
 						dataValue.StandardFrameRate( TimeCode::k29_97Fps );
@@ -270,8 +270,14 @@ namespace INT_UMC {
 			node->RemoveNode( pair.first, pair.second );
 			return retNode;
 		} else {
-			return spIXMPStructureNode();
+			auto parentNode = node->GetParent();
+			if ( ( strcmp( parentNode->GetName()->c_str(), pair.second ) == 0 ) &&
+				 ( strcmp( parentNode->GetNameSpace()->c_str(), pair.first ) == 0 ) )
+			{
+				return node;
+			} 
 		}
+		return spIXMPStructureNode();
 	}
 
 	size_t GetMatchingIndexForActualNode( const spIXMPStructureNode & node, const NamespacePropertyNamePair ** array,

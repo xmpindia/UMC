@@ -184,7 +184,7 @@ namespace INT_UMC {
 	bool VideoFrameSourceImpl::ValidateXMPNode() const {
 		std::string userUniqueID;
 		auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
-		if ( source ) return false;
+		if ( !source ) return false;
 		UpdateDataFromXMPDOM( userUniqueID, kUniqueIDPair, source, kEmptyString );
 		if ( userUniqueID.empty() ) return false;
 		std::string sourceID;

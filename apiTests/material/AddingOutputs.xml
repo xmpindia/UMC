@@ -10,6 +10,7 @@
             <rdf:Bag>
                <rdf:li rdf:parseType="Resource">
                   <xmpMM:DocumentID>9</xmpMM:DocumentID>
+                  <xmpDM:description>Output One</xmpDM:description>
                   <xmpDM:title>Video for Output One</xmpDM:title>
                   <umc:audioEditRate>48000</umc:audioEditRate>
                   <umc:canvasAspectRatio>640/480</umc:canvasAspectRatio>
