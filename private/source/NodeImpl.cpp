@@ -95,6 +95,17 @@ namespace INT_UMC {
 		return retValue;
 	}
 
+	static bool HandleCustomDataNode( const spICustomDataHandler & handler, const spcIXMPStructureNode & node ) {
+		auto it = node->Iterator();
+		while ( it ) {
+			bool retValue = HandleNode( handler, it->GetNode() );
+			if ( !retValue )
+				return false;
+			it = it->Next();
+		}
+		return true;
+	}
+
 	static bool HandleSimpleNode( const spICustomDataHandler & handler, const spcIXMPSimpleNode & node ) {
 		return handler->AddKeyValuePair( node->GetName()->c_str(), node->GetValue()->c_str() );
 	}
@@ -130,9 +141,9 @@ namespace INT_UMC {
 	}
 
 
-	static spICustomData ParseNode( const spICustomDataHandler & handler, const spcIXMPNode & node ) {
+	static spICustomData ParseNode( const spICustomDataHandler & handler, const spcIXMPStructureNode & node ) {
 		if ( handler->BeginCustomData() ) {
-			if ( HandleNode( handler, node ) )
+			if ( HandleCustomDataNode( handler, node ) )
 				return handler->EndCustomData();
 		}
 		return spICustomData();
@@ -145,7 +156,7 @@ namespace INT_UMC {
 			return it->second;
 		else {
 			auto handler = ICustomDataHandlerRegistry::GetInstance()->GetHandler( customDataNameSpace, customDataName );
-			auto node = mExtensionNode->GetNode( customDataNameSpace.c_str(), customDataName.c_str() );
+			auto node = mExtensionNode->GetStructureNode( customDataNameSpace.c_str(), customDataName.c_str() );
 			if ( handler && node ) {
 				auto returnValue = ParseNode( handler, node );
 				mCustomDataMap[ combinedString ] = returnValue;

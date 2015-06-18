@@ -13,12 +13,14 @@
 
 class AddingDoViDisplayCustomDataToUMC : public CppUnit::TestCase {
 	CPPUNIT_TEST_SUITE( AddingDoViDisplayCustomDataToUMC );
-		CPPUNIT_TEST( Test );
+		CPPUNIT_TEST( SetCustomDataTest );
+		CPPUNIT_TEST( GetCustomDataTest );
 	CPPUNIT_TEST_SUITE_END();
 
 
 protected:
-	void Test();
+	void SetCustomDataTest();
+	void GetCustomDataTest();
 
 public:
 	virtual void setUp();
@@ -36,7 +38,7 @@ void AddingDoViDisplayCustomDataToUMC::setUp() {
 		std::make_shared< DoVi::DisplayHandler >() );
 }
 
-void AddingDoViDisplayCustomDataToUMC::Test() {
+void AddingDoViDisplayCustomDataToUMC::SetCustomDataTest() {
 	auto umc = UMC::IUMC::CreateEmptyUMC();
 	std::shared_ptr< DoVi::Display > display = std::make_shared< DoVi::Display >();
 	display->setID( "id-1");
@@ -45,11 +47,20 @@ void AddingDoViDisplayCustomDataToUMC::Test() {
 	umc->SetCustomData( DoVi::Display::GetNameSpace(), DoVi::Display::GetPropertyName(), display );
 
 	auto rdfRep = umc->SerializeToBuffer();
+
+	auto um1 = UMC::IUMC::CreateUMCFromBuffer( rdfRep );
+	std::shared_ptr< DoVi::Display >parsedDisplay =  std::dynamic_pointer_cast< DoVi::Display >(
+		um1->GetCustomData( DoVi::Display::GetNameSpace(), DoVi::Display::GetPropertyName() ) );
+
 	//std::cout<<" ******* AddingDoViDisplayCustomDataToUMC::Test *****\n";
 	//std::cout<<rdfRep<<"\n\n\n\n\n";
 }
 
 void AddingDoViDisplayCustomDataToUMC::tearDown() {
 	UMC_Terminate();
+}
+
+void AddingDoViDisplayCustomDataToUMC::GetCustomDataTest() {
+	
 }
 
