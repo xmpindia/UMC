@@ -33,6 +33,12 @@
 
 ////////////////////////////////////////
 
+#ifdef __APPLE__
+#include <stdlib.h>
+#include <mach-o/dyld.h>
+#undef TRUE
+#undef FALSE
+#endif
 
 namespace TestUtils {
 	#if WIN32
