@@ -46,20 +46,34 @@ namespace INT_UMC {
 	bool CustomDataHandlerImpl::EndStructure( const std::string & structureName ) {
 		assert( mParents.top().mIsArray == false );
 		assert( structureName.compare( mParents.top().mStructNode->GetName()->c_str() ) == 0 );
+		assert( mParents.size() > 1 );
+
+		auto node = mParents.top().mStructNode;
 		mParents.pop();
+		if ( mParents.top().mIsArray )
+			mParents.top().mArrayNode->AppendNode( node );
+		else
+			mParents.top().mStructNode->AppendNode( node );
 		return true;
 	}
 
 	bool CustomDataHandlerImpl::BeginArray( const std::string & arrayName ) {
-		spIXMPArrayNode node = IXMPArrayNode::CreateOrderedArrayNode( mNameSpace.c_str(), arrayName.c_str() );
-		mParents.push( node );
+		spIXMPArrayNode node = IXMPArrayNode::CreateUnorderedArrayNode( mNameSpace.c_str(), arrayName.c_str() );
+		mParents.push( Parent( node ) );
 		return true;
 	}
 
 	bool CustomDataHandlerImpl::EndArray( const std::string & arrayName ) {
 		assert( mParents.top().mIsArray == true );
 		assert( arrayName.compare( mParents.top().mArrayNode->GetName()->c_str() ) == 0 );
+		assert( mParents.size() > 1 );
+
+		auto node = mParents.top().mArrayNode;
 		mParents.pop();
+		if ( mParents.top().mIsArray )
+			mParents.top().mArrayNode->AppendNode( node );
+		else
+			mParents.top().mStructNode->AppendNode( node );
 		return true;
 	}
 
