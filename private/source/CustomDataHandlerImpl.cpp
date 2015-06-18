@@ -14,7 +14,6 @@
 #include "XMPCore/Interfaces/IXMPSimpleNode.h"
 #include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
 #include <assert.h>
-#include <iostream>
 
 namespace INT_UMC {
 
@@ -23,11 +22,11 @@ namespace INT_UMC {
 		: mNameSpace( customDataNameSpace )
 		, mBaseNode( baseNode )
 	{
+		spIXMPStructureNode node = IXMPStructureNode::CreateStructureNode( mNameSpace.c_str(), customDataName.c_str() );
+		mParents.push( Parent( node ) );
 	}
 
 	bool CustomDataHandlerImpl::BeginCustomData() {
-		spIXMPStructureNode node = IXMPStructureNode::CreateStructureNode( mNameSpace.c_str(), "custom" );
-		mParents.push( Parent( node ) );
 		return true;
 	}
 
@@ -47,46 +46,20 @@ namespace INT_UMC {
 	bool CustomDataHandlerImpl::EndStructure( const std::string & structureName ) {
 		assert( mParents.top().mIsArray == false );
 		assert( structureName.compare( mParents.top().mStructNode->GetName()->c_str() ) == 0 );
-
-		if( mParents.size() == 1 )
-		{
-			mBaseNode->InsertNode( mParents.top().mStructNode );
-			mParents.pop();
-		} else
-		{
-			auto node = mParents.top().mStructNode;
-			mParents.pop();
-			if ( mParents.top().mIsArray )
-				mParents.top().mArrayNode->AppendNode( node );
-			else
-				mParents.top().mStructNode->AppendNode( node );
-		}
+		mParents.pop();
 		return true;
 	}
 
 	bool CustomDataHandlerImpl::BeginArray( const std::string & arrayName ) {
-		spIXMPArrayNode node = IXMPArrayNode::CreateUnorderedArrayNode( mNameSpace.c_str(), arrayName.c_str() );
-		mParents.push( Parent( node ) );
+		spIXMPArrayNode node = IXMPArrayNode::CreateOrderedArrayNode( mNameSpace.c_str(), arrayName.c_str() );
+		mParents.push( node );
 		return true;
 	}
 
 	bool CustomDataHandlerImpl::EndArray( const std::string & arrayName ) {
 		assert( mParents.top().mIsArray == true );
 		assert( arrayName.compare( mParents.top().mArrayNode->GetName()->c_str() ) == 0 );
-
-		if( mParents.size() == 1 )
-		{
-			mBaseNode->InsertNode( mParents.top().mArrayNode );
-			mParents.pop();
-		} else
-		{
-			auto node = mParents.top().mArrayNode;
-			mParents.pop();
-			if ( mParents.top().mIsArray )
-				mParents.top().mArrayNode->AppendNode( node );
-			else
-				mParents.top().mStructNode->AppendNode( node );
-		}
+		mParents.pop();
 		return true;
 	}
 
