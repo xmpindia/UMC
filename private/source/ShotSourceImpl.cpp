@@ -152,7 +152,7 @@ namespace INT_UMC {
 	bool ShotSourceImpl::ValidateXMPNode() const {
 		std::string userUniqueID;
 		auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
-		if ( source ) return false;
+		if ( !source ) return false;
 		UpdateDataFromXMPDOM( userUniqueID, kUniqueIDPair, source, kEmptyString );
 		if ( userUniqueID.empty() ) return false;
 		std::string sourceID;
@@ -207,9 +207,7 @@ namespace INT_UMC {
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node)
 	{
 		if ( node ) {
-			auto retValue = std::make_shared< ShotSourceImpl >( uniqueIDAndReferenceTracker,  uniqueIDGenerator, source, node );
-			retValue->SyncXMPToUMC();
-			return retValue;
+			return std::make_shared< ShotSourceImpl >( uniqueIDAndReferenceTracker,  uniqueIDGenerator, source, node );
 		} else {
 			return std::make_shared< ShotSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, source );
 		}

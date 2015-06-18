@@ -275,9 +275,7 @@ namespace INT_UMC {
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
 	{
 		if ( node ) {
-			auto retValue = std::make_shared< VideoTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
-			retValue->SyncXMPToUMC();
-			return retValue;
+			return std::make_shared< VideoTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
 		} else {
 			return std::make_shared< VideoTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 		}

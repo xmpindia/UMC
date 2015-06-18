@@ -61,6 +61,7 @@ namespace INT_UMC {
 		spIVideoSource source = CreateVideoSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mVideoSources, kVideoSourcesPair, mSources, kSourcesPair);
 		AddElementToMap( mVideoSourceMap, source, shared_from_this(), mVideoSources );
+		source->GetInternalNode()->SyncXMPToUMC();
 		return source;
 	}
 
@@ -82,6 +83,7 @@ namespace INT_UMC {
 		spIAudioSource source = CreateAudioSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mAudioSources, kAudioSourcesPair, mSources, kSourcesPair );
 		AddElementToMap( mAudioSourceMap, source, shared_from_this(), mAudioSources );
+		source->GetInternalNode()->SyncXMPToUMC();
 		return source;
 	}
 
@@ -103,6 +105,7 @@ namespace INT_UMC {
 		spIVideoFrameSource source = CreateVideoFrameSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spIVideoSource(), actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mVideoFrameSources, kVideoFrameSourcesPair, mSources, kSourcesPair );
 		AddElementToMap( mVideoFrameSourceMap, source, shared_from_this(), mVideoFrameSources );
+		source->GetInternalNode()->SyncXMPToUMC();
 		return source;
 	}
 
@@ -124,6 +127,7 @@ namespace INT_UMC {
 		spIImageSource source = CreateImageSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mImageSources, kImageSourcesPair, mSources, kSourcesPair );
 		AddElementToMap( mImageSourceMap, source, shared_from_this(), mImageSources );
+		source->GetInternalNode()->SyncXMPToUMC();
 		return source;
 	}
 
@@ -165,6 +169,7 @@ namespace INT_UMC {
 		spIOutput output = CreateOutput( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mOutputs, kOutputsPair );
 		AddElementToMap( mOutputMap, output, shared_from_this(), mOutputs );
+		output->GetInternalNode()->SyncXMPToUMC();
 		return output;
 	}
 

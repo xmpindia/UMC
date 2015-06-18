@@ -20,7 +20,6 @@ class AddingShotSourcesToShotsTests : public CppUnit::TestCase {
 	CPPUNIT_TEST( ParseShotSources );
 	CPPUNIT_TEST_SUITE_END();
 
-
 protected:
 	void CountOfShotSources();
 	void ShotSourcesContent();
@@ -189,8 +188,7 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
 	auto shots = tracks[0]->GetAllShots();
 	auto shotSources = shots[0]->GetAllShotSources();
 
-	std::cout << shots[0]->ShotSourceCount() << " " << shots[1]->ShotSourceCount() << std::endl;
-	/*auto source = shotSources[0]->GetSource();
+	auto source = shotSources[0]->GetSource();
 
 	CPPUNIT_ASSERT_EQUAL( source->GetClipName(), std::string( "source 1" ) );
 	CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
@@ -228,7 +226,7 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
 	CPPUNIT_ASSERT_EQUAL( vsource->GetAudioEditRate(), EditRate( 48000 ) );
 	CPPUNIT_ASSERT_EQUAL( vsource->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
 	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
-	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );*/
+	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
 }
 
 void AddingShotSourcesToShotsTests::setUp() {

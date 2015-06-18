@@ -201,6 +201,7 @@ namespace INT_UMC {
 		spIVideoTrack track = CreateVideoTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mVideoTracks, kVideoTracksPair, mTracks, kTracksPair );
 		AddElementToMap( mVideoTrackMap, track, shared_from_this(), mVideoTracks );
+		track->GetInternalNode()->SyncXMPToUMC();
 		return track;
 	}
 
@@ -209,7 +210,7 @@ namespace INT_UMC {
 	}
 
 	std::string OutputImpl::Serialize() const {
-		throw std::logic_error( "The method or operation is not implemented." );
+		return NodeImpl::SerializeXMP();
 	}
 
 	UMC::pINode OutputImpl::GetNode() {
@@ -238,6 +239,7 @@ namespace INT_UMC {
 		spIAudioTrack track = CreateAudioTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mAudioTracks, kAudioTracksPair, mTracks, kTracksPair );
 		AddElementToMap( mAudioTrackMap, track, shared_from_this(), mAudioTracks );
+		track->GetInternalNode()->SyncXMPToUMC();
 		return track;
 	}
 
@@ -406,9 +408,7 @@ namespace INT_UMC {
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
 	{
 		if ( node ) {
-			auto retValue = std::make_shared< OutputImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
-			retValue->SyncXMPToUMC();
-			return retValue;
+			return std::make_shared< OutputImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
 		} else {
 			return std::make_shared< OutputImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator );
 		}

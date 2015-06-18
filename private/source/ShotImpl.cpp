@@ -51,6 +51,7 @@ namespace INT_UMC {
 		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mFrames, kFramesPair );
 		AddElementToMap( mFrameMap, frame, spSelf, mFrames );
+		frame->GetInternalNode()->SyncXMPToUMC();
 		return frame;
 	}
 
@@ -84,6 +85,7 @@ namespace INT_UMC {
 		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mShotSources, kShotSourcesPair );
 		AddElementToMap( mShotSourceMap, shotSource, spSelf, mShotSources );
+		shotSource->GetInternalNode()->SyncXMPToUMC();
 		return shotSource;
 	}
 

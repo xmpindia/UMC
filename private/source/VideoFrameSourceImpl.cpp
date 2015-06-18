@@ -205,9 +205,7 @@ namespace INT_UMC {
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spIVideoSource & videoSource, const spIXMPStructureNode & node )
 	{
 		if ( node ) {
-			auto retValue = std::make_shared< VideoFrameSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
-			retValue->SyncXMPToUMC();
-			return retValue;
+			return std::make_shared< VideoFrameSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );
 		}
 		else {
 			return std::make_shared< VideoFrameSourceImpl >( videoSource, uniqueIDAndReferenceTracker, uniqueIDGenerator );

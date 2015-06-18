@@ -95,6 +95,7 @@ namespace INT_UMC {
 		spIClipShot shot = CreateClipShot( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mClipShots, kClipShotsPair, mShots, kShotsPair );
 		AddElementToMap( mClipShotMap, shot, node2, mClipShots );
+		shot->GetInternalNode()->SyncXMPToUMC();
 		return shot;
 	}
 
@@ -116,6 +117,7 @@ namespace INT_UMC {
 		spITransitionShot shot = CreateTransitionShot( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mTransitionShots, kTransitionShotsPair, mShots, kShotsPair );
 		AddElementToMap( mTransitionShotMap, shot, node2, mTransitionShots );
+		shot->GetInternalNode()->SyncXMPToUMC();
 		return shot;
 	}
 

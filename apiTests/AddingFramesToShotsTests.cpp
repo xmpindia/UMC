@@ -178,9 +178,7 @@ void AddingFramesToShotsTests::ParseFrames() {
 	auto shots = tracks[0]->GetAllShots();
 	auto frames = shots[0]->GetAllFrames();
 
-	std::cout << shots[0]->FrameCount() << std::endl;
-	
-	/*auto source = frames[0]->GetSource();
+	auto source = frames[0]->GetSource();
 
 	CPPUNIT_ASSERT_EQUAL( frames[0]->GetShotInCount(), ( EditUnitInCount ) 12 );
 
@@ -223,7 +221,7 @@ void AddingFramesToShotsTests::ParseFrames() {
 	CPPUNIT_ASSERT_EQUAL( vsource->GetAudioEditRate(), EditRate( 48000 ) );
 	CPPUNIT_ASSERT_EQUAL( vsource->GetInCount(), ( EditUnitInCount ) kEditUnitInCountFromBeginning );
 	CPPUNIT_ASSERT_EQUAL( vsource->GetDuration(), ( EditUnitDuration ) kEditUnitDurationTillEnd );
-	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );*/
+	CPPUNIT_ASSERT_EQUAL( vsource->GetTimeCode(), TimeCode( FrameRate( 1 ) ) );
 }
 
 
