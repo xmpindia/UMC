@@ -151,6 +151,10 @@ namespace INT_UMC {
 		return TrackImpl::GetUniqueID();
 	}
 
+	std::string AudioTrackImpl::GetParsedID() const {
+		return GetParsedID();
+	}
+
 	wpcINode AudioTrackImpl::GetParentNode() const {
 		return TrackImpl::GetParentNode();
 	}

@@ -171,6 +171,7 @@ void AddingOutputsToUMCTests::ParseOutputs() {
 	CPPUNIT_ASSERT_EQUAL( outputs.size(), (size_t) 2 );
 
 	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetName(), std::string( "Output One" ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetParsedID(), std::string( "9" ) );
 	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetTitle(), std::string( "Video for Output One" ) );
 	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetAudioEditRate(), EditRate( 48000 ) );
 	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetVideoEditRate(), EditRate( 24 ) );
@@ -178,6 +179,7 @@ void AddingOutputsToUMCTests::ParseOutputs() {
 	CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetCanvasAspectRatio(), AspectRatio( 640, 480 ) );
 
 	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetName(), std::string( "" ) );
+	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetParsedID(), std::string( "10" ) );
 	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetTitle(), std::string( "" ) );
 	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetAudioEditRate(), EditRate( 1 ) );
 	CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetVideoEditRate(), EditRate( 1 ) );

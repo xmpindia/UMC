@@ -50,6 +50,8 @@ namespace UMC {
 		virtual eNodeTypes GetNodeType() const = 0;
 		virtual const std::string & GetUniqueID() const = 0;
 
+		virtual std::string GetParsedID() const = 0;
+
 		template< typename requiredNodeType >
 		weak_ptr< requiredNodeType > GetParent();
 

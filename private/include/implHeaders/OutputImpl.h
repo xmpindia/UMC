@@ -31,6 +31,7 @@ namespace INT_UMC {
 			const spIXMPStructureNode & xmpStructureNode );
 
 		virtual const std::string & GetUniqueID() const;
+		virtual std::string GetParsedID() const;
 
 		virtual spITrack AddTrack( const std::string & buffer );
 

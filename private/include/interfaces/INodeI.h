@@ -20,6 +20,7 @@ namespace INT_UMC {
 	class INodeI {
 	public:
 		virtual const std::string & GetUniqueID() const = 0;
+		virtual std::string GetParsedID() const = 0;
 
 		virtual pINode GetNode() = 0;
 		virtual pcINode GetNode() const = 0;
@@ -33,11 +34,6 @@ namespace INT_UMC {
 
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) = 0;
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const = 0;
-
-		//virtual void SetExtensionNode( const spIXMPStructureNode & structureNode ) = 0;
-
-		//virtual spIXMPStructureNode GetExtensionNode( bool create = false ) const = 0;
-		//virtual spIXMPStructureNode GetMergedExtensionNode() const = 0;
 
 		virtual void RemoveFromDOM() = 0;
 		virtual void AddToDOM( const spINode & parent ) = 0;

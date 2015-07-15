@@ -30,6 +30,7 @@ namespace INT_UMC {
 	#define THROW_WRONG_FUNCTION_CALLED( operation ) throw std::bad_function_call( operation " is not supposed to be invoked" );
 	#define THROW_PARSING_ERROR throw std::logic_error( "parsing error occured" );
 	#define THROW_UNIQUE_ID_IS_MISSING throw std::logic_error( "validation of serialized buffer failed since uniqueID is missing" );
+	#define THROW_PARSED_ID_NOT_UNIQUE throw std::logic_error( "validation of serialized buffer failed since uniqueID is already used in the DOM" );
 	#define THROW_XMPSTRUCTURE_NODE_VALIDATION_FAILED( reason ) throw std::logic_error( "validation of serialized buffer failed since " reason );
 }
 

@@ -42,6 +42,10 @@ namespace INT_UMC {
 		return SourceImpl::GetUniqueID();
 	}
 
+	std::string ImageSourceImpl::GetParsedID() const {
+		return SourceImpl::GetParsedID();
+	}
+
 	wpcINode ImageSourceImpl::GetParentNode() const {
 		return SourceImpl::GetParentNode();
 	}

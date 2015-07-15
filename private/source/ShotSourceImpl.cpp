@@ -73,6 +73,10 @@ namespace INT_UMC {
 		return NodeImpl::GetUniqueID();
 	}
 
+	std::string ShotSourceImpl::GetParsedID() const {
+		return NodeImpl::GetParsedID();
+	}
+
 	wpcINode ShotSourceImpl::GetParentNode() const {
 		return NodeImpl::GetParentNode();
 	}

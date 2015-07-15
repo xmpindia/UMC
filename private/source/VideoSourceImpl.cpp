@@ -143,6 +143,10 @@ namespace INT_UMC {
 		return NodeImpl::GetUniqueID();
 	}
 
+	std::string VideoSourceImpl::GetParsedID() const {
+		return NodeImpl::GetParsedID();
+	}
+
 	INode::eNodeTypes VideoSourceImpl::GetNodeType() const {
 		return SourceImpl::GetNodeType();
 	}

@@ -70,12 +70,44 @@ namespace INT_UMC {
 		}
 	}
 
-	bool UniqueIDAndReferenceTrackerImpl::GetUserUniqueID( const std::string & userUniqueID, std::string & uniqueID ) const {
-		auto it = mUserAndActualUniqueIDMap.find ( userUniqueID );
-		if ( it != mUserAndActualUniqueIDMap.end() ) {
-			uniqueID = it->second;
-			return true;
+	bool UniqueIDAndReferenceTrackerImpl::GetUserUniqueID( const std::string & key, std::string & value, bool keyIsUserUniqueID ) const {
+		if ( keyIsUserUniqueID ) {
+			auto it = mUserAndActualUniqueIDMap.find( key );
+			if ( it != mUserAndActualUniqueIDMap.end() ) {
+				value = it->second;
+				return true;
+			} else {
+				return false;
+			}
 		} else {
+			// right now doing a linear search, think about using two maps
+			auto it = mUserAndActualUniqueIDMap.begin();
+			auto itEnd = mUserAndActualUniqueIDMap.end();
+			for( ; it != itEnd; ++it ) {
+				if ( key.compare( it->second.c_str() ) == 0 ) {
+					value = it->first;
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	bool UniqueIDAndReferenceTrackerImpl::RemoveUserUniqueID( const std::string & key, bool keyIsUserUniqueID /*= true */ ) {
+		if ( keyIsUserUniqueID ) {
+			if ( mUserAndActualUniqueIDMap.erase( key ) > 0 )
+				return true;
+			return false;
+		} else {
+			// right now doing a linear search, think about using two maps
+			auto it = mUserAndActualUniqueIDMap.begin();
+			auto itEnd = mUserAndActualUniqueIDMap.end();
+			for ( ; it != itEnd; ++it ) {
+				if ( key.compare( it->second.c_str() ) == 0 ) {
+					mUserAndActualUniqueIDMap.erase( it );
+					return true;
+				}
+			}
 			return false;
 		}
 	}

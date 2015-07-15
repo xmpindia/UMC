@@ -31,6 +31,10 @@ namespace INT_UMC {
 		return ShotImpl::GetUniqueID();
 	}
 
+	std::string TransitionShotImpl::GetParsedID() const {
+		return ShotImpl::GetParsedID();
+	}
+
 	UMC::wpcINode TransitionShotImpl::GetParentNode() const {
 		return ShotImpl::GetParentNode();
 	}

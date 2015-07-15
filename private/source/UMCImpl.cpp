@@ -598,6 +598,10 @@ namespace INT_UMC {
 		return NodeImpl::GetUniqueID();
 	}
 
+	std::string UMCImpl::GetParsedID() const {
+		return NodeImpl::GetParsedID();
+	}
+
 	wpcINode UMCImpl::GetParentNode() const {
 		return NodeImpl::GetParentNode();
 	}

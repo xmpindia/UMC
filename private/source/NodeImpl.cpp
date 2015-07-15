@@ -243,6 +243,12 @@ namespace INT_UMC {
 		return mIndex;
 	}
 
+	std::string NodeImpl::GetParsedID() const {
+		std::string parsedID;
+		mspUniqueIDAndReferenceTracker->GetUserUniqueID( mUniqueID, parsedID, false );
+		return parsedID;
+	}
+
 	void NodeImpl::SyncUMCToXMP() const {
 		AddOrUpdateDataToXMPDOM( mUniqueID, kUniqueIDPair, mXMPStructureNode );
 		SyncInternalStuffToXMP();
@@ -253,7 +259,8 @@ namespace INT_UMC {
 		auto uniqueIDNode = TryToGetSimpleNode( mXMPStructureNode, kUniqueIDPair );
 		if ( uniqueIDNode ) {
 			auto oldUniqueID = uniqueIDNode->GetValue();
-			mspUniqueIDAndReferenceTracker->AddUserUniqueID( oldUniqueID->c_str(), mUniqueID );
+			if ( !mspUniqueIDAndReferenceTracker->AddUserUniqueID( oldUniqueID->c_str(), mUniqueID ) )
+				THROW_PARSED_ID_NOT_UNIQUE;
 		} else {
 			THROW_UNIQUE_ID_IS_MISSING;
 		}

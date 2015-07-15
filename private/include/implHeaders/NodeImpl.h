@@ -37,6 +37,7 @@ namespace INT_UMC {
 			const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType );
 
 		virtual const std::string & GetUniqueID() const;
+		virtual std::string GetParsedID() const;
 
 		virtual wpcINode GetParentNode() const;
 		virtual wpINode GetParentNode();

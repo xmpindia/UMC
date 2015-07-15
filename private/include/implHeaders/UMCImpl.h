@@ -135,6 +135,7 @@ namespace INT_UMC {
 		virtual spIXMPStructureNode GetXMPNode() const;
 
 		virtual const std::string & GetUniqueID() const;
+		virtual std::string GetParsedID() const;
 
 		virtual wpcINode GetParentNode() const;
 		virtual wpINode GetParentNode();

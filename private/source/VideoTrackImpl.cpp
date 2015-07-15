@@ -161,6 +161,10 @@ namespace INT_UMC {
 		return TrackImpl::GetUniqueID();
 	}
 
+	std::string VideoTrackImpl::GetParsedID() const {
+		return TrackImpl::GetParsedID();
+	}
+
 	wpcINode VideoTrackImpl::GetParentNode() const {
 		return TrackImpl::GetParentNode();
 	}

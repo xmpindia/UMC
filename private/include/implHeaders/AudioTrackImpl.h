@@ -74,6 +74,7 @@ namespace INT_UMC {
 		virtual eNodeTypes GetNodeType() const;
 
 		virtual const std::string & GetUniqueID() const;
+		virtual std::string GetParsedID() const;
 
 		virtual NodeList GetAllChildren();
 		virtual cNodeList GetAllChildren() const;

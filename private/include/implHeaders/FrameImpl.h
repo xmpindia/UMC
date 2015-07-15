@@ -30,6 +30,7 @@ namespace INT_UMC {
 			const spIXMPStructureNode & node );
 
 		const std::string & GetUniqueID() const;
+		virtual std::string GetParsedID() const;
 
 		virtual spISource GetSource();
 		virtual spcISource GetSource() const;

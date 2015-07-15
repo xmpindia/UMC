@@ -24,6 +24,10 @@ namespace INT_UMC {
 		return NodeImpl::GetUniqueID();
 	}
 
+	std::string OutputImpl::GetParsedID() const {
+		return NodeImpl::GetParsedID();
+	}
+
 	spITrack OutputImpl::GetTrack( const std::string & uniqueID ) {
 		spITrack track = GetVideoTrack( uniqueID );
 		if ( track ) return track;

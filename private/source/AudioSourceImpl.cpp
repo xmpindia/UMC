@@ -160,6 +160,10 @@ namespace INT_UMC {
 		return this;
 	}
 
+	std::string AudioSourceImpl::GetParsedID() const {
+		return SourceImpl::GetParsedID();
+	}
+
 	void AudioSourceImpl::SyncXMPToInternalStuff() {
 		SourceImpl::SyncXMPToInternalStuff();
 		UpdateDataFromXMPDOM( mInCount, kInCountPair, mXMPStructureNode, stoi64 );

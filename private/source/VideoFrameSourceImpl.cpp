@@ -73,6 +73,10 @@ namespace INT_UMC {
 		return SourceImpl::GetUniqueID();
 	}
 
+	std::string VideoFrameSourceImpl::GetParsedID() const {
+		return SourceImpl::GetUniqueID();
+	}
+
 	wpcINode VideoFrameSourceImpl::GetParentNode() const {
 		return SourceImpl::GetParentNode();
 	}
