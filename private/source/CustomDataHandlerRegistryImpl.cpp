@@ -37,11 +37,10 @@ namespace INT_UMC {
 			mCustomDataHandlerMap.insert( std::make_pair( combinedString, handler ) );
 			std::string registeredPrefix;
 			if ( !SXMPMeta::GetNamespacePrefix( nameSpace.c_str(), &registeredPrefix) ) {
-				static long long unsigned int count( 1 );
 				std::string prefix( "cm" );
-				prefix.append( std::to_string( count ) );
+				prefix.append( std::to_string( sPrefixCount ) );
 				SXMPMeta::RegisterNamespace( nameSpace.c_str(), prefix.c_str(), &registeredPrefix );
-				count++;
+				sPrefixCount++;
 			}
 			return true;
 		} else {
@@ -70,6 +69,7 @@ namespace INT_UMC {
 	pICustomDataHandlerRegistry ICustomDataHandlerRegistry::CreateInstance() {
 		assert( sCustomDataHandlerRegistryImplPtr == NULL );
 		sCustomDataHandlerRegistryImplPtr = new CustomDataHandlerRegistryImpl();
+
 		return sCustomDataHandlerRegistryImplPtr;
 	}
 

@@ -19,6 +19,9 @@ namespace INT_UMC {
 		: public ICustomDataHandlerRegistry
 	{
 	public:
+		CustomDataHandlerRegistryImpl()
+			: sPrefixCount( 1 ) { }
+
 		virtual bool IsHandlerRegistered( const std::string & nameSpace, const std::string & name ) const;
 		virtual bool RegisterHandler( const std::string & nameSpace, const std::string & name, const spICustomDataHandler & handler );
 		virtual spICustomDataHandler GetHandler( const std::string & nameSpace, const std::string & name );
@@ -29,7 +32,7 @@ namespace INT_UMC {
 
 	protected:
 		std::map< std::string, spICustomDataHandler >		mCustomDataHandlerMap;
-
+		long long unsigned int								sPrefixCount;
 	};
 }
 
