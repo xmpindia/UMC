@@ -38,6 +38,8 @@ namespace INT_UMC {
 
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetParsedID() const;
+		virtual bool SetUniqueID( const std::string & newUniqueID );
+		virtual void ChangeUniqueID( const std::string & newUniqueID );
 
 		virtual wpcINode GetParentNode() const;
 		virtual wpINode GetParentNode();

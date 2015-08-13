@@ -249,6 +249,35 @@ namespace INT_UMC {
 		return parsedID;
 	}
 
+	bool NodeImpl::SetUniqueID( const std::string & newUniqueID ) {
+		if ( newUniqueID.length() == 0 )
+			return false;
+		if ( mUniqueID.compare( newUniqueID ) == 0 )
+			return true;
+		if ( mspUniqueIDAndReferenceTracker->IsUniqueIDPresent( newUniqueID) )
+			return false;
+		size_t referenceCount = mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
+		std::string oldUniqueID = mUniqueID;
+		std::string userUniqueID = GetParsedID();
+		spINode parentNode = mwpParentNode.lock();
+		if ( parentNode && parentNode->GetInternalNode()->ChangeChildUniqueID( GetExternalNode(), newUniqueID ) ) {
+			mspUniqueIDAndReferenceTracker->RemoveUniqueID( oldUniqueID );
+			mspUniqueIDAndReferenceTracker->AddUniqueID( newUniqueID );
+			for( size_t i = 0; i < referenceCount; ++i ) {
+				mspUniqueIDAndReferenceTracker->AddReference( newUniqueID );
+			}
+			if ( userUniqueID.length() > 0 ) {
+				mspUniqueIDAndReferenceTracker->RemoveUserUniqueID( userUniqueID );
+				mspUniqueIDAndReferenceTracker->AddUserUniqueID( userUniqueID, newUniqueID );
+			}
+		}
+		return true;
+	}
+
+	void NodeImpl::ChangeUniqueID( const std::string & newUniqueID ) {
+		mUniqueID = newUniqueID;
+	}
+
 	void NodeImpl::SyncUMCToXMP() const {
 		AddOrUpdateDataToXMPDOM( mUniqueID, kUniqueIDPair, mXMPStructureNode );
 		SyncInternalStuffToXMP();
@@ -261,6 +290,7 @@ namespace INT_UMC {
 			auto oldUniqueID = uniqueIDNode->GetValue();
 			if ( !mspUniqueIDAndReferenceTracker->AddUserUniqueID( oldUniqueID->c_str(), mUniqueID ) )
 				THROW_PARSED_ID_NOT_UNIQUE;
+			SetUniqueID( oldUniqueID->c_str() );
 		} else {
 			THROW_UNIQUE_ID_IS_MISSING;
 		}

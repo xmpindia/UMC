@@ -49,6 +49,7 @@ namespace UMC {
 
 		virtual eNodeTypes GetNodeType() const = 0;
 		virtual const std::string & GetUniqueID() const = 0;
+		virtual bool SetUniqueID( const std::string & uniqueID ) = 0;
 
 		virtual std::string GetParsedID() const = 0;
 

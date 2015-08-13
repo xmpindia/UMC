@@ -185,6 +185,57 @@ namespace INT_UMC {
 		return this;
 	}
 
+	bool UMCImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
+	bool UMCImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		switch( childNode->GetNodeType() ) {
+		case INode::kNodeTypeSource:
+		{
+			spISource sourceChild = ConvertNode< ISource >( childNode );
+			switch ( sourceChild->GetType() ) {
+			case ISource::kSourceTypeAudio:
+				ChangeUniqueIDOfChildNode< IAudioSource >( mAudioSourceMap, sourceChild, newUniqueID, mAudioSources, shared_from_this() );
+				return true;
+				break;
+
+			case ISource::kSourceTypeVideo:
+				ChangeUniqueIDOfChildNode< IVideoSource >( mVideoSourceMap, sourceChild, newUniqueID, mVideoSources, shared_from_this() );
+				return true;
+				break;
+
+			case ISource::kSourceTypeImage:
+				ChangeUniqueIDOfChildNode< IImageSource >( mImageSourceMap, sourceChild, newUniqueID, mImageSources, shared_from_this() );
+				return true;
+				break;
+
+			case ISource::kSourceTypeVideoFrame:
+				ChangeUniqueIDOfChildNode< IVideoFrameSource >( mVideoFrameSourceMap, sourceChild, newUniqueID, mVideoFrameSources, shared_from_this() );
+				return true;
+				break;
+
+			default:
+				return false;
+			}
+		}
+		break;
+
+		case INode::kNodeTypeOutput:
+			ChangeUniqueIDOfChildNode< IOutput >( mOutputMap, childNode, newUniqueID, mOutputs, shared_from_this() );
+			return true;
+			break;
+
+		default:
+			return false;
+		}
+		return false;
+	}
+
+	UMC::spINode UMCImpl::GetExternalNode() {
+		return shared_from_this();
+	}
+
 	size_t UMCImpl::SourceCount() const {
 		return mVideoSourceMap.size() +
 			mAudioSourceMap.size() +

@@ -10,6 +10,9 @@
 
 #include "implHeaders/VideoTrackImpl.h"
 #include "utils/UMCAndXMPMapping.h"
+#include "interfaces/IClipShot.h"
+#include "interfaces/ITransitionShot.h"
+#include "utils/Utils.h"
 
 namespace INT_UMC {
 
@@ -257,6 +260,43 @@ namespace INT_UMC {
 
 	UMC::pcINode VideoTrackImpl::GetNode() const {
 		return this;
+	}
+
+	bool VideoTrackImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
+	bool VideoTrackImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		switch ( childNode->GetNodeType() ) {
+		case INode::kNodeTypeShot:
+		{
+			spIShot shotChild = ConvertNode< IShot >( childNode );
+			switch ( shotChild->GetType() ) {
+
+			case IShot::kShotTypeClip:
+				ChangeUniqueIDOfChildNode< IClipShot >( mClipShotMap, shotChild, newUniqueID, mClipShots, shared_from_this() );
+				return true;
+				break;
+
+			case IShot::kShotTypeTransition:
+				ChangeUniqueIDOfChildNode< ITransitionShot >( mTransitionShotMap, shotChild, newUniqueID, mTransitionShots, shared_from_this() );
+				return true;
+				break;
+
+			default:
+				return false;
+			}
+		}
+		break;
+
+		default:
+			return false;
+		}
+		return false;
+	}
+
+	UMC::spINode VideoTrackImpl::GetExternalNode() {
+		return shared_from_this();
 	}
 
 	UMC::spIShot VideoTrackImpl::AddShot( const std::string & buffer ) {

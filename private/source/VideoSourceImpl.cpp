@@ -51,6 +51,19 @@ namespace INT_UMC {
 		return this;
 	}
 
+	bool VideoSourceImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
+
+	bool VideoSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		return false;
+	}
+
+	UMC::spINode VideoSourceImpl::GetExternalNode() {
+		return shared_from_this();
+	}
+
 	void VideoSourceImpl::SyncXMPToInternalStuff() {
 		SourceImpl::SyncXMPToInternalStuff();
 		UpdateDataFromXMPDOM( mInCount, kInCountPair, mXMPStructureNode, stoi64 );

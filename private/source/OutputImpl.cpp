@@ -225,6 +225,40 @@ namespace INT_UMC {
 		return this;
 	}
 
+	bool OutputImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
+	bool OutputImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		switch( childNode->GetNodeType() ) {
+		case INode::kNodeTypeTrack:
+		{
+			spITrack trackChild = ConvertNode< ITrack >( childNode );
+			switch ( trackChild->GetType() ) {
+			case ITrack::kTrackTypeAudio:
+				ChangeUniqueIDOfChildNode< IAudioTrack >( mAudioTrackMap, trackChild, newUniqueID, mAudioTracks, shared_from_this() );
+				return true;
+				break;
+
+			case ITrack::kTrackTypeVideo:
+				ChangeUniqueIDOfChildNode< IVideoTrack >( mVideoTrackMap, trackChild, newUniqueID, mVideoTracks, shared_from_this() );
+				return true;
+				break;
+
+			default:
+				return false;
+			}
+		}
+		break;
+
+		}
+		return false;
+	}
+
+	UMC::spINode OutputImpl::GetExternalNode() {
+		return shared_from_this();
+	}
+
 	spIAudioTrack OutputImpl::AddAudioTrack() {
 		spIAudioTrack track = CreateAudioTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mAudioTracks, kAudioTracksPair, mTracks, kTracksPair );

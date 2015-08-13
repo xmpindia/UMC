@@ -45,6 +45,13 @@ namespace INT_UMC {
 		virtual void SyncXMPToUMC() = 0;
 		virtual void SetIndex( size_t index ) = 0;
 		virtual size_t GetIndex() const = 0;
+		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) = 0;
+		virtual void ChangeUniqueID( const std::string & newUniqueID ) = 0;
+
+		virtual spINode GetExternalNode() = 0;
+		spcINode GetExternalNode() const {
+			return const_cast< pINodeI >( this )->GetExternalNode();
+		}
 
 		
 		virtual spIUniqueIDAndReferenceTracker GetUniqueIDAndReferenceTracker() = 0;

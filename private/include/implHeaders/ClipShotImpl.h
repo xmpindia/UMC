@@ -126,6 +126,13 @@ namespace INT_UMC {
 		virtual size_t RemoveShotSource( const std::string & uniqueID );
 
 		~ClipShotImpl();
+
+		virtual bool SetUniqueID( const std::string & uniqueID );
+
+		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
+
+		virtual spINode GetExternalNode();
+
 	};
 }
 

@@ -118,6 +118,10 @@ namespace INT_UMC {
 
 		virtual pcINode GetNode() const;
 
+		virtual bool SetUniqueID( const std::string & uniqueID );
+		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
+		virtual spINode GetExternalNode();
+
 		EditRate				mAudioEditRate;
 	};
 }

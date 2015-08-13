@@ -81,6 +81,10 @@ namespace INT_UMC {
 
 		virtual spIXMPStructureNode GetXMPNode() const;
 
+		virtual bool SetUniqueID( const std::string & uniqueID );
+		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
+		virtual spINode GetExternalNode();
+
 	protected:
 		spISource				mSource;
 		EditUnitInCount			mSourceInCount;

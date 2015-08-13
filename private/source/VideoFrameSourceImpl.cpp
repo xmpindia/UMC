@@ -74,7 +74,7 @@ namespace INT_UMC {
 	}
 
 	std::string VideoFrameSourceImpl::GetParsedID() const {
-		return SourceImpl::GetUniqueID();
+		return SourceImpl::GetParsedID();
 	}
 
 	wpcINode VideoFrameSourceImpl::GetParentNode() const {
@@ -203,6 +203,18 @@ namespace INT_UMC {
 
 	UMC::pINode VideoFrameSourceImpl::GetNode() {
 		return this;
+	}
+
+	UMC::spINode VideoFrameSourceImpl::GetExternalNode() {
+		return shared_from_this();
+	}
+
+	bool VideoFrameSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		return false;
+	}
+
+	bool VideoFrameSourceImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
 	spIVideoFrameSource CreateVideoFrameSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,

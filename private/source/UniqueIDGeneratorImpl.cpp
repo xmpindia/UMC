@@ -21,6 +21,7 @@ namespace INT_UMC {
 
 	std::string UniqueIDGeneratorImpl::GenerateUniqueID( INode::eNodeTypes nodeType ) {
 		static char buffer[ 32 ] = "";
+		do {
 	#if UMC_UNIXBuild || UMC_MacBuild
 		snprintf ( buffer, 32, "%d", mCurrentID );
 	#elif UMC_WinBuild
@@ -29,6 +30,7 @@ namespace INT_UMC {
 		#error "Missing implementation for the platform"
 	#endif
 		mCurrentID++;
+		} while( mUniqueIDAndReferenceTracker->IsUniqueIDPresent( buffer ) );
 		assert( !mUniqueIDAndReferenceTracker->IsUniqueIDPresent( buffer ) );
 		return std::string( buffer );
 	}

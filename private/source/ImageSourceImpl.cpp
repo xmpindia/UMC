@@ -128,6 +128,18 @@ namespace INT_UMC {
 		return this;
 	}
 
+	bool ImageSourceImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
+	bool ImageSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		return false;
+	}
+
+	UMC::spINode ImageSourceImpl::GetExternalNode() {
+		return shared_from_this();
+	}
+
 	void ImageSourceImpl::SyncXMPToInternalStuff() {
 		SourceImpl::SyncXMPToInternalStuff();
 	}

@@ -89,6 +89,10 @@ namespace INT_UMC {
 
 		virtual pcINode GetNode() const;
 
+		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
+		virtual spINode GetExternalNode();
+		virtual bool SetUniqueID( const std::string & uniqueID );
+
 	protected:
 		EditUnitInCount				mInCount;
 		EditUnitDuration			mDuration;

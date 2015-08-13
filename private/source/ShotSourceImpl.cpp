@@ -145,6 +145,18 @@ namespace INT_UMC {
 		return mXMPStructureNode;
 	}
 
+	bool ShotSourceImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
+	bool ShotSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		return false;
+	}
+
+	UMC::spINode ShotSourceImpl::GetExternalNode() {
+		return shared_from_this();
+	}
+
 	UMC::pcINode ShotSourceImpl::GetNode() const {
 		return this;
 	}

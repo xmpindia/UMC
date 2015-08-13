@@ -93,6 +93,16 @@ namespace INT_UMC {
 		}
 	}
 
+	template< typename mapElementType, typename mapType >
+	void ChangeUniqueIDOfChildNode( mapType & map, const spINode & node, const std::string & newUniqueID,
+		const spIXMPArrayNode & parentArrayNode, const spINode & parentNode )
+	{
+		auto childNode = ConvertNode< mapElementType >( node );
+		map.erase( node->GetUniqueID() );
+		childNode->GetInternalNode()->ChangeUniqueID( newUniqueID );
+		map[ newUniqueID ] = childNode;
+	}
+
 	template< typename mapType >
 	size_t TryAndRemoveElementFromMap( mapType & map, const std::string & elementID, const spIXMPArrayNode & parentNode ) {
 		auto it = map.find( elementID );

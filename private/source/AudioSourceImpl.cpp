@@ -160,6 +160,18 @@ namespace INT_UMC {
 		return this;
 	}
 
+	bool AudioSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		return false;
+	}
+
+	spINode AudioSourceImpl::GetExternalNode() {
+		return shared_from_this();
+	}
+
+	bool AudioSourceImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
 	std::string AudioSourceImpl::GetParsedID() const {
 		return SourceImpl::GetParsedID();
 	}

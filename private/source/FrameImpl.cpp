@@ -63,7 +63,7 @@ namespace INT_UMC {
 	}
 
 	std::string FrameImpl::GetParsedID() const {
-		return NodeImpl::GetUniqueID();
+		return NodeImpl::GetParsedID();
 	}
 
 	wpcINode FrameImpl::GetParentNode() const {
@@ -132,6 +132,18 @@ namespace INT_UMC {
 
 	INT_UMC::spIXMPStructureNode FrameImpl::GetXMPNode() const {
 		return mXMPStructureNode;
+	}
+
+	bool FrameImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID(  uniqueID );
+	}
+
+	bool FrameImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		return false;
+	}
+
+	UMC::spINode FrameImpl::GetExternalNode() {
+		return shared_from_this();
 	}
 
 	UMC::pcINode FrameImpl::GetNode() const {

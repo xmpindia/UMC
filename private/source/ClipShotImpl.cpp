@@ -8,6 +8,9 @@
 // =================================================================================================
 
 #include "implHeaders/ClipShotImpl.h"
+#include "interfaces/IShotSource.h"
+#include "interfaces/IFrame.h"
+#include "utils/Utils.h"
 
 namespace INT_UMC {
 
@@ -132,6 +135,38 @@ namespace INT_UMC {
 	}
 
 	ClipShotImpl::~ClipShotImpl() { }
+
+	bool ClipShotImpl::SetUniqueID( const std::string & uniqueID ) {
+		return NodeImpl::SetUniqueID( uniqueID );
+	}
+
+	bool ClipShotImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+		switch ( childNode->GetNodeType() ) {
+		case INode::kNodeTypeFrame:
+		{
+			spIFrame frameChild = ConvertNode< IFrame >( childNode );
+			ChangeUniqueIDOfChildNode< IFrame >( mFrameMap, frameChild, newUniqueID, mFrames, shared_from_this() );
+			return true;
+		}
+		break;
+
+		case INode::kNodeTypeShotSource:
+		{
+			spIShotSource shotSourceChild = ConvertNode< IShotSource >( childNode );
+			ChangeUniqueIDOfChildNode< IShotSource >( mShotSourceMap, shotSourceChild, newUniqueID, mShotSources, shared_from_this() );
+			return true;
+		}
+		break;
+
+		default:
+			return false;
+		}
+		return false;
+	}
+
+	UMC::spINode ClipShotImpl::GetExternalNode() {
+		return shared_from_this();
+	}
 
 	size_t ClipShotImpl::RemoveShotSource( const std::string & uniqueID ) {
 		return ShotImpl::RemoveShotSource( uniqueID );
