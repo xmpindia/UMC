@@ -19,10 +19,29 @@ namespace UMC {
 		: public ITrack
 	{
 	public:
+
+		//!
+		//! Sets video edit rate for the video track
+		//! \param[in] EditRate object.
+		//!
 		virtual void SetVideoEditRate( const EditRate & editRate ) = 0;
+
+		//!
+		//! Gets video edit rate for the video track
+		//! \return EditRate object.
+		//!
 		virtual EditRate GetVideoEditRate() const = 0;
 
+		//!
+		//! Sets audio edit rate for the video track
+		//! \param[in] EditRate object.
+		//!
 		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
+
+		//!
+		//! Gets audio edit rate for the video track
+		//! \return EditRate object.
+		//!
 		virtual EditRate GetAudioEditRate() const = 0;
 
 		virtual ~IVideoTrack() = 0;

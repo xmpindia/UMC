@@ -17,6 +17,12 @@
 namespace UMC {
 	class IUniqueIDGenerator {
 	public:
+
+		//!
+		//! Generate a unique id based on the node type
+		//! param[in] a value of type INode::eNodeTypes indicating the type of the node for which the unique id is to be generated
+		//! \return a value of type std::string indicating the generated unique id
+		//!
 		virtual std::string GenerateUniqueID( INode::eNodeTypes nodeType ) = 0;
 	};
 }

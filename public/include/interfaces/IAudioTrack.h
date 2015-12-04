@@ -19,7 +19,17 @@ namespace UMC {
 		: public ITrack
 	{
 	public:
+
+		//!
+		//! Sets audio edit rate for the audio track
+		//! \param[in] EditRate object.
+		//!
 		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
+
+		//!
+		//! Gets audio edit rate for the audio track
+		//! \return EditRate object.
+		//!
 		virtual EditRate GetAudioEditRate() const = 0;
 
 		virtual ~IAudioTrack() = 0;

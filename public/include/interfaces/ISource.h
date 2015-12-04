@@ -34,9 +34,22 @@ namespace UMC {
 			kSourceTypeMaxValue		= Max_UMC_Uns32
 		} eSourceTypes;
 
+		//!
+		//! Set the clip name of the source
+		//! \param[in] std::string object containing the clip name of the source
+		//!
 		virtual void SetClipName( const std::string & clipName ) = 0;
+
+		//!
+		//! Get the clip name of the source
+		//! \return a value of type std::string containing the clip name of the souce
+		//!
 		virtual std::string GetClipName() const = 0;
 
+		//!
+		//! Get the type of the source
+		//! \return a value of eSourceType containing the type of the source
+		//!
 		virtual eSourceTypes GetType() const = 0;
 
 		virtual ~ISource() = 0;

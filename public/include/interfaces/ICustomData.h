@@ -17,9 +17,23 @@ namespace UMC {
 	class ICustomData {
 	
 	public:
+
+		//!
+		//! Set the parent node for the current node
+		//! \param[in] a weak pointer to the parent node
+		//!
 		virtual void SetParentNode( const wpINode & parentNode ) = 0;
 
+		//!
+		//! Get the parent node for the current node
+		//! \return  a weak pointer to a const object of INode indicating the parent of the current node
+		//!
 		virtual wpcINode GetParentNode() const = 0;
+
+		//!
+		//! Get the parent node for the current node
+		//! \return  a weak pointer to a non-const object of INode indicating the parent of the current node
+		//!
 		virtual wpINode GetParentNode() = 0;
 	};
 }
