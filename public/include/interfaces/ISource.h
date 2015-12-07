@@ -13,14 +13,14 @@
 #include "UMCFwdDeclarations.h"
 
 #include "baseTypes/TimeCode.h"
-#include "INode.h"
+#include "IUMCNode.h"
 
 #include <string>
 
 namespace UMC {
 
 	class ISource
-		: public INode
+		: public IUMCNode
 	{
 
 	public:

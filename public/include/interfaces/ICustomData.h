@@ -22,19 +22,19 @@ namespace UMC {
 		//! Set the parent node for the current node
 		//! \param[in] a weak pointer to the parent node
 		//!
-		virtual void SetParentNode( const wpINode & parentNode ) = 0;
+		virtual void SetParentNode( const wpIUMCNode & parentNode ) = 0;
 
 		//!
 		//! Get the parent node for the current node
-		//! \return  a weak pointer to a const object of INode indicating the parent of the current node
+		//! \return  a weak pointer to a const object of IUMCNode indicating the parent of the current node
 		//!
-		virtual wpcINode GetParentNode() const = 0;
+		virtual wpcIUMCNode GetParentNode() const = 0;
 
 		//!
 		//! Get the parent node for the current node
-		//! \return  a weak pointer to a non-const object of INode indicating the parent of the current node
+		//! \return  a weak pointer to a non-const object of IUMCNode indicating the parent of the current node
 		//!
-		virtual wpINode GetParentNode() = 0;
+		virtual wpIUMCNode GetParentNode() = 0;
 	};
 }
 

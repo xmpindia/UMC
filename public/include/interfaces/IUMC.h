@@ -11,12 +11,12 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
-#include "INode.h"
+#include "IUMCNode.h"
 
 namespace UMC {
 
 	class IUMC
-		: public INode
+		: public IUMCNode
 	{
 	public:
 		typedef std::vector< spISource >			SourceList;

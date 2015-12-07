@@ -11,7 +11,7 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNode.h"
 
 #include <string>
 #include <vector>
@@ -19,7 +19,7 @@
 namespace UMC {
 
 	class IShot
-		: public INode
+		: public IUMCNode
 	{
 
 	public:

@@ -11,13 +11,13 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNode.h"
 #include "baseTypes/RationalType.h"
 
 namespace UMC {
 
 	class IOutput
-		: public INode
+		: public IUMCNode
 	{
 
 	public:

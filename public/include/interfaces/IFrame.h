@@ -11,14 +11,14 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNode.h"
 
 #include <string>
 
 namespace UMC {
 
 	class IFrame 
-		: public INode
+		: public IUMCNode
 	{
 
 	public:

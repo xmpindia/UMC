@@ -11,12 +11,12 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNode.h"
 
 namespace UMC {
 
 	class ITrack
-		: public INode
+		: public IUMCNode
 	{
 	public:
 		typedef std::vector< spIShot > ShotList;

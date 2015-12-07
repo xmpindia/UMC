@@ -11,11 +11,11 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNode.h"
 
 namespace UMC {
 	class IShotSource
-		: public INode
+		: public IUMCNode
 	{
 
 	public:
