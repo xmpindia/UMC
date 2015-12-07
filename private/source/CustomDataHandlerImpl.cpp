@@ -9,20 +9,21 @@
 
 #include "implHeaders/CustomDataHandlerImpl.h"
 #include "interfaces/ICustomData.h"
-#include "XMPCore/Interfaces/IXMPArrayNode.h"
-#include "XMPCore/Interfaces/IXMPStructureNode.h"
-#include "XMPCore/Interfaces/IXMPSimpleNode.h"
-#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
+#include "XMPCore/Interfaces/IArrayNode.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
+#include "XMPCore/Interfaces/ISimpleNode.h"
+#include "XMPCore/Interfaces/ICoreObjectFactory.h"
+#include "XMPCommon/Interfaces/IUTF8String.h"
 #include <assert.h>
 
 namespace INT_UMC {
 
 	CustomDataHandlerImpl::CustomDataHandlerImpl( const spcICustomData & customData, const std::string & customDataNameSpace,
-		const std::string & customDataName, const spIXMPStructureNode & baseNode )
+		const std::string & customDataName, const spIStructureNode & baseNode )
 		: mNameSpace( customDataNameSpace )
 		, mBaseNode( baseNode )
 	{
-		spIXMPStructureNode node = IXMPStructureNode::CreateStructureNode( mNameSpace.c_str(), customDataName.c_str() );
+		spIStructureNode node = IStructureNode::CreateStructureNode( mNameSpace.c_str(), mNameSpace.length(), customDataName.c_str(), customDataName.length() );
 		mParents.push( Parent( node ) );
 	}
 
@@ -38,7 +39,7 @@ namespace INT_UMC {
 	}
 
 	bool CustomDataHandlerImpl::BeginStructure( const std::string & structureName ) {
-		spIXMPStructureNode node = IXMPStructureNode::CreateStructureNode( mNameSpace.c_str(), structureName.c_str() );
+		spIStructureNode node = IStructureNode::CreateStructureNode( mNameSpace.c_str(), mNameSpace.length(), structureName.c_str(), structureName.length() );
 		mParents.push( Parent( node ) );
 		return true;
 	}
@@ -58,7 +59,7 @@ namespace INT_UMC {
 	}
 
 	bool CustomDataHandlerImpl::BeginArray( const std::string & arrayName ) {
-		spIXMPArrayNode node = IXMPArrayNode::CreateUnorderedArrayNode( mNameSpace.c_str(), arrayName.c_str() );
+		spIArrayNode node = IArrayNode::CreateUnorderedArrayNode( mNameSpace.c_str(), mNameSpace.length(), arrayName.c_str(), arrayName.length() );
 		mParents.push( Parent( node ) );
 		return true;
 	}
@@ -79,9 +80,9 @@ namespace INT_UMC {
 
 	bool CustomDataHandlerImpl::AddKeyValuePair( const std::string & key, const std::string & value ) {
 		if ( mParents.top().mIsArray )
-			mParents.top().mArrayNode->AppendNode( IXMPSimpleNode::CreateSimpleNode( mNameSpace.c_str(), key.c_str(), value.c_str() ) );
+			mParents.top().mArrayNode->AppendNode( ISimpleNode::CreateSimpleNode( mNameSpace.c_str(), mNameSpace.length(), key.c_str(), key.length(), value.c_str(), value.length() ) );
 		else
-			mParents.top().mStructNode->AppendNode( IXMPSimpleNode::CreateSimpleNode( mNameSpace.c_str(), key.c_str(), value.c_str() ) );
+			mParents.top().mStructNode->AppendNode( ISimpleNode::CreateSimpleNode( mNameSpace.c_str(), mNameSpace.length(), key.c_str(), key.length(), value.c_str(), value.length() ) );
 		return true;
 	}
 
@@ -89,16 +90,16 @@ namespace INT_UMC {
 		return false;
 	}
 
-	CustomDataHandlerImpl::Parent::Parent( const spIXMPStructureNode & structureNode )
+	CustomDataHandlerImpl::Parent::Parent( const spIStructureNode & structureNode )
 		: mStructNode( structureNode )
 		, mIsArray( false ) { }
 
-	CustomDataHandlerImpl::Parent::Parent( const spIXMPArrayNode & arrayNode )
+	CustomDataHandlerImpl::Parent::Parent( const spIArrayNode & arrayNode )
 		: mArrayNode( arrayNode )
 		, mIsArray( true ) { }
 
 	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData, const std::string & customDataNameSpace,
-		const std::string & customDataName, const spIXMPStructureNode & baseNode )
+		const std::string & customDataName, const spIStructureNode & baseNode )
 	{
 		return std::make_shared< CustomDataHandlerImpl >( customData, customDataNameSpace, customDataName, baseNode );
 	}

@@ -22,7 +22,7 @@ namespace INT_UMC {
 		, mAudioEditRate( 1 ) {}
 
 	AudioTrackImpl::AudioTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeAudio, node )
 		, mAudioEditRate( 1 ) {}
 
@@ -146,7 +146,7 @@ namespace INT_UMC {
 		return TrackImpl::RemoveTransitionShot( uniqueID );
 	}
 
-	INode::eNodeTypes AudioTrackImpl::GetNodeType() const {
+	IUMCNode::eNodeTypes AudioTrackImpl::GetNodeType() const {
 		return TrackImpl::GetNodeType();
 	}
 
@@ -158,43 +158,43 @@ namespace INT_UMC {
 		return GetParsedID();
 	}
 
-	wpcINode AudioTrackImpl::GetParentNode() const {
+	wpcIUMCNode AudioTrackImpl::GetParentNode() const {
 		return TrackImpl::GetParentNode();
 	}
 
-	wpINode AudioTrackImpl::GetParentNode() {
+	wpIUMCNode AudioTrackImpl::GetParentNode() {
 		return TrackImpl::GetParentNode();
 	}
 
-	spcINode AudioTrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
+	spcIUMCNode AudioTrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return TrackImpl::GetDecendantNode( uniqueID );
 	}
 
-	spINode AudioTrackImpl::GetDecendantNode( const std::string & uniqueID ) {
+	spIUMCNode AudioTrackImpl::GetDecendantNode( const std::string & uniqueID ) {
 		return TrackImpl::GetDecendantNode( uniqueID );
 	}
 
-	spcINode AudioTrackImpl::GetChildNode( const std::string & uniqueID ) const {
+	spcIUMCNode AudioTrackImpl::GetChildNode( const std::string & uniqueID ) const {
 		return TrackImpl::GetChildNode( uniqueID );
 	}
 
-	spINode AudioTrackImpl::GetChildNode( const std::string & uniqueID ) {
+	spIUMCNode AudioTrackImpl::GetChildNode( const std::string & uniqueID ) {
 		return TrackImpl::GetChildNode( uniqueID );
 	}
 
-	INode::NodeList AudioTrackImpl::GetAllChildren() {
+	IUMCNode::NodeList AudioTrackImpl::GetAllChildren() {
 		return TrackImpl::GetAllChildren();
 	}
 
-	INode::cNodeList AudioTrackImpl::GetAllChildren() const {
+	IUMCNode::cNodeList AudioTrackImpl::GetAllChildren() const {
 		return TrackImpl::GetAllChildren();
 	}
 
-	INode::NodeList AudioTrackImpl::GetAllDecendants() {
+	IUMCNode::NodeList AudioTrackImpl::GetAllDecendants() {
 		return TrackImpl::GetAllDecendants();
 	}
 
-	INode::cNodeList AudioTrackImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList AudioTrackImpl::GetAllDecendants() const {
 		return TrackImpl::GetAllDecendants();
 	}
 
@@ -206,11 +206,11 @@ namespace INT_UMC {
 		return TrackImpl::SerializeXMP();
 	}
 
-	pcINodeI AudioTrackImpl::GetInternalNode() const {
+	pcIUMCNodeI AudioTrackImpl::GetInternalNode() const {
 		return this;
 	}
 
-	pINodeI AudioTrackImpl::GetInternalNode() {
+	pIUMCNodeI AudioTrackImpl::GetInternalNode() {
 		return this;
 	}
 
@@ -228,7 +228,7 @@ namespace INT_UMC {
 		UpdateDataFromXMPDOM( mAudioEditRate, kAudioEditRatePair, mXMPStructureNode, stou64rt );
 	}
 
-	INT_UMC::spIXMPStructureNode AudioTrackImpl::GetXMPNode() const {
+	INT_UMC::spIStructureNode AudioTrackImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -238,11 +238,11 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::pINode AudioTrackImpl::GetNode() {
+	UMC::pIUMCNode AudioTrackImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode AudioTrackImpl::GetNode() const {
+	UMC::pcIUMCNode AudioTrackImpl::GetNode() const {
 		return this;
 	}
 
@@ -250,9 +250,9 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool AudioTrackImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool AudioTrackImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		switch ( childNode->GetNodeType() ) {
-		case INode::kNodeTypeShot:
+		case IUMCNode::kNodeTypeShot:
 		{
 			spIShot shotChild = ConvertNode< IShot >( childNode );
 			switch ( shotChild->GetType() ) {
@@ -279,7 +279,7 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::spINode AudioTrackImpl::GetExternalNode() {
+	UMC::spIUMCNode AudioTrackImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -300,7 +300,7 @@ namespace INT_UMC {
 	}
 
 	spIAudioTrack CreateAudioTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< AudioTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );

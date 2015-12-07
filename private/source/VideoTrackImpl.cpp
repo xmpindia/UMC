@@ -23,7 +23,7 @@ namespace INT_UMC {
 		, mAudioEditRate( 1 ) {}
 
 	VideoTrackImpl::VideoTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 		: TrackImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ITrack::kTrackTypeVideo, node )
 		, mVideoEditRate( 1 )
 		, mAudioEditRate( 1 ) {}
@@ -156,7 +156,7 @@ namespace INT_UMC {
 		return TrackImpl::RemoveTransitionShot( uniqueID );
 	}
 
-	INode::eNodeTypes VideoTrackImpl::GetNodeType() const {
+	IUMCNode::eNodeTypes VideoTrackImpl::GetNodeType() const {
 		return TrackImpl::GetNodeType();
 	}
 
@@ -168,43 +168,43 @@ namespace INT_UMC {
 		return TrackImpl::GetParsedID();
 	}
 
-	wpcINode VideoTrackImpl::GetParentNode() const {
+	wpcIUMCNode VideoTrackImpl::GetParentNode() const {
 		return TrackImpl::GetParentNode();
 	}
 
-	wpINode VideoTrackImpl::GetParentNode() {
+	wpIUMCNode VideoTrackImpl::GetParentNode() {
 		return TrackImpl::GetParentNode();
 	}
 
-	spcINode VideoTrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
+	spcIUMCNode VideoTrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return TrackImpl::GetDecendantNode( uniqueID );
 	}
 
-	spINode VideoTrackImpl::GetDecendantNode( const std::string & uniqueID ) {
+	spIUMCNode VideoTrackImpl::GetDecendantNode( const std::string & uniqueID ) {
 		return TrackImpl::GetDecendantNode( uniqueID );
 	}
 
-	spcINode VideoTrackImpl::GetChildNode( const std::string & uniqueID ) const {
+	spcIUMCNode VideoTrackImpl::GetChildNode( const std::string & uniqueID ) const {
 		return TrackImpl::GetChildNode( uniqueID );
 	}
 
-	spINode VideoTrackImpl::GetChildNode( const std::string & uniqueID ) {
+	spIUMCNode VideoTrackImpl::GetChildNode( const std::string & uniqueID ) {
 		return TrackImpl::GetChildNode( uniqueID );
 	}
 
-	INode::NodeList VideoTrackImpl::GetAllChildren() {
+	IUMCNode::NodeList VideoTrackImpl::GetAllChildren() {
 		return TrackImpl::GetAllChildren();
 	}
 
-	INode::cNodeList VideoTrackImpl::GetAllChildren() const {
+	IUMCNode::cNodeList VideoTrackImpl::GetAllChildren() const {
 		return TrackImpl::GetAllChildren();
 	}
 
-	INode::NodeList VideoTrackImpl::GetAllDecendants() {
+	IUMCNode::NodeList VideoTrackImpl::GetAllDecendants() {
 		return TrackImpl::GetAllDecendants();
 	}
 
-	INode::cNodeList VideoTrackImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList VideoTrackImpl::GetAllDecendants() const {
 		return TrackImpl::GetAllDecendants();
 	}
 
@@ -216,11 +216,11 @@ namespace INT_UMC {
 		return TrackImpl::SerializeXMP();
 	}
 
-	pcINodeI VideoTrackImpl::GetInternalNode() const {
+	pcIUMCNodeI VideoTrackImpl::GetInternalNode() const {
 		return this;
 	}
 
-	pINodeI VideoTrackImpl::GetInternalNode() {
+	pIUMCNodeI VideoTrackImpl::GetInternalNode() {
 		return this;
 	}
 
@@ -244,7 +244,7 @@ namespace INT_UMC {
 		UpdateDataFromXMPDOM( mAudioEditRate, kAudioEditRatePair, mXMPStructureNode, stou64rt );
 	}
 
-	NS_XMPCORE::spIXMPStructureNode VideoTrackImpl::GetXMPNode() const {
+	AdobeXMPCore::spIStructureNode VideoTrackImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -254,11 +254,11 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::pINode VideoTrackImpl::GetNode() {
+	UMC::pIUMCNode VideoTrackImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode VideoTrackImpl::GetNode() const {
+	UMC::pcIUMCNode VideoTrackImpl::GetNode() const {
 		return this;
 	}
 
@@ -266,9 +266,9 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool VideoTrackImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool VideoTrackImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		switch ( childNode->GetNodeType() ) {
-		case INode::kNodeTypeShot:
+		case IUMCNode::kNodeTypeShot:
 		{
 			spIShot shotChild = ConvertNode< IShot >( childNode );
 			switch ( shotChild->GetType() ) {
@@ -295,7 +295,7 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::spINode VideoTrackImpl::GetExternalNode() {
+	UMC::spIUMCNode VideoTrackImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -316,7 +316,7 @@ namespace INT_UMC {
 	}
 
 	spIVideoTrack CreateVideoTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< VideoTrackImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );

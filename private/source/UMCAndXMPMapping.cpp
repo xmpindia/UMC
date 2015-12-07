@@ -12,10 +12,16 @@
 #include "utils/Utils.h"
 #include <sstream>
 
-#include "XMPCore/Interfaces/IXMPDOMImplementationRegistry.h"
-#include "XMPCore/Interfaces/IXMPDOMParser.h"
+#include "XMPCore/Interfaces/IDOMImplementationRegistry.h"
+#include "XMPCore/Interfaces/IDOMParser.h"
+#include "XMPCore/Interfaces/IMetadata.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
+#include "XMPCore/Interfaces/IArrayNode.h"
+#include "XMPCommon/Interfaces/IUTF8String.h"
 
 namespace INT_UMC {
+
+	using AdobeXMPCommon::npos;
 	const NamespacePropertyNamePair kSourcesPair( kXMP_NS_UMC, "sources" );
 	const NamespacePropertyNamePair kVideoSourcesPair( kXMP_NS_UMC, "videoSources" );
 	const NamespacePropertyNamePair kAudioSourcesPair( kXMP_NS_UMC, "audioSources" );
@@ -71,30 +77,30 @@ namespace INT_UMC {
 
 	void AddOrUpdateDataToXMPDOM( const std::string & stringValue,
 		const NamespacePropertyNamePair & namespacePropertyNamePair,
-		const spIXMPStructureNode & parentNode )
+		const spIStructureNode & parentNode )
 	{
-		auto existingNode = parentNode->GetNode( namespacePropertyNamePair.first, namespacePropertyNamePair.second );
+		auto existingNode = parentNode->GetNode( namespacePropertyNamePair.first, npos, namespacePropertyNamePair.second, npos );
 		bool nodeAlreadyExists = existingNode ? true : false;
 
 		if ( !stringValue.empty() ) {
-			if ( nodeAlreadyExists && existingNode->GetNodeType() == IXMPNode::kXMPNodeTypeSimple ) {
-				auto simpleExistingNode = parentNode->GetSimpleNode( namespacePropertyNamePair.first, namespacePropertyNamePair.second );
-				simpleExistingNode->ChangeValue( stringValue.c_str() );
+			if ( nodeAlreadyExists && existingNode->GetNodeType() == INode::kNTSimple ) {
+				auto simpleExistingNode = parentNode->GetSimpleNode( namespacePropertyNamePair.first, npos, namespacePropertyNamePair.second, npos );
+				simpleExistingNode->SetValue( stringValue.c_str(), npos );
 			} else {
-				auto newNode = IXMPSimpleNode::CreateSimpleNode( namespacePropertyNamePair.first,
-					namespacePropertyNamePair.second, stringValue.c_str() );
+				auto newNode = ISimpleNode::CreateSimpleNode( namespacePropertyNamePair.first, npos,
+					namespacePropertyNamePair.second, npos, stringValue.c_str() );
 				if ( nodeAlreadyExists ) parentNode->ReplaceNode( newNode );
 				else parentNode->AppendNode( newNode );
 			}
 		} else if ( nodeAlreadyExists ) {
-			parentNode->RemoveNode( namespacePropertyNamePair.first, namespacePropertyNamePair.second );
+			parentNode->RemoveNode( namespacePropertyNamePair.first, npos, namespacePropertyNamePair.second, npos );
 		}
 	}
 
-	void AddOrUpdateDataToXMPDOM( const TimeCode & timeCode, const spIXMPStructureNode & parentNode )
+	void AddOrUpdateDataToXMPDOM( const TimeCode & timeCode, const spIStructureNode & parentNode )
 	{
 		if ( timeCode.StandardFrameRate() != TimeCode::kNonStandardFrameRate ) {
-			auto sp = IXMPStructureNode::CreateStructureNode( kStartTimeCodePair.first, kStartTimeCodePair.second );
+			auto sp = IStructureNode::CreateStructureNode( kStartTimeCodePair.first, npos, kStartTimeCodePair.second, npos );
 
 			AddOrUpdateDataToXMPDOM( timeCode.SMPTETimecode(), kTimeValuePair, sp );
 
@@ -138,7 +144,7 @@ namespace INT_UMC {
 
 			}
 			AddOrUpdateDataToXMPDOM( std::string( timeFormat ), kTimeFormatPair, sp );
-			if ( parentNode->GetNode( kStartTimeCodePair.first, kStartTimeCodePair.second ) ) {
+			if ( parentNode->GetNode( kStartTimeCodePair.first, npos, kStartTimeCodePair.second, npos ) ) {
 				parentNode->ReplaceNode( sp );
 			} else {
 				parentNode->AppendNode( sp );
@@ -187,9 +193,9 @@ namespace INT_UMC {
 	}
 
 	bool UpdateDataFromXMPDOM( std::string & dataValue, const NamespacePropertyNamePair & pair,
-		const spIXMPStructureNode & parentNode, const std::string & resetValue )
+		const spIStructureNode & parentNode, const std::string & resetValue )
 	{
-		spIXMPSimpleNode node = TryToGetSimpleNode( parentNode, pair );
+		spISimpleNode node = TryToGetSimpleNode( parentNode, pair );
 		if ( node ) {
 			auto value = node->GetValue();
 			if ( value->size() ) {
@@ -201,13 +207,13 @@ namespace INT_UMC {
 		return false;
 	}
 
-	bool UpdateDataFromXMPDOM( TimeCode & dataValue, const spIXMPStructureNode & parentNode ) {
-		spIXMPStructureNode timeCodeNode = TryToGetStructNode( parentNode, kStartTimeCodePair );
+	bool UpdateDataFromXMPDOM( TimeCode & dataValue, const spIStructureNode & parentNode ) {
+		spIStructureNode timeCodeNode = TryToGetStructNode( parentNode, kStartTimeCodePair );
 		if ( timeCodeNode ) {
-			spIXMPSimpleNode timeValue = TryToGetSimpleNode( timeCodeNode, kTimeValuePair );
+			spISimpleNode timeValue = TryToGetSimpleNode( timeCodeNode, kTimeValuePair );
 			if ( timeValue ) {
 				dataValue.SMPTETimecode( timeValue->GetValue()->c_str() );
-				spIXMPSimpleNode timeFormat = TryToGetSimpleNode( timeCodeNode, kTimeFormatPair );
+				spISimpleNode timeFormat = TryToGetSimpleNode( timeCodeNode, kTimeFormatPair );
 				if ( timeFormat ) {
 					const char * timeFormatValue = timeFormat->GetValue()->c_str();
 					if ( strcmp( timeFormatValue, "24Timecode" ) == 0 ) {
@@ -257,17 +263,17 @@ namespace INT_UMC {
 		return false;
 	}
 
-	NS_XMPCORE::spIXMPStructureNode ParseRDF( const std::string & buffer ) {
-		spIXMPDOMParser parser = GetParser();
-		auto node = parser->Parse( buffer.c_str() );
+	AdobeXMPCore::spIStructureNode ParseRDF( const std::string & buffer ) {
+		spIDOMParser parser = GetParser();
+		auto node = parser->Parse( buffer.c_str(), buffer.length() );
 		if ( !node ) THROW_PARSING_ERROR;
-		return node;
+		return node->ConvertToStructureNode();
 	}
 
-	NS_XMPCORE::spIXMPStructureNode TryToGetActualNode( const spIXMPStructureNode & node, const NamespacePropertyNamePair & pair ) {
+	AdobeXMPCore::spIStructureNode TryToGetActualNode( const spIStructureNode & node, const NamespacePropertyNamePair & pair ) {
 		auto retNode = TryToGetStructNode( node, pair );
 		if ( retNode ) {
-			node->RemoveNode( pair.first, pair.second );
+			node->RemoveNode( pair.first, npos, pair.second, npos );
 			return retNode;
 		} else {
 			auto parentNode = node->GetParent();
@@ -277,10 +283,10 @@ namespace INT_UMC {
 				return node;
 			} 
 		}
-		return spIXMPStructureNode();
+		return spIStructureNode();
 	}
 
-	size_t GetMatchingIndexForActualNode( const spIXMPStructureNode & node, const NamespacePropertyNamePair ** array,
+	size_t GetMatchingIndexForActualNode( const spIStructureNode & node, const NamespacePropertyNamePair ** array,
 		size_t nElement )
 	{
 		for ( size_t i = 0; i < nElement; ++i ) {
@@ -292,7 +298,7 @@ namespace INT_UMC {
 		return -1;
 	}
 
-	/*NS_XMPCORE::spIXMPStructureNode TryToGetActualNode( const spIXMPStructureNode & node, const NamespacePropertyNamePair ** array,
+	/*AdobeXMPCore::spIStructureNode TryToGetActualNode( const spIStructureNode & node, const NamespacePropertyNamePair ** array,
 		size_t nElement, size_t & matchedIndex )
 	{
 		matchedIndex = -1;
@@ -303,7 +309,7 @@ namespace INT_UMC {
 				return retNode;
 			}
 		}
-		return spIXMPStructureNode();
+		return spIStructureNode();
 	}*/
 
 }

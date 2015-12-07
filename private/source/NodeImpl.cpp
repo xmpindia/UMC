@@ -17,32 +17,37 @@
 #include "utils/UMCAndXMPMapping.h"
 #include "utils/Utils.h"
 
-#include "XMPCore/Interfaces/IXMPStructureNode.h"
-#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
+#include "XMPCore/Interfaces/IMetadata.h"
+#include "XMPCore/Interfaces/ICoreObjectFactory.h"
+#include "XMPCore/Interfaces/INode.h"
+#include "XMPCore/Interfaces/INodeIterator.h"
+#include "XMPCommon/Interfaces/IUTF8String.h"
 #include <assert.h>
 
 namespace INT_UMC {
 
+	using AdobeXMPCommon::npos;
 	NodeImpl::NodeImpl()
-		: mXMPStructureNode( IXMPMetadata::CreateMetadata() )
+		: mXMPStructureNode( IMetadata::CreateMetadata() )
 		, mIndex( size_t(-1) ) { }
 
-	NodeImpl::NodeImpl( const spIXMPStructureNode & structureNode )
+	NodeImpl::NodeImpl( const spIStructureNode & structureNode )
 		: mXMPStructureNode( structureNode )
 		, mIndex( size_t(-1) ) { }
 	
 	NodeImpl::NodeImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType,
+		const spIUniqueIDGenerator & uniqueIDGenerator, IUMCNode::eNodeTypes nodeType,
 		const NamespacePropertyNamePair & namespacePropertyNamePair )
-		: mXMPStructureNode( IXMPStructureNode::CreateStructureNode( namespacePropertyNamePair.first, namespacePropertyNamePair.second ) )
+		: mXMPStructureNode( IStructureNode::CreateStructureNode( namespacePropertyNamePair.first, npos, namespacePropertyNamePair.second, npos ) )
 		, mIndex( size_t(-1) ) 
 	{
 		Init( uniqueIDAndReferenceTracker, uniqueIDGenerator, nodeType );
 	}
 
 	NodeImpl::NodeImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType,
-		const spIXMPStructureNode & xmpStructureNode )
+		const spIUniqueIDGenerator & uniqueIDGenerator, IUMCNode::eNodeTypes nodeType,
+		const spIStructureNode & xmpStructureNode )
 		: mXMPStructureNode( xmpStructureNode )
 		, mIndex( size_t(-1) ) 
 	{
@@ -50,7 +55,7 @@ namespace INT_UMC {
 	}
 
 	void NodeImpl::Init( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType )
+		const spIUniqueIDGenerator & uniqueIDGenerator, IUMCNode::eNodeTypes nodeType )
 	{
 		if ( !uniqueIDAndReferenceTracker ) THROW_UNIQUE_ID_AND_REFERENCE_TRACKER_CANT_BE_NULL;
 		if ( !uniqueIDGenerator ) THROW_UNIQUE_ID_GENERATOR_CANT_BE_NULL;
@@ -63,11 +68,11 @@ namespace INT_UMC {
 		return mUniqueID;
 	}
 
-	wpcINode NodeImpl::GetParentNode() const {
+	wpcIUMCNode NodeImpl::GetParentNode() const {
 		return mwpParentNode;
 	}
 
-	wpINode NodeImpl::GetParentNode() {
+	wpIUMCNode NodeImpl::GetParentNode() {
 		return mwpParentNode;
 	}
 
@@ -75,27 +80,27 @@ namespace INT_UMC {
 		return mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
 	}
 
-	static bool HandleSimpleNode( const spICustomDataHandler & handler, const spcIXMPSimpleNode & node );
-	static bool HandleStructureNode( const spICustomDataHandler & handler, const spcIXMPStructureNode & node );
-	static bool HandleArrayNode( const spICustomDataHandler & handler, const spcIXMPArrayNode & node );
+	static bool HandleSimpleNode( const spICustomDataHandler & handler, const spcISimpleNode & node );
+	static bool HandleStructureNode( const spICustomDataHandler & handler, const spcIStructureNode & node );
+	static bool HandleArrayNode( const spICustomDataHandler & handler, const spcIArrayNode & node );
 
-	static bool HandleNode( const spICustomDataHandler & handler, const spcIXMPNode & node ) {
+	static bool HandleNode( const spICustomDataHandler & handler, const spcINode & node ) {
 		bool retValue( false );
 		switch ( node->GetNodeType() ) {
-		case IXMPNode::kXMPNodeTypeSimple:
-			retValue = HandleSimpleNode( handler, node->AdaptConstNodeTo< IXMPSimpleNode >( node, IXMPNode::kXMPNodeTypeSimple ) );
+		case INode::kNTSimple:
+			retValue = HandleSimpleNode( handler, node->ConvertToSimpleNode() );
 			break;
-		case IXMPNode::kXMPNodeTypeStructure:
-			retValue = HandleStructureNode( handler, IXMPNode::AdaptConstNodeTo< IXMPStructureNode >( node, IXMPNode::kXMPNodeTypeStructure ) );
+		case INode::kNTStructure:
+			retValue = HandleStructureNode( handler, node->ConvertToStructureNode() );
 			break;
-		case IXMPNode::kXMPNodeTypeArray:
-			retValue = HandleArrayNode( handler, IXMPNode::AdaptConstNodeTo< IXMPArrayNode >( node, IXMPNode::kXMPNodeTypeArray ) );
+		case INode::kNTArray:
+			retValue = HandleArrayNode( handler, node->ConvertToArrayNode()) ;
 			break;
 		}
 		return retValue;
 	}
 
-	static bool HandleCustomDataNode( const spICustomDataHandler & handler, const spcIXMPStructureNode & node ) {
+	static bool HandleCustomDataNode( const spICustomDataHandler & handler, const spcIStructureNode & node ) {
 		auto it = node->Iterator();
 		while ( it ) {
 			bool retValue = HandleNode( handler, it->GetNode() );
@@ -106,11 +111,11 @@ namespace INT_UMC {
 		return true;
 	}
 
-	static bool HandleSimpleNode( const spICustomDataHandler & handler, const spcIXMPSimpleNode & node ) {
-		return handler->AddKeyValuePair( node->GetName()->c_str(), node->GetValue()->c_str() );
+	static bool HandleSimpleNode( const spICustomDataHandler & handler, const spcISimpleNode & node ) {
+		return handler->AddKeyValuePair(node->GetName()->c_str(), node->GetValue()->c_str());
 	}
 
-	static bool HandleStructureNode( const spICustomDataHandler & handler, const spcIXMPStructureNode & node ) {
+	static bool HandleStructureNode( const spICustomDataHandler & handler, const spcIStructureNode & node ) {
 		const char * name = node->GetName()->c_str();
 		if ( handler->BeginStructure( name ) ) {
 			auto it = node->Iterator();
@@ -125,7 +130,7 @@ namespace INT_UMC {
 		return false;
 	}
 
-	static bool HandleArrayNode( const spICustomDataHandler & handler, const spcIXMPArrayNode & node ) {
+	static bool HandleArrayNode( const spICustomDataHandler & handler, const spcIArrayNode & node ) {
 		const char * name = node->GetName()->c_str();
 		if ( handler->BeginArray( name ) ) {
 			auto it = node->Iterator();
@@ -141,7 +146,7 @@ namespace INT_UMC {
 	}
 
 
-	static spICustomData ParseNode( const spICustomDataHandler & handler, const spcIXMPStructureNode & node ) {
+	static spICustomData ParseNode( const spICustomDataHandler & handler, const spcIStructureNode & node ) {
 		if ( handler->BeginCustomData() ) {
 			if ( HandleCustomDataNode( handler, node ) )
 				return handler->EndCustomData();
@@ -156,7 +161,7 @@ namespace INT_UMC {
 			return it->second;
 		else {
 			auto handler = ICustomDataHandlerRegistry::GetInstance()->GetHandler( customDataNameSpace, customDataName );
-			auto node = mExtensionNode->GetStructureNode( customDataNameSpace.c_str(), customDataName.c_str() );
+			auto node = mExtensionNode->GetStructureNode( customDataNameSpace.c_str(), npos, customDataName.c_str(), npos );
 			if ( handler && node ) {
 				auto returnValue = ParseNode( handler, node );
 				mCustomDataMap[ combinedString ] = returnValue;
@@ -180,7 +185,7 @@ namespace INT_UMC {
 				std::string combinedString = GetCombinedString( customDataNameSpace, customDataName );
 				mCustomDataMap[ combinedString ] = customData;
 				customData->SetParentNode( mwpParentNode.lock() );
-				mExtensionNode->RemoveNode( customDataNameSpace.c_str(), customDataName.c_str() );
+				mExtensionNode->RemoveNode( customDataNameSpace.c_str(), npos, customDataName.c_str(), npos );
 				auto serializerHandler = CreateSerializerHandler( customData, customDataNameSpace, customDataName, mExtensionNode );
 				handler->Serialize( customData, serializerHandler );
 				return true;
@@ -195,7 +200,7 @@ namespace INT_UMC {
 		mwpParentNode.reset();
 	}
 
-	void NodeImpl::AddToDOM( const spINode & parent ) {
+	void NodeImpl::AddToDOM( const spIUMCNode & parent ) {
 		mspUniqueIDAndReferenceTracker->AddUniqueID( mUniqueID );
 		if ( !parent ) THROW_PARENT_CANT_BE_NULL;
 		mwpParentNode = parent;
@@ -214,7 +219,7 @@ namespace INT_UMC {
 
 	void NodeImpl::CreateExtensionNodeIfRequired() {
 		if ( !mExtensionNode ) {
-			mExtensionNode = IXMPStructureNode::CreateStructureNode( kExtensionPair.first, kExtensionPair.second );
+			mExtensionNode = IStructureNode::CreateStructureNode( kExtensionPair.first, npos, kExtensionPair.second, npos );
 			mXMPStructureNode->AppendNode( mExtensionNode );
 		}
 	}
@@ -259,7 +264,7 @@ namespace INT_UMC {
 		size_t referenceCount = mspUniqueIDAndReferenceTracker->GetReferenceCount( mUniqueID );
 		std::string oldUniqueID = mUniqueID;
 		std::string userUniqueID = GetParsedID();
-		spINode parentNode = mwpParentNode.lock();
+		spIUMCNode parentNode = mwpParentNode.lock();
 		if ( parentNode && parentNode->GetInternalNode()->ChangeChildUniqueID( GetExternalNode(), newUniqueID ) ) {
 			mspUniqueIDAndReferenceTracker->RemoveUniqueID( oldUniqueID );
 			mspUniqueIDAndReferenceTracker->AddUniqueID( newUniqueID );

@@ -9,7 +9,7 @@
 
 
 #include "implHeaders/AudioSourceImpl.h"
-#include "XMPCore/Interfaces/IXMPStructureNode.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
 #include "utils/UMCAndXMPMapping.h"
 
 namespace INT_UMC {
@@ -23,7 +23,7 @@ namespace INT_UMC {
 		, mTimeCode( FrameRate( 1 ) ) {}
 
 	AudioSourceImpl::AudioSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, ISource::kSourceTypeAudio, node )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd )
@@ -74,7 +74,7 @@ namespace INT_UMC {
 		return SourceImpl::GetClipName();
 	}
 
-	INode::eNodeTypes AudioSourceImpl::GetNodeType() const {
+	IUMCNode::eNodeTypes AudioSourceImpl::GetNodeType() const {
 		return SourceImpl::GetNodeType();
 	}
 
@@ -82,43 +82,43 @@ namespace INT_UMC {
 		return SourceImpl::GetUniqueID();
 	}
 
-	wpcINode AudioSourceImpl::GetParentNode() const {
+	wpcIUMCNode AudioSourceImpl::GetParentNode() const {
 		return SourceImpl::GetParentNode();
 	}
 
-	wpINode AudioSourceImpl::GetParentNode() {
+	wpIUMCNode AudioSourceImpl::GetParentNode() {
 		return SourceImpl::GetParentNode();
 	}
 
-	spcINode AudioSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
-		return spcINode();
+	spcIUMCNode AudioSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
+		return spcIUMCNode();
 	}
 
-	spINode AudioSourceImpl::GetDecendantNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode AudioSourceImpl::GetDecendantNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	spcINode AudioSourceImpl::GetChildNode( const std::string & uniqueID ) const {
-		return spINode();
+	spcIUMCNode AudioSourceImpl::GetChildNode( const std::string & uniqueID ) const {
+		return spIUMCNode();
 	}
 
-	spINode AudioSourceImpl::GetChildNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode AudioSourceImpl::GetChildNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	INode::NodeList AudioSourceImpl::GetAllChildren() {
+	IUMCNode::NodeList AudioSourceImpl::GetAllChildren() {
 		return NodeList();
 	}
 
-	INode::cNodeList AudioSourceImpl::GetAllChildren() const {
+	IUMCNode::cNodeList AudioSourceImpl::GetAllChildren() const {
 		return cNodeList();
 	}
 
-	INode::NodeList AudioSourceImpl::GetAllDecendants() {
+	IUMCNode::NodeList AudioSourceImpl::GetAllDecendants() {
 		return NodeList();
 	}
 
-	INode::cNodeList AudioSourceImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList AudioSourceImpl::GetAllDecendants() const {
 		return cNodeList();
 	}
 
@@ -138,11 +138,11 @@ namespace INT_UMC {
 		return SourceImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
-	pINodeI AudioSourceImpl::GetInternalNode() { return this; }
+	pIUMCNodeI AudioSourceImpl::GetInternalNode() { return this; }
 
-	pcINodeI AudioSourceImpl::GetInternalNode() const { return this; }
+	pcIUMCNodeI AudioSourceImpl::GetInternalNode() const { return this; }
 
-	NS_XMPCORE::spIXMPStructureNode AudioSourceImpl::GetXMPNode() const {
+	AdobeXMPCore::spIStructureNode AudioSourceImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -152,19 +152,19 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::pINode AudioSourceImpl::GetNode() {
+	UMC::pIUMCNode AudioSourceImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode AudioSourceImpl::GetNode() const {
+	UMC::pcIUMCNode AudioSourceImpl::GetNode() const {
 		return this;
 	}
 
-	bool AudioSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool AudioSourceImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		return false;
 	}
 
-	spINode AudioSourceImpl::GetExternalNode() {
+	spIUMCNode AudioSourceImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -201,7 +201,7 @@ namespace INT_UMC {
 	}
 
 	spIAudioSource CreateAudioSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< AudioSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );

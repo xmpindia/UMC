@@ -9,13 +9,16 @@
 
 
 #include "utils/Utils.h"
-#include "interfaces/INode.h"
-#include "XMPCore/Interfaces/IXMPDOMImplementationRegistry.h"
-#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
+#include "interfaces/IUMCNode.h"
+#include "XMPCore/Interfaces/IDOMImplementationRegistry.h"
+#include "XMPCore/Interfaces/ICoreObjectFactory.h"
+#include "XMPCore/Interfaces/IArrayNode.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
 
 namespace INT_UMC {
 
-	bool SafeToRemoveElement( const spcINode & node ) {
+	using AdobeXMPCommon::npos;
+	bool SafeToRemoveElement( const spcIUMCNode & node ) {
 		if ( node->GetReferenceCount() == 0  ) {
 			auto list = node->GetAllChildren();
 			auto it = list.begin();
@@ -29,8 +32,8 @@ namespace INT_UMC {
 		return false;
 	}
 
-	NS_XMPCORE::spIXMPDOMSerializer GetSerializer( bool reset /*= false */ ) {
-		static spIXMPDOMSerializer serializer;
+	AdobeXMPCore::spIDOMSerializer GetSerializer( bool reset /*= false */ ) {
+		static spIDOMSerializer serializer;
 		if ( reset ) {
 			serializer.reset();
 			return serializer;
@@ -39,13 +42,13 @@ namespace INT_UMC {
 		if ( serializer )
 			return serializer;
 		else {
-			serializer = IXMPDOMImplementationRegistry::GetDOMImplementationRegistry()->CreateSerializer( "rdf" );
+			serializer = IDOMImplementationRegistry::GetDOMImplementationRegistry()->GetSerializer( "rdf" );
 			return serializer;
 		}
 	}
 
-	NS_XMPCORE::spIXMPDOMParser GetParser( bool reset /*= false */ ) {
-		static spIXMPDOMParser parser;
+	AdobeXMPCore::spIDOMParser GetParser( bool reset /*= false */ ) {
+		static spIDOMParser parser;
 		if ( reset ) {
 			parser.reset();
 			return parser;
@@ -54,28 +57,28 @@ namespace INT_UMC {
 		if ( parser )
 			return parser;
 		else {
-			parser = IXMPDOMImplementationRegistry::GetDOMImplementationRegistry()->CreateParser( "rdf" );
+			parser = IDOMImplementationRegistry::GetDOMImplementationRegistry()->GetParser( "rdf" );
 			return parser;
 		}
 	}
 
-	void CreateEquivalentXMPNodes( const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode,
+	void CreateEquivalentXMPNodes( const spIStructureNode & parent, spIArrayNode & arrayNode,
 		const NamespacePropertyNamePair & arrayPair )
 	{
 		if ( !arrayNode ) {
-			arrayNode = IXMPArrayNode::CreateUnorderedArrayNode( arrayPair.first, arrayPair.second );
+			arrayNode = IArrayNode::CreateUnorderedArrayNode( arrayPair.first, npos, arrayPair.second, npos );
 			parent->AppendNode( arrayNode );
 		}
 	}
 
-	void CreateEquivalentXMPNodes( const spIXMPStructureNode & parent, spIXMPArrayNode & arrayNode,
-		const NamespacePropertyNamePair & arrayPair, spIXMPStructureNode & containerNode, const NamespacePropertyNamePair & containerPair )
+	void CreateEquivalentXMPNodes( const spIStructureNode & parent, spIArrayNode & arrayNode,
+		const NamespacePropertyNamePair & arrayPair, spIStructureNode & containerNode, const NamespacePropertyNamePair & containerPair )
 	{
 		if ( !arrayNode ) {
-			arrayNode = IXMPArrayNode::CreateUnorderedArrayNode( arrayPair.first, arrayPair.second );
+			arrayNode = IArrayNode::CreateUnorderedArrayNode( arrayPair.first, npos, arrayPair.second, npos );
 			if ( containerPair.first ) {
 				if ( !containerNode ) {
-					containerNode = IXMPStructureNode::CreateStructureNode( containerPair.first, containerPair.second );
+					containerNode = IStructureNode::CreateStructureNode( containerPair.first, npos, containerPair.second, npos );
 					parent->AppendNode( containerNode );
 				}
 				containerNode->AppendNode( arrayNode );
@@ -85,27 +88,27 @@ namespace INT_UMC {
 		}
 	}
 
-	NS_XMPCORE::spIXMPArrayNode TryToGetArrayNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
+	AdobeXMPCore::spIArrayNode TryToGetArrayNode( const spIStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
 		try {
-			return parentNode->GetArrayNode( pair.first, pair.second );
+			return parentNode->GetArrayNode( pair.first, npos, pair.second, npos );
 		} catch ( ... ) {
-			return spIXMPArrayNode();
+			return spIArrayNode();
 		}
 	}
 
-	NS_XMPCORE::spIXMPStructureNode TryToGetStructNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
+	AdobeXMPCore::spIStructureNode TryToGetStructNode( const spIStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
 		try {
-			return parentNode->GetStructureNode( pair.first, pair.second );
+			return parentNode->GetStructureNode( pair.first, npos, pair.second, npos );
 		} catch ( ... ) {
-			return spIXMPStructureNode();
+			return spIStructureNode();
 		}
 	}
 
-	NS_XMPCORE::spIXMPSimpleNode TryToGetSimpleNode( const spIXMPStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
+	AdobeXMPCore::spISimpleNode TryToGetSimpleNode( const spIStructureNode & parentNode, const NamespacePropertyNamePair & pair ) {
 		try {
-			return parentNode->GetSimpleNode( pair.first, pair.second );
+			return parentNode->GetSimpleNode( pair.first, npos, pair.second, npos );
 		} catch ( ... ) {
-			return spIXMPSimpleNode();
+			return spISimpleNode();
 		}
 	}
 

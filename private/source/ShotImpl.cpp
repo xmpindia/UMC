@@ -17,6 +17,7 @@
 
 namespace INT_UMC {
 
+	using AdobeXMPCommon::npos;
 	void ShotImpl::SetInCount( const EditUnitInCount & inCount ) {
 		mInCount = inCount;
 	}
@@ -33,19 +34,19 @@ namespace INT_UMC {
 		return mDuration;
 	}
 
-	spIFrame ShotImpl::AddFrame( const spISource & source, const spINode & spSelf ) {
+	spIFrame ShotImpl::AddFrame( const spISource & source, const spIUMCNode & spSelf ) {
 		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, source );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mFrames, kFramesPair );
 		AddElementToMap( mFrameMap, frame, spSelf, mFrames );
 		return frame;
 	}
 
-	UMC::spIFrame ShotImpl::AddFrame( const std::string & buffer, const spINode & spSelf ) {
-		spIXMPStructureNode xmpNode = ParseRDF( buffer );
+	UMC::spIFrame ShotImpl::AddFrame( const std::string & buffer, const spIUMCNode & spSelf ) {
+		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddFrame( xmpNode, spSelf );
 	}
 
-	UMC::spIFrame ShotImpl::AddFrame( const spIXMPStructureNode & node, const spINode & spSelf ) {
+	UMC::spIFrame ShotImpl::AddFrame( const spIStructureNode & node, const spIUMCNode & spSelf ) {
 		auto actualNode = TryToGetActualNode( node, kFramesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
@@ -67,19 +68,19 @@ namespace INT_UMC {
 		return CreateListFromMap< spcIFrame >( mFrameMap );
 	}
 
-	spIShotSource ShotImpl::AddShotSource( const spISource & source, const spINode & spSelf ) {
+	spIShotSource ShotImpl::AddShotSource( const spISource & source, const spIUMCNode & spSelf ) {
 		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, source );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mShotSources, kShotSourcesPair );
 		AddElementToMap( mShotSourceMap, shotSource, spSelf, mShotSources );
 		return shotSource;
 	}
 
-	UMC::spIShotSource ShotImpl::AddShotSource( const std::string & buffer, const spINode & spSelf ) {
-		spIXMPStructureNode xmpNode = ParseRDF( buffer );
+	UMC::spIShotSource ShotImpl::AddShotSource( const std::string & buffer, const spIUMCNode & spSelf ) {
+		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddShotSource( xmpNode, spSelf );
 	}
 
-	UMC::spIShotSource ShotImpl::AddShotSource( const spIXMPStructureNode & node, const spINode & spSelf ) {
+	UMC::spIShotSource ShotImpl::AddShotSource( const spIStructureNode & node, const spIUMCNode & spSelf ) {
 		auto actualNode = TryToGetActualNode( node, kShotSourcesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
@@ -139,11 +140,11 @@ namespace INT_UMC {
 		return TryAndRemoveElementFromMap( mFrameMap, uniqueID, mFrames );
 	}
 
-	spcINode ShotImpl::GetDecendantNode( const std::string & id ) const {
+	spcIUMCNode ShotImpl::GetDecendantNode( const std::string & id ) const {
 		return const_cast< ShotImpl * >( this )->GetDecendantNode( id );
 	}
 
-	spINode ShotImpl::GetDecendantNode( const std::string & id ) {
+	spIUMCNode ShotImpl::GetDecendantNode( const std::string & id ) {
 		auto node = GetChildNode( id );
 		if ( node ) return node;
 		node = GetDecendantFromMap( mShotSourceMap, id );
@@ -152,42 +153,42 @@ namespace INT_UMC {
 		return node;
 	}
 
-	spcINode ShotImpl::GetChildNode( const std::string & id ) const {
+	spcIUMCNode ShotImpl::GetChildNode( const std::string & id ) const {
 		return const_cast< ShotImpl * >( this )->GetChildNode( id );
 	}
 
-	spINode ShotImpl::GetChildNode( const std::string & id ) {
-		spINode node = GetShotSource( id );
+	spIUMCNode ShotImpl::GetChildNode( const std::string & id ) {
+		spIUMCNode node = GetShotSource( id );
 		if ( node ) return node;
 		node = GetFrame( id );
 		return node;
 	}
 
-	INode::NodeList ShotImpl::GetAllChildren() {
-		INode::NodeList list;
-		AppendToListFromMap< spINode >( list, mShotSourceMap );
-		AppendToListFromMap< spINode >( list, mFrameMap );
+	IUMCNode::NodeList ShotImpl::GetAllChildren() {
+		IUMCNode::NodeList list;
+		AppendToListFromMap< spIUMCNode >( list, mShotSourceMap );
+		AppendToListFromMap< spIUMCNode >( list, mFrameMap );
 		return list;
 	}
 
-	INode::cNodeList ShotImpl::GetAllChildren() const {
-		INode::cNodeList list;
-		AppendToListFromMap< spcINode >( list, mShotSourceMap );
-		AppendToListFromMap< spcINode >( list, mFrameMap );
+	IUMCNode::cNodeList ShotImpl::GetAllChildren() const {
+		IUMCNode::cNodeList list;
+		AppendToListFromMap< spcIUMCNode >( list, mShotSourceMap );
+		AppendToListFromMap< spcIUMCNode >( list, mFrameMap );
 		return list;
 	}
 
-	INode::NodeList ShotImpl::GetAllDecendants() {
-		INode::NodeList list;
-		AppendDecendantsFromMapToList< spINode >( list, mShotSourceMap );
-		AppendDecendantsFromMapToList< spINode >( list, mFrameMap );
+	IUMCNode::NodeList ShotImpl::GetAllDecendants() {
+		IUMCNode::NodeList list;
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mShotSourceMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mFrameMap );
 		return list;
 	}
 
-	INode::cNodeList ShotImpl::GetAllDecendants() const {
-		INode::cNodeList list;
-		AppendDecendantsFromMapToList< spcINode >( list, mShotSourceMap );
-		AppendDecendantsFromMapToList< spcINode >( list, mFrameMap );
+	IUMCNode::cNodeList ShotImpl::GetAllDecendants() const {
+		IUMCNode::cNodeList list;
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mShotSourceMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mFrameMap );
 		return list;
 	}
 
@@ -200,9 +201,9 @@ namespace INT_UMC {
 
 	void ShotImpl::SyncInternalStuffToXMP() const {
 		if ( mInCount != kEditUnitInCountFromBeginning || mDuration != kEditUnitDurationTillEnd ) {
-			spIXMPStructureNode record = TryToGetStructNode( mXMPStructureNode, kRecordPair );
+			spIStructureNode record = TryToGetStructNode( mXMPStructureNode, kRecordPair );
 			if ( !record ) {
-				record = IXMPStructureNode::CreateStructureNode( kRecordPair.first, kRecordPair.second );
+				record = IStructureNode::CreateStructureNode( kRecordPair.first, npos, kRecordPair.second, npos );
 				mXMPStructureNode->AppendNode( record );
 			}
 			AddOrUpdateDataToXMPDOM( mInCount, kInCountPair, record, IgnoreEditUnitInCount );
@@ -213,7 +214,7 @@ namespace INT_UMC {
 		CallSyncUMCToXMPOnMapElements( mFrameMap );
 	}
 
-	void ShotImpl::SyncXMPToInternalStuff( const spINode & spSelf ) {
+	void ShotImpl::SyncXMPToInternalStuff( const spIUMCNode & spSelf ) {
 		mShotSources = TryToGetArrayNode( mXMPStructureNode, kShotSourcesPair );
 		mFrames = TryToGetArrayNode( mXMPStructureNode, kFramesPair );
 
@@ -232,14 +233,14 @@ namespace INT_UMC {
 	}
 
 	ShotImpl::ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeShot, node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeShot, node )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd ) { }
 
 	ShotImpl::ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeShot, kShotsPair )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeShot, kShotsPair )
 		, mInCount( kEditUnitInCountFromBeginning )
 		, mDuration( kEditUnitDurationTillEnd ) { }
 

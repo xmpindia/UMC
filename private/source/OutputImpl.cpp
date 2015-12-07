@@ -16,7 +16,7 @@
 #include "utils/Utils.h"
 #include "utils/UMCAndXMPMapping.h"
 
-#include "XMPCore/Interfaces/IXMPStructureNode.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
 
 namespace INT_UMC {
 
@@ -53,15 +53,15 @@ namespace INT_UMC {
 		return list;
 	}
 
-	INode::eNodeTypes OutputImpl::GetNodeType() const {
+	IUMCNode::eNodeTypes OutputImpl::GetNodeType() const {
 		return kNodeTypeOutput;
 	}
 
-	spcINode OutputImpl::GetDecendantNode( const std::string & id ) const {
+	spcIUMCNode OutputImpl::GetDecendantNode( const std::string & id ) const {
 		return const_cast< OutputImpl * >( this )->GetDecendantNode( id );
 	}
 
-	spINode OutputImpl::GetDecendantNode( const std::string & id ) {
+	spIUMCNode OutputImpl::GetDecendantNode( const std::string & id ) {
 		auto node = GetChildNode( id );
 		if ( node ) return node;
 		node = GetDecendantFromMap( mVideoTrackMap, id );
@@ -70,39 +70,39 @@ namespace INT_UMC {
 		return node;
 	}
 
-	spcINode OutputImpl::GetChildNode( const std::string & id ) const {
+	spcIUMCNode OutputImpl::GetChildNode( const std::string & id ) const {
 		return const_cast< OutputImpl * >( this )->GetChildNode( id );
 	}
 
-	spINode OutputImpl::GetChildNode( const std::string & id ) {
+	spIUMCNode OutputImpl::GetChildNode( const std::string & id ) {
 		return GetTrack( id );
 	}
 
-	INode::NodeList OutputImpl::GetAllChildren() {
+	IUMCNode::NodeList OutputImpl::GetAllChildren() {
 		NodeList list;
-		AppendToListFromMap< spINode, VideoTrackMap >( list, mVideoTrackMap );
-		AppendToListFromMap< spINode, AudioTrackMap >( list, mAudioTrackMap );
+		AppendToListFromMap< spIUMCNode, VideoTrackMap >( list, mVideoTrackMap );
+		AppendToListFromMap< spIUMCNode, AudioTrackMap >( list, mAudioTrackMap );
 		return list;
 	}
 
-	INode::cNodeList OutputImpl::GetAllChildren() const {
+	IUMCNode::cNodeList OutputImpl::GetAllChildren() const {
 		cNodeList list;
-		AppendToListFromMap< spcINode, VideoTrackMap >( list, mVideoTrackMap );
-		AppendToListFromMap< spcINode, AudioTrackMap >( list, mAudioTrackMap );
+		AppendToListFromMap< spcIUMCNode, VideoTrackMap >( list, mVideoTrackMap );
+		AppendToListFromMap< spcIUMCNode, AudioTrackMap >( list, mAudioTrackMap );
 		return list;
 	}
 
-	INode::NodeList OutputImpl::GetAllDecendants() {
+	IUMCNode::NodeList OutputImpl::GetAllDecendants() {
 		NodeList list;
-		AppendDecendantsFromMapToList< spINode >( list, mVideoTrackMap );
-		AppendDecendantsFromMapToList< spINode >( list, mAudioTrackMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mVideoTrackMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mAudioTrackMap );
 		return list;
 	}
 
-	INode::cNodeList OutputImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList OutputImpl::GetAllDecendants() const {
 		cNodeList list;
-		AppendDecendantsFromMapToList< spcINode >( list, mVideoTrackMap );
-		AppendDecendantsFromMapToList< spcINode >( list, mAudioTrackMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mVideoTrackMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mAudioTrackMap );
 		return list;
 	}
 
@@ -122,11 +122,11 @@ namespace INT_UMC {
 		return NodeImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
-	pINodeI OutputImpl::GetInternalNode() {
+	pIUMCNodeI OutputImpl::GetInternalNode() {
 		return this;
 	}
 
-	pcINodeI OutputImpl::GetInternalNode() const {
+	pcIUMCNodeI OutputImpl::GetInternalNode() const {
 		return this;
 	}
 
@@ -167,12 +167,12 @@ namespace INT_UMC {
 		PopulateMapFromXMPArrayNode( this, &OutputImpl::AddAudioTrack, mAudioTracks );
 	}
 
-	NS_XMPCORE::spIXMPStructureNode OutputImpl::GetXMPNode() const {
+	AdobeXMPCore::spIStructureNode OutputImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
 	UMC::spITrack OutputImpl::AddTrack( const std::string & buffer ) {
-		spIXMPStructureNode parentNode = ParseRDF( buffer );
+		spIStructureNode parentNode = ParseRDF( buffer );
 		const NamespacePropertyNamePair * pairs[ 2 ] = { &kVideoTracksPair, &kAudioSourcesPair };
 		size_t matchedIndex =  GetMatchingIndexForActualNode( parentNode, &pairs[ 0 ], ( size_t ) 2 );
 
@@ -195,11 +195,11 @@ namespace INT_UMC {
 	}
 
 	UMC::spIVideoTrack OutputImpl::AddVideoTrack( const std::string & buffer ) {
-		spIXMPStructureNode node = ParseRDF( buffer );
+		spIStructureNode node = ParseRDF( buffer );
 		return AddVideoTrack( node );
 	}
 
-	UMC::spIVideoTrack OutputImpl::AddVideoTrack( const spIXMPStructureNode & node ) {
+	UMC::spIVideoTrack OutputImpl::AddVideoTrack( const spIStructureNode & node ) {
 		auto actualNode = TryToGetActualNode( node, kVideoTracksPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIVideoTrack track = CreateVideoTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -217,11 +217,11 @@ namespace INT_UMC {
 		return NodeImpl::SerializeXMP();
 	}
 
-	UMC::pINode OutputImpl::GetNode() {
+	UMC::pIUMCNode OutputImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode OutputImpl::GetNode() const {
+	UMC::pcIUMCNode OutputImpl::GetNode() const {
 		return this;
 	}
 
@@ -229,9 +229,9 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool OutputImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool OutputImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		switch( childNode->GetNodeType() ) {
-		case INode::kNodeTypeTrack:
+		case IUMCNode::kNodeTypeTrack:
 		{
 			spITrack trackChild = ConvertNode< ITrack >( childNode );
 			switch ( trackChild->GetType() ) {
@@ -255,7 +255,7 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::spINode OutputImpl::GetExternalNode() {
+	UMC::spIUMCNode OutputImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -267,11 +267,11 @@ namespace INT_UMC {
 	}
 
 	UMC::spIAudioTrack OutputImpl::AddAudioTrack( const std::string & buffer ) {
-		spIXMPStructureNode node = ParseRDF( buffer );
+		spIStructureNode node = ParseRDF( buffer );
 		return AddAudioTrack( node );
 	}
 
-	UMC::spIAudioTrack OutputImpl::AddAudioTrack( const spIXMPStructureNode & node ) {
+	UMC::spIAudioTrack OutputImpl::AddAudioTrack( const spIStructureNode & node ) {
 		auto actualNode = TryToGetActualNode( node, kAudioTracksPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIAudioTrack track = CreateAudioTrack( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -381,11 +381,11 @@ namespace INT_UMC {
 		return TryAndRemoveElementFromMap( mAudioTrackMap, uniqueID, mAudioTracks );
 	}
 
-	wpcINode OutputImpl::GetParentNode() const  {
+	wpcIUMCNode OutputImpl::GetParentNode() const  {
 		return NodeImpl::GetParentNode();
 	}
 
-	wpINode OutputImpl::GetParentNode() {
+	wpIUMCNode OutputImpl::GetParentNode() {
 		return NodeImpl::GetParentNode();
 	}
 
@@ -426,8 +426,8 @@ namespace INT_UMC {
 	}
 
 	OutputImpl::OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & xmpStructureNode )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeOutput, xmpStructureNode )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & xmpStructureNode )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeOutput, xmpStructureNode )
 		, mCanvasAspectRatio( 1 )
 		, mImageAspectRatio( 1 )
 		, mVideoEditRate( 1 )
@@ -436,14 +436,14 @@ namespace INT_UMC {
 
 	OutputImpl::OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeOutput, kOutputsPair )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeOutput, kOutputsPair )
 		, mCanvasAspectRatio( 1 )
 		, mImageAspectRatio( 1 )
 		, mVideoEditRate( 1 )
 		, mAudioEditRate( 1 ) { }
 
 	spIOutput CreateOutput( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< OutputImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );

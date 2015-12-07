@@ -23,7 +23,9 @@
 
 #include "utils/UMCAndXMPMapping.h"
 
-#include "XMPCore/Interfaces/IXMPMetadata.h"
+#include "XMPCore/Interfaces/IMetadata.h"
+#include "XMPCore/Interfaces/IArrayNode.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
 
 namespace INT_UMC {
 
@@ -31,16 +33,16 @@ namespace INT_UMC {
 	UMCImpl::UMCImpl() {
 		auto first = CreateUniqueIDAndReferenceTracker();
 		auto second = CreateUniqueIDGenerator( first );
-		Init( first, second, INode::kNodeTypeUMC );
+		Init( first, second, IUMCNode::kNodeTypeUMC );
 	}
 
 
-	UMCImpl::UMCImpl( const spIXMPStructureNode & metadata )
+	UMCImpl::UMCImpl( const spIStructureNode & metadata )
 		: NodeImpl( metadata )
 	{
 		auto first = CreateUniqueIDAndReferenceTracker();
 		auto second = CreateUniqueIDGenerator( first );
-		Init( first, second, INode::kNodeTypeUMC );
+		Init( first, second, IUMCNode::kNodeTypeUMC );
 	}
 
 	spIVideoSource UMCImpl::AddVideoSource() {
@@ -51,11 +53,11 @@ namespace INT_UMC {
 	}
 
 	spIVideoSource UMCImpl::AddVideoSource( const std::string & buffer ) {
-		spIXMPStructureNode node = ParseRDF( buffer );
+		spIStructureNode node = ParseRDF( buffer );
 		return AddVideoSource( node );
 	}
 
-	spIVideoSource UMCImpl::AddVideoSource( const spIXMPStructureNode & node ) {
+	spIVideoSource UMCImpl::AddVideoSource( const spIStructureNode & node ) {
 		auto actualNode = TryToGetActualNode( node, kVideoSourcesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIVideoSource source = CreateVideoSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -73,11 +75,11 @@ namespace INT_UMC {
 	}
 
 	spIAudioSource UMCImpl::AddAudioSource( const std::string & buffer ) {
-		spIXMPStructureNode node = ParseRDF( buffer );
+		spIStructureNode node = ParseRDF( buffer );
 		return AddAudioSource( node );
 	}
 
-	spIAudioSource UMCImpl::AddAudioSource( const spIXMPStructureNode & node ) {
+	spIAudioSource UMCImpl::AddAudioSource( const spIStructureNode & node ) {
 		auto actualNode = TryToGetActualNode( node, kAudioSourcesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIAudioSource source = CreateAudioSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -95,11 +97,11 @@ namespace INT_UMC {
 	}
 
 	spIVideoFrameSource UMCImpl::AddVideoFrameSource( const std::string & buffer ) {
-		spIXMPStructureNode node = ParseRDF( buffer );
+		spIStructureNode node = ParseRDF( buffer );
 		return AddVideoFrameSource( node );
 	}
 
-	UMC::spIVideoFrameSource UMCImpl::AddVideoFrameSource( const spIXMPStructureNode & node ) {
+	UMC::spIVideoFrameSource UMCImpl::AddVideoFrameSource( const spIStructureNode & node ) {
 		auto actualNode = TryToGetActualNode( node, kVideoFrameSourcesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIVideoFrameSource source = CreateVideoFrameSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spIVideoSource(), actualNode );
@@ -117,11 +119,11 @@ namespace INT_UMC {
 	}
 
 	spIImageSource UMCImpl::AddImageSource( const std::string & buffer ) {
-		spIXMPStructureNode node = ParseRDF( buffer );
+		spIStructureNode node = ParseRDF( buffer );
 		return AddImageSource( node );
 	}
 
-	spIImageSource UMCImpl::AddImageSource( const spIXMPStructureNode & node ) {
+	spIImageSource UMCImpl::AddImageSource( const spIStructureNode & node ) {
 		auto actualNode = TryToGetActualNode( node, kImageSourcesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIImageSource source = CreateImageSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -132,7 +134,7 @@ namespace INT_UMC {
 	}
 
 	spISource UMCImpl::AddSource( const std::string & buffer ) {
-		spIXMPStructureNode parentNode = ParseRDF( buffer );
+		spIStructureNode parentNode = ParseRDF( buffer );
 		const NamespacePropertyNamePair * pairs[4] = { &kVideoSourcesPair, &kAudioSourcesPair, &kImageSourcesPair, &kVideoFrameSourcesPair };
 		size_t matchedIndex = GetMatchingIndexForActualNode( parentNode, &pairs[0], (size_t) 4 );
 
@@ -159,11 +161,11 @@ namespace INT_UMC {
 	}
 
 	spIOutput UMCImpl::AddOutput( const std::string & buffer ) {
-		spIXMPStructureNode node = ParseRDF( buffer );
+		spIStructureNode node = ParseRDF( buffer );
 		return AddOutput( node );
 	}
 
-	UMC::spIOutput UMCImpl::AddOutput( const spIXMPStructureNode & node ) {
+	UMC::spIOutput UMCImpl::AddOutput( const spIStructureNode & node ) {
 		auto actualNode = TryToGetActualNode( node, kOutputsPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIOutput output = CreateOutput( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -177,11 +179,11 @@ namespace INT_UMC {
 		return true;
 	}
 
-	UMC::pINode UMCImpl::GetNode() {
+	UMC::pIUMCNode UMCImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode UMCImpl::GetNode() const {
+	UMC::pcIUMCNode UMCImpl::GetNode() const {
 		return this;
 	}
 
@@ -189,9 +191,9 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool UMCImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool UMCImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		switch( childNode->GetNodeType() ) {
-		case INode::kNodeTypeSource:
+		case IUMCNode::kNodeTypeSource:
 		{
 			spISource sourceChild = ConvertNode< ISource >( childNode );
 			switch ( sourceChild->GetType() ) {
@@ -221,7 +223,7 @@ namespace INT_UMC {
 		}
 		break;
 
-		case INode::kNodeTypeOutput:
+		case IUMCNode::kNodeTypeOutput:
 			ChangeUniqueIDOfChildNode< IOutput >( mOutputMap, childNode, newUniqueID, mOutputs, shared_from_this() );
 			return true;
 			break;
@@ -232,7 +234,7 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::spINode UMCImpl::GetExternalNode() {
+	UMC::spIUMCNode UMCImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -524,16 +526,16 @@ namespace INT_UMC {
 		return SerializeXMP();
 	}
 
-	INode::eNodeTypes UMCImpl::GetNodeType() const {
-		return INode::kNodeTypeUMC;
+	IUMCNode::eNodeTypes UMCImpl::GetNodeType() const {
+		return IUMCNode::kNodeTypeUMC;
 	}
 
-	spcINode UMCImpl::GetDecendantNode( const std::string & uniqueID ) const {
+	spcIUMCNode UMCImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return const_cast< UMCImpl * >( this )->GetDecendantNode( uniqueID );
 	}
 
-	spINode UMCImpl::GetDecendantNode( const std::string & uniqueID ) {
-		spINode node = GetChildNode( uniqueID );
+	spIUMCNode UMCImpl::GetDecendantNode( const std::string & uniqueID ) {
+		spIUMCNode node = GetChildNode( uniqueID );
 		if ( node ) return node;
 		node = GetDecendantFromMap< VideoSourceMap >( mVideoSourceMap, uniqueID );
 		if ( node ) return node;
@@ -547,12 +549,12 @@ namespace INT_UMC {
 		return node;
 	}
 
-	spcINode UMCImpl::GetChildNode( const std::string & uniqueID ) const {
+	spcIUMCNode UMCImpl::GetChildNode( const std::string & uniqueID ) const {
 		return const_cast< UMCImpl * >( this )->GetChildNode( uniqueID );
 	}
 
-	spINode UMCImpl::GetChildNode( const std::string & uniqueID ) {
-		spINode node = mVideoSourceMap.find( uniqueID )->second;
+	spIUMCNode UMCImpl::GetChildNode( const std::string & uniqueID ) {
+		spIUMCNode node = mVideoSourceMap.find( uniqueID )->second;
 		if ( node ) return node;
 		node = mAudioSourceMap.find( uniqueID )->second;
 		if ( node ) return node;
@@ -564,51 +566,51 @@ namespace INT_UMC {
 		return node;
 	}
 
-	INode::NodeList UMCImpl::GetAllChildren() {
+	IUMCNode::NodeList UMCImpl::GetAllChildren() {
 		NodeList list;
-		AppendToListFromMap< spINode >( list, mVideoSourceMap );
-		AppendToListFromMap< spINode >( list, mAudioSourceMap );
-		AppendToListFromMap< spINode >( list, mVideoFrameSourceMap );
-		AppendToListFromMap< spINode >( list, mImageSourceMap );
-		AppendToListFromMap< spINode >( list, mOutputMap );
+		AppendToListFromMap< spIUMCNode >( list, mVideoSourceMap );
+		AppendToListFromMap< spIUMCNode >( list, mAudioSourceMap );
+		AppendToListFromMap< spIUMCNode >( list, mVideoFrameSourceMap );
+		AppendToListFromMap< spIUMCNode >( list, mImageSourceMap );
+		AppendToListFromMap< spIUMCNode >( list, mOutputMap );
 		return list;
 	}
 
-	INode::cNodeList UMCImpl::GetAllChildren() const {
+	IUMCNode::cNodeList UMCImpl::GetAllChildren() const {
 		cNodeList list;
-		AppendToListFromMap< spcINode >( list, mVideoSourceMap );
-		AppendToListFromMap< spcINode >( list, mAudioSourceMap );
-		AppendToListFromMap< spcINode >( list, mVideoFrameSourceMap );
-		AppendToListFromMap< spcINode >( list, mImageSourceMap );
-		AppendToListFromMap< spcINode >( list, mOutputMap );
+		AppendToListFromMap< spcIUMCNode >( list, mVideoSourceMap );
+		AppendToListFromMap< spcIUMCNode >( list, mAudioSourceMap );
+		AppendToListFromMap< spcIUMCNode >( list, mVideoFrameSourceMap );
+		AppendToListFromMap< spcIUMCNode >( list, mImageSourceMap );
+		AppendToListFromMap< spcIUMCNode >( list, mOutputMap );
 		return list;
 	}
 
-	INode::NodeList UMCImpl::GetAllDecendants() {
+	IUMCNode::NodeList UMCImpl::GetAllDecendants() {
 		NodeList list;
-		AppendDecendantsFromMapToList< spINode >( list, mVideoSourceMap );
-		AppendDecendantsFromMapToList< spINode >( list, mAudioSourceMap );
-		AppendDecendantsFromMapToList< spINode >( list, mVideoFrameSourceMap );
-		AppendDecendantsFromMapToList< spINode >( list, mImageSourceMap );
-		AppendDecendantsFromMapToList< spINode >( list, mOutputMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mVideoSourceMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mAudioSourceMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mVideoFrameSourceMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mImageSourceMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mOutputMap );
 		return list;
 	}
 
-	INode::cNodeList UMCImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList UMCImpl::GetAllDecendants() const {
 		cNodeList list;
-		AppendDecendantsFromMapToList< spcINode >( list, mVideoSourceMap );
-		AppendDecendantsFromMapToList< spcINode >( list, mAudioSourceMap );
-		AppendDecendantsFromMapToList< spcINode >( list, mVideoFrameSourceMap );
-		AppendDecendantsFromMapToList< spcINode >( list, mImageSourceMap );
-		AppendDecendantsFromMapToList< spcINode >( list, mOutputMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mVideoSourceMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mAudioSourceMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mVideoFrameSourceMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mImageSourceMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mOutputMap );
 		return list;
 	}
 
-	pINodeI UMCImpl::GetInternalNode() {
+	pIUMCNodeI UMCImpl::GetInternalNode() {
 		return this;
 	}
 
-	pcINodeI UMCImpl::GetInternalNode() const {
+	pcIUMCNodeI UMCImpl::GetInternalNode() const {
 		return this;
 	}
 
@@ -641,7 +643,7 @@ namespace INT_UMC {
 		PopulateMapFromXMPArrayNode( this, &UMCImpl::AddOutput, mOutputs );
 	}
 
-	NS_XMPCORE::spIXMPStructureNode UMCImpl::GetXMPNode() const {
+	AdobeXMPCore::spIStructureNode UMCImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -653,11 +655,11 @@ namespace INT_UMC {
 		return NodeImpl::GetParsedID();
 	}
 
-	wpcINode UMCImpl::GetParentNode() const {
+	wpcIUMCNode UMCImpl::GetParentNode() const {
 		return NodeImpl::GetParentNode();
 	}
 
-	wpINode UMCImpl::GetParentNode() {
+	wpIUMCNode UMCImpl::GetParentNode() {
 		return NodeImpl::GetParentNode();
 	}
 
@@ -690,7 +692,7 @@ namespace UMC {
 	}
 
 	spIUMC IUMC::CreateUMCFromBuffer( const std::string & buffer ) {
-		NS_XMPCORE::spIXMPStructureNode node = INT_UMC::ParseRDF( buffer );
+		AdobeXMPCore::spIStructureNode node = INT_UMC::ParseRDF( buffer );
 		auto retVal = std::make_shared< INT_UMC::UMCImpl >( node );
 		retVal->SyncXMPToUMC();
 		return retVal;

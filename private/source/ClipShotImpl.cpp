@@ -19,15 +19,15 @@ namespace INT_UMC {
 		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator ) { }
 
 	ClipShotImpl::ClipShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, node ) { }
 
 	IShot::eShotTypes ClipShotImpl::GetType() const {
 		return IShot::kShotTypeClip;
 	}
 
-	INode::eNodeTypes ClipShotImpl::GetNodeType() const {
-		return INode::kNodeTypeShot;
+	IUMCNode::eNodeTypes ClipShotImpl::GetNodeType() const {
+		return IUMCNode::kNodeTypeShot;
 	}
 
 	const std::string & ClipShotImpl::GetUniqueID() const {
@@ -38,43 +38,43 @@ namespace INT_UMC {
 		return ShotImpl::GetParsedID();
 	}
 
-	UMC::wpcINode ClipShotImpl::GetParentNode() const {
+	UMC::wpcIUMCNode ClipShotImpl::GetParentNode() const {
 		return ShotImpl::GetParentNode();
 	}
 
-	UMC::wpINode ClipShotImpl::GetParentNode() {
+	UMC::wpIUMCNode ClipShotImpl::GetParentNode() {
 		return ShotImpl::GetParentNode();
 	}
 
-	UMC::spcINode ClipShotImpl::GetDecendantNode( const std::string & uniqueID ) const {
+	UMC::spcIUMCNode ClipShotImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return ShotImpl::GetDecendantNode( uniqueID );
 	}
 
-	UMC::spINode ClipShotImpl::GetDecendantNode( const std::string & uniqueID ) {
+	UMC::spIUMCNode ClipShotImpl::GetDecendantNode( const std::string & uniqueID ) {
 		return ShotImpl::GetDecendantNode( uniqueID );
 	}
 
-	UMC::spcINode ClipShotImpl::GetChildNode( const std::string & uniqueID ) const {
+	UMC::spcIUMCNode ClipShotImpl::GetChildNode( const std::string & uniqueID ) const {
 		return ShotImpl::GetChildNode( uniqueID );
 	}
 
-	UMC::spINode ClipShotImpl::GetChildNode( const std::string & uniqueID ) {
+	UMC::spIUMCNode ClipShotImpl::GetChildNode( const std::string & uniqueID ) {
 		return ShotImpl::GetChildNode( uniqueID );
 	}
 
-	INode::NodeList ClipShotImpl::GetAllChildren() {
+	IUMCNode::NodeList ClipShotImpl::GetAllChildren() {
 		return ShotImpl::GetAllChildren();
 	}
 
-	INode::cNodeList ClipShotImpl::GetAllChildren() const {
+	IUMCNode::cNodeList ClipShotImpl::GetAllChildren() const {
 		return ShotImpl::GetAllChildren();
 	}
 
-	INode::NodeList ClipShotImpl::GetAllDecendants() {
+	IUMCNode::NodeList ClipShotImpl::GetAllDecendants() {
 		return ShotImpl::GetAllDecendants();
 	}
 
-	INode::cNodeList ClipShotImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList ClipShotImpl::GetAllDecendants() const {
 		return ShotImpl::GetAllDecendants();
 	}
 
@@ -98,11 +98,11 @@ namespace INT_UMC {
 		return ShotImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
-	INT_UMC::pINodeI ClipShotImpl::GetInternalNode() {
+	INT_UMC::pIUMCNodeI ClipShotImpl::GetInternalNode() {
 		return this;
 	}
 
-	INT_UMC::pcINodeI ClipShotImpl::GetInternalNode() const {
+	INT_UMC::pcIUMCNodeI ClipShotImpl::GetInternalNode() const {
 		return this;
 	}
 
@@ -122,15 +122,15 @@ namespace INT_UMC {
 		ShotImpl::SyncInternalStuffToXMP();
 	}
 
-	UMC::pINode ClipShotImpl::GetNode() {
+	UMC::pIUMCNode ClipShotImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode ClipShotImpl::GetNode() const {
+	UMC::pcIUMCNode ClipShotImpl::GetNode() const {
 		return this;
 	}
 
-	INT_UMC::spIXMPStructureNode ClipShotImpl::GetXMPNode() const {
+	INT_UMC::spIStructureNode ClipShotImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -140,9 +140,9 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool ClipShotImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool ClipShotImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		switch ( childNode->GetNodeType() ) {
-		case INode::kNodeTypeFrame:
+		case IUMCNode::kNodeTypeFrame:
 		{
 			spIFrame frameChild = ConvertNode< IFrame >( childNode );
 			ChangeUniqueIDOfChildNode< IFrame >( mFrameMap, frameChild, newUniqueID, mFrames, shared_from_this() );
@@ -150,7 +150,7 @@ namespace INT_UMC {
 		}
 		break;
 
-		case INode::kNodeTypeShotSource:
+		case IUMCNode::kNodeTypeShotSource:
 		{
 			spIShotSource shotSourceChild = ConvertNode< IShotSource >( childNode );
 			ChangeUniqueIDOfChildNode< IShotSource >( mShotSourceMap, shotSourceChild, newUniqueID, mShotSources, shared_from_this() );
@@ -164,7 +164,7 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::spINode ClipShotImpl::GetExternalNode() {
+	UMC::spIUMCNode ClipShotImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -258,7 +258,7 @@ namespace INT_UMC {
 
 
 	spIClipShot CreateClipShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< ClipShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );

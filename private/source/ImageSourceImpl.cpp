@@ -9,7 +9,7 @@
 
 
 #include "implHeaders/ImageSourceImpl.h"
-#include "XMPCore/Interfaces/IXMPStructureNode.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
 #include "utils/UMCAndXMPMapping.h"
 
 namespace INT_UMC {
@@ -19,7 +19,7 @@ namespace INT_UMC {
 		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeImage, kImageSourcesPair ) { }
 
 	ImageSourceImpl::ImageSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 		: SourceImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, kSourceTypeImage, node ) { }
 
 	ISource::eSourceTypes ImageSourceImpl::GetType() const {
@@ -34,7 +34,7 @@ namespace INT_UMC {
 		return SourceImpl::GetClipName();
 	}
 
-	INode::eNodeTypes ImageSourceImpl::GetNodeType() const {
+	IUMCNode::eNodeTypes ImageSourceImpl::GetNodeType() const {
 		return SourceImpl::GetNodeType();
 	}
 
@@ -46,43 +46,43 @@ namespace INT_UMC {
 		return SourceImpl::GetParsedID();
 	}
 
-	wpcINode ImageSourceImpl::GetParentNode() const {
+	wpcIUMCNode ImageSourceImpl::GetParentNode() const {
 		return SourceImpl::GetParentNode();
 	}
 
-	wpINode ImageSourceImpl::GetParentNode() {
+	wpIUMCNode ImageSourceImpl::GetParentNode() {
 		return SourceImpl::GetParentNode();
 	}
 
-	spcINode ImageSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
-		return spcINode();
+	spcIUMCNode ImageSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
+		return spcIUMCNode();
 	}
 
-	spINode ImageSourceImpl::GetDecendantNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode ImageSourceImpl::GetDecendantNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	spcINode ImageSourceImpl::GetChildNode( const std::string & uniqueID ) const {
-		return spINode();
+	spcIUMCNode ImageSourceImpl::GetChildNode( const std::string & uniqueID ) const {
+		return spIUMCNode();
 	}
 
-	spINode ImageSourceImpl::GetChildNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode ImageSourceImpl::GetChildNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	INode::NodeList ImageSourceImpl::GetAllChildren() {
+	IUMCNode::NodeList ImageSourceImpl::GetAllChildren() {
 		return NodeList();
 	}
 
-	INode::cNodeList ImageSourceImpl::GetAllChildren() const {
+	IUMCNode::cNodeList ImageSourceImpl::GetAllChildren() const {
 		return cNodeList();
 	}
 
-	INode::NodeList ImageSourceImpl::GetAllDecendants() {
+	IUMCNode::NodeList ImageSourceImpl::GetAllDecendants() {
 		return NodeList();
 	}
 
-	INode::cNodeList ImageSourceImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList ImageSourceImpl::GetAllDecendants() const {
 		return cNodeList();
 	}
 
@@ -102,15 +102,15 @@ namespace INT_UMC {
 		return SourceImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
-	pINodeI ImageSourceImpl::GetInternalNode() {
+	pIUMCNodeI ImageSourceImpl::GetInternalNode() {
 		return this;
 	}
 
-	pcINodeI ImageSourceImpl::GetInternalNode() const {
+	pcIUMCNodeI ImageSourceImpl::GetInternalNode() const {
 		return this;
 	}
 
-	NS_XMPCORE::spIXMPStructureNode ImageSourceImpl::GetXMPNode() const {
+	AdobeXMPCore::spIStructureNode ImageSourceImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -120,11 +120,11 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::pINode ImageSourceImpl::GetNode() {
+	UMC::pIUMCNode ImageSourceImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode ImageSourceImpl::GetNode() const {
+	UMC::pcIUMCNode ImageSourceImpl::GetNode() const {
 		return this;
 	}
 
@@ -132,11 +132,11 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool ImageSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool ImageSourceImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		return false;
 	}
 
-	UMC::spINode ImageSourceImpl::GetExternalNode() {
+	UMC::spIUMCNode ImageSourceImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -157,7 +157,7 @@ namespace INT_UMC {
 	}
 
 	spIImageSource CreateImageSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< ImageSourceImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );

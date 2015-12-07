@@ -19,7 +19,7 @@ namespace INT_UMC {
 		: mUniqueIDAndReferenceTracker( uniqueIDAndReferenceTracker )
 		, mCurrentID( 0 ) { }
 
-	std::string UniqueIDGeneratorImpl::GenerateUniqueID( INode::eNodeTypes nodeType ) {
+	std::string UniqueIDGeneratorImpl::GenerateUniqueID( IUMCNode::eNodeTypes nodeType ) {
 		static char buffer[ 32 ] = "";
 		do {
 	#if UMC_UNIXBuild || UMC_MacBuild

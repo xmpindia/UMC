@@ -19,15 +19,15 @@ namespace INT_UMC {
 		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator ) { }
 
 	TransitionShotImpl::TransitionShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 		: ShotImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, node ) { }
 
 	IShot::eShotTypes TransitionShotImpl::GetType() const {
 		return IShot::kShotTypeTransition;
 	}
 
-	INode::eNodeTypes TransitionShotImpl::GetNodeType() const {
-		return INode::kNodeTypeShot;
+	IUMCNode::eNodeTypes TransitionShotImpl::GetNodeType() const {
+		return IUMCNode::kNodeTypeShot;
 	}
 
 	const std::string & TransitionShotImpl::GetUniqueID() const {
@@ -38,43 +38,43 @@ namespace INT_UMC {
 		return ShotImpl::GetParsedID();
 	}
 
-	UMC::wpcINode TransitionShotImpl::GetParentNode() const {
+	UMC::wpcIUMCNode TransitionShotImpl::GetParentNode() const {
 		return ShotImpl::GetParentNode();
 	}
 
-	UMC::wpINode TransitionShotImpl::GetParentNode() {
+	UMC::wpIUMCNode TransitionShotImpl::GetParentNode() {
 		return ShotImpl::GetParentNode();
 	}
 
-	UMC::spcINode TransitionShotImpl::GetDecendantNode( const std::string & uniqueID ) const {
+	UMC::spcIUMCNode TransitionShotImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return ShotImpl::GetDecendantNode( uniqueID );
 	}
 
-	UMC::spINode TransitionShotImpl::GetDecendantNode( const std::string & uniqueID ) {
+	UMC::spIUMCNode TransitionShotImpl::GetDecendantNode( const std::string & uniqueID ) {
 		return ShotImpl::GetDecendantNode( uniqueID );
 	}
 
-	UMC::spcINode TransitionShotImpl::GetChildNode( const std::string & uniqueID ) const {
+	UMC::spcIUMCNode TransitionShotImpl::GetChildNode( const std::string & uniqueID ) const {
 		return ShotImpl::GetChildNode( uniqueID );
 	}
 
-	UMC::spINode TransitionShotImpl::GetChildNode( const std::string & uniqueID ) {
+	UMC::spIUMCNode TransitionShotImpl::GetChildNode( const std::string & uniqueID ) {
 		return ShotImpl::GetChildNode( uniqueID );
 	}
 
-	INode::NodeList TransitionShotImpl::GetAllChildren() {
+	IUMCNode::NodeList TransitionShotImpl::GetAllChildren() {
 		return ShotImpl::GetAllChildren();
 	}
 
-	INode::cNodeList TransitionShotImpl::GetAllChildren() const {
+	IUMCNode::cNodeList TransitionShotImpl::GetAllChildren() const {
 		return ShotImpl::GetAllChildren();
 	}
 
-	INode::NodeList TransitionShotImpl::GetAllDecendants() {
+	IUMCNode::NodeList TransitionShotImpl::GetAllDecendants() {
 		return ShotImpl::GetAllDecendants();
 	}
 
-	INode::cNodeList TransitionShotImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList TransitionShotImpl::GetAllDecendants() const {
 		return ShotImpl::GetAllDecendants();
 	}
 
@@ -98,11 +98,11 @@ namespace INT_UMC {
 		return ShotImpl::SetCustomData( customDataNameSpace, customDataName, customData );
 	}
 
-	INT_UMC::pINodeI TransitionShotImpl::GetInternalNode() {
+	INT_UMC::pIUMCNodeI TransitionShotImpl::GetInternalNode() {
 		return this;
 	}
 
-	INT_UMC::pcINodeI TransitionShotImpl::GetInternalNode() const {
+	INT_UMC::pcIUMCNodeI TransitionShotImpl::GetInternalNode() const {
 		return this;
 	}
 
@@ -122,15 +122,15 @@ namespace INT_UMC {
 		ShotImpl::SyncInternalStuffToXMP();
 	}
 
-	UMC::pINode TransitionShotImpl::GetNode() {
+	UMC::pIUMCNode TransitionShotImpl::GetNode() {
 		return this;
 	}
 
-	UMC::pcINode TransitionShotImpl::GetNode() const {
+	UMC::pcIUMCNode TransitionShotImpl::GetNode() const {
 		return this;
 	}
 
-	INT_UMC::spIXMPStructureNode TransitionShotImpl::GetXMPNode() const {
+	INT_UMC::spIStructureNode TransitionShotImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -140,9 +140,9 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool TransitionShotImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool TransitionShotImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		switch ( childNode->GetNodeType() ) {
-		case INode::kNodeTypeFrame:
+		case IUMCNode::kNodeTypeFrame:
 		{
 			spIFrame frameChild = ConvertNode< IFrame >( childNode );
 			ChangeUniqueIDOfChildNode< IFrame >( mFrameMap, frameChild, newUniqueID, mFrames, shared_from_this() );
@@ -150,7 +150,7 @@ namespace INT_UMC {
 		}
 		break;
 
-		case INode::kNodeTypeShotSource:
+		case IUMCNode::kNodeTypeShotSource:
 		{
 			spIShotSource shotSourceChild = ConvertNode< IShotSource >( childNode );
 			ChangeUniqueIDOfChildNode< IShotSource >( mShotSourceMap, shotSourceChild, newUniqueID, mFrames, shared_from_this() );
@@ -164,7 +164,7 @@ namespace INT_UMC {
 		return false;
 	}
 
-	UMC::spINode TransitionShotImpl::GetExternalNode() {
+	UMC::spIUMCNode TransitionShotImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
@@ -257,7 +257,7 @@ namespace INT_UMC {
 	}
 
 	spITransitionShot CreateTransitionShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< TransitionShotImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, node );

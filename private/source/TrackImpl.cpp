@@ -15,22 +15,22 @@
 #include "utils/Utils.h"
 #include "utils/UMCAndXMPMapping.h"
 
-#include "XMPCore/Interfaces/IXMPStructureNode.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
 
 
 namespace INT_UMC {
 
 	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType, const NamespacePropertyNamePair & pair )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeTrack, pair ) { }
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeTrack, pair ) { }
 
 	TrackImpl::TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType,
-		const spIXMPStructureNode & xmpStructureNode )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeTrack, xmpStructureNode ) { }
+		const spIStructureNode & xmpStructureNode )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeTrack, xmpStructureNode ) { }
 
-	INode::eNodeTypes TrackImpl::GetNodeType() const {
-		return INode::kNodeTypeTrack;
+	IUMCNode::eNodeTypes TrackImpl::GetNodeType() const {
+		return IUMCNode::kNodeTypeTrack;
 	}
 
 	void TrackImpl::CleanUpOnRemovalFromDOM() {
@@ -47,7 +47,7 @@ namespace INT_UMC {
 		CallSyncUMCToXMPOnMapElements( mTransitionShotMap );
 	}
 
-	void TrackImpl::SyncXMPToInternalStuff( const spINode & node ) {
+	void TrackImpl::SyncXMPToInternalStuff( const spIUMCNode & node ) {
 		mShots = TryToGetStructNode( mXMPStructureNode, kShotsPair );
 		if ( mShots ) {
 			mClipShots = TryToGetArrayNode( mShots, kClipShotsPair );
@@ -60,8 +60,8 @@ namespace INT_UMC {
 		PopulateMapFromXMPArrayNode< spITransitionShot, TrackImpl >( this, &TrackImpl::AddTransitionShot, mTransitionShots, node );
 	}
 
-	UMC::spIShot TrackImpl::AddShot( const std::string & buffer, const spINode & node2 ) {
-		spIXMPStructureNode parentNode = ParseRDF( buffer );
+	UMC::spIShot TrackImpl::AddShot( const std::string & buffer, const spIUMCNode & node2 ) {
+		spIStructureNode parentNode = ParseRDF( buffer );
 		const NamespacePropertyNamePair * pairs[2] = { &kClipShotsPair, &kTransitionShotsPair };
 		size_t matchedIndex = GetMatchingIndexForActualNode( parentNode, &pairs[ 0 ], ( size_t ) 2 );
 
@@ -77,19 +77,19 @@ namespace INT_UMC {
 		
 	}
 
-	UMC::spIClipShot TrackImpl::AddClipShot( const spINode & node ) {
+	UMC::spIClipShot TrackImpl::AddClipShot( const spIUMCNode & node ) {
 		spIClipShot shot = CreateClipShot( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mClipShots, kClipShotsPair, mShots, kShotsPair );
 		AddElementToMap( mClipShotMap, shot, node, mClipShots );
 		return shot;
 	}
 
-	UMC::spIClipShot TrackImpl::AddClipShot( const std::string & buffer, const spINode & node ) {
-		spIXMPStructureNode xmpNode = ParseRDF( buffer );
+	UMC::spIClipShot TrackImpl::AddClipShot( const std::string & buffer, const spIUMCNode & node ) {
+		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddClipShot( xmpNode, node );
 	}
 
-	UMC::spIClipShot TrackImpl::AddClipShot( const spIXMPStructureNode & node, const spINode & node2 ) {
+	UMC::spIClipShot TrackImpl::AddClipShot( const spIStructureNode & node, const spIUMCNode & node2 ) {
 		auto actualNode = TryToGetActualNode( node, kClipShotsPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spIClipShot shot = CreateClipShot( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -99,19 +99,19 @@ namespace INT_UMC {
 		return shot;
 	}
 
-	UMC::spITransitionShot TrackImpl::AddTransitionShot( const spINode & node ) {
+	UMC::spITransitionShot TrackImpl::AddTransitionShot( const spIUMCNode & node ) {
 		spITransitionShot shot = CreateTransitionShot( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mTransitionShots, kTransitionShotsPair, mShots, kShotsPair );
 		AddElementToMap( mTransitionShotMap, shot, node, mTransitionShots );
 		return shot;
 	}
 
-	UMC::spITransitionShot TrackImpl::AddTransitionShot( const std::string & buffer, const spINode & node ) {
-		spIXMPStructureNode xmpNode = ParseRDF( buffer );
+	UMC::spITransitionShot TrackImpl::AddTransitionShot( const std::string & buffer, const spIUMCNode & node ) {
+		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddTransitionShot( xmpNode, node );
 	}
 
-	UMC::spITransitionShot TrackImpl::AddTransitionShot( const spIXMPStructureNode & node, const spINode & node2 ) {
+	UMC::spITransitionShot TrackImpl::AddTransitionShot( const spIStructureNode & node, const spIUMCNode & node2 ) {
 		auto actualNode = TryToGetActualNode( node, kTransitionShotsPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
 		spITransitionShot shot = CreateTransitionShot( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, actualNode );
@@ -253,11 +253,11 @@ namespace INT_UMC {
 		return TryAndRemoveElementFromMap( mTransitionShotMap, uniqueID, mTransitionShots );
 	}
 
-	UMC::spcINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
+	UMC::spcIUMCNode TrackImpl::GetDecendantNode( const std::string & uniqueID ) const {
 		return const_cast< TrackImpl * >( this )->GetDecendantNode( uniqueID );
 	}
 
-	UMC::spINode TrackImpl::GetDecendantNode( const std::string & uniqueID ) {
+	UMC::spIUMCNode TrackImpl::GetDecendantNode( const std::string & uniqueID ) {
 		auto node = GetChildNode( uniqueID );
 		if ( node ) return node;
 		node = GetDecendantFromMap( mClipShotMap, uniqueID );
@@ -266,39 +266,39 @@ namespace INT_UMC {
 		return node;
 	}
 
-	UMC::spcINode TrackImpl::GetChildNode( const std::string & uniqueID ) const {
+	UMC::spcIUMCNode TrackImpl::GetChildNode( const std::string & uniqueID ) const {
 		return GetShot( uniqueID );
 	}
 
-	UMC::spINode TrackImpl::GetChildNode( const std::string & uniqueID ) {
+	UMC::spIUMCNode TrackImpl::GetChildNode( const std::string & uniqueID ) {
 		return GetShot( uniqueID );
 	}
 
-	INode::NodeList TrackImpl::GetAllChildren() {
-		INode::NodeList list;
-		AppendToListFromMap< spINode, ClipShotMap >( list, mClipShotMap );
-		AppendToListFromMap< spINode, TransitionShotMap >( list, mTransitionShotMap );
+	IUMCNode::NodeList TrackImpl::GetAllChildren() {
+		IUMCNode::NodeList list;
+		AppendToListFromMap< spIUMCNode, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spIUMCNode, TransitionShotMap >( list, mTransitionShotMap );
 		return list;
 	}
 
-	INode::cNodeList TrackImpl::GetAllChildren() const {
-		INode::cNodeList list;
-		AppendToListFromMap< spcINode, ClipShotMap >( list, mClipShotMap );
-		AppendToListFromMap< spcINode, TransitionShotMap >( list, mTransitionShotMap );
+	IUMCNode::cNodeList TrackImpl::GetAllChildren() const {
+		IUMCNode::cNodeList list;
+		AppendToListFromMap< spcIUMCNode, ClipShotMap >( list, mClipShotMap );
+		AppendToListFromMap< spcIUMCNode, TransitionShotMap >( list, mTransitionShotMap );
 		return list;
 	}
 
-	INode::NodeList TrackImpl::GetAllDecendants() {
-		INode::NodeList list;
-		AppendDecendantsFromMapToList< spINode >( list, mClipShotMap );
-		AppendDecendantsFromMapToList< spINode >( list, mTransitionShotMap );
+	IUMCNode::NodeList TrackImpl::GetAllDecendants() {
+		IUMCNode::NodeList list;
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mClipShotMap );
+		AppendDecendantsFromMapToList< spIUMCNode >( list, mTransitionShotMap );
 		return list;
 	}
 
-	INode::cNodeList TrackImpl::GetAllDecendants() const {
-		INode::cNodeList list;
-		AppendDecendantsFromMapToList< spcINode >( list, mClipShotMap );
-		AppendDecendantsFromMapToList< spcINode >( list, mTransitionShotMap );
+	IUMCNode::cNodeList TrackImpl::GetAllDecendants() const {
+		IUMCNode::cNodeList list;
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mClipShotMap );
+		AppendDecendantsFromMapToList< spcIUMCNode >( list, mTransitionShotMap );
 		return list;
 	}
 

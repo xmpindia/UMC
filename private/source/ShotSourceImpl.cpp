@@ -17,17 +17,18 @@
 
 namespace INT_UMC {
 
+	using AdobeXMPCommon::npos;
 	ShotSourceImpl::ShotSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeShotSource, kShotSourcesPair )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeShotSource, kShotSourcesPair )
 		, mSource( source )
 		, mSourceInCount( kEditUnitInCountFromBeginning )
 		, mSourceDuration( kEditUnitDurationTillEnd )
 		, mShotInCount( kEditUnitInCountFromBeginning ) { }
 
 	ShotSourceImpl::ShotSourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeShotSource, node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIStructureNode & node )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeShotSource, node )
 		, mSource( source )
 		, mSourceInCount( kEditUnitInCountFromBeginning )
 		, mSourceDuration( kEditUnitDurationTillEnd )
@@ -65,8 +66,8 @@ namespace INT_UMC {
 		return mShotInCount;
 	}
 
-	INode::eNodeTypes ShotSourceImpl::GetNodeType() const {
-		return INode::kNodeTypeShotSource;
+	IUMCNode::eNodeTypes ShotSourceImpl::GetNodeType() const {
+		return IUMCNode::kNodeTypeShotSource;
 	}
 
 	const std::string & ShotSourceImpl::GetUniqueID() const {
@@ -77,43 +78,43 @@ namespace INT_UMC {
 		return NodeImpl::GetParsedID();
 	}
 
-	wpcINode ShotSourceImpl::GetParentNode() const {
+	wpcIUMCNode ShotSourceImpl::GetParentNode() const {
 		return NodeImpl::GetParentNode();
 	}
 
-	wpINode ShotSourceImpl::GetParentNode() {
+	wpIUMCNode ShotSourceImpl::GetParentNode() {
 		return NodeImpl::GetParentNode();
 	}
 
-	spcINode ShotSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
-		return spcINode();
+	spcIUMCNode ShotSourceImpl::GetDecendantNode( const std::string & uniqueID ) const {
+		return spcIUMCNode();
 	}
 
-	spINode ShotSourceImpl::GetDecendantNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode ShotSourceImpl::GetDecendantNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	spcINode ShotSourceImpl::GetChildNode( const std::string & uniqueID ) const {
-		return spINode();
+	spcIUMCNode ShotSourceImpl::GetChildNode( const std::string & uniqueID ) const {
+		return spIUMCNode();
 	}
 
-	spINode ShotSourceImpl::GetChildNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode ShotSourceImpl::GetChildNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	INode::NodeList ShotSourceImpl::GetAllChildren() {
+	IUMCNode::NodeList ShotSourceImpl::GetAllChildren() {
 		return NodeList();
 	}
 
-	INode::cNodeList ShotSourceImpl::GetAllChildren() const {
+	IUMCNode::cNodeList ShotSourceImpl::GetAllChildren() const {
 		return cNodeList();
 	}
 
-	INode::NodeList ShotSourceImpl::GetAllDecendants() {
+	IUMCNode::NodeList ShotSourceImpl::GetAllDecendants() {
 		return NodeList();
 	}
 
-	INode::cNodeList ShotSourceImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList ShotSourceImpl::GetAllDecendants() const {
 		return cNodeList();
 	}
 
@@ -121,11 +122,11 @@ namespace INT_UMC {
 		return NodeImpl::GetReferenceCount();
 	}
 
-	pcINodeI ShotSourceImpl::GetInternalNode() const {
+	pcIUMCNodeI ShotSourceImpl::GetInternalNode() const {
 		return this;
 	}
 
-	pINodeI ShotSourceImpl::GetInternalNode() {
+	pIUMCNodeI ShotSourceImpl::GetInternalNode() {
 		return this;
 	}
 
@@ -141,7 +142,7 @@ namespace INT_UMC {
 		return NodeImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	INT_UMC::spIXMPStructureNode ShotSourceImpl::GetXMPNode() const {
+	INT_UMC::spIStructureNode ShotSourceImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -149,19 +150,19 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID( uniqueID );
 	}
 
-	bool ShotSourceImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool ShotSourceImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		return false;
 	}
 
-	UMC::spINode ShotSourceImpl::GetExternalNode() {
+	UMC::spIUMCNode ShotSourceImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
-	UMC::pcINode ShotSourceImpl::GetNode() const {
+	UMC::pcIUMCNode ShotSourceImpl::GetNode() const {
 		return this;
 	}
 
-	UMC::pINode ShotSourceImpl::GetNode() {
+	UMC::pIUMCNode ShotSourceImpl::GetNode() {
 		return this;
 	}
 
@@ -189,7 +190,7 @@ namespace INT_UMC {
 	void ShotSourceImpl::SyncInternalStuffToXMP() const {
 		auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
 		if ( !source ) {
-			source = IXMPStructureNode::CreateStructureNode( kSourcePair.first, kSourcePair.second );
+			source = IStructureNode::CreateStructureNode( kSourcePair.first, npos, kSourcePair.second, npos );
 			mXMPStructureNode->AppendNode( source );
 		}
 		AddOrUpdateDataToXMPDOM( mSourceInCount, kInCountPair, source, IgnoreEditUnitInCount );
@@ -220,7 +221,7 @@ namespace INT_UMC {
 	}
 
 	spIShotSource CreateShotSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node)
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIStructureNode & node)
 	{
 		if ( node ) {
 			return std::make_shared< ShotSourceImpl >( uniqueIDAndReferenceTracker,  uniqueIDGenerator, source, node );

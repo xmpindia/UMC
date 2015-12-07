@@ -11,11 +11,12 @@
 #include "interfaces/INodeI.h"
 #include "utils/Utils.h"
 
-#include "XMPCore/Interfaces/IXMPDOMSerializer.h"
+#include "XMPCore/Interfaces/IDOMSerializer.h"
+#include "XMPCommon/Interfaces/IUTF8String.h"
 
 namespace INT_UMC {
 
-	std::string INodeI::SerializeXMP() const {
+	std::string IUMCNodeI::SerializeXMP() const {
 		auto serializer = GetSerializer();
 		SyncUMCToXMP();
 		auto sp = GetXMPNode();
@@ -23,7 +24,7 @@ namespace INT_UMC {
 		return std::string( spString->c_str(), spString->size() );
 	}
 
-	INodeI::~INodeI() {
+	IUMCNodeI::~IUMCNodeI() {
 
 	}
 

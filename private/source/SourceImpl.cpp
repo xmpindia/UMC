@@ -35,11 +35,11 @@ namespace INT_UMC {
 	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType,
 		const NamespacePropertyNamePair & pair )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource, pair ) { }
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeSource, pair ) { }
 
 	SourceImpl::SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes,
-		const spIXMPStructureNode & xmpStructureNode ) 
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeSource, xmpStructureNode ) { }
+		const spIStructureNode & xmpStructureNode ) 
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeSource, xmpStructureNode ) { }
 
 }

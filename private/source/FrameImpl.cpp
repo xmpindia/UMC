@@ -15,17 +15,17 @@
 #include "utils/Utils.h"
 
 namespace INT_UMC {
-
+	using AdobeXMPCommon::npos;
 	FrameImpl::FrameImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeFrame, kFramesPair )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeFrame, kFramesPair )
 		, mSource( source )
 		, mSourceInCount( kEditUnitInCountFromBeginning )
 		, mShotInCount( kEditUnitInCountFromBeginning ) { }
 
 	FrameImpl::FrameImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node )
-		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, INode::kNodeTypeFrame, node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIStructureNode & node )
+		: NodeImpl( uniqueIDAndReferenceTracker, uniqueIDGenerator, IUMCNode::kNodeTypeFrame, node )
 		, mSource( source )
 		, mSourceInCount( kEditUnitInCountFromBeginning )
 		, mShotInCount( kEditUnitInCountFromBeginning ) { }
@@ -54,8 +54,8 @@ namespace INT_UMC {
 		return mShotInCount;
 	}
 
-	INode::eNodeTypes FrameImpl::GetNodeType() const {
-		return INode::kNodeTypeFrame;
+	IUMCNode::eNodeTypes FrameImpl::GetNodeType() const {
+		return IUMCNode::kNodeTypeFrame;
 	}
 
 	const std::string & FrameImpl::GetUniqueID() const {
@@ -66,43 +66,43 @@ namespace INT_UMC {
 		return NodeImpl::GetParsedID();
 	}
 
-	wpcINode FrameImpl::GetParentNode() const {
+	wpcIUMCNode FrameImpl::GetParentNode() const {
 		return NodeImpl::GetParentNode();
 	}
 
-	wpINode FrameImpl::GetParentNode() {
+	wpIUMCNode FrameImpl::GetParentNode() {
 		return NodeImpl::GetParentNode();
 	}
 
-	spcINode FrameImpl::GetDecendantNode( const std::string & uniqueID ) const {
-		return spcINode();
+	spcIUMCNode FrameImpl::GetDecendantNode( const std::string & uniqueID ) const {
+		return spcIUMCNode();
 	}
 
-	spINode FrameImpl::GetDecendantNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode FrameImpl::GetDecendantNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	spcINode FrameImpl::GetChildNode( const std::string & uniqueID ) const {
-		return spINode();
+	spcIUMCNode FrameImpl::GetChildNode( const std::string & uniqueID ) const {
+		return spIUMCNode();
 	}
 
-	spINode FrameImpl::GetChildNode( const std::string & uniqueID ) {
-		return spINode();
+	spIUMCNode FrameImpl::GetChildNode( const std::string & uniqueID ) {
+		return spIUMCNode();
 	}
 
-	INode::NodeList FrameImpl::GetAllChildren() {
+	IUMCNode::NodeList FrameImpl::GetAllChildren() {
 		return NodeList();
 	}
 
-	INode::cNodeList FrameImpl::GetAllChildren() const {
+	IUMCNode::cNodeList FrameImpl::GetAllChildren() const {
 		return cNodeList();
 	}
 
-	INode::NodeList FrameImpl::GetAllDecendants() {
+	IUMCNode::NodeList FrameImpl::GetAllDecendants() {
 		return NodeList();
 	}
 
-	INode::cNodeList FrameImpl::GetAllDecendants() const {
+	IUMCNode::cNodeList FrameImpl::GetAllDecendants() const {
 		return cNodeList();
 	}
 
@@ -110,11 +110,11 @@ namespace INT_UMC {
 		return NodeImpl::GetReferenceCount();
 	}
 
-	pcINodeI FrameImpl::GetInternalNode() const {
+	pcIUMCNodeI FrameImpl::GetInternalNode() const {
 		return this;
 	}
 
-	pINodeI FrameImpl::GetInternalNode() {
+	pIUMCNodeI FrameImpl::GetInternalNode() {
 		return this;
 	}
 
@@ -130,7 +130,7 @@ namespace INT_UMC {
 		return NodeImpl::GetCustomData( customDataNameSpace, customDataName );
 	}
 
-	INT_UMC::spIXMPStructureNode FrameImpl::GetXMPNode() const {
+	INT_UMC::spIStructureNode FrameImpl::GetXMPNode() const {
 		return mXMPStructureNode;
 	}
 
@@ -138,19 +138,19 @@ namespace INT_UMC {
 		return NodeImpl::SetUniqueID(  uniqueID );
 	}
 
-	bool FrameImpl::ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID ) {
+	bool FrameImpl::ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID ) {
 		return false;
 	}
 
-	UMC::spINode FrameImpl::GetExternalNode() {
+	UMC::spIUMCNode FrameImpl::GetExternalNode() {
 		return shared_from_this();
 	}
 
-	UMC::pcINode FrameImpl::GetNode() const {
+	UMC::pcIUMCNode FrameImpl::GetNode() const {
 		return this;
 	}
 
-	UMC::pINode FrameImpl::GetNode() {
+	UMC::pIUMCNode FrameImpl::GetNode() {
 		return this;
 	}
 
@@ -177,7 +177,7 @@ namespace INT_UMC {
 	void FrameImpl::SyncInternalStuffToXMP() const {
 		auto source = TryToGetStructNode( mXMPStructureNode, kSourcePair );
 		if ( !source ) {
-			source = IXMPStructureNode::CreateStructureNode( kSourcePair.first, kSourcePair.second );
+			source = IStructureNode::CreateStructureNode( kSourcePair.first, npos, kSourcePair.second, npos );
 			mXMPStructureNode->AppendNode( source );
 		}
 		AddOrUpdateDataToXMPDOM( mSourceInCount, kInCountPair, source, IgnoreEditUnitInCount );
@@ -207,7 +207,7 @@ namespace INT_UMC {
 	}
 
 	spIFrame CreateFrame( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node )
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIStructureNode & node )
 	{
 		if ( node ) {
 			return std::make_shared< FrameImpl >( uniqueIDAndReferenceTracker, uniqueIDGenerator, source, node );

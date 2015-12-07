@@ -10,10 +10,12 @@
 #include "UMCDefines_I.h"
 #include "interfaces/ICustomDataHandlerRegistry.h"
 #include "utils/Utils.h"
-
+#include "XMPCommon/XMPCommonDefines.h"
+#include <string>
+#include "XMP_Const.h"
 #define TXMP_STRING_TYPE std::string
 #include "XMP.incl_cpp"
-
+#include "XMP.hpp"
 
 extern "C" void UMC_Initialize() {
 	SXMPMeta::Initialize();
