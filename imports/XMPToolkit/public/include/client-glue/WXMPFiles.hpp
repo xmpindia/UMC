@@ -72,7 +72,7 @@ extern "C" {
 #endif
 
 // =================================================================================================
-/// \file WXMPFiles.h
+/// \file WXMPFiles.hpp
 /// \brief High level support to access metadata in files of interest to Adobe applications.
 ///
 /// This header ...

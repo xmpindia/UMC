@@ -27,7 +27,7 @@ namespace INT_UMC {
 
 		FrameImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source,
-			const spIXMPStructureNode & node );
+			const spIStructureNode & node );
 
 		const std::string & GetUniqueID() const;
 		virtual std::string GetParsedID() const;
@@ -43,14 +43,14 @@ namespace INT_UMC {
 
 		virtual eNodeTypes GetNodeType() const;
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		virtual wpcIUMCNode GetParentNode() const;
+		virtual wpIUMCNode GetParentNode();
 
-		virtual spcINode GetDecendantNode( const std::string & id ) const;
-		virtual spINode GetDecendantNode( const std::string & id );
+		virtual spcIUMCNode GetDecendantNode( const std::string & id ) const;
+		virtual spIUMCNode GetDecendantNode( const std::string & id );
 
-		virtual spcINode GetChildNode( const std::string & id ) const;
-		virtual spINode GetChildNode( const std::string & id );
+		virtual spcIUMCNode GetChildNode( const std::string & id ) const;
+		virtual spIUMCNode GetChildNode( const std::string & id );
 
 		virtual NodeList GetAllChildren();
 		virtual cNodeList GetAllChildren() const;
@@ -65,8 +65,8 @@ namespace INT_UMC {
 
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
-		virtual pINodeI GetInternalNode();
-		virtual pcINodeI GetInternalNode() const;
+		virtual pIUMCNodeI GetInternalNode();
+		virtual pcIUMCNodeI GetInternalNode() const;
 
 		virtual std::string Serialize() const;
 
@@ -76,14 +76,14 @@ namespace INT_UMC {
 		virtual void SyncXMPToInternalStuff();
 		virtual bool ValidateXMPNode() const;
 
-		virtual pINode GetNode();
-		virtual pcINode GetNode() const;
+		virtual pIUMCNode GetNode();
+		virtual pcIUMCNode GetNode() const;
 
-		virtual spIXMPStructureNode GetXMPNode() const;
+		virtual spIStructureNode GetXMPNode() const;
 
 		virtual bool SetUniqueID( const std::string & uniqueID );
-		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
-		virtual spINode GetExternalNode();
+		virtual bool ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID );
+		virtual spIUMCNode GetExternalNode();
 
 	protected:
 		spISource				mSource;

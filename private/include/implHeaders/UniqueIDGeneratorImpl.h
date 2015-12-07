@@ -19,7 +19,7 @@ namespace INT_UMC {
 	{
 	public:
 		UniqueIDGeneratorImpl( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker );
-		virtual std::string GenerateUniqueID( INode::eNodeTypes nodeType );
+		virtual std::string GenerateUniqueID( IUMCNode::eNodeTypes nodeType );
 
 	protected:
 		spcIUniqueIDAndReferenceTracker				mUniqueIDAndReferenceTracker;

@@ -12,7 +12,7 @@
 
 #include "UMCFwdDeclarations.h"
 #include "UMCDefines_I.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNode.h"
 #include "XMPCore/XMPCoreFwdDeclarations.h"
 
 
@@ -21,14 +21,14 @@
 
 namespace INT_UMC {
 	using namespace UMC;
-	using NS_XMPCORE::spIXMPStructureNode;
+	using AdobeXMPCore::spIStructureNode;
 
-	// INodeI
-	class INodeI;
-	typedef INodeI *											pINodeI;
-	typedef const INodeI *										pcINodeI;
-	typedef shared_ptr< INodeI >								spINodeI;
-	typedef shared_ptr< const INodeI >							spcINodeI;
+	// IUMCNodeI
+	class IUMCNodeI;
+	typedef IUMCNodeI *											pIUMCNodeI;
+	typedef const IUMCNodeI *										pcIUMCNodeI;
+	typedef shared_ptr< IUMCNodeI >								spIUMCNodeI;
+	typedef shared_ptr< const IUMCNodeI >							spcIUMCNodeI;
 	
 	// IUniqueIDAndReferenceTracker
 	class IUniqueIDAndReferenceTracker;
@@ -45,41 +45,41 @@ namespace INT_UMC {
 	typedef shared_ptr< const ICustomDataHandlerRegistry >		spcICustomDataHandlerRegistry;
 
 	spICustomDataHandler CreateSerializerHandler( const spcICustomData & customData, const std::string & customDataNameSpace,
-		const std::string & customDataName, const NS_XMPCORE::spIXMPStructureNode & baseNode );
+		const std::string & customDataName, const AdobeXMPCore::spIStructureNode & baseNode );
 
 	spIUniqueIDAndReferenceTracker CreateUniqueIDAndReferenceTracker();
 	spIUniqueIDGenerator CreateUniqueIDGenerator( const spcIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker );
 
 	spISource CreateSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 	spIVideoSource CreateVideoSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 	spIAudioSource CreateAudioSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 	spIImageSource CreateImageSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 	spIVideoFrameSource CreateVideoFrameSource(const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 		const spIUniqueIDGenerator & uniqueIDGenerator, const spIVideoSource & videoSource,
-		const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIStructureNode & node = spIStructureNode() );
 
 	spIOutput CreateOutput( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 
 	spIVideoTrack CreateVideoTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 	spIAudioTrack CreateAudioTrack( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 
 	spIClipShot CreateClipShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 	spITransitionShot CreateTransitionShot( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node = spIStructureNode() );
 
 	spIFrame CreateFrame( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIStructureNode & node = spIStructureNode() );
 
 	spIShotSource CreateShotSource( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIXMPStructureNode & node = spIXMPStructureNode() );
+		const spIUniqueIDGenerator & uniqueIDGenerator, const spISource & source, const spIStructureNode & node = spIStructureNode() );
 
 }
 #endif  // UMCFwdDeclarations_I_h__

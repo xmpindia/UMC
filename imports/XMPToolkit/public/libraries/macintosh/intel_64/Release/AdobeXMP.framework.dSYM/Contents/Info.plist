@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>English</string>
 		<key>CFBundleIdentifier</key>
-		<string>com.apple.xcode.dsym.AdobeXMP.framework</string>
+		<string>com.apple.xcode.dsym.com.adobe.AdobeXMPCore</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundlePackageType</key>
@@ -13,8 +13,8 @@
 		<key>CFBundleSignature</key>
 		<string>????</string>
 		<key>CFBundleShortVersionString</key>
-		<string>1.0</string>
+		<string>Adobe XMP Core 5.6 -c 114</string>
 		<key>CFBundleVersion</key>
-		<string>1</string>
+		<string>1.000000</string>
 	</dict>
 </plist>

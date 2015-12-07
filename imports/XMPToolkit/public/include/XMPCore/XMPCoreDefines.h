@@ -17,71 +17,72 @@
 //
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  ADC	Amandeep Chawla
-//
-// mm/dd/yy who Description of changes, most recent on top.
-//
-// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
-// 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
-// 05-19-14 ADC 5.6-c012 Refactoring XMPCommon code and appropriate changes in XMPCore and XMPCompareAndMerge.
-// 04-11-14 ADC 1.0-m019 [3739647] Find a Strategy to resolve the issues of "multiple definitions" faced
-//						 by clients while integrating the new builds containing Compare and Merge.
-// 01-30-14 ADC 1.0-m001 First version
-//
-// =================================================================================================
-#endif // AdobePrivate
-
-#include "XMPCommon/XMPCommonDefines.h"
-
 // =================================================================================================
 // All Platform Settings
 // ===========================
-#define NS_XMPCORE AdobeXMPCore
+#include "XMPCommon/XMPCommonDefines.h"
 
+#if ENABLE_XMP_CPP_INTERFACE
+#ifndef ENABLE_CPP_DOM_MODEL
 // =================================================================================================
 // Macintosh Specific Settings
 // ===========================
 #if XMP_MacBuild
-	#define ENABLE_NEW_DOM_MODEL 1
+	#define ENABLE_CPP_DOM_MODEL 1
 #endif
 
 // =================================================================================================
 // IOS Specific Settings
 // ===========================
 #if XMP_iOSBuild
-	#define ENABLE_NEW_DOM_MODEL 1
+	#define ENABLE_CPP_DOM_MODEL 1
 #endif
 
 // =================================================================================================
 // Windows Specific Settings
 // =========================
 #if XMP_WinBuild
-	#define ENABLE_NEW_DOM_MODEL 1
+	#define ENABLE_CPP_DOM_MODEL 1
 #endif
 
 // =================================================================================================
 // UNIX Specific Settings
 // ======================
 #if XMP_UNIXBuild
-	#define ENABLE_NEW_DOM_MODEL 1
+#define ENABLE_CPP_DOM_MODEL 1
+#endif
+#endif // ENABLE_CPP_DOM_MODEL
+#endif  // ENABLE_XMP_CPP_INTERFACE
+
+#ifndef ENABLE_CPP_DOM_MODEL
+	#define ENABLE_CPP_DOM_MODEL 0
 #endif
 
-#ifndef ENABLE_NEW_DOM_MODEL
-	#define ENABLE_NEW_DOM_MODEL 0
-#endif
+#if ENABLE_CPP_DOM_MODEL
 
-#if SOURCE_COMPILED
-	#define BUILDING_XMPCORE_LIB 1
-#endif
+	#if SOURCE_COMPILING_XMP_ALL
+		#define SOURCE_COMPILING_XMPCORE_LIB 1
+	#endif
 
-#ifndef BUILDING_XMPCORE_LIB
-	#define BUILDING_XMPCORE_LIB 0
-#endif
+	#ifndef SOURCE_COMPILING_XMPCORE_LIB
+		#define SOURCE_COMPILING_XMPCORE_LIB 0
+	#endif
+
+	#ifndef BUILDING_XMPCORE_LIB
+		#define  BUILDING_XMPCORE_LIB 0
+	#endif
+
+	#if BUILDING_XMPCORE_LIB
+		#if !BUILDING_XMPCORE_AS_STATIC && !BUILDING_XMPCORE_AS_DYNAMIC
+			#error "Define either BUILDING_XMPCORE_AS_STATIC as 1 or BUILDING_XMPCORE_AS_DYNAMIC as 1"
+		#endif
+	#endif
+
+	#ifndef LINKING_XMPCORE_LIB
+		#define LINKING_XMPCORE_LIB 1
+	#endif
+
+	namespace AdobeXMPCore {};
+#endif  // ENABLE_CPP_DOM_MODEL
 
 #endif // XMPCoreDefines_h__

@@ -41,7 +41,7 @@
 /// \file TXMPDocOps.hpp
 /// \brief Services to support application "document operations".
 ///
-/// \c TXMPDocOps is the template class providing services in support of common operations to
+/// @details \c TXMPDocOps is the template class providing services in support of common operations to
 /// application documents. These services implement XMP policy that needs to be consistent across
 /// applications. The template must be instantiated with a string class such as \c std::string. See
 /// the instructions in XMP.hpp, and the Overview for a discussion of the overall architecture of

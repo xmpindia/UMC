@@ -10,474 +10,299 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  ADC	Amandeep Chawla
-//  ANS Ankita Sharma
-//
-// mm-dd-yy who Description of changes, most recent first.
-//
-// 08-07-14 ANS 5.6-c023 Fixing compile time issues in XMPCore headers on Mac 32 bit.
-// 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
-// 05-19-14 ADC 5.6-c012 Refactoring XMPCommon code and appropriate changes in XMPCore and XMPCompareAndMerge.
-// 02-24-14 HK  5.6-c004 Added new internal XMP DOM interfaces + fixed memory leaks + implemented qualifiers for new XMP DOM.
-// 02-12-14 HK  5.5-c028 Done refactoring of XMP DOM interfaces and implementations.
-// 02-09-14 ADC 5.5-c026 Re-factoring of XMPCommon Framework
-//
-// =================================================================================================
-#endif	// AdobePrivate
 
 #include "XMPCore/XMPCoreDefines.h"
 #include "XMPCommon/XMPCommonFwdDeclarations.h"
-
-#ifdef XMPCORE_CLIENT_HEADER
-	#define QUOTEME(FILE_NAME) #FILE_NAME
-	#include QUOTEME(XMPCORE_CLIENT_HEADER)
-#endif
-
-namespace NS_XMPCORE {
-	using NS_XMPCOMMON::shared_ptr;
-    using NS_XMPCOMMON::UInt32;
-
-	// IXMPPathSegment
-	class IXMPPathSegment_v1;
-
-	typedef IXMPPathSegment_v1							IXMPPathSegment_base;
-	typedef IXMPPathSegment_v1 *						pIXMPPathSegment_base;
-	typedef const IXMPPathSegment_v1 *					pcIXMPPathSegment_base;
-
-	typedef IXMPPathSegment_v1							IXMPPathSegment_latest;
-
-	#ifndef CLIENT_IXMPPATHSEGMENT_VERSION
-		typedef IXMPPathSegment_latest					IXMPPathSegment;
-	#else
-		class CLIENT_IXMPPATHSEGMENT_VERSION;
-		typedef CLIENT_IXMPPATHSEGMENT_VERSION			IXMPPathSegment;
-	#endif
-	typedef IXMPPathSegment *							pIXMPPathSegment;
-	typedef const IXMPPathSegment *						pcIXMPPathSegment;
-	typedef shared_ptr< IXMPPathSegment >				spIXMPPathSegment;
-	typedef shared_ptr< const IXMPPathSegment >			spcIXMPPathSegment;
-
-	// IXMPPath
-	class IXMPPath_v1;
-
-	typedef IXMPPath_v1									IXMPPath_base;
-	typedef IXMPPath_v1 *								pIXMPPath_base;
-	typedef const IXMPPath_v1 *							pcIXMPPath_base;
-
-	typedef IXMPPath_v1									IXMPPath_latest;
-
-	#ifndef CLIENT_IXMPPATH_VERSION
-		typedef IXMPPath_latest							IXMPPath;
-	#else
-		class CLIENT_IXMPPATH_VERSION;
-		typedef CLIENT_IXMPPATH_VERSION					IXMPPath;
-	#endif
-	typedef IXMPPath *									pIXMPPath;
-	typedef const IXMPPath *							pcIXMPPath;
-	typedef shared_ptr< IXMPPath >						spIXMPPath;
-	typedef shared_ptr< const IXMPPath >				spcIXMPPath;
-
-	// IXMPNameSpacePrefixMap
-	class IXMPNameSpacePrefixMap_v1;
-
-	typedef IXMPNameSpacePrefixMap_v1					IXMPNameSpacePrefixMap_base;
-	typedef IXMPNameSpacePrefixMap_v1 *					pIXMPNameSpacePrefixMap_base;
-	typedef const IXMPNameSpacePrefixMap_v1 *			pcIXMPNameSpacePrefixMap_base;
-
-	typedef IXMPNameSpacePrefixMap_v1					IXMPNameSpacePrefixMap_latest;
-
-	#ifndef CLIENT_IXMPNAMESPACEPREFIXMAP_VERSION
-		typedef IXMPNameSpacePrefixMap_latest			IXMPNameSpacePrefixMap;
-	#else
-		class CLIENT_IXMPNAMESPACEPREFIXMAP_VERSION;
-		typedef CLIENT_IXMPNAMESPACEPREFIXMAP_VERSION	IXMPNameSpacePrefixMap;
-	#endif
-	typedef IXMPNameSpacePrefixMap *					pIXMPNameSpacePrefixMap;
-	typedef const IXMPNameSpacePrefixMap *				pcIXMPNameSpacePrefixMap;
-	typedef shared_ptr< IXMPNameSpacePrefixMap >		spIXMPNameSpacePrefixMap;
-	typedef shared_ptr< const IXMPNameSpacePrefixMap >	spcIXMPNameSpacePrefixMap;
-
-	// IXMPNode
-	class IXMPNode_v1;
-
-	typedef IXMPNode_v1									IXMPNode_base;
-	typedef IXMPNode_v1 *								pIXMPNode_base;
-	typedef const IXMPNode_v1 *							pcIXMPNode_base;
-
-	typedef IXMPNode_v1									IXMPNode_latest;
-
-	#ifndef CLIENT_IXMPNODE_VERSION
-		typedef IXMPNode_latest							IXMPNode;
-	#else
-		class CLIENT_IXMPNODE_VERSION;
-		typedef CLIENT_IXMPNODE_VERSION					IXMPNode;
-	#endif
-	typedef IXMPNode	*								pIXMPNode;
-	typedef const IXMPNode	*							pcIXMPNode;
-	typedef shared_ptr< IXMPNode >						spIXMPNode;
-	typedef shared_ptr< const IXMPNode >				spcIXMPNode;
-
-	// IXMPCompositeNode
-	class IXMPCompositeNode_v1;
-
-	typedef IXMPCompositeNode_v1						IXMPCompositeNode_base;
-	typedef IXMPCompositeNode_v1 *						pIXMPCompositeNode_base;
-	typedef const IXMPCompositeNode_v1 *				pcIXMPCompositeNode_base;
-
-	typedef IXMPCompositeNode_v1						IXMPCompositeNode_latest;
-
-	#ifndef CLIENT_IXMPCOMPOSITENODE_VERSION
-		typedef IXMPCompositeNode_latest				IXMPCompositeNode;
-	#else
-		class CLIENT_IXMPCOMPOSITENODE_VERSION;
-		typedef CLIENT_IXMPCOMPOSITENODE_VERSION		IXMPCompositeNode;
-	#endif
-	typedef IXMPCompositeNode *							pIXMPCompositeNode;
-	typedef const IXMPCompositeNode *					pcIXMPCompositeNode;
-	typedef shared_ptr< IXMPCompositeNode >				spIXMPCompositeNode;
-	typedef shared_ptr< const IXMPCompositeNode >		spcIXMPCompositeNode;
-
-	// IXMPArrayNode
-	class IXMPArrayNode_v1;
-
-	typedef IXMPArrayNode_v1							IXMPArrayNode_base;
-	typedef IXMPArrayNode_v1 *							pIXMPArrayNode_base;
-	typedef const IXMPArrayNode_v1 *					pcIXMPArrayNode_base;
-
-	typedef IXMPArrayNode_v1							IXMPArrayNode_latest;
-
-	#ifndef CLIENT_IXMPARRAYNODE_VERSION
-		typedef IXMPArrayNode_latest					IXMPArrayNode;
-	#else
-		class CLIENT_IXMPARRAYNODE_VERSION;
-		typedef CLIENT_IXMPARRAYNODE_VERSION			IXMPArrayNode;
-	#endif
-	typedef IXMPArrayNode *								pIXMPArrayNode;
-	typedef const IXMPArrayNode *						pcIXMPArrayNode;
-	typedef shared_ptr< IXMPArrayNode >					spIXMPArrayNode;
-	typedef shared_ptr< const IXMPArrayNode >			spcIXMPArrayNode;
-
-	// IXMPStructureNode
-	class IXMPStructureNode_v1;
-
-	typedef IXMPStructureNode_v1						IXMPStructureNode_base;
-	typedef IXMPStructureNode_v1 *						pIXMPStructureNode_base;
-	typedef const IXMPStructureNode_v1 *				pcIXMPStructureNode_base;
-
-	typedef IXMPStructureNode_v1						IXMPStructureNode_latest;
-
-	#ifndef CLIENT_IXMPSTRUCTURENODE_VERSION
-		typedef IXMPStructureNode_latest				IXMPStructureNode;
-	#else
-		class CLIENT_IXMPSTRUCTURENODE_VERSION;
-		typedef CLIENT_IXMPSTRUCTURENODE_VERSION		IXMPStructureNode;
-	#endif
-	typedef IXMPStructureNode *							pIXMPStructureNode;
-	typedef const IXMPStructureNode *					pcIXMPStructureNode;
-	typedef shared_ptr< IXMPStructureNode >				spIXMPStructureNode;
-	typedef shared_ptr< const IXMPStructureNode >		spcIXMPStructureNode;
-
-	// IXMPCoreObjectFactory
-	class IXMPCoreObjectFactory_v1;
-
-	typedef IXMPCoreObjectFactory_v1					IXMPCoreObjectFactory_base;
-	typedef IXMPCoreObjectFactory_v1 *					pIXMPCoreObjectFactory_base;
-	typedef const IXMPCoreObjectFactory_v1 *			pcIXMPCoreObjectFactory_base;
-
-	typedef IXMPCoreObjectFactory_v1					IXMPCoreObjectFactory_latest;
-
-	#ifndef CLIENT_IXMPCOREOBJECTFACTORY_VERSION
-		typedef IXMPCoreObjectFactory_latest			IXMPCoreObjectFactory;
-	#else
-		class CLIENT_IXMPCOREOBJECTFACTORY_VERSION;
-		typedef CLIENT_IXMPCOREOBJECTFACTORY_VERSION	IXMPCoreObjectFactory;
-	#endif
-	typedef IXMPCoreObjectFactory *						pIXMPCoreObjectFactory;
-	typedef const IXMPCoreObjectFactory *				pcIXMPCoreObjectFactory;
-	typedef shared_ptr< IXMPCoreObjectFactory >			spIXMPCoreObjectFactory;
-	typedef shared_ptr< const IXMPCoreObjectFactory >	spcIXMPCoreObjectFactory;
-
-	// IXMPSimpleNode
-	class IXMPSimpleNode_v1;
-
-	typedef IXMPSimpleNode_v1							IXMPSimpleNode_base;
-	typedef IXMPSimpleNode_v1 *							pIXMPSimpleNode_base;
-	typedef const IXMPSimpleNode_v1 *					pcIXMPSimpleNode_base;
-
-	typedef IXMPSimpleNode_v1							IXMPSimpleNode_latest;
-
-	#ifndef CLIENT_IXMPSIMPLENODE_VERSION
-		typedef IXMPSimpleNode_latest					IXMPSimpleNode;
-	#else
-		class CLIENT_IXMPSIMPLENODE_VERSION;
-		typedef CLIENT_IXMPSIMPLENODE_VERSION			IXMPSimpleNode;
-	#endif
-	typedef IXMPSimpleNode *							pIXMPSimpleNode;
-	typedef const IXMPSimpleNode *						pcIXMPSimpleNode;
-	typedef shared_ptr< IXMPSimpleNode >				spIXMPSimpleNode;
-	typedef shared_ptr< const IXMPSimpleNode >			spcIXMPSimpleNode;
-
-	// IXMPArrayNode
-	class IXMPArrayNode_v1;
-
-	typedef IXMPArrayNode_v1							IXMPArrayNode_base;
-	typedef IXMPArrayNode_v1 *							pIXMPArrayNode_base;
-	typedef const IXMPArrayNode_v1 *					pcIXMPArrayNode_base;
-
-	typedef IXMPArrayNode_v1							IXMPArrayNode_latest;
-
-	#ifndef CLIENT_IXMPARRAYNODE_VERSION
-		typedef IXMPArrayNode_latest					IXMPArrayNode;
-	#else
-		class CLIENT_IXMPARRAYNODE_VERSION;
-		typedef CLIENT_IXMPARRAYNODE_VERSION			IXMPArrayNode;
-	#endif
-	typedef IXMPArrayNode *								pIXMPArrayNode;
-	typedef const IXMPArrayNode *						pcIXMPArrayNode;
-	typedef shared_ptr< IXMPArrayNode >					spIXMPArrayNode;
-	typedef shared_ptr< const IXMPArrayNode >			spcIXMPArrayNode;
-
-	// IXMPStructureNode
-	class IXMPStructureNode_v1;
-
-	typedef IXMPStructureNode_v1						IXMPStructureNode_base;
-	typedef IXMPStructureNode_v1 *						pIXMPStructureNode_base;
-	typedef const IXMPStructureNode_v1 *				pcIXMPStructureNode_base;
-
-	typedef IXMPStructureNode_v1						IXMPStructureNode_latest;
-
-	#ifndef CLIENT_IXMPSTRUCTURENODE_VERSION
-		typedef IXMPStructureNode_latest				IXMPStructureNode;
-	#else
-		class CLIENT_IXMPSTRUCTURENODE_VERSION;
-		typedef CLIENT_IXMPSTRUCTURENODE_VERSION		IXMPStructureNode;
-	#endif
-	typedef IXMPStructureNode *							pIXMPStructureNode;
-	typedef const IXMPStructureNode *					pcIXMPStructureNode;
-	typedef shared_ptr< IXMPStructureNode >				spIXMPStructureNode;
-	typedef shared_ptr< const IXMPStructureNode >		spcIXMPStructureNode;
-
-	// IXMPQualifiers
-	class IXMPQualifiers_v1;
-
-	typedef IXMPQualifiers_v1							IXMPQualifiers_base;
-	typedef IXMPQualifiers_v1 *							pIXMPQualifiers_base;
-	typedef const IXMPQualifiers_v1 *					pcIXMPQualifiers_base;
-
-	typedef IXMPQualifiers_v1							IXMPQualifiers_latest;
-
-	#ifndef CLIENT_IXMPQUALIFIERS_VERSION
-		typedef IXMPQualifiers_latest					IXMPQualifiers;
-	#else
-		class CLIENT_IXMPQUALIFIERS_VERSION;
-		typedef CLIENT_IXMPQUALIFIERS_VERSION			IXMPQualifiers;
-	#endif
-	typedef IXMPQualifiers *							pIXMPQualifiers;
-	typedef const IXMPQualifiers *						pcIXMPQualifiers;
-	typedef shared_ptr< IXMPQualifiers >				spIXMPQualifiers;
-	typedef shared_ptr< const IXMPQualifiers >			spcIXMPQualifiers;
-
-	// IXMPNodeIterator
-	class IXMPNodeIterator_v1;
-
-	typedef IXMPNodeIterator_v1							IXMPNodeIterator_base;
-	typedef IXMPNodeIterator_v1 *						pIXMPNodeIterator_base;
-
-	typedef IXMPNodeIterator_v1							IXMPNodeIterator_latest;
-
-#ifndef CLIENT_IXMPNODEITERATOR_VERSION
-	typedef IXMPNodeIterator_latest						IXMPNodeIterator;
-#else
-	class CLIENT_IXMPNODEITERATOR_VERSION;
-	typedef CLIENT_IXMPNODEITERATOR_VERSION				IXMPNodeIterator;
-#endif
-	typedef IXMPNodeIterator	*						pIXMPNodeIterator;
-	typedef shared_ptr< IXMPNodeIterator >				spIXMPNodeIterator;
-
-
-	// IXMPConstNodeIterator
-	class IXMPConstNodeIterator_v1;
-
-	typedef IXMPConstNodeIterator_v1					IXMPConstNodeIterator_base;
-	typedef IXMPConstNodeIterator_v1 *					pIXMPConstNodeIterator_base;
-
-	typedef IXMPConstNodeIterator_v1					IXMPConstNodeIterator_latest;
-
-#ifndef CLIENT_IXMPCONSTNODEITERATOR_VERSION
-	typedef IXMPConstNodeIterator_latest				IXMPConstNodeIterator;
-#else
-	class CLIENT_IXMPCONSTNODEITERATOR_VERSION;
-	typedef CLIENT_IXMPCONSTNODEITERATOR_VERSION		IXMPConstNodeIterator;
-#endif
-	typedef IXMPConstNodeIterator	*					pIXMPConstNodeIterator;
-	typedef shared_ptr< IXMPConstNodeIterator >			spIXMPConstNodeIterator;
-
-	// IXMPMetadata
-	class IXMPMetadata_v1;
-
-	typedef IXMPMetadata_v1								IXMPMetadata_base;
-	typedef IXMPMetadata_v1 *							pIXMPMetadata_base;
-	typedef const IXMPMetadata_v1 *						pcIXMPMetadata_base;
-
-	typedef IXMPMetadata_v1								IXMPMetadata_latest;
-
-#ifndef CLIENT_IXMPMETADATA_VERSION
-	typedef IXMPMetadata_latest							IXMPMetadata;
-#else
-	class CLIENT_IXMPMETADATA_VERSION;
-	typedef CLIENT_IXMPMETADATA_VERSION					IXMPMetadata;
-#endif
-	typedef IXMPMetadata *								pIXMPMetadata;
-	typedef const IXMPMetadata *						pcIXMPMetadata;
-	typedef shared_ptr< IXMPMetadata >					spIXMPMetadata;
-	typedef shared_ptr< const IXMPMetadata >			spcIXMPMetadata;
-
-	// IXMPDOMConfiguration
-	class IXMPDOMConfiguration_v1;
-
-	typedef IXMPDOMConfiguration_v1						IXMPDOMConfiguration_base;
-	typedef IXMPDOMConfiguration_v1 *					pIXMPDOMConfiguration_base;
-	typedef const IXMPDOMConfiguration_v1 *				pcIXMPDOMConfiguration_base;
-
-	typedef IXMPDOMConfiguration_v1						IXMPDOMConfiguration_latest;
-
-	#ifndef CLIENT_IXMPDOMCONFIGURATION_VERSION
-		typedef IXMPDOMConfiguration_latest				IXMPDOMConfiguration;
-	#else
-		class CLIENT_IXMPDOMCONFIGURATION_VERSION;
-		typedef CLIENT_IXMPDOMCONFIGURATION_VERSION		IXMPDOMConfiguration;
-	#endif
-	typedef IXMPDOMConfiguration *						pIXMPDOMConfiguration;
-	typedef const IXMPDOMConfiguration *				pcIXMPDOMConfiguration;
-	typedef shared_ptr< IXMPDOMConfiguration >			spIXMPDOMConfiguration;
-	typedef shared_ptr< const IXMPDOMConfiguration >	spcIXMPDOMConfiguration;
-
-
-	// IXMPDOMParser
-	class IXMPDOMParser_v1;
-
-	typedef IXMPDOMParser_v1							IXMPDOMParser_base;
-	typedef IXMPDOMParser_v1 *							pIXMPDOMParser_base;
-	typedef const IXMPDOMParser_v1 *					pcIXMPDOMParser_base;
-
-	typedef IXMPDOMParser_v1							IXMPDOMParser_latest;
-
-	#ifndef CLIENT_IXMPDOMPARSER_VERSION
-		typedef IXMPDOMParser_latest					IXMPDOMParser;
-	#else
-		class CLIENT_IXMPDOMPARSER_VERSION;
-		typedef CLIENT_IXMPDOMPARSER_VERSION			IXMPDOMParser;
-	#endif
-	typedef IXMPDOMParser *								pIXMPDOMParser;
-	typedef const IXMPDOMParser *						pcIXMPDOMParser;
-	typedef shared_ptr< IXMPDOMParser >					spIXMPDOMParser;
-	typedef shared_ptr< const IXMPDOMParser >			spcIXMPDOMParser;
-
-	// IXMPDOMSerializer
-	class IXMPDOMSerializer_v1;
-
-	typedef IXMPDOMSerializer_v1						IXMPDOMSerializer_base;
-	typedef IXMPDOMSerializer_v1 *						pIXMPDOMSerializer_base;
-	typedef const IXMPDOMSerializer_v1 *				pcIXMPDOMSerializer_base;
-
-	typedef IXMPDOMSerializer_v1						IXMPDOMSerializer_latest;
-
-	#ifndef CLIENT_IXMPDOMSERIALIZER_VERSION
-		typedef IXMPDOMSerializer_latest				IXMPDOMSerializer;
-	#else
-		class CLIENT_IXMPDOMSERIALIZER_VERSION;
-		typedef CLIENT_IXMPDOMSERIALIZER_VERSION		IXMPDOMSerializer;
-	#endif
-	typedef IXMPDOMSerializer *							pIXMPDOMSerializer;
-	typedef const IXMPDOMSerializer *					pcIXMPDOMSerializer;
-	typedef shared_ptr< IXMPDOMSerializer >				spIXMPDOMSerializer;
-	typedef shared_ptr< const IXMPDOMSerializer >		spcIXMPDOMSerializer;
-
-	// IXMPDOMImplementationRegistry
-	class IXMPDOMImplementationRegistry_v1;
-
-	typedef IXMPDOMImplementationRegistry_v1					IXMPDOMImplementationRegistry_base;
-	typedef IXMPDOMImplementationRegistry_v1 *					pIXMPDOMImplementationRegistry_base;
-	typedef const IXMPDOMImplementationRegistry_v1 *			pcIXMPDOMImplementationRegistry_base;
-
-	typedef IXMPDOMImplementationRegistry_v1					IXMPDOMImplementationRegistry_latest;
-
-	#ifndef CLIENT_IXMPDOMIMPLEMENTATIONREGISTRY_VERSION
-		typedef IXMPDOMImplementationRegistry_latest			IXMPDOMImplementationRegistry;
-	#else
-		class CLIENT_IXMPDOMIMPLEMENTATIONREGISTRY_VERSION;
-		typedef CLIENT_IXMPDOMIMPLEMENTATIONREGISTRY_VERSION	IXMPDOMImplementationRegistry;
-	#endif
-typedef IXMPDOMImplementationRegistry *							pIXMPDOMImplementationRegistry;
-typedef const IXMPDOMImplementationRegistry *					pcIXMPDOMImplementationRegistry;
-typedef shared_ptr< IXMPDOMImplementationRegistry >				spIXMPDOMImplementationRegistry;
-typedef shared_ptr< const IXMPDOMImplementationRegistry >		spcIXMPDOMImplementationRegistry;
-
-
-	typedef enum {
-		//! Indicates that IXMPNameSpacePrefixMap has an entry missing.
-		kXMPDataModelCodeXMPNameSpacePrefixMapEntryMissing				= 0,
-		//! Indicates that a different type of node is present than one user is expecting
-		kXMPDataModelCodeDifferentNodeTypePresent						= 1,
-		//! Indicates that node is already a child of another parent.
-		kXMPDataModelNodeAlreadyAChild									= 2,
-		//! Indicates a node with the same qualified name or index already exists.
-		kXMPDataModelNodeAlreadyExists									= 3,
-		//! Indicates no such node exists.
-		kXMPDataModelNoSuchNodeExists									= 4,
-		//! Indicates current array element type is not same as that of other child items
-		kXMPDataModelArrayItemTypeDifferent								= 5,
-		//! Indicates invalid path segment inside a path.
-		kXMPDataModelInvalidPathSegment									= 6,
-
-		//! Indicates Bad schema parameter
-		kXMPDataModelCodeBadSchema										= 101,
-		//! Indicates Bad XPath parameter
-		kXMPDataModelCodeBadXPath										= 102,
-		//! Indicates Bad options parameter
-		kXMPDataModelCodeBadOptions										= 103,
-		//! Indicates Bad iteration position
-		kXMPDataModelCodeBadIterPosition								= 104,
-		//! Indicates Unicode error
-		kXMPDataModelCodeBadUnicode										= 105,
-		//! Indicates XMP format error
-		kXMPDataModelCodeValidationError								= 106,
-		//! Indicates Empty iterator
-		kXMPDataModelCodeEmptyIterator									= 107,
-
-		//! Maximum value this enum can hold, should be treated as invalid value.
-		kXMPDataModelCodeMaxValue										= NS_XMPCOMMON::kMaxEnumValue
-	} eXMPDataModelErrorCode;
-
-	typedef enum {
-		//! Indicates XML parsing error.
-		kXMPParserCodeBadXML											= 0,
-		/// RDF format error
-		kXMPParserCodeBadRDF											= 1,
-		/// XMP format error
-		kXMPParserCodeBadXMP											= 2,
-
-		//! Maximum value this enum can hold, should be treated as invalid value.
-		kXMPParserCodeMaxValue											= NS_XMPCOMMON::kMaxEnumValue
-	} eXMPParserErrorCode;
-
-	typedef enum {
-		//! Indicates serialization failed to achieve size requirement.
-		kXMPSerializerCodeSizeExceed									= 0,
-		//! Indicates un registered namespace encountered during serialization.
-		kXMPSerializerCodeUnRegisteredNameSpace							= 1,
-
-		//! Maximum value this enum can hold, should be treated as invalid value.
-		kXMPSerializerCodeMaxValue										= NS_XMPCOMMON::kMaxEnumValue
-
-	} eXMPSerializerErrorCode;
+#include "XMPCore/XMPCoreLatestInterfaceVersions.h"
+
+namespace AdobeXMPCore {
+	using namespace AdobeXMPCommon;
+
+	// INameSpacePrefixMap
+	class INameSpacePrefixMap_v1;
+	typedef INameSpacePrefixMap_v1														INameSpacePrefixMap_base;
+	typedef INameSpacePrefixMap_v1 *													pINameSpacePrefixMap_base;
+	typedef const INameSpacePrefixMap_v1 *												pcINameSpacePrefixMap_base;
+	typedef BASE_CLASS( INameSpacePrefixMap, INAMESPACEPREFIXMAP_VERSION )				INameSpacePrefixMap;
+	typedef INameSpacePrefixMap *														pINameSpacePrefixMap;
+	typedef const INameSpacePrefixMap *													pcINameSpacePrefixMap;
+	typedef shared_ptr< INameSpacePrefixMap >											spINameSpacePrefixMap;
+	typedef shared_ptr< const INameSpacePrefixMap >										spcINameSpacePrefixMap;
+	static const uint64 kINameSpacePrefixMapID											( 0x634e5350724d6170 /* cNSPrMap */ );
+
+	// IPathSegment
+	class IPathSegment_v1;
+	typedef IPathSegment_v1																IPathSegment_base;
+	typedef IPathSegment_v1 *															pIPathSegment_base;
+	typedef const IPathSegment_v1 *														pcIPathSegment_base;
+	typedef BASE_CLASS( IPathSegment, IPATHSEGMENT_VERSION )							IPathSegment;
+	typedef IPathSegment *																pIPathSegment;
+	typedef const IPathSegment *														pcIPathSegment;
+	typedef shared_ptr< IPathSegment >													spIPathSegment;
+	typedef shared_ptr< const IPathSegment >											spcIPathSegment;
+	static const uint64 kIPathSegmentID													( 0x6350617468536567 /* cPathSeg */ );
+
+	// IPath
+	class IPath_v1;
+	typedef IPath_v1																	IPath_base;
+	typedef IPath_v1 *																	pIPath_base;
+	typedef const IPath_v1 *															pcIPath_base;
+	typedef BASE_CLASS( IPath, IPATH_VERSION )											IPath;
+	typedef IPath *																		pIPath;
+	typedef const IPath *																pcIPath;
+	typedef shared_ptr< IPath >															spIPath;
+	typedef shared_ptr< const IPath >													spcIPath;
+	static const uint64 kIPathID														( 0x6350617468202020 /* cPath    */ );
+
+	// INode
+	class INode_v1;
+	typedef INode_v1																	INode_base;
+	typedef INode_v1 *																	pINode_base;
+	typedef const INode_v1 *															pcINode_base;
+	typedef BASE_CLASS( INode, INODE_VERSION )											INode;
+	typedef INode *																		pINode;
+	typedef const INode *																pcINode;
+	typedef shared_ptr< INode >															spINode;
+	typedef shared_ptr< const INode >													spcINode;
+	static const uint64 kINodeID														( 0x634e6f6465202020 /* cNode    */ );
+
+	// ISimpleNode
+	class ISimpleNode_v1;
+	typedef ISimpleNode_v1																ISimpleNode_base;
+	typedef ISimpleNode_v1 *															pISimpleNode_base;
+	typedef const ISimpleNode_v1 *														pcISimpleNode_base;
+	typedef BASE_CLASS( ISimpleNode, ISIMPLENODE_VERSION )								ISimpleNode;
+	typedef ISimpleNode *																pISimpleNode;
+	typedef const ISimpleNode *															pcISimpleNode;
+	typedef shared_ptr< ISimpleNode >													spISimpleNode;
+	typedef shared_ptr< const ISimpleNode >												spcISimpleNode;
+	static const uint64 kISimpleNodeID													( 0x63536d6c4e6f6465 /* cSmlNode */ );
+
+	// ICompositeNode
+	class ICompositeNode_v1;
+	typedef ICompositeNode_v1															ICompositeNode_base;
+	typedef ICompositeNode_v1 *															pICompositeNode_base;
+	typedef const ICompositeNode_v1 *													pcICompositeNode_base;
+	typedef BASE_CLASS( ICompositeNode, ICOMPOSITENODE_VERSION )						ICompositeNode;
+	typedef ICompositeNode *															pICompositeNode;
+	typedef const ICompositeNode *														pcICompositeNode;
+	typedef shared_ptr< ICompositeNode >												spICompositeNode;
+	typedef shared_ptr< const ICompositeNode >											spcICompositeNode;
+	static const uint64 kICompositeNodeID												( 0x63436d704e6f6465 /* cCmpNode */ );
+
+	// IStructureNode
+	class IStructureNode_v1;
+	typedef IStructureNode_v1															IStructureNode_base;
+	typedef IStructureNode_v1 *															pIStructureNode_base;
+	typedef const IStructureNode_v1 *													pcIStructureNode_base;
+	typedef BASE_CLASS( IStructureNode, ISTRUCTURENODE_VERSION )						IStructureNode;
+	typedef IStructureNode *															pIStructureNode;
+	typedef const IStructureNode *														pcIStructureNode;
+	typedef shared_ptr< IStructureNode >												spIStructureNode;
+	typedef shared_ptr< const IStructureNode >											spcIStructureNode;
+	static const uint64 kIStructureNodeID												( 0x635374724e6f6465 /* cStrNode */ );
+
+	// IArrayNode
+	class IArrayNode_v1;
+	typedef IArrayNode_v1																IArrayNode_base;
+	typedef IArrayNode_v1 *																pIArrayNode_base;
+	typedef const IArrayNode_v1 *														pcIArrayNode_base;
+	typedef BASE_CLASS( IArrayNode, IARRAYNODE_VERSION )								IArrayNode;
+	typedef IArrayNode *																pIArrayNode;
+	typedef const IArrayNode *															pcIArrayNode;
+	typedef shared_ptr< IArrayNode >													spIArrayNode;
+	typedef shared_ptr< const IArrayNode >												spcIArrayNode;
+	static const uint64 kIArrayNodeID													( 0x634172724e6f6465 /* cArrNode */ );
+
+	// INodeIterator
+	class INodeIterator_v1;
+	typedef INodeIterator_v1															INodeIterator_base;
+	typedef INodeIterator_v1 *															pINodeIterator_base;
+	typedef const INodeIterator_v1 *													pcINodeIterator_base;
+	typedef BASE_CLASS(INodeIterator, INODEITERATOR_VERSION)							INodeIterator;
+	typedef INodeIterator *																pINodeIterator;
+	typedef const INodeIterator *														pcINodeIterator;
+	typedef shared_ptr< INodeIterator >													spINodeIterator;
+	typedef shared_ptr< const INodeIterator >											spcINodeIterator;
+	static const uint64	kINodeIteratorID												(0x634e6f6465497420 /* cNodeIt */);
+
+	// IMetadata
+	class IMetadata_v1;
+	typedef IMetadata_v1																IMetadata_base;
+	typedef IMetadata_v1 *																pIMetadata_base;
+	typedef const IMetadata_v1 *														pcIMetadata_base;
+	typedef BASE_CLASS( IMetadata, IMETADATA_VERSION )									IMetadata;
+	typedef IMetadata *																	pIMetadata;
+	typedef const IMetadata *															pcIMetadata;
+	typedef shared_ptr< IMetadata >														spIMetadata;
+	typedef shared_ptr< const IMetadata >												spcIMetadata;
+	static const uint64 kIMetadataID													( 0x634d657461646174 /* cMetadat */ );
+
+	// IClientDOMParser
+	class IClientDOMParser_v1;
+	typedef IClientDOMParser_v1															IClientDOMParser_base;
+	typedef IClientDOMParser_v1 *														pIClientDOMParser_base;
+	typedef const IClientDOMParser_v1 *													pcIClientDOMParser_base;
+	typedef BASE_CLASS( IClientDOMParser, ICLIENTDOMPARSER_VERSION )					IClientDOMParser;
+	typedef IClientDOMParser *															pIClientDOMParser;
+	typedef const IClientDOMParser *													pcIClientDOMParser;
+
+	// IClientDOMSerializer
+	class IClientDOMSerializer_v1;
+	typedef IClientDOMSerializer_v1														IClientDOMSerializer_base;
+	typedef IClientDOMSerializer_v1 *													pIClientDOMSerializer_base;
+	typedef const IClientDOMSerializer_v1 *												pcIClientDOMSerializer_base;
+	typedef BASE_CLASS( IClientDOMSerializer, ICLIENTDOMSERIALIZER_VERSION )			IClientDOMSerializer;
+	typedef IClientDOMSerializer *														pIClientDOMSerializer;
+	typedef const IClientDOMSerializer *												pcIClientDOMSerializer;
+	
+	// IDOMParser
+	class IDOMParser_v1;
+	typedef IDOMParser_v1																IDOMParser_base;
+	typedef IDOMParser_v1 *																pIDOMParser_base;
+	typedef const IDOMParser_v1 *														pcIDOMParser_base;
+	typedef BASE_CLASS( IDOMParser, IDOMPARSER_VERSION )								IDOMParser;
+	typedef IDOMParser *																pIDOMParser;
+	typedef const IDOMParser *															pcIDOMParser;
+	typedef shared_ptr< IDOMParser >													spIDOMParser;
+	typedef shared_ptr< const IDOMParser >												spcIDOMParser;
+	static const uint64 kIDOMParserID													( 0x63444f4d50727372 /* cDOMPrsr */ );
+
+	// IDOMSerializer
+	class IDOMSerializer_v1;
+	typedef IDOMSerializer_v1															IDOMSerializer_base;
+	typedef IDOMSerializer_v1 *															pIDOMSerializer_base;
+	typedef const IDOMSerializer_v1 *													pcIDOMSerializer_base;
+	typedef BASE_CLASS( IDOMSerializer, IDOMSERIALIZER_VERSION )						IDOMSerializer;
+	typedef IDOMSerializer *															pIDOMSerializer;
+	typedef const IDOMSerializer *														pcIDOMSerializer;
+	typedef shared_ptr< IDOMSerializer >												spIDOMSerializer;
+	typedef shared_ptr< const IDOMSerializer >											spcIDOMSerializer;
+	static const uint64 kIDOMSerializerID												( 0x63444f4d53726c7a /* cDOMSrlz */ );
+
+	// IDOMImplementationRegistry
+	class IDOMImplementationRegistry_v1;
+	typedef IDOMImplementationRegistry_v1												IDOMImplementationRegistry_base;
+	typedef IDOMImplementationRegistry_v1 *												pIDOMImplementationRegistry_base;
+	typedef const IDOMImplementationRegistry_v1 *										pcIDOMImplementationRegistry_base;
+	typedef BASE_CLASS( IDOMImplementationRegistry, IDOMIMPLEMENTATIONREGISTRY_VERSION)	IDOMImplementationRegistry;
+	typedef IDOMImplementationRegistry *												pIDOMImplementationRegistry;
+	typedef const IDOMImplementationRegistry *											pcIDOMImplementationRegistry;
+	typedef shared_ptr< IDOMImplementationRegistry >									spIDOMImplementationRegistry;
+	typedef shared_ptr< const IDOMImplementationRegistry >								spcIDOMImplementationRegistry;
+	static const uint64 kIDOMImplementationRegistryID									( 0x63444f4d52677374 /* cDOMRgst */ );
+
+	// ICoreObjectFactory
+	class ICoreObjectFactory_v1;
+	typedef ICoreObjectFactory_v1														ICoreObjectFactory_base;
+	typedef ICoreObjectFactory_v1 *														pICoreObjectFactory_base;
+	typedef const ICoreObjectFactory_v1 *												pcICoreObjectFactory_base;
+	typedef BASE_CLASS( ICoreObjectFactory, ICOREOBJECTFACTORY_VERSION )				ICoreObjectFactory;
+	typedef ICoreObjectFactory *														pICoreObjectFactory;
+	typedef const ICoreObjectFactory *													pcICoreObjectFactory;
+	static const uint64 kICoreObjectFactoryID											( 0x634f626a46616374 /* cObjFact */ );
+
+	// ICoreConfigurationManager
+	class ICoreConfigurationManager_v1;
+	typedef ICoreConfigurationManager_v1												ICoreConfigurationManager_base;
+	typedef ICoreConfigurationManager_v1 *												pICoreConfigurationManager_base;
+	typedef const ICoreConfigurationManager_v1 *										pcICoreConfigurationManager_base;
+	typedef BASE_CLASS( ICoreConfigurationManager, ICORECONFIGURATIONMANAGER_VERSION )	ICoreConfigurationManager;
+	typedef ICoreConfigurationManager *													pICoreConfigurationManager;
+	typedef const ICoreConfigurationManager *											pcICoreConfigurationManager;
+	typedef shared_ptr< ICoreConfigurationManager >										spICoreConfigurationManager;
+	typedef shared_ptr< const ICoreConfigurationManager >								spcICoreConfigurationManager;	
+	static const uint64 kICoreConfigurationManagerID									( 0x63436f6e664d6772 /* cConfMgr */ );
 
 }
 
+namespace AdobeXMPCore_Int {
+
+	// INameSpacePrefixMap_I
+	class INameSpacePrefixMap_I;
+	typedef INameSpacePrefixMap_I *														pINameSpacePrefixMap_I;
+	typedef const INameSpacePrefixMap_I *												pcINameSpacePrefixMap_I;
+
+	// IPathSegment_I
+	class IPathSegment_I;
+	typedef IPathSegment_I *															pIPathSegment_I;
+	typedef const IPathSegment_I *														pcIPathSegment_I;
+
+	// IPath_I
+	class IPath_I;
+	typedef IPath_I *																	pIPath_I;
+	typedef const IPath_I *																pcIPath_I;
+
+	// INode_I
+	class INode_I;
+	typedef INode_I *																	pINode_I;
+	typedef const INode_I *																pcINode_I;
+
+	// ISimpleNode_I
+	class ISimpleNode_I;
+	typedef ISimpleNode_I *																pISimpleNode_I;
+	typedef const ISimpleNode_I *														pcISimpleNode_I;
+
+	// ICompositeNode_I
+	class ICompositeNode_I;
+	typedef ICompositeNode_I *															pICompositeNode_I;
+	typedef const ICompositeNode_I *													pcICompositeNode_I;
+
+	// IStructureNode_I
+	class IStructureNode_I;
+	typedef IStructureNode_I *															pIStructureNode_I;
+	typedef const IStructureNode_I *													pcIStructureNode_I;
+
+	// IArrayNode_I
+	class IArrayNode_I;
+	typedef IArrayNode_I *																pIArrayNode_I;
+	typedef const IArrayNode_I *														pcIArrayNode_I;
+
+	// INodeIterator_I
+	class INodeIterator_I;
+	typedef INodeIterator_I *															pINodeIterator_I;
+	typedef const INodeIterator_I *														pcINodeIterator_I;
+
+	// IMetadata_I
+	class IMetadata_I;
+	typedef IMetadata_I *																pIMetadata_I;
+	typedef const IMetadata_I *															pcIMetadata_I;
+
+	// IClientDOMParser_I
+	class IClientDOMParser_I;
+	typedef IClientDOMParser_I *														pIClientDOMParser_I;
+	typedef const IClientDOMParser_I *													pcIClientDOMParser_I;
+
+	// IClientDOMSerializer_I
+	class IClientDOMSerializer_I;
+	typedef IClientDOMSerializer_I *													pIClientDOMSerializer_I;
+	typedef const IClientDOMSerializer_I *												pcIClientDOMSerializer_I;
+
+	// IDOMParser_I
+	class IDOMParser_I;
+	typedef IDOMParser_I *																pIDOMParser_I;
+	typedef const IDOMParser_I *														pcIDOMParser_I;
+
+	// IDOMSerializer_I
+	class IDOMSerializer_I;
+	typedef IDOMSerializer_I *															pIDOMSerializer_I;
+	typedef const IDOMSerializer_I *													pcIDOMSerializer_I;
+
+	// IDOMImplementationRegistry_I
+	class IDOMImplementationRegistry_I;
+	typedef IDOMImplementationRegistry_I *												pIDOMImplementationRegistry_I;
+	typedef const IDOMImplementationRegistry_I *										pcIDOMImplementationRegistry_I;
+
+	// ICoreObjectFactory_I
+	class ICoreObjectFactory_I;
+	typedef ICoreObjectFactory_I *														pICoreObjectFactory_I;
+	typedef const ICoreObjectFactory_I *												pcICoreObjectFactory_I;
+
+	// ICoreConfigurationManager_I
+	class ICoreConfigurationManager_I;
+	typedef ICoreConfigurationManager_I *												pICoreConfigurationManager_I;
+	typedef const ICoreConfigurationManager_I *											pcICoreConfigurationManager_I;
+}
+
 #endif // XMPCoreFwdDeclarations_h__
+

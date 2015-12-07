@@ -47,7 +47,7 @@
 /// \file TXMPDocOps.hpp
 /// \brief Services to support application "document operations".
 ///
-/// \c TXMPDocOps is the template class providing services in support of common operations to
+/// @details\c TXMPDocOps is the template class providing services in support of common operations to
 /// application documents. These services implement XMP policy that needs to be consistent across
 /// applications. The template must be instantiated with a string class such as \c std::string. See
 /// the instructions in XMP.hpp, and the Overview for a discussion of the overall architecture of
@@ -62,7 +62,7 @@
 /// \c std::string. See the instructions in XMP.hpp, and the Overview for a discussion of the overall
 /// architecture of the XMP API.
 ///
-/// This class defines helper functions that support common behavior for high level operations on
+/// @details This class defines helper functions that support common behavior for high level operations on
 /// application documents. Common examples are the user menu actions \c File/New, \c File/Open,
 /// \c File/Save, \c File/SaveAs, etc. Applications must keep a per-document \c SXMPDocOps object
 /// alongside their \c SXMPMeta object, document level state is kept by the \c SXMPDocOps object.
@@ -99,7 +99,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief Reconstruct a \c TXMPDocOps object from an internal reference.
     ///
-    /// This constructor creates a new \c TXMPDocOps object that refers to the underlying reference
+    /// @details This constructor creates a new \c TXMPDocOps object that refers to the underlying reference
     /// object of an existing \c TXMPDocOps object. Use to safely pass \c SXMPDocOps references across
     /// DLL boundaries.
     ///
@@ -118,7 +118,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief Assignment operator
     ///
-    /// Increments an internal reference count but does not perform a deep copy. The two client
+    /// @details Increments an internal reference count but does not perform a deep copy. The two client
     /// objects will both refer to the same internal object.
     ///
     /// @param rhs The existing \c TXMPDocOps object.
@@ -129,7 +129,7 @@ public:
     /// @brief GetInternalRef() retrieves an internal reference that can be safely passed across DLL
     /// boundaries and reconstructed.
     ///
-    /// Use with the reconstruction constructor to safely pass \c SXMPDocOps references across DLL
+    /// @details Use with the reconstruction constructor to safely pass \c SXMPDocOps references across DLL
     /// boundaries where the clients might have used different string types when instantiating
     /// \c TXMPDocOps.
 	///
@@ -150,7 +150,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c SetAppName() sets the application's name.
     ///
-    /// Use \c SetAppName to provide the application name which is used to set \c xmp:CreatorTool
+    /// @details Use \c SetAppName to provide the application name which is used to set \c xmp:CreatorTool
     /// property and the \c stEvt:softwareAgent field of \c xmpMM:History entries.
     ///
     /// @param in_appName The application's name for use in the \c xmp:CreatorTool property.
@@ -160,7 +160,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c CreateID() creates a new GUID string.
     ///
-    /// Generates a new GUID and formats it as a string with the given prefix. It is recommended
+    /// @details Generates a new GUID and formats it as a string with the given prefix. It is recommended
     /// that the prefix end with a colon and follow W3C URI scheme syntax.
     ///
     /// @param out_xmpID The string to received the value of the generated GUID.
@@ -174,7 +174,7 @@ public:
     /// \name General document manipulation
     /// @{
     ///
-    /// These are general operations intended to help applications maintain standard XMP properties.
+    /// @details These are general operations intended to help applications maintain standard XMP properties.
     /// The basic model is that an application's document object would contain both an \c SXMPMeta
     /// object and an \c SXMPDocOps object. These functions define the association of those, and
     /// perform standard operations on the \c SXMPMeta for typical user actions like New, Open,
@@ -183,11 +183,11 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c NewXMP() initializes the \c SXMPDocOps and \c SXMPMeta objects for a new document.
     ///
-    /// An application should call \c NewXMP when it creates a new document to perform standard XMP
+    /// @details An application should call \c NewXMP when it creates a new document to perform standard XMP
     /// initialization. This includes setting \c dc:format to the MIME type (if provided), setting
     /// \c xmp:CreatorTool to the application name (if provided via \c SetAppName), setting
     /// \c xmp:CreateDate to the current local date-time, and noting that the entire document has
-    /// changed (see \c NoteChange).
+    ///  changed (see \c NoteChange).
     ///
     /// @param inout_docXMP The SXMPMeta object associated with the application document. This should
     /// be an empty SXMPMeta object. The application can set other properties after calling \c NewXMP.
@@ -203,7 +203,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c OpenXMP() performs standard normalization when opening existing documents.
     ///
-    /// An application should call \c OpenXMP when opening an existing document, after reading any
+    /// @details An application should call \c OpenXMP when opening an existing document, after reading any
     /// existing XMP. The primary role of \c OpenXMP is to detect changes by other "ignorant"
     /// applications, and to prepare the \c SXMPDocOps object for editing operations.
     ///
@@ -223,7 +223,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c OpenXMP() performs standard normalization when opening existing documents.
     ///
-    /// This overload of \c OpenXMP adds an optional file path parameter.
+    /// @details This overload of \c OpenXMP adds an optional file path parameter.
     ///
     /// @param inout_docXMP The SXMPMeta object associated with the existing document. This should
     /// be initialized with the XMP from the document, if any.
@@ -245,7 +245,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c OpenXMP() performs standard normalization when opening existing documents.
     ///
-    /// This overload of \c OpenXMP adds an optional file modification time parameter.
+    /// @details This overload of \c OpenXMP adds an optional file modification time parameter.
     ///
     /// @param inout_docXMP The SXMPMeta object associated with the existing document. This should
     /// be initialized with the XMP from the document, if any.
@@ -255,12 +255,12 @@ public:
     /// appended to report the change in format.
     ///
     /// @param in_filePath An optional disk path of the file, should be an absolute path. Saved for
-    /// use in \c PrepareForSave to detect SaveAs operations to a new location.
+    ///  use in \c PrepareForSave to detect SaveAs operations to a new location.
     ///
     /// @param in_fileModTime An optional file modification time, presumably from the file system.
-    /// This is compared with the timestamp in the most recent "created" or "saved" \c xmpMM:History
-    /// entry. If this time is newer, presumably the file has been modified by an "ignorant"
-    /// application and a "modified" \c xmpMM:History entry is appended. See \c PrepareForSave.
+    ///  This is compared with the timestamp in the most recent "created" or "saved" \c xmpMM:History
+    ///  entry. If this time is newer, presumably the file has been modified by an "ignorant"
+    ///  application and a "modified" \c xmpMM:History entry is appended. See \c PrepareForSave.
     ///
     /// @param in_options There are no currently defined options.
 
@@ -273,7 +273,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c BranchXMP() is used to initialize a derived document's XMP.
     ///
-    /// \c BranchXMP() is used to initialize a derived document's XMP. It should be called when
+    /// @details \c BranchXMP() is used to initialize a derived document's XMP. It should be called when
     /// deriving one document from another, for example when doing a Save As operation. It should be
     /// called on the source document:
     /// {code}
@@ -300,7 +300,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c PrepareForSave() is used to finalize the XMP in preparation for saving the document.
     ///
-    /// \c PrepareForSave() is used to finalize the XMP in preparation for saving the document. It
+    /// @details \c PrepareForSave() is used to finalize the XMP in preparation for saving the document. It
     /// makes sure that standard IDs exist, sets various date properties, appends appropriate
     /// history, etc. It does nothing though if the document is unchanged (not dirty).
     ///
@@ -316,7 +316,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c PrepareForSave() is used to finalize the XMP in preparation for saving the document.
     ///
-    /// This overload of \c PrepareForSave adds an optional file path parameter.
+    /// @details This overload of \c PrepareForSave adds an optional file path parameter.
     ///
     /// @param in_mimeType Optional MIME type string, used to detect changes and to set \c dc:format.
     /// If provided and different from an existing dc:format value, an xmpMM:History entry is
@@ -334,7 +334,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c PrepareForSave() is used to finalize the XMP in preparation for saving the document.
     ///
-    /// This overload of \c PrepareForSave adds an optional file modification time parameter.
+    /// @details This overload of \c PrepareForSave adds an optional file modification time parameter.
     ///
     /// @param in_mimeType Optional MIME type string, used to detect changes and to set \c dc:format.
     /// If provided and different from an existing dc:format value, an xmpMM:History entry is
@@ -356,7 +356,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c NoteChange() is used to report changes to some portion of a document.
     ///
-    /// \c NoteChange() is used to report changes to some portion of a document. This information is
+    /// @details \c NoteChange() is used to report changes to some portion of a document. This information is
     /// later recorded in the history by \c PrepareForSave.
     ///
     /// @param in_part A string denoting the changed portion of the file. The syntax is extensible,
@@ -379,7 +379,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c NoteChange() is used to report changes to some portion of a document.
     ///
-    /// This overload takes a vector of changed parts. It is equivalent to calling the single part
+    /// @details This overload takes a vector of changed parts. It is equivalent to calling the single part
     /// form on each of the vector elements.
     ///
     /// @param in_parts A vector of strings, each following the part name syntax.
@@ -399,7 +399,7 @@ public:
     // ---------------------------------------------------------------------------------------------
     /// @brief \c HasPartChanged() is used to determine if a portion of a file has changed.
     ///
-    /// \c HasPartChanged is used to determine if a portion of a file has changed since some
+    /// @details \c HasPartChanged is used to determine if a portion of a file has changed since some
     /// previous save with a given \c xmpMM:InstanceID property.
     ///
     /// @param in_prevInstanceID The \c xmpMM:InstanceID of the file when last seen.

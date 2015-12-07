@@ -7,208 +7,198 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  ADC	Amandeep Chawla
-//
-// mm-dd-yy who Description of changes, most recent first.
-//
-// 12-30-14 ADC 5.6-c032 Adding IConfigurable Interface to XMPCommon.
-//
-// =================================================================================================
-#endif  // AdobePrivate
-
 #include "XMPCommon/Interfaces/BaseInterfaces/IConfigurable.h"
 
-#if GENERATE_XMPCOMMON_CLIENT_LAYER_CODE
+#if !BUILDING_XMPCOMMON_LIB && !SOURCE_COMPILING_XMP_ALL
 
 #include "XMPCommon/Utilities/TWrapperFunctions.h"
-#include "XMPCommon/Interfaces/IError.h"
-#include <stdlib.h>
+#include <assert.h>
 
-namespace NS_XMPCOMMON {
+namespace AdobeXMPCommon {
 
+	IConfigurableProxy::IConfigurableProxy( pIConfigurable configurable )
+		: mConfigurableRawPtr( configurable ) { }
 
-	void IConfigurable::SetParameter( UInt64 key, bool value ) {
-		NS_XMPCOMMON::CallSafeFunctionReturningVoid< IConfigurableBase, UInt64, UInt32 >(
-			GetRawPointer(), &IConfigurableBase::SetParameter, key, static_cast< UInt32 >( value ) );
+	void APICALL IConfigurableProxy::SetParameter( const uint64 & key, bool value ) {
+		CombinedDataValue combinedValue;
+		combinedValue.uint32Value = value ? 1 : 0;
+		CallSafeFunctionReturningVoid< IConfigurable, const uint64 &, uint32, const CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::setParameter, key, static_cast< uint32 >( IConfigurable::kDTBool ), combinedValue
+		);
 	}
 
-	void IConfigurable::SetParameter( UInt64 key, UInt32 value, pcIError_base & error ) __NOTHROW__ {
-		_sp->SetParameter( key, value, error );
+	void APICALL IConfigurableProxy::setParameter( const uint64 & key, uint32 dataType, const CombinedDataValue & dataValue, pcIError_base & error ) __NOTHROW__ {
+		assert( false );
+		return mConfigurableRawPtr->setParameter( key, dataType, dataValue, error );
 	}
 
-	void IConfigurable::SetParameter( UInt64 key, UInt64 value ) {
-		NS_XMPCOMMON::CallSafeFunctionReturningVoid< IConfigurableBase, UInt64, UInt64 >(
-			GetRawPointer(), &IConfigurableBase::SetParameter, key, value );
+	bool APICALL IConfigurableProxy::RemoveParameter( const uint64 & key ) {
+		return CallSafeFunction< IConfigurable, bool, uint32, const uint64 & >(
+			mConfigurableRawPtr, &IConfigurable::removeParameter, key );
 	}
 
-	void IConfigurable::SetParameter( UInt64 key, UInt64 value, pcIError_base & error ) __NOTHROW__ {
-		_sp->SetParameter( key, value, error );
+	uint32 APICALL IConfigurableProxy::removeParameter( const uint64 & key, pcIError_base & error ) __NOTHROW__ {
+		assert( false );
+		return mConfigurableRawPtr->removeParameter( key, error );
 	}
 
-	void IConfigurable::SetParameter( UInt64 key, Int64 value ) {
-		NS_XMPCOMMON::CallSafeFunctionReturningVoid< IConfigurableBase, UInt64, Int64 >(
-			GetRawPointer(), &IConfigurableBase::SetParameter, key, value );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, Int64 value, pcIError_base & error ) __NOTHROW__ {
-		_sp->SetParameter( key, value, error );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, double value ) {
-		NS_XMPCOMMON::CallSafeFunctionReturningVoid< IConfigurableBase, UInt64, double >(
-			GetRawPointer(), &IConfigurableBase::SetParameter, key, value );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, double value, pcIError_base & error ) __NOTHROW__ {
-		_sp->SetParameter( key, value, error );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, char value ) {
-		NS_XMPCOMMON::CallSafeFunctionReturningVoid< IConfigurableBase, UInt64, char >(
-			GetRawPointer(), &IConfigurableBase::SetParameter, key, value );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, char value, pcIError_base & error ) __NOTHROW__ {
-		_sp->SetParameter( key, value, error );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, const char * value ) {
-		NS_XMPCOMMON::CallSafeFunctionReturningVoid< IConfigurableBase, UInt64, const char * >(
-			GetRawPointer(), &IConfigurableBase::SetParameter, key, value );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, const char * value, pcIError_base & error ) __NOTHROW__ {
-		_sp->SetParameter( key, value, error );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, const void * value ) {
-		NS_XMPCOMMON::CallSafeFunctionReturningVoid< IConfigurableBase, UInt64, const void * >(
-			GetRawPointer(), &IConfigurableBase::SetParameter, key, value );
-	}
-
-	void IConfigurable::SetParameter( UInt64 key, const void * value, pcIError_base & error ) __NOTHROW__ {
-		_sp->SetParameter( key, value, error );
-	}
-
-	bool IConfigurable::RemoveParameter( UInt64 key ) {
-		return NS_XMPCOMMON::CallSafeFunction< IConfigurableBase, bool, UInt32, UInt64 >(
-			GetRawPointer(), &IConfigurableBase::RemoveParameter, key );
-	}
-
-	UInt32 IConfigurable::RemoveParameter( UInt64 key, pcIError_base & error ) __NOTHROW__ {
-		return _sp->RemoveParameter( key, error );
-	}
-
-	bool IConfigurable::GetParameter( UInt64 key, bool & value ) const {
-		UInt32 u32value = value ? 0 : 1;
-		bool returnValue = NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, bool, UInt32, UInt64, UInt32 & >(
-			GetRawPointer(), &IConfigurableBase::GetParameter, key, u32value );
-		value = u32value != 0 ? true : false;
+	bool APICALL IConfigurableProxy::GetParameter( const uint64 & key, bool & value ) const {
+		CombinedDataValue combinedValue;
+		bool returnValue = CallConstSafeFunction< IConfigurable, bool, uint32, const uint64 &, uint32, CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::getParameter, key, static_cast< uint32 >( IConfigurable::kDTBool ), combinedValue
+		);
+		value = combinedValue.uint32Value != 0 ? 1 : 0;
 		return returnValue;
 	}
 
-	UInt32 IConfigurable::GetParameter( UInt64 key, UInt32 & value, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameter( key, value, error );
+	uint32 APICALL IConfigurableProxy::getParameter( const uint64 & key, uint32 dataType, CombinedDataValue & value, pcIError_base & error ) const __NOTHROW__ {
+		assert( false );
+		return mConfigurableRawPtr->getParameter( key, dataType, value, error );
 	}
 
-	bool IConfigurable::GetParameter( UInt64 key, UInt64 & value ) const {
-		return NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, bool, UInt32, UInt64, UInt64 & >(
-			GetRawPointer(), &IConfigurableBase::GetParameter, key, value );
-	}
-
-	UInt32 IConfigurable::GetParameter( UInt64 key, UInt64 & value, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameter( key, value, error );
-	}
-
-	bool IConfigurable::GetParameter( UInt64 key, Int64 & value ) const {
-		return NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, bool, UInt32, UInt64, Int64 & >(
-			GetRawPointer(), &IConfigurableBase::GetParameter, key, value );
-	}
-
-	UInt32 IConfigurable::GetParameter( UInt64 key, Int64 & value, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameter( key, value, error );
-	}
-
-	bool IConfigurable::GetParameter( UInt64 key, double & value ) const {
-		return NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, bool, UInt32, UInt64, double & >(
-			GetRawPointer(), &IConfigurableBase::GetParameter, key, value );
-	}
-
-	UInt32 IConfigurable::GetParameter( UInt64 key, double & value, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameter( key, value, error );
-	}
-
-	bool IConfigurable::GetParameter( UInt64 key, char & value ) const {
-		return NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, bool, UInt32, UInt64, char & >(
-			GetRawPointer(), &IConfigurableBase::GetParameter, key, value );
-	}
-
-	UInt32 IConfigurable::GetParameter( UInt64 key, char & value, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameter( key, value, error );
-	}
-
-	bool IConfigurable::GetParameter( UInt64 key, const char * & value ) const {
-		return NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, bool, UInt32, UInt64, const char * & >(
-			GetRawPointer(), &IConfigurableBase::GetParameter, key, value );
-	}
-
-	UInt32 IConfigurable::GetParameter( UInt64 key, const char * & value, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameter( key, value, error );
-	}
-
-	bool IConfigurable::GetParameter( UInt64 key, const void * & value ) const {
-		return NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, bool, UInt32, UInt64, const void * & >(
-			GetRawPointer(), &IConfigurableBase::GetParameter, key, value );
-	}
-
-	UInt32 IConfigurable::GetParameter( UInt64 key, const void * & value, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameter( key, value, error );
-	}
-
-	std::vector< UInt64 > IConfigurable::GetAllParameters() const {
-		SizeT nElements = _sp->Size();
-		std::vector< UInt64 > vec;
-		vec.reserve( nElements );
-		UInt64 * array = ( UInt64 * ) malloc( nElements * sizeof ( UInt64 ) );
-		_sp->GetAllParameters( array, nElements );
-		for ( SizeT i = 0; i < nElements; i++ )
-			vec.push_back( array[i] );
+	std::vector< uint64 > APICALL IConfigurableProxy::GetAllParameters() const {
+		sizet nElements = mConfigurableRawPtr->Size();
+		std::vector< uint64 > vec( nElements );
+		if ( nElements > 0 )
+			mConfigurableRawPtr->getAllParameters( vec.data(), nElements );
 		return vec;
 	}
 
-	void IConfigurable::GetAllParameters( UInt64 * array, SizeT count ) const __NOTHROW__ {
-		return _sp->GetAllParameters( array , count );
+	void APICALL IConfigurableProxy::getAllParameters( uint64 * array, sizet count ) const __NOTHROW__ {
+		assert( false );
+		return mConfigurableRawPtr->getAllParameters( array, count );
 	}
 
-	IConfigurable_v1::eParameterValueType IConfigurable::GetParameterValueType( UInt64 key ) const {
-		return NS_XMPCOMMON::CallConstSafeFunction< IConfigurableBase, eParameterValueType, UInt32, UInt64 >(
-			GetRawPointer(), &IConfigurableBase::GetParameterValueType, key );
+	sizet APICALL IConfigurableProxy::Size() const __NOTHROW__ {
+		return mConfigurableRawPtr->Size();
 	}
 
-	UInt32 IConfigurable::GetParameterValueType( UInt64 key, pcIError_base & error ) const __NOTHROW__ {
-		return _sp->GetParameterValueType( key, error );
+	IConfigurable::eDataType APICALL IConfigurableProxy::GetDataType( const uint64 & key ) const {
+		return CallConstSafeFunction< IConfigurable, eDataType, uint32, const uint64 & >(
+			mConfigurableRawPtr, &IConfigurable::getDataType, key );
+	}
+
+	uint32 APICALL IConfigurableProxy::getDataType( const uint64 & key, pcIError_base & error ) const __NOTHROW__ {
+		assert( false );
+		return mConfigurableRawPtr->getDataType( key, error );
+	}
+
+	bool APICALL IConfigurableProxy::GetParameter( const uint64 & key, const void * & value ) const {
+		CombinedDataValue combinedValue;
+		bool returnValue = CallConstSafeFunction< IConfigurable, bool, uint32, const uint64 &, uint32, CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::getParameter, key, static_cast< uint32 >( IConfigurable::kDTConstVoidPtr ), combinedValue
+		);
+		value = combinedValue.constVoidPtrValue;
+		return returnValue;
+	}
+
+	bool APICALL IConfigurableProxy::GetParameter( const uint64 & key, const char * & value ) const {
+		CombinedDataValue combinedValue;
+		bool returnValue = CallConstSafeFunction< IConfigurable, bool, uint32, const uint64 &, uint32, CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::getParameter, key, static_cast< uint32 >( IConfigurable::kDTConstCharBuffer ), combinedValue
+		);
+		value = combinedValue.constCharPtrValue;
+		return returnValue;
+	}
+
+	bool APICALL IConfigurableProxy::GetParameter( const uint64 & key, char & value ) const {
+		CombinedDataValue combinedValue;
+		bool returnValue = CallConstSafeFunction< IConfigurable, bool, uint32, const uint64 &, uint32, CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::getParameter, key, static_cast< uint32 >( IConfigurable::kDTChar ), combinedValue
+		);
+		value = combinedValue.charValue;
+		return returnValue;
+	}
+
+	bool APICALL IConfigurableProxy::GetParameter( const uint64 & key, double & value ) const {
+		CombinedDataValue combinedValue;
+		bool returnValue = CallConstSafeFunction< IConfigurable, bool, uint32, const uint64 &, uint32, CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::getParameter, key, static_cast< uint32 >( IConfigurable::kDTDouble ), combinedValue
+		);
+		value = combinedValue.doubleValue;
+		return returnValue;
+	}
+
+	bool APICALL IConfigurableProxy::GetParameter( const uint64 & key, int64 & value ) const {
+		CombinedDataValue combinedValue;
+		bool returnValue = CallConstSafeFunction< IConfigurable, bool, uint32, const uint64 &, uint32, CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::getParameter, key, static_cast< uint32 >( IConfigurable::kDTInt64 ), combinedValue
+		);
+		value = combinedValue.int64Value;
+		return returnValue;
+	}
+
+	bool APICALL IConfigurableProxy::GetParameter( const uint64 & key, uint64 & value ) const {
+		CombinedDataValue combinedValue;
+		bool returnValue = CallConstSafeFunction< IConfigurable, bool, uint32, const uint64 &, uint32, CombinedDataValue &
+		>(
+		mConfigurableRawPtr, &IConfigurable::getParameter, key, static_cast< uint32 >( IConfigurable::kDTUint64 ), combinedValue
+		);
+		value = combinedValue.uint64Value;
+		return returnValue;
+	}
+
+	void APICALL IConfigurableProxy::SetParameter( const uint64 & key, const void * value ) {
+		CombinedDataValue combinedValue;
+		combinedValue.constVoidPtrValue= value;
+		return CallSafeFunctionReturningVoid< IConfigurable, const uint64 &, uint32, const CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::setParameter, key, static_cast< uint32 >( IConfigurable::kDTConstVoidPtr ), combinedValue
+		);
+	}
+
+	void APICALL IConfigurableProxy::SetParameter( const uint64 & key, const char * value ) {
+		CombinedDataValue combinedValue;
+		combinedValue.constCharPtrValue = value;
+		return CallSafeFunctionReturningVoid< IConfigurable, const uint64 &, uint32, const CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::setParameter, key, static_cast< uint32 >( IConfigurable::kDTConstCharBuffer ), combinedValue
+		);
+	}
+
+	void APICALL IConfigurableProxy::SetParameter( const uint64 & key, char value ) {
+		CombinedDataValue combinedValue;
+		combinedValue.charValue = value;
+		return CallSafeFunctionReturningVoid< IConfigurable, const uint64 &, uint32, const CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::setParameter, key, static_cast< uint32 >( IConfigurable::kDTChar ), combinedValue
+		);
+	}
+
+	void APICALL IConfigurableProxy::SetParameter( const uint64 & key, double value ) {
+		CombinedDataValue combinedValue;
+		combinedValue.doubleValue = value;
+		return CallSafeFunctionReturningVoid< IConfigurable, const uint64 &, uint32, const CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::setParameter, key, static_cast< uint32 >( IConfigurable::kDTDouble ), combinedValue
+		);
+	}
+
+	void APICALL IConfigurableProxy::SetParameter( const uint64 & key, int64 value ) {
+		CombinedDataValue combinedValue;
+		combinedValue.int64Value = value;
+		return CallSafeFunctionReturningVoid< IConfigurable, const uint64 &, uint32, const CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::setParameter, key, static_cast< uint32 >( IConfigurable::kDTInt64 ), combinedValue
+		);
+	}
+
+	void APICALL IConfigurableProxy::SetParameter( const uint64 & key, uint64 value ) {
+		CombinedDataValue combinedValue;
+		combinedValue.uint64Value = value;
+		return CallSafeFunctionReturningVoid< IConfigurable, const uint64 &, uint32, const CombinedDataValue &
+		>(
+			mConfigurableRawPtr, &IConfigurable::setParameter, key, static_cast< uint32 >( IConfigurable::kDTUint64 ), combinedValue
+		);
 	}
 
 }
 
-#endif  // GENERATE_XMPCOMMON_CLIENT_LAYER_CODE
-
-namespace NS_XMPCOMMON {
-
-	UInt64 IConfigurable_v1::ConvertCharBufferToUInt64( const char * key ) {
-		UInt64 keyAsUInt64 = 0;
-		if ( key ) {
-			for ( int i = 0; i < 8 && key[ i ] != '\0'; i++ ) {
-				keyAsUInt64 = keyAsUInt64 << 8;
-				keyAsUInt64 += ( unsigned char ) key[ i ];
-				}
-			}
-		return keyAsUInt64;
-		}	
-}
+#endif  // !BUILDING_XMPCOMMON_LIB && !SOURCE_COMPILING_XMP_ALL

@@ -7,7 +7,7 @@
 
 #if AdobePrivate
 	#include "XMPCore/XMPCoreDefines.h"
-	#if ENABLE_NEW_DOM_MODEL
+	#if ENABLE_CPP_DOM_MODEL
 		#include "XMPCore/XMPCoreFwdDeclarations.h"
 	#endif
 #endif
@@ -19,69 +19,6 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  AWL Alan Lillich
-//  FNO Frank Nocke
-//	SKP Sunil Kishor Pathak
-//  AJ Abhishek Jindal
-//
-// mm-dd-yy who Description of changes, most recent first.
-//
-// 01-09-14 AJ 5.6-c031 Renamed UseNewCoreAPIs() to Use_CPP_DOM_APIs()
-// 12-05-14 SKP 5.6-c030 Renamed GetNewMetadataObject() to GetIXMPMetadata()
-// 08-01-12 AWL 5.5-c004 Implement public API and glue layer for XMPCore error notifications.
-//
-// 05-27-09 AWL 5.0-c033 Remove XMPMeta::SendAssertNotify.
-// 05-19-09 AWL 5.0-c031 First part of threading improvements, revamp the client glue.
-// 05-12-09 AWL 5.0-c029 Finish deprecated function removal.
-// 02-17-09 FNO 5.0-c023 [0656083] Remove moot kXMP_WriteAliasComments option.
-// 02-17-09 FNO 5.0-c010 [1647989] "type-patch.diff" replacing long/int with safer XMP_ type counterparts.
-// 02-16-09 FNO 5.0-c008 [1647989] Adding 3rd patch by H. Figuiere: adding delete-localized-text function.
-//
-// 02-28-08 AWL 4.2-c046 Add SXMPMeta::Erase.
-// 08-27-07 AWL 4.2-c020 Add Sort, change the Dump* routines to hexify non-ASCII characters.
-// 08-02-07 AWL 4.2 Incorporate major revamp to doxygen comments.
-//
-// 10-12-06 AWL 4.1-c021 [1235816] Remove the new/delete overrides from static builds.
-//
-// 03-24-06 AWL 4.0 Adapt for move to ham-perforce, integrate XMPFiles, bump version to 4.
-//
-// 08-08-05 AWL 3.3-004 Change ResolveAlias to allow general alias path.
-// 07-18-05 AWL 3.3-002 Add GetMemProcs so that DocMetaLib can use the same ones as XMP.
-//
-// 05-16-05 AWL 3.2-100 Complete the deBIBification, integrate the internal and SDK source.
-// 04-26-05 AWL Fix Doxygen warnings.
-// 04-19-05 AWL Improve Doxygen comments for SDK.
-// 04-14-05 AWL 3.2-018 Move the padding param, add overloads to simplify use of SerializeToBuffer.
-// 02-11-05 AWL 3.2-002 Add client reference counting.
-// 01-28-05 AWL Remove BIB.
-// 04-13-05 AWL 3.2-017 Improve the documentation and behavior of Get/SetLocalizedText.
-//
-// 01-26-05 AWL 3.1.1-107 [1141684] Add XMPMeta::UnregisterAssertNotify and XMPMeta::SendAssertNotify.
-// 01-25-05 AWL 3.1.1-106 [1141007] Add XMPMeta::RegisterAssertNotify.
-//
-// 07-15-04 AWL 3.1-064 [1016805] Get rid of kXMP_PropValueIsXML.
-//
-// 03-25-04 AWL Move XMP_InternalRef from TXMPMeta.hpp to XMP_Const.h.
-// 01-29-04 AWL Add overloads for SetProperty and friends. Add AppendArrayItem. Remove BIBStream
-//              constructor and functions ParseFromStream and SerailizeToStream.
-// 01-17-04 AWL Move into new Perforce depot, cosmetic cleanup.
-// 05-06-03 AWL Introduce callback model for output (e.g. dump routines).
-// 04-18-03 AWL Remove formsMatch parameter from RegisterAlias.
-// 03-03-03 AWL Add the rest of the Doxygen comments.
-// 12-03-02 AWL Start adding Doxygen comments.
-// 10-29-02 AWL Update for latest CXMPMeta.hpp revisions.
-// 09-12-02 AWL Tweak to clean compile.
-// 09-11-02 AWL Started first draft.
-//
-// =================================================================================================
-#endif /* AdobePrivate */
 
 // =================================================================================================
 /// \file TXMPMeta.hpp
@@ -158,7 +95,7 @@ public:
     /// @return True on success. */
     static bool Initialize();
 #else
-    /// Internal. Initializes the XMP Toolkit with an optional memory allocation mechanism.
+    /// @brief Internal. Initializes the XMP Toolkit with an optional memory allocation mechanism.
     /// The parameters must be either both null (0), or both non-null.
     ///
     /// @param AllocateProc	 An optional memory allocation procedure. If provided, the \c DeleteProc
@@ -171,10 +108,10 @@ public:
 
     static bool Initialize ( XMP_AllocateProc AllocateProc = 0,
                  			 XMP_DeleteProc   DeleteProc = 0 );
-#if ENABLE_NEW_DOM_MODEL
+#if ENABLE_CPP_DOM_MODEL
 	// ---------------------------------------------------------------------------------------------
 	/// @brief \c Use_CPP_DOM_APIs() when passed true, will rout the SXMPMeta functions to their 
-	///implementation done using new XMP Core APIs.
+	///  implementation done using new XMP Core APIs.
 	/// When false is passed to Use_CPP_DOM_APIs(), the SXMPMeta functions are routed to the old XMP Core APIs
 	/// Use_CPP_DOM_APIs() should be always called before the use of a SXMPMeta object, otherwise an exception might be thrown.
 	/// This function is static; make the call directly from the concrete class (\c SXMPMeta).
@@ -1711,12 +1648,12 @@ public:
                         XMP_Index      baseIndent,
                         XMP_StringLen  padding ) const;
 
-#if ENABLE_NEW_DOM_MODEL
+#if ENABLE_CPP_DOM_MODEL
 	// ---------------------------------------------------------------------------------------------
-    /// @brief \c GetIXMPMetadata() returns the  shared pointer of the IXMPMetadata object present inside the XMPMeta object
+    /// @brief \c GetIMetadata() returns the  shared pointer of the IXMPMetadata object present inside the XMPMeta object
     ///in case the client has chosen to set the Use_CPP_DOM_APIs flag as true
 	///if Use_CPP_DOM_APIs is passed false, null is returned with an error message "Not Available"
-	NS_XMPCORE::spIXMPMetadata GetIXMPMetadata();
+	AdobeXMPCore::spIMetadata GetIMetadata();
 #endif
 #endif
 
@@ -1935,7 +1872,7 @@ public:
 	
 	//  --------------------------------------------------------------------------------------------
 	/// @brief ResetErrorCallbackLimit() resets the error notification limit and counting. It has no
-	/// effect if an error notification callback function is not registered. 
+	///        effect if an error notification callback function is not registered. 
 	///
 	/// @param limit A limit on the number of notifications to be delivered.
 	

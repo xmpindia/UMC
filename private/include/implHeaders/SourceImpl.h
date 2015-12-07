@@ -26,12 +26,12 @@ namespace INT_UMC {
 
 		SourceImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, ISource::eSourceTypes sourceType,
-			const spIXMPStructureNode & xmpStructureNode );
+			const spIStructureNode & xmpStructureNode );
 
 		virtual void SetClipName( const std::string & clipName );
 		virtual std::string GetClipName() const;
 
-		virtual INode::eNodeTypes GetNodeType() const { return INode::kNodeTypeSource; }
+		virtual IUMCNode::eNodeTypes GetNodeType() const { return IUMCNode::kNodeTypeSource; }
 
 		virtual void SyncInternalStuffToXMP() const = 0;
 		virtual void SyncXMPToInternalStuff() = 0;

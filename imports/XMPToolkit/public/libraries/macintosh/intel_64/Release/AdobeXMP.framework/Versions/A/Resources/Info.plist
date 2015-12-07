@@ -2,35 +2,51 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BuildDate</key>
+	<string>0000/00/00-00:00:00</string>
+	<key>BuildID</key>
+	<string>1</string>
 	<key>BuildMachineOSBuild</key>
-	<string>14D136</string>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<string>14E46</string>
+	<key>BuildVersion</key>
+	<string>1.000000</string>
 	<key>CFBundleExecutable</key>
 	<string>AdobeXMP</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Adobe XMP Core 5.6 -c 114, Copyright 2002-2014, Adobe Systems Incorporated. All Rights Reserved.</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.adobe.AdobeXMPCore</string>
+	<key>CFBundleName</key>
+	<string>AdobeXMPCore</string>
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string>Adobe XMP Core 5.6 -c 114</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>XMP </string>
 	<key>CFBundleVersion</key>
-	<string></string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
+	<string>1.000000</string>
+	<key>Configuration</key>
+	<string>Release</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>5A3005</string>
+	<string>6C131e</string>
 	<key>DTPlatformVersion</key>
 	<string>GM</string>
 	<key>DTSDKBuild</key>
-	<string>13A595</string>
+	<string>14A383</string>
 	<key>DTSDKName</key>
-	<string>macosx10.9</string>
+	<string>macosx10.10</string>
 	<key>DTXcode</key>
-	<string>0502</string>
+	<string>0620</string>
 	<key>DTXcodeBuild</key>
-	<string>5A3005</string>
+	<string>6C131e</string>
+	<key>FileVersion</key>
+	<string>5.6 -c 114, 1.000000, 0000/00/00-00:00:00</string>
+	<key>ProductName</key>
+	<string>Adobe XMP Core</string>
+	<key>ProductVersion</key>
+	<string>5.6</string>
 </dict>
 </plist>

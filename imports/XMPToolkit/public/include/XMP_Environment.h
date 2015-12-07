@@ -194,6 +194,7 @@
 	#define XMP_HELPER_DLL_IMPORT __attribute__((visibility("default")))
 	#define XMP_HELPER_DLL_EXPORT __attribute__((visibility("default")))
 	#define XMP_HELPER_DLL_PRIVATE __attribute__((visibility("hidden")))
+	#define APICALL 
 #endif
 
 // =================================================================================================
@@ -203,6 +204,7 @@
 	#define XMP_HELPER_DLL_IMPORT
 	#define XMP_HELPER_DLL_EXPORT
 	#define XMP_HELPER_DLL_PRIVATE
+	#define APICALL __stdcall
 #endif
 
 // =================================================================================================
@@ -210,8 +212,9 @@
 // ======================
 #if (XMP_UNIXBuild)
 	#define XMP_HELPER_DLL_IMPORT
-	#define XMP_HELPER_DLL_EXPORT
-	#define XMP_HELPER_DLL_PRIVATE
+	#define XMP_HELPER_DLL_EXPORT __attribute__ ((visibility ("default")))
+	#define XMP_HELPER_DLL_PRIVATE __attribute__ ((visibility ("hidden")))
+	#define APICALL 
 #endif
 
 // =================================================================================================
@@ -227,6 +230,7 @@
 	#define XMP_HELPER_DLL_IMPORT __attribute__((visibility("default")))
 	#define XMP_HELPER_DLL_EXPORT __attribute__((visibility("default")))
 	#define XMP_HELPER_DLL_PRIVATE __attribute__((visibility("hidden")))
+	#define APICALL 
 #endif
 
 // =================================================================================================

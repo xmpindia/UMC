@@ -24,7 +24,7 @@ namespace INT_UMC {
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		ClipShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node );
 
 		virtual eShotTypes GetType() const;
 
@@ -33,17 +33,17 @@ namespace INT_UMC {
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetParsedID() const;
 
-		virtual wpcINode GetParentNode() const;
+		virtual wpcIUMCNode GetParentNode() const;
 
-		virtual wpINode GetParentNode();
+		virtual wpIUMCNode GetParentNode();
 
-		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const;
+		virtual spcIUMCNode GetDecendantNode( const std::string & uniqueID ) const;
 
-		virtual spINode GetDecendantNode( const std::string & uniqueID );
+		virtual spIUMCNode GetDecendantNode( const std::string & uniqueID );
 
-		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
+		virtual spcIUMCNode GetChildNode( const std::string & uniqueID ) const;
 
-		virtual spINode GetChildNode( const std::string & uniqueID );
+		virtual spIUMCNode GetChildNode( const std::string & uniqueID );
 
 		virtual NodeList GetAllChildren();
 
@@ -63,9 +63,9 @@ namespace INT_UMC {
 
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
-		virtual INT_UMC::pINodeI GetInternalNode();
+		virtual INT_UMC::pIUMCNodeI GetInternalNode();
 
-		virtual INT_UMC::pcINodeI GetInternalNode() const;
+		virtual INT_UMC::pcIUMCNodeI GetInternalNode() const;
 
 		virtual void CleanUpOnRemovalFromDOM();
 
@@ -75,11 +75,11 @@ namespace INT_UMC {
 
 		virtual void SyncInternalStuffToXMP() const;
 
-		virtual pINode GetNode();
+		virtual pIUMCNode GetNode();
 
-		virtual pcINode GetNode() const;
+		virtual pcIUMCNode GetNode() const;
 
-		virtual spIXMPStructureNode GetXMPNode() const;
+		virtual spIStructureNode GetXMPNode() const;
 
 		virtual void SetInCount( const EditUnitInCount & inCount );
 
@@ -129,9 +129,9 @@ namespace INT_UMC {
 
 		virtual bool SetUniqueID( const std::string & uniqueID );
 
-		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
+		virtual bool ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID );
 
-		virtual spINode GetExternalNode();
+		virtual spIUMCNode GetExternalNode();
 
 	};
 }

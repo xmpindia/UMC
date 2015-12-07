@@ -26,7 +26,7 @@ namespace INT_UMC {
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		ShotImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node );
 
 		virtual void SetInCount( const EditUnitInCount & inCount );
 		virtual EditUnitInCount GetInCount() const;
@@ -34,11 +34,11 @@ namespace INT_UMC {
 		virtual void SetDuration( const EditUnitDuration & duration );
 		virtual EditUnitDuration GetDuration() const;
 
-		virtual spIFrame AddFrame( const spISource & source, const spINode & spSelf );
-		virtual spIFrame AddFrame( const std::string & buffer, const spINode & spSelf );
+		virtual spIFrame AddFrame( const spISource & source, const spIUMCNode & spSelf );
+		virtual spIFrame AddFrame( const std::string & buffer, const spIUMCNode & spSelf );
 
-		virtual spIShotSource AddShotSource( const spISource & source, const spINode & spSelf );
-		virtual spIShotSource AddShotSource( const std::string & buffer, const spINode & spSelf );
+		virtual spIShotSource AddShotSource( const spISource & source, const spIUMCNode & spSelf );
+		virtual spIShotSource AddShotSource( const std::string & buffer, const spIUMCNode & spSelf );
 
 		virtual size_t FrameCount() const;
 		virtual IShot::FrameList GetAllFrames();
@@ -58,23 +58,23 @@ namespace INT_UMC {
 		virtual size_t RemoveShotSource( const std::string & uniqueID );
 		virtual size_t RemoveFrame( const std::string & uniqueID );
 
-		spcINode GetDecendantNode( const std::string & uniqueID ) const;
-		spINode GetDecendantNode( const std::string & uniqueID );
+		spcIUMCNode GetDecendantNode( const std::string & uniqueID ) const;
+		spIUMCNode GetDecendantNode( const std::string & uniqueID );
 
-		spcINode GetChildNode( const std::string & uniqueID ) const;
-		spINode GetChildNode( const std::string & uniqueID );
+		spcIUMCNode GetChildNode( const std::string & uniqueID ) const;
+		spIUMCNode GetChildNode( const std::string & uniqueID );
 
-		INode::NodeList GetAllChildren();
-		INode::cNodeList GetAllChildren() const;
+		IUMCNode::NodeList GetAllChildren();
+		IUMCNode::cNodeList GetAllChildren() const;
 
-		INode::NodeList GetAllDecendants();
-		INode::cNodeList GetAllDecendants() const;
+		IUMCNode::NodeList GetAllDecendants();
+		IUMCNode::cNodeList GetAllDecendants() const;
 
 		void CleanUpOnRemovalFromDOM();
 		void SetUpOnAdditionToDOM();
 
 		virtual void SyncInternalStuffToXMP() const;
-		virtual void SyncXMPToInternalStuff( const spINode & spSelf );
+		virtual void SyncXMPToInternalStuff( const spIUMCNode & spSelf );
 
 		virtual bool ValidateXMPNode() const;
 
@@ -82,11 +82,11 @@ namespace INT_UMC {
 		typedef std::map< const std::string, spIFrame > FrameMap;
 		typedef std::map< const std::string, spIShotSource > ShotSourceMap;
 
-		spIXMPArrayNode			mFrames;
-		spIXMPArrayNode			mShotSources;
+		spIArrayNode			mFrames;
+		spIArrayNode			mShotSources;
 
-		spIShotSource AddShotSource( const spIXMPStructureNode & node, const spINode & spSelf );
-		spIFrame AddFrame( const spIXMPStructureNode & node, const spINode & spSelf );
+		spIShotSource AddShotSource( const spIStructureNode & node, const spIUMCNode & spSelf );
+		spIFrame AddFrame( const spIStructureNode & node, const spIUMCNode & spSelf );
 
 		EditUnitInCount			mInCount;
 		EditUnitDuration		mDuration;

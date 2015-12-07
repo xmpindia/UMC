@@ -25,14 +25,14 @@ namespace UMC {
 	typedef shared_ptr< IUniqueIDGenerator >		spIUniqueIDGenerator;
 	typedef shared_ptr< const IUniqueIDGenerator >	spcIUniqueIDGenerator;
 
-	// INode
-	class INode;
-	typedef INode *									pINode;
-	typedef const INode *							pcINode;
-	typedef shared_ptr< INode >						spINode;
-	typedef shared_ptr< const INode >				spcINode;
-	typedef weak_ptr< INode >						wpINode;
-	typedef weak_ptr< const INode >					wpcINode;
+	// IUMCNode
+	class IUMCNode;
+	typedef IUMCNode *									pIUMCNode;
+	typedef const IUMCNode *							pcIUMCNode;
+	typedef shared_ptr< IUMCNode >						spIUMCNode;
+	typedef shared_ptr< const IUMCNode >				spcIUMCNode;
+	typedef weak_ptr< IUMCNode >						wpIUMCNode;
+	typedef weak_ptr< const IUMCNode >					wpcIUMCNode;
 
 
 	// ISource

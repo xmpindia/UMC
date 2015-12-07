@@ -9,63 +9,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  AWL Alan Lillich
-//  FNO Frank Nocke
-//  ADC	Amandeep Chawla
-//	SKP Sunil Kishor pathak
-//  AJ Abhishek Jindal
-//
-// mm-dd-yy who Description of changes, most recent on top.
-//
-// 01-09-14 AJ 5.6-c031 Renamed UseNewCoreAPIs() to Use_CPP_DOM_APIs()
-// 12-05-14 SKP 5.6-c030 Renamed GetNewMetadataObject() to GetIXMPMetadata()
-// 02-24-14 ADC 5.6-c001 XMPCommon Framework and XMPCore new APIs ported to Mac Environment.
-//
-// 05-13-13 ADC 5.5-c018 Removing usage of bool in APIs exposed at DLL boundaries.
-// 08-01-12 AWL 5.5-c004 Implement public API and glue layer for XMPCore error notifications.
-//
-// 07-16-09 AWL 5.0-c045 [2379902] Restore M4 signature for WXMPMeta_RegisterAssertNotify_1.
-// 06-11-09 AWL 5.0-c034 Finish threading revamp, implement friendly reader/writer locking.
-// 05-27-09 AWL 5.0-c033 Remove XMPMeta::SendAssertNotify.
-// 05-21-09 AWL 5.0-c032 Revamp glue again to pass SetClientString with each function.
-// 05-19-09 AWL 5.0-c031 First part of threading improvements, revamp the client glue.
-// 02-16-09 FNO 5.0-c008 [1647989] Adding 3rd patch by H. Figuiere: adding delete-localized-text function.
-//
-// 02-28-08 AWL 4.2-c046 Add SXMPMeta::Erase.
-// 08-27-07 AWL 4.2-c020 Add Sort, change the Dump* routines to hexify non-ASCII characters.
-//
-// 10-12-06 AWL 4.1-c021 [1235816] Remove the new/delete overrides from static builds.
-//
-// 03-24-06 AWL 4.0 Adapt for move to ham-perforce, integrate XMPFiles, bump version to 4.
-//
-// 07-18-05 AWL 3.3-002 Add GetMemProcs so that DocMetaLib can use the same ones as XMP.
-//
-// 05-16-05 AWL 3.2-100 Complete the deBIBification, integrate the internal and SDK source.
-// 04-14-05 AWL 3.2-018 Move the padding param, add overloads to simplify use of SerializeToBuffer.
-// 02-11-05 AWL 3.2-002 Add client reference counting.
-// 01-28-05 AWL Remove BIB.
-//
-// 10-20-04 AWL 3.1.1-085 [1084185] Fix XMP_InternalRef to not depend on BIBContainerBase layout.
-// 04-16-04 AWL Add forward declaration of class CXMPMeta for AIX.
-// 02-14-04 AWL Remove all default parameters from the CXMP* classes.
-// 01-17-04 AWL Move into new Perforce depot, cosmetic cleanup.
-// 05-06-03 AWL Introduce callback model for output (e.g. dump routines).
-// 04-18-03 AWL Remove formsMatch parameter from RegisterAlias.
-// 10-22-02 AWL Another round of tweaks and cleanup.
-// 09-12-02 AWL Tweak to clean compile.
-// 09-06-02 AWL First version for general review.
-// 08-22-02 AWL First draft sent to Perry Caro and Chris Deighan.
-// 08-15-02 AWL Started first draft.
-//
-// =================================================================================================
-#endif // AdobePrivate
-
 #include "client-glue/WXMP_Common.hpp"
 
 #if __cplusplus

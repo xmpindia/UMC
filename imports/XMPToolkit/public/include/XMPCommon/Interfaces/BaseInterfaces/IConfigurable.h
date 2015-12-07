@@ -1,3 +1,7 @@
+//!
+//! @file IConfigurable.h
+//!
+
 #ifndef IConfigurable_h__
 #define IConfigurable_h__ 1
 
@@ -10,240 +14,212 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  ADC	Amandeep Chawla
-//
-// mm-dd-yy who Description of changes, most recent first.
-//
-// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
-// 12-30-14 ADC 5.6-c032 Adding IConfigurable Interface to XMPCommon.
-//
-// =================================================================================================
-#endif  // AdobePrivate
-
 #include "XMPCommon/XMPCommonFwdDeclarations.h"
 
-namespace NS_XMPCOMMON {
-	using namespace NS_XMPCOMMON;
+namespace AdobeXMPCommon {
 
 	//!
-	//! \brief Version1 of the interface that allows to attach various key-value parameters to the
-	//! underlying object.
-	//! \details Key is an unsigned 64-bit integer value which can be a char buffer of eight
-	//! characters also.
-	//! \note For all value types except user data ( const void * ) or char buffer
-	//! ( const char * ) a copy is made and is stored, so the scope is maintained
-	//! internally. But for user data ( const void * ) or char buffer ( const
-	//! char * ) its clients responsibility to make sure these pointers remain
-	//! valid through out the life span of the object or objects derived from it.
-	//! \attention Multi threading is supported by the derived object if required.
+	//! \brief Interface that allows to attach various key-value parameters to the underlying object.
 	//!
-	class XMP_PUBLIC IConfigurable_v1
+	//! \details Key is an unsigned 64-bit integer value which can be a char buffer of eight characters also.
+	//! \note For all value types except user data ( const void * ) or char buffer ( const char * ) a copy is made
+	//!  and is stored, so the scope is maintained internally. But for user data ( const void * ) or char buffer
+	//!  ( const char * ) its clients responsibility to make sure these pointers remain valid through out the life
+	//!  span of the object or objects derived from it.
+	//!
+	class XMP_PUBLIC IConfigurable
 	{
 	public:
 
 		//!
-		//! Indicates various types of parameter values.
+		//! @brief Indicates various types of parameter values.
 		//!
 		typedef enum {
-			//! Parameter value type is boolean.
-			kParameterValueTypeBool					= 0,
-			//! Parameter value type is unsigned 64 bit integer.
-			kParameterValueTypeUInt64				= 1,
-			//! Parameter value type is signed 64 bit integer.
-			kParameterValueTypeInt64				= 2,
-			//! Parameter value type is character.
-			kParameterValueTypeChar					= 3,
-			//! Parameter value type is double.
-			kParameterValueTypeDouble				= 4,
-			//! Parameter value type is char buffer.
-			kParameterValueTypeConstCharBuffer		= 5,
-			//! Parameter value type is user data ( pointer to const void ).
-			kParameterValueTypeConstVoidPtr			= 6,
+			//!< Data type is none.
+			kDTNone					= 0,
+			//!< Data type is boolean.
+			kDTBool					= 1 << 0,
+			//!< Data type is unsigned 64 bit integer.
+			kDTUint64				= 1 << 1,
+			//!< Data type is signed 64 bit integer.
+			kDTInt64				= 1 << 2,
+			//!< Data type is character.
+			kDTChar					= 1 << 3,
+			//!< Data type is double.
+			kDTDouble				= 1 << 4,
+			//!< Data type is char buffer.
+			kDTConstCharBuffer		= 1 << 5,
+			//!< Data type is user data ( pointer to const void ).
+			kDTConstVoidPtr			= 1 << 6,
 
-			//! Maximum value this enum can hold, should be treated as invalid value.
-			kParameterValueTypeMaxValue				= kMaxEnumValue
-		} eParameterValueType;
+			//!< Maximum value this enum can hold.
+			kDTAll					= 0xFFFFFFFF
+		} eDataType;
 
-		//! @{
 		//!
-		//! Add/Change a value of a parameter.
-		//! \param[in] key an unsigned 64 bit integer value indicating the key.
-		//! \param[in] value new value of the parameter.
+		//! @{
+		//! @brief Add/Change a value of a parameter.
+		//! \param[in] key An unsigned 64 bit integer value indicating the key.
+		//! \param[in] value New value of the parameter.
 		//! \attention Error is thrown in case
 		//!		- the previous type of value associated with key is of different type.
 		//!		- the type of value associated with key is not as expected.
 		//!
-		virtual void SetParameter( UInt64 key, bool value ) = 0;
-		virtual void SetParameter( UInt64 key, UInt64 value ) = 0;
-		virtual void SetParameter( UInt64 key, Int64 value ) = 0;
-		virtual void SetParameter( UInt64 key, double value ) = 0;
-		virtual void SetParameter( UInt64 key, char value ) = 0;
-		virtual void SetParameter( UInt64 key, const char * value ) = 0;
-		virtual void SetParameter( UInt64 key, const void * value ) = 0;
+		virtual void APICALL SetParameter( const uint64 & key, bool value ) = 0;
+		virtual void APICALL SetParameter( const uint64 & key, uint64 value ) = 0;
+		virtual void APICALL SetParameter( const uint64 & key, int64 value ) = 0;
+		virtual void APICALL SetParameter( const uint64 & key, double value ) = 0;
+		virtual void APICALL SetParameter( const uint64 & key, char value ) = 0;
+		virtual void APICALL SetParameter( const uint64 & key, const char * value ) = 0;
+		virtual void APICALL SetParameter( const uint64 & key, const void * value ) = 0;
 		//! @}
 
 		//!
-		//! Removes a particular parameter if present.
-		//! \param[in] key an unsigned 64 bit integer value indicating the key.
-		//! \return true in case key was present and is deleted.
+		//! @brief Removes a particular parameter if present.
+		//! \param[in] key An unsigned 64 bit integer value indicating the key.
+		//! \return True in case key was present and is deleted.
 		//! \attention Error is thrown in case
 		//!		- key is a must have for the underlying object.
 		//!
-		virtual bool RemoveParameter( UInt64 key ) = 0;
+		virtual bool APICALL RemoveParameter( const uint64 & key ) = 0;
 
-		//! {@
 		//!
-		//! Get the value of a parameter if present.
-		//! \param[in] key an unsigned 64 bit integer value indicating the key.
-		//! \param[out] value the value of the parameter.
+		//! @{
+		//! @brief Get the value of a parameter if present.
+		//! \param[in] key An unsigned 64 bit integer value indicating the key.
+		//! \param[out] value The value of the parameter.
 		//! \return false if no such parameter is present, otherwise true.
 		//! \attention Error is thrown in case the type of the parameter is not
-		//! the one client is asking for.
+		//!  the one client is asking for.
 		//!
-		virtual bool GetParameter( UInt64 key, bool & value ) const = 0;
-		virtual bool GetParameter( UInt64 key, UInt64 & value ) const = 0;
-		virtual bool GetParameter( UInt64 key, Int64 & value ) const = 0;
-		virtual bool GetParameter( UInt64 key, double & value ) const = 0;
-		virtual bool GetParameter( UInt64 key, char & value ) const = 0;
-		virtual bool GetParameter( UInt64 key, const char * & value ) const = 0;
-		virtual bool GetParameter( UInt64 key, const void * & value ) const = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, bool & value ) const = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, uint64 & value ) const = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, int64 & value ) const = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, double & value ) const = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, char & value ) const = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, const char * & value ) const = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, const void * & value ) const = 0;
 		//! @}
 
 		//!
-		//! Get all the keys of the parameters associated with the object.
-		//! \detail provide a std::vector containing the keys of all the parameters associated with the object.
-		//! \return a std::vector of unsigned 64 bit integers.
+		//! @brief Get all the keys of the parameters associated with the object.
+		//! \details Provide a std::vector containing the keys of all the parameters associated with the object.
+		//! \return A std::vector of unsigned 64 bit integers.
 		//!
-		virtual std::vector< UInt64 > GetAllParameters() const = 0;
+		virtual std::vector< uint64 > APICALL GetAllParameters() const = 0;
 
 		//!
-		//! Get the number of parameters associated with the object.
+		//! @brief Get the number of parameters associated with the object.
 		//!
-		virtual SizeT Size() const = 0;
+		virtual sizet APICALL Size() const __NOTHROW__ = 0;
 
 		//!
-		//! Get the value type of a particular parameter.
-		//! \param[in] key an unsigned 64 bit integer value indicating the key.
-		//! \return a value of type eParameterValueType indicating the type of value the parameter is supposed to hold.
-		//! \note return kParameterValueTypeMaxValue in case no such key is associated with the object.
+		//! @brief Get the value type of a particular parameter.
+		//! \param[in] key An unsigned 64 bit integer value indicating the key.
+		//! \return A value of type eDataType indicating the type of value the parameter is supposed to hold.
+		//! \note return kDTNone in case no such key is associated with the object.
 		//!
-		virtual eParameterValueType GetParameterValueType( UInt64 key ) const = 0;
+		virtual eDataType APICALL GetDataType( const uint64 & key ) const = 0;
 
 		//!
-		//! Utility function to convert character buffer ( maximum of 8 characters ) to UInt64 representation.
-		//! \param[in] key a pointer to const char buffer, maximum characters used are 8 provided there is no
-		//! null character present in the buffer between 1st to 8 characters, otherwise characters upto NULL
-		//! character (excluding NULL) are read.
-		//! \return a 64-bit unsigned integer representing the first 8 characters of the character buffer.
-		//! \note return 0 in case key is NULL.
+		//! @brief Utility function to convert character buffer ( maximum of 8 characters ) to uint64 representation.
+		//! \param[in] key A pointer to const char buffer, maximum characters used are 8 provided there is no
+		//!  null character present in the buffer between 1st to 8 characters, otherwise characters upto NULL
+		//!  character (excluding NULL) are read.
+		//! \return A 64-bit unsigned integer representing the first 8 characters of the character buffer.
+		//! \note Return 0 in case key is NULL.
 		//!
-		static UInt64 ConvertCharBufferToUInt64( const char * key );
+		static uint64 ConvertCharBufferToUint64( const char * key ) {
+			uint64 keyAsuint64 = 0;
+			if ( key ) {
+				for ( int i = 0; i < 8 && key[ i ] != '\0'; i++ ) {
+					keyAsuint64 = keyAsuint64 << 8;
+					keyAsuint64 += ( unsigned char ) key[ i ];
+				}
+			}
+			return keyAsuint64;
+		}
+
+		//!
+		//! @brief A union data type to store all kind of values.
+		//!
+		union CombinedDataValue {
+			bool			boolValue;
+			uint32			uint32Value;
+			uint64			uint64Value;
+			int64			int64Value;
+			double			doubleValue;
+			char			charValue;
+			const char *	constCharPtrValue;
+			const void *	constVoidPtrValue;
+		};
 
 	protected:
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		// all safe functions
-		virtual void SetParameter( UInt64 key, UInt32 value, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual void SetParameter( UInt64 key, UInt64 value, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual void SetParameter( UInt64 key, Int64 value, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual void SetParameter( UInt64 key, double value, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual void SetParameter( UInt64 key, char value, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual void SetParameter( UInt64 key, const char * value, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual void SetParameter( UInt64 key, const void * value, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual UInt32 RemoveParameter( UInt64 key, pcIError_base & error ) __NOTHROW__ = 0;
-		virtual UInt32 GetParameter( UInt64 key, UInt32 & value, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual UInt32 GetParameter( UInt64 key, UInt64 & value, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual UInt32 GetParameter( UInt64 key, Int64 & value, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual UInt32 GetParameter( UInt64 key, double & value, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual UInt32 GetParameter( UInt64 key, char & value, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual UInt32 GetParameter( UInt64 key, const char * & value, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual UInt32 GetParameter( UInt64 key, const void * & value, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual void GetAllParameters( UInt64 * array, SizeT count ) const __NOTHROW__ = 0;
-		virtual UInt32 GetParameterValueType( UInt64 key, pcIError_base & error ) const __NOTHROW__ = 0;
+		virtual void APICALL setParameter( const uint64 & key, uint32 dataType, const CombinedDataValue & dataValue, pcIError_base & error ) __NOTHROW__ = 0;
+		virtual uint32 APICALL removeParameter( const uint64 & key, pcIError_base & error ) __NOTHROW__ = 0;
+		virtual uint32 APICALL getParameter( const uint64 & key, uint32 dataType, CombinedDataValue & value, pcIError_base & error ) const __NOTHROW__ = 0;
+		virtual void APICALL getAllParameters( uint64 * array, sizet count ) const __NOTHROW__ = 0;
+		virtual uint32 APICALL getDataType( const uint64 & key, pcIError_base & error ) const __NOTHROW__ = 0;
 		//! \endcond
 
 	protected:
 		//!
 		//! protected Virtual Destructor
 		//!
-		virtual ~IConfigurable_v1() __NOTHROW__ = 0;
+		virtual ~IConfigurable() __NOTHROW__ {};
 
-	#if GENERATE_XMPCOMMON_CLIENT_LAYER_CODE
-		friend class IConfigurable;
+		friend class IConfigurableProxy;
+	#ifdef FRIEND_CLASS_DECLARATION
+		FRIEND_CLASS_DECLARATION();
 	#endif
 		REQ_FRIEND_CLASS_DECLARATION();
 	};
 
-	inline IConfigurable_v1::~IConfigurable_v1() __NOTHROW__ { }
+//! \cond XMP_INTERNAL_DOCUMENTATION
+#if !BUILDING_XMPCOMMON_LIB && !SOURCE_COMPILING_XMP_ALL
 
-#if GENERATE_XMPCOMMON_CLIENT_LAYER_CODE
-	typedef BASE_CLASS( IConfigurable, CLIENT_ICONFIGURABLE_VERSION ) IConfigurableBase;
-
-	class IConfigurable : public virtual IConfigurableBase {
-	//! \cond XMP_INTERNAL_DOCUMENTATION
+	class IConfigurableProxy
+		: public virtual IConfigurable {
 	public:
-		typedef IConfigurableBase *											pIConfigurableBase;
-		typedef const IConfigurableBase *									pcIConfigurableBase;
-		typedef shared_ptr< IConfigurableBase >								spIConfigurableBase;
-		typedef shared_ptr< const IConfigurableBase >						spcIConfigurableBase;
+		IConfigurableProxy( pIConfigurable configurable );
+		virtual void APICALL SetParameter( const uint64 & key, bool value );
+		virtual void APICALL SetParameter( const uint64 & key, uint64 value );
+		virtual void APICALL SetParameter( const uint64 & key, int64 value );
+		virtual void APICALL SetParameter( const uint64 & key, double value );
+		virtual void APICALL SetParameter( const uint64 & key, char value );
+		virtual void APICALL SetParameter( const uint64 & key, const char * value );
+		virtual void APICALL SetParameter( const uint64 & key, const void * value );
+		virtual void APICALL setParameter( const uint64 & key, uint32 dataType, const CombinedDataValue & dataValue, pcIError_base & error ) __NOTHROW__;
 
-	public:
-		IConfigurable( const spIConfigurableBase & sp ) : _sp( sp ) {}
-		IConfigurable( const spcIConfigurableBase & csp ) : _sp( const_pointer_cast< IConfigurableBase > ( csp ) ) {}
+		virtual bool APICALL RemoveParameter( const uint64 & key );
+		virtual uint32 APICALL removeParameter( const uint64 & key, pcIError_base & error ) __NOTHROW__;
 
-		virtual void SetParameter( UInt64 key, bool value );
-		virtual void SetParameter( UInt64 key, UInt32 value, pcIError_base & error ) __NOTHROW__;
-		virtual void SetParameter( UInt64 key, UInt64 value );
-		virtual void SetParameter( UInt64 key, UInt64 value, pcIError_base & error ) __NOTHROW__;
-		virtual void SetParameter( UInt64 key, Int64 value );
-		virtual void SetParameter( UInt64 key, Int64 value, pcIError_base & error ) __NOTHROW__;
-		virtual void SetParameter( UInt64 key, double value );
-		virtual void SetParameter( UInt64 key, double value, pcIError_base & error ) __NOTHROW__;
-		virtual void SetParameter( UInt64 key, char value );
-		virtual void SetParameter( UInt64 key, char value, pcIError_base & error ) __NOTHROW__;
-		virtual void SetParameter( UInt64 key, const char * value );
-		virtual void SetParameter( UInt64 key, const char * value, pcIError_base & error ) __NOTHROW__;
-		virtual void SetParameter( UInt64 key, const void * value );
-		virtual void SetParameter( UInt64 key, const void * value, pcIError_base & error ) __NOTHROW__;
-		virtual bool RemoveParameter( UInt64 key );
-		virtual UInt32 RemoveParameter( UInt64 key, pcIError_base & error ) __NOTHROW__;
-		virtual bool GetParameter( UInt64 key, bool & value ) const;
-		virtual UInt32 GetParameter( UInt64 key, UInt32 & value, pcIError_base & error ) const __NOTHROW__;
-		virtual bool GetParameter( UInt64 key, UInt64 & value ) const;
-		virtual UInt32 GetParameter( UInt64 key, UInt64 & value, pcIError_base & error ) const __NOTHROW__;
-		virtual bool GetParameter( UInt64 key, Int64 & value ) const;
-		virtual UInt32 GetParameter( UInt64 key, Int64 & value, pcIError_base & error ) const __NOTHROW__;
-		virtual bool GetParameter( UInt64 key, double & value ) const;
-		virtual UInt32 GetParameter( UInt64 key, double & value, pcIError_base & error ) const __NOTHROW__;
-		virtual bool GetParameter( UInt64 key, char & value ) const;
-		virtual UInt32 GetParameter( UInt64 key, char & value, pcIError_base & error ) const __NOTHROW__;
-		virtual bool GetParameter( UInt64 key, const char * & value ) const;
-		virtual UInt32 GetParameter( UInt64 key, const char * & value, pcIError_base & error ) const __NOTHROW__;
-		virtual bool GetParameter( UInt64 key, const void * & value ) const;
-		virtual UInt32 GetParameter( UInt64 key, const void * & value, pcIError_base & error ) const __NOTHROW__;
-		virtual std::vector< UInt64 > GetAllParameters() const;
-		virtual void GetAllParameters( UInt64 * array, SizeT count ) const __NOTHROW__ = 0;
-		virtual eParameterValueType GetParameterValueType( UInt64 key ) const = 0;
-		virtual UInt32 GetParameterValueType( UInt64 key, pcIError_base & error ) const __NOTHROW__ = 0;
-		virtual ~IConfigurable() __NOTHROW__ = 0;
+		virtual bool APICALL GetParameter( const uint64 & key, bool & value ) const;
+		virtual bool APICALL GetParameter( const uint64 & key, uint64 & value ) const;
+		virtual bool APICALL GetParameter( const uint64 & key, int64 & value ) const;
+		virtual bool APICALL GetParameter( const uint64 & key, double & value ) const;
+		virtual bool APICALL GetParameter( const uint64 & key, char & value ) const;
+		virtual bool APICALL GetParameter( const uint64 & key, const char * & value ) const;
+		virtual bool APICALL GetParameter( const uint64 & key, const void * & value ) const;
+		virtual uint32 APICALL getParameter( const uint64 & key, uint32 dataType, CombinedDataValue & value, pcIError_base & error ) const __NOTHROW__;
 
-		pcIConfigurableBase GetRawPointer() const { return _sp.get(); }
-		pIConfigurableBase GetRawPointer() { return _sp.get(); }
+		virtual std::vector< uint64 > APICALL GetAllParameters() const;
+		virtual void APICALL getAllParameters( uint64 * array, sizet count ) const __NOTHROW__;
 
-	private:
-		spIConfigurableBase					_sp;
+		virtual sizet APICALL Size() const __NOTHROW__;
 
-	//! \endcond
+		virtual eDataType APICALL GetDataType( const uint64 & key ) const;
+		virtual uint32 APICALL getDataType( const uint64 & key, pcIError_base & error ) const __NOTHROW__;
+
+	protected:
+		pIConfigurable		mConfigurableRawPtr;
 	};
 
-	inline IConfigurable::~IConfigurable() __NOTHROW__ { }
+#endif  // !BUILDING_XMPCOMMON_LIB && !SOURCE_COMPILING_XMP_ALL
+//! \endcond
 
-#endif  // GENERATE_XMPCOMMON_CLIENT_LAYER_CODE
 }
 
 #endif  // IConfigurable_h__

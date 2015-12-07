@@ -28,7 +28,7 @@ namespace INT_UMC {
 
 		OutputImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator,
-			const spIXMPStructureNode & xmpStructureNode );
+			const spIStructureNode & xmpStructureNode );
 
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetParsedID() const;
@@ -86,14 +86,14 @@ namespace INT_UMC {
 
 		virtual eNodeTypes GetNodeType() const;
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		virtual wpcIUMCNode GetParentNode() const;
+		virtual wpIUMCNode GetParentNode();
 
-		virtual spcINode GetDecendantNode( const std::string & id ) const;
-		virtual spINode GetDecendantNode( const std::string & id );
+		virtual spcIUMCNode GetDecendantNode( const std::string & id ) const;
+		virtual spIUMCNode GetDecendantNode( const std::string & id );
 
-		virtual spcINode GetChildNode( const std::string & id ) const;
-		virtual spINode GetChildNode( const std::string & id );
+		virtual spcIUMCNode GetChildNode( const std::string & id ) const;
+		virtual spIUMCNode GetChildNode( const std::string & id );
 
 		virtual NodeList GetAllChildren();
 		virtual cNodeList GetAllChildren() const;
@@ -108,8 +108,8 @@ namespace INT_UMC {
 
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
-		virtual pINodeI GetInternalNode();
-		virtual pcINodeI GetInternalNode() const;
+		virtual pIUMCNodeI GetInternalNode();
+		virtual pcIUMCNodeI GetInternalNode() const;
 
 
 		virtual void CleanUpOnRemovalFromDOM();
@@ -118,30 +118,30 @@ namespace INT_UMC {
 		virtual void SyncInternalStuffToXMP() const;
 		virtual void SyncXMPToInternalStuff();
 
-		virtual spIXMPStructureNode GetXMPNode() const;
+		virtual spIStructureNode GetXMPNode() const;
 
 	protected:
-		spIAudioTrack AddAudioTrack( const spIXMPStructureNode & xmpStructureNode );
-		spIVideoTrack AddVideoTrack( const spIXMPStructureNode & xmpStructureNode );
+		spIAudioTrack AddAudioTrack( const spIStructureNode & xmpStructureNode );
+		spIVideoTrack AddVideoTrack( const spIStructureNode & xmpStructureNode );
 
 		virtual bool ValidateXMPNode() const;
 
 		virtual std::string Serialize() const;
 
-		virtual pINode GetNode();
+		virtual pIUMCNode GetNode();
 
-		virtual pcINode GetNode() const;
+		virtual pcIUMCNode GetNode() const;
 
 		virtual bool SetUniqueID( const std::string & uniqueID );
-		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
-		virtual spINode GetExternalNode();
+		virtual bool ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID );
+		virtual spIUMCNode GetExternalNode();
 
 		typedef std::map< const std::string, spIVideoTrack > VideoTrackMap;
 		typedef std::map< const std::string, spIAudioTrack > AudioTrackMap;
 
-		spIXMPArrayNode					mVideoTracks;
-		spIXMPArrayNode					mAudioTracks;
-		spIXMPStructureNode				mTracks;
+		spIArrayNode					mVideoTracks;
+		spIArrayNode					mAudioTracks;
+		spIStructureNode				mTracks;
 
 		std::string						mName;
 		std::string						mTitle;

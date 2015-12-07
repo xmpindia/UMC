@@ -31,12 +31,12 @@
 // =================================================================================================
 #endif	// AdobePrivate
 
-#include "XMPCore/XMPCore_Defines.h"
+#include "XMPCore/XMPCoreDefines.h"
 #include "XMPCommon/XMPCommonFwdDeclarations.h"
 
-#include "XMPCore/Interfaces/IXMPStructNode.h"
+#include "XMPCore/Interfaces/IXMPStructureNode.h"
 
-namespace NS_XMPCORE{
+namespace AdobeXMPCore{
 
 	class XMP_PUBLIC IXMPLanguageAlternative_v1
 	{

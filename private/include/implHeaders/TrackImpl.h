@@ -25,22 +25,22 @@ namespace INT_UMC {
 
 		TrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
 			const spIUniqueIDGenerator & uniqueIDGenerator, ITrack::eTrackTypes trackType,
-			const spIXMPStructureNode & xmpStructureNode );
+			const spIStructureNode & xmpStructureNode );
 
-		INode::eNodeTypes GetNodeType() const;
+		IUMCNode::eNodeTypes GetNodeType() const;
 
 		void CleanUpOnRemovalFromDOM();
 		void SetUpOnAdditionToDOM();
 
 		void SyncInternalStuffToXMP() const;
-		void SyncXMPToInternalStuff( const spINode & node );
+		void SyncXMPToInternalStuff( const spIUMCNode & node );
 
-		spIClipShot AddClipShot( const spINode & node );
-		spITransitionShot AddTransitionShot( const spINode & node );
+		spIClipShot AddClipShot( const spIUMCNode & node );
+		spITransitionShot AddTransitionShot( const spIUMCNode & node );
 
-		spIShot AddShot( const std::string & buffer, const spINode & node );
-		spIClipShot AddClipShot( const std::string & buffer, const spINode & node );
-		spITransitionShot AddTransitionShot( const std::string & buffer, const spINode & node );
+		spIShot AddShot( const std::string & buffer, const spIUMCNode & node );
+		spIClipShot AddClipShot( const std::string & buffer, const spIUMCNode & node );
+		spITransitionShot AddTransitionShot( const std::string & buffer, const spIUMCNode & node );
 
 		void SetName( const std::string & name );
 		std::string GetName() const;
@@ -71,30 +71,30 @@ namespace INT_UMC {
 		size_t RemoveClipShot( const std::string & uniqueID );
 		size_t RemoveTransitionShot( const std::string & uniqueID );
 
-		spcINode GetDecendantNode( const std::string & uniqueID ) const;
-		spINode GetDecendantNode( const std::string & uniqueID );
+		spcIUMCNode GetDecendantNode( const std::string & uniqueID ) const;
+		spIUMCNode GetDecendantNode( const std::string & uniqueID );
 
-		spcINode GetChildNode( const std::string & uniqueID ) const;
-		spINode GetChildNode( const std::string & uniqueID );
+		spcIUMCNode GetChildNode( const std::string & uniqueID ) const;
+		spIUMCNode GetChildNode( const std::string & uniqueID );
 
-		INode::NodeList GetAllChildren();
-		INode::cNodeList GetAllChildren() const;
+		IUMCNode::NodeList GetAllChildren();
+		IUMCNode::cNodeList GetAllChildren() const;
 
-		INode::NodeList GetAllDecendants();
-		INode::cNodeList GetAllDecendants() const;
+		IUMCNode::NodeList GetAllDecendants();
+		IUMCNode::cNodeList GetAllDecendants() const;
 
 	protected:
-		spIClipShot AddClipShot( const spIXMPStructureNode & node, const spINode & node2 );
-		spITransitionShot AddTransitionShot( const spIXMPStructureNode & node, const spINode & node2 );
+		spIClipShot AddClipShot( const spIStructureNode & node, const spIUMCNode & node2 );
+		spITransitionShot AddTransitionShot( const spIStructureNode & node, const spIUMCNode & node2 );
 
 		bool ValidateXMPNode() const = 0;
 
 		typedef std::map< const std::string, spIClipShot >			ClipShotMap;
 		typedef std::map< const std::string, spITransitionShot >	TransitionShotMap;
 
-		spIXMPStructureNode				mShots;
-		spIXMPArrayNode					mClipShots;
-		spIXMPArrayNode					mTransitionShots;
+		spIStructureNode				mShots;
+		spIArrayNode					mClipShots;
+		spIArrayNode					mTransitionShots;
 
 		std::string						mName;
 		ClipShotMap						mClipShotMap;

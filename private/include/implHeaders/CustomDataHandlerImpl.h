@@ -18,14 +18,14 @@
 namespace INT_UMC {
 
 	using namespace UMC;
-	using namespace NS_XMPCORE;
+	using namespace AdobeXMPCore;
 
 	class CustomDataHandlerImpl
 		: public ICustomDataHandler
 	{
 	public:
 		CustomDataHandlerImpl( const spcICustomData & customData, const std::string & customDataNameSpace,
-			const std::string & customDataName, const spIXMPStructureNode & baseNode );
+			const std::string & customDataName, const spIStructureNode & baseNode );
 
 		virtual bool BeginCustomData();
 		virtual spICustomData EndCustomData();
@@ -41,16 +41,16 @@ namespace INT_UMC {
 
 	protected:
 		struct Parent {
-			Parent( const spIXMPStructureNode & structureNode );
-			Parent( const spIXMPArrayNode & arrayNode );
-			spIXMPStructureNode mStructNode;
-			spIXMPArrayNode mArrayNode;
+			Parent( const spIStructureNode & structureNode );
+			Parent( const spIArrayNode & arrayNode );
+			spIStructureNode mStructNode;
+			spIArrayNode mArrayNode;
 			bool mIsArray;
 		};
 
 		std::stack< Parent >	mParents;
 		const std::string &		mNameSpace;
-		spIXMPStructureNode		mBaseNode;
+		spIStructureNode		mBaseNode;
 	};
 }
 

@@ -24,7 +24,7 @@ namespace INT_UMC {
 			const spIUniqueIDGenerator & uniqueIDGenerator );
 
 		VideoTrackImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, const spIXMPStructureNode & node );
+			const spIUniqueIDGenerator & uniqueIDGenerator, const spIStructureNode & node );
 
 		virtual ~VideoTrackImpl() {}
 
@@ -84,14 +84,14 @@ namespace INT_UMC {
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		virtual wpcIUMCNode GetParentNode() const;
+		virtual wpIUMCNode GetParentNode();
 
-		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const;
-		virtual spINode GetDecendantNode( const std::string & uniqueID );
+		virtual spcIUMCNode GetDecendantNode( const std::string & uniqueID ) const;
+		virtual spIUMCNode GetDecendantNode( const std::string & uniqueID );
 
-		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
-		virtual spINode GetChildNode( const std::string & uniqueID );
+		virtual spcIUMCNode GetChildNode( const std::string & uniqueID ) const;
+		virtual spIUMCNode GetChildNode( const std::string & uniqueID );
 
 		virtual size_t GetReferenceCount() const;
 
@@ -102,8 +102,8 @@ namespace INT_UMC {
 
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
-		virtual INT_UMC::pINodeI GetInternalNode();
-		virtual INT_UMC::pcINodeI GetInternalNode() const;
+		virtual INT_UMC::pIUMCNodeI GetInternalNode();
+		virtual INT_UMC::pcIUMCNodeI GetInternalNode() const;
 
 		virtual void CleanUpOnRemovalFromDOM();
 		virtual void SetUpOnAdditionToDOM();
@@ -111,18 +111,18 @@ namespace INT_UMC {
 		virtual void SyncInternalStuffToXMP() const;
 		virtual void SyncXMPToInternalStuff();
 
-		virtual spIXMPStructureNode GetXMPNode() const;
+		virtual spIStructureNode GetXMPNode() const;
 
 	protected:
 		virtual bool ValidateXMPNode() const;
 
-		virtual pINode GetNode();
+		virtual pIUMCNode GetNode();
 
-		virtual pcINode GetNode() const;
+		virtual pcIUMCNode GetNode() const;
 
 		virtual bool SetUniqueID( const std::string & uniqueID );
-		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
-		virtual spINode GetExternalNode();
+		virtual bool ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID );
+		virtual spIUMCNode GetExternalNode();
 
 		EditRate				mVideoEditRate;
 		EditRate				mAudioEditRate;

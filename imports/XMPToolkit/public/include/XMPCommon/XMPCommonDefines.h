@@ -17,238 +17,172 @@
 //
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  ADC	Amandeep Chawla
-//
-// mm/dd/yy who Description of changes, most recent on top.
-//
-// 02-02-15 ADC 5.6-c036 Porting C++ Based APIs of XMPCore to gcc 4.8.x on Linux Platform.
-// 12-30-14 ADC 5.6-c032 Adding IConfigurable Interface to XMPCommon.
-// 11-19-14 ADC 1.0-a001 Framework in place for Asset Management Library.
-// 08-03-14 ADC 1.0-m029 Fixing crashers on Macintosh.
-// 07-10-14 ADC 5.6-c017 Fixing issues related to Mac build.
-// 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
-// 05-19-14 ADC 5.6-c012 Refactoring XMPCommon code and appropriate changes in XMPCore and XMPCompareAndMerge.
-// 05-19-14 ADC 1.0-m020 Refactoring XMPCommon code and appropriate changes in XMPCore and XMPCompareAndMerge.
-// 04-11-14 ADC 1.0-m019 [3739647] Find a Strategy to resolve the issues of "multiple definitions" faced
-//						 by clients while integrating the new builds containing Compare and Merge.
-// 03-03-14 ADC 1.0-m013 Implemented GetMergedMetadata function of ThreeWayMerge.
-// 02-25-14 ADC 1.0-m010 Porting XMPCompareAndMerge to Mac Environment.
-// 02-24-14 HK  5.6-c004 Added new internal XMP DOM interfaces + fixed memory leaks + implemented qualifiers for new XMP DOM.
-// 02-24-14 ADC 5.6-c003 Fixing crash in XMPFilesAPI test.
-// 02-24-14 ADC 5.6-c001 XMPCommon Framework and XMPCore new APIs ported to Mac Environment.
-//
-// 02-18-14 ADC 1.0-m005 Fixes for problems reported by QE during the basic sanity tests
-// 02-18-14 ADC 1.0-m004 Three Way Conflict Identification Feature.
-// 02-13-14 ADC 5.5-c031 Refactoring XMPCore, implementing few APIs and fixing issues.
-// 02-09-14 ADC 1.0-m003 Re-factoring of XMPCommon Framework
-// 02-05-14 ADC 1.0-m002 Some changes in the common framework
-// 01-30-14 ADC 1.0-m001 First version
-//
-// =================================================================================================
-#endif // AdobePrivate
-
 // =================================================================================================
 // All Platform Settings
 // ===========================
 #include "XMP_Environment.h"
-#include "XMP_Const.h"
-
-// =================================================================================================
-// Macintosh Specific Settings
-// ===========================
-#if XMP_MacBuild
-	#define ENABLE_XMP_COMMON_CODE 1
-	#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
-	#define SUPPORT_SHARED_POINTERS_IN_TR1 0
-	#define SUPPORT_SHARED_POINTERS_IN_STD 1
-	#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
-	#define BAD_EXCEPTION_SUPPORT_STRINGS 0
-	#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 0
-	#define SUPPORT_DYNAMIC_CAST_OPTIMIZATION 0
-#endif
-
-// =================================================================================================
-// IOS Specific Settings
-// ===========================
-#if XMP_iOSBuild
-	#define ENABLE_XMP_COMMON_CODE 1
-	#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
-	#define SUPPORT_SHARED_POINTERS_IN_TR1 0
-	#define SUPPORT_SHARED_POINTERS_IN_STD 1
-	#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
-	#define BAD_EXCEPTION_SUPPORT_STRINGS 0
-	#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 0
-	#define SUPPORT_DYNAMIC_CAST_OPTIMIZATION 0
-#endif
-
-// =================================================================================================
-// Windows Specific Settings
-// =========================
-#if XMP_WinBuild
-	#define ENABLE_XMP_COMMON_CODE 1
-	#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 1
-	#if _MSC_VER <= 1600
-		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
-		#define SUPPORT_SHARED_POINTERS_IN_TR1 1
-		#define SUPPORT_SHARED_POINTERS_IN_STD 0
+/*
+ENABLE_XMP_CPP_INTERFACE is used for checking availability of C++11 on non-Windows platforms. 
+ENABLE_XMP_CPP_INTERFACE is set to 0 in case C++11 is not available.
+On Windows,ENABLE_XMP_CPP_INTERFACE is set to 1 by default.
+Clients should set ENABLE_XMP_CPP_INTERFACE to 0, if they don't want to use the new XMPCore or XMPExtensions libraries.
+If ENABLE_XMP_CPP_INTERFACE is 1, some clients might have to include additional public source files in order to compile their projects.
+*/
+#ifndef ENABLE_XMP_CPP_INTERFACE
+	#if !XMP_WinBuild
+		#include <ciso646>
+		#if __cplusplus < 201103
+			#define ENABLE_XMP_CPP_INTERFACE 0
+		#else
+			#define ENABLE_XMP_CPP_INTERFACE 1
+		#endif
 	#else
-		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 1
+		#define ENABLE_XMP_CPP_INTERFACE 1
+	#endif
+#endif
+
+#if ENABLE_XMP_CPP_INTERFACE
+	// =================================================================================================
+	// Macintosh Specific Settings
+	// ===========================
+	#if XMP_MacBuild
+		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
+		#ifdef _LIBCPP_VERSION
+			#define SUPPORT_SHARED_POINTERS_IN_TR1 0
+			#define SUPPORT_SHARED_POINTERS_IN_STD 1
+		#else
+			#define SUPPORT_SHARED_POINTERS_IN_TR1 1
+			#define SUPPORT_SHARED_POINTERS_IN_STD 0
+		#endif
+		#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
+		#define BAD_EXCEPTION_SUPPORT_STRINGS 0
+		#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 0
+		#define SUPPORT_VARIADIC_TEMPLATES 0
+	#endif
+
+	// =================================================================================================
+	// IOS Specific Settings
+	// ===========================
+	#if XMP_iOSBuild
+		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
+		#ifdef _LIBCPP_VERSION
+			#define SUPPORT_SHARED_POINTERS_IN_TR1 0
+			#define SUPPORT_SHARED_POINTERS_IN_STD 1
+		#else
+			#define SUPPORT_SHARED_POINTERS_IN_TR1 1
+			#define SUPPORT_SHARED_POINTERS_IN_STD 0
+		#endif
 		#define SUPPORT_SHARED_POINTERS_IN_TR1 0
 		#define SUPPORT_SHARED_POINTERS_IN_STD 1
-	#endif
-	#define BAD_EXCEPTION_SUPPORT_STRINGS 1
-	#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 1
-	#define SUPPORT_DYNAMIC_CAST_OPTIMIZATION 1
-#endif
-
-// =================================================================================================
-// UNIX Specific Settings
-// ======================
-#if XMP_UNIXBuild
-	#define ENABLE_XMP_COMMON_CODE 1
-	#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-	#if GCC_VERSION >= 40800
-		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 1
-	#else
-		#define REQ_FRIEND_CLASS_DECLARATION() template<typename _Ptr, std::_Lock_policy _Lp> friend class std::_Sp_counted_ptr;
-		#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
+		#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
+		#define BAD_EXCEPTION_SUPPORT_STRINGS 0
+		#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 0
+		#define SUPPORT_VARIADIC_TEMPLATES 0
 	#endif
 
-	#define SUPPORT_SHARED_POINTERS_IN_TR1 0
-	#define SUPPORT_SHARED_POINTERS_IN_STD 1
-	#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
-	#define BAD_EXCEPTION_SUPPORT_STRINGS 0
-	#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 1
-	#define SUPPORT_DYNAMIC_CAST_OPTIMIZATION 0
-	#define SHARED_POINTERS_REQUIRE_ACCESS_TO_DESTRUCTOR 1
-#endif
-
-#ifndef REQ_FRIEND_CLASS_DECLARATION
-	#define REQ_FRIEND_CLASS_DECLARATION()
-#endif
-
-#ifndef ENABLE_XMP_COMMON_CODE
-	#define ENABLE_XMP_COMMON_CODE 0
-#endif
-
-#if ENABLE_XMP_COMMON_CODE
-	//! \cond XMP_INTERNAL_DOCUMENTATION
-	//! \cond NEVER_IN_DOCUMENTATION
-	#define NS_XMPCOMMON AdobeXMPCommon
-	namespace NS_XMPCOMMON {};
-	//! \endcond
-
-	#ifndef BUILDING_XMPCOMMON_LIB
-		#define  BUILDING_XMPCOMMON_LIB 0
-	#endif
-
-	#ifndef SOURCE_COMPILING_XMPCOMMON_LIB
-		#define SOURCE_COMPILING_XMPCOMMON_LIB 0
-	#endif
-
-	#if SOURCE_COMPILING_XMPCOMMON_LIB
-		#if BUILDING_XMPCOMMON_LIB
-			#error "You can't have both SOURCE_COMPILATION and BUILDING_LIB set together"
+	// =================================================================================================
+	// Windows Specific Settings
+	// =========================
+	#if XMP_WinBuild
+		#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 1
+		#if _MSC_VER <= 1600
+			#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
+			#define SUPPORT_SHARED_POINTERS_IN_TR1 1
+			#define SUPPORT_SHARED_POINTERS_IN_STD 0
+		#else
+			#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 1
+			#define SUPPORT_SHARED_POINTERS_IN_TR1 0
+			#define SUPPORT_SHARED_POINTERS_IN_STD 1
 		#endif
-		#define GENERATE_XMPCOMMON_CLIENT_LAYER_CODE 0
-		#define GENERATE_XMPCOMMON_DLL_LAYER_CODE 0
+		#define BAD_EXCEPTION_SUPPORT_STRINGS 1
+		#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 1
 	#endif
 
-	#if BUILDING_XMPCOMMON_LIB
-		#if SOURCE_COMPILING_XMPCOMMON_LIB
-			#error "You can't have both SOURCE_COMPILATION and BUILDING_LIB set together"
+	// =================================================================================================
+	// UNIX Specific Settings
+	// ======================
+	#if XMP_UNIXBuild
+		#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+		#if GCC_VERSION >= 40800
+			#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 1
+		#else
+			#define REQ_FRIEND_CLASS_DECLARATION() template<typename _Ptr, std::_Lock_policy _Lp> friend class std::_Sp_counted_ptr;
+			#define SUPPORT_STD_ATOMIC_IMPLEMENTATION 0
 		#endif
-		#define GENERATE_XMPCOMMON_CLIENT_LAYER_CODE 0
-		#define GENERATE_XMPCOMMON_DLL_LAYER_CODE 1
+
+		#define SUPPORT_SHARED_POINTERS_IN_TR1 0
+		#define SUPPORT_SHARED_POINTERS_IN_STD 1
+		#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
+		#define BAD_EXCEPTION_SUPPORT_STRINGS 0
+		#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 1
+		#define SUPPORT_DYNAMIC_CAST_OPTIMIZATION 0
+		#define SUPPORT_VARIADIC_TEMPLATES 0
 	#endif
 
-	#ifndef GENERATE_XMPCOMMON_CLIENT_LAYER_CODE
-		#define GENERATE_XMPCOMMON_CLIENT_LAYER_CODE 1
+	#ifndef SUPPORT_VARIADIC_TEMPLATES
+		#define SUPPORT_VARIADIC_TEMPLATES 1
 	#endif
 
-	#ifndef GENERATE_XMPCOMMON_DLL_LAYER_CODE
-		#define GENERATE_XMPCOMMON_DLL_LAYER_CODE 1
+	#ifndef REQ_FRIEND_CLASS_DECLARATION
+		#define REQ_FRIEND_CLASS_DECLARATION()
 	#endif
-
-	//TODO: @Aman to remove later on
-	#if SOURCE_COMPILED
-		#define BUILDING_XMPCOMMON_LIB 1
-	#endif
-
-
-	//!
-	//! controls whether client wants to build source directly into his application/library.
-	//!
-	#ifndef SOURCE_COMPILED
-		#define SOURCE_COMPILED 0
-	#endif
-
-	#if SOURCE_COMPILED
-		#define VIRTUAL_IF_SOURCE_COMPILED virtual
-		#define MARK_PURE_VIRTUAL_IF_SOURCE_COMPILED = 0
-		#define BUILDING_XMPCOMMON_LIB 1
-	#else
-		#define VIRTUAL_IF_SOURCE_COMPILED 
-		#define MARK_PURE_VIRTUAL_IF_SOURCE_COMPILED 
-	#endif
-
-	#define __NOTHROW__ throw()
 
 	#define JOIN_CLASSNAME_WITH_VERSION_NUMBER_INT(x,y) x ## _v ## y
 	#define JOIN_CLASSNAME_WITH_VERSION_NUMBER(x,y)  JOIN_CLASSNAME_WITH_VERSION_NUMBER_INT(x,y)
 	#define BASE_CLASS(classNameWithoutVersionNumber, versionNumber) JOIN_CLASSNAME_WITH_VERSION_NUMBER(classNameWithoutVersionNumber, versionNumber)
+	#define EXPAND_MACRO(X) X
+	#define QUOTEME2(X) #X
+	#define QUOTEME(X) QUOTEME2(X)
 
-	//! \endcond
+	#define __NOTHROW__ throw()
 
-	namespace NS_XMPCOMMON {
-
-		typedef XMP_Int64 Int64;
-		typedef XMP_Uns64 UInt64;
-		typedef XMP_Int32 Int32;
-		typedef XMP_Uns32 UInt32;
-
-	#if ! XMP_64
-		typedef XMP_Uns32 	NativeUInt;
-		typedef XMP_Int32 	NativeInt;
+	#if SOURCE_COMPILING_XMP_ALL || SOURCE_COMPILING_XMPCORE_LIB || SOURCE_COMPILING_XMPCOMPAREANDMERGE_LIB || SOURCE_COMPILING_XMPEXTENSIONS_LIB
+		#define SOURCE_COMPILING_XMPCOMMON_LIB 1
 	#else
-		typedef XMP_Uns64 	NativeUInt;
-		typedef XMP_Int64 	NativeInt;
+		#define SOURCE_COMPILING_XMPCOMMON_LIB 0
 	#endif
 
-		typedef NativeUInt	SizeT;
-	
-		const SizeT kMaxSize_t = ( SizeT ) -1;
+	#ifndef BUILDING_XMPCOMMON_LIB
+		#define BUILDING_XMPCOMMON_LIB 0
+	#endif
+
+	#if BUILDING_XMPCOMMON_LIB
+		#if !BUILDING_XMPCOMMON_AS_STATIC && !BUILDING_XMPCOMMON_AS_DYNAMIC
+			#error "Define either BUILDING_XMPCOMMON_AS_STATIC as 1 or BUILDING_XMPCOMMON_AS_DYNAMIC as 1"
+		#endif
+	#endif
+
+	#ifndef __XMP_Const_h__
+		#include "XMP_Const.h"
+	#endif
+
+	namespace AdobeXMPCommon {
+
+		typedef XMP_Int64	int64;
+		typedef XMP_Uns64	uint64;
+		typedef XMP_Int32	int32;
+		typedef XMP_Uns32	uint32;
+	#if !XMP_64
+		typedef uint32		sizet;
+	#else
+		typedef uint64		sizet;
+	#endif
+
+		const sizet kMaxSize						( ( sizet ) -1 );
+		const sizet npos							( kMaxSize );
+
 		// force an enum type to be represented in 32 bits
-		static const XMP_Int32 kMaxEnumValue = Max_XMP_Int32;
+		static const uint32 kMaxEnumValue			( Max_XMP_Uns32 );
+		static const uint32 kAllBits				( 0xFFFFFFFF );
 
-		//!
-		//! Indicates multi threading support required by client.
-		//!
-		typedef enum {
-			//! Use multi threading support configured at initialization through #NS_XMPCOMMON::IConfigurationManager.
-			//! By default library is not multi threaded.
-			kMultiThreadingConfiguredAtInitialization						= 0,
-			//! Disable multi threading support at the object level, by passing this value during creation or cloning operation (if provided).
-			//! Can also be used to set no multi threading as the default behavior of multi threading support during initialization.
-			kNoMultiThreading												= 1,
-			//! Enable multi threading support at the object level, by passing this value during creation or cloning operation (if provided).
-			//! Can also be used to set multi threading as the default behavior of multi threading support during initialization.
-			kMulthiThreading												= 2,
-			//! Uses the setting of the current object to be cloned. Only makes sense in case of cloning operation.
-			kMultiThreadingUseClonedObjectValue								= 3,
+		// unique ids for the interfaces defined in the namespace
+		static const uint64 kIErrorID					( 0x6e4572726f722020 /* nError   */ );
+		static const uint64 kIUTF8StringID				( 0x6e55544638537472 /* nUTF8Str */ );
+		static const uint64 kIObjectFactoryID			( 0x6e4f626a46616374 /* nObjFact */ );
+		static const uint64 kIErrorNotifierID			( 0x6e4572724e6f7466 /* nErrNotf */ );
+		static const uint64 kIConfigurationManagerID	( 0x6e436f6e664d6772 /* nConfMgr */ );
+	}  // namespace AdobeXMPCommon
 
-			//! Maximum value this enum can hold, should be treated as invalid value.
-			kMultithreadingMaxValue											= kMaxEnumValue
-		} eMultiThreadingSupport;
-	}
-
-#endif  // ENABLE_XMP_COMMON_CODE
+#endif  // ENABLE_XMP_CPP_INTERFACE
 
 #endif  // __XMPCommonDefines_h__
-

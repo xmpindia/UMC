@@ -17,6 +17,13 @@
 //
 // mm-dd-yy who Description of changes, most recent on top
 //
+// 03-26-15 AJ  5.6-c065 Disabling the code for linux for integrating into green as shared_ptr is not available on gcc 4.4.4
+// 03-26-15 AJ  5.6-c064 Minimizing risk of shared_ptr usage across dlls by changing glue code
+// 03-18-15 AJ  5-6-c053 Removing std:: for accessing shared pointers for Mac
+// 03-18-15 AJ  5.6-c052 Adding shared ptr for the private data in the marker structure
+// 03-16-15 AJ  5.6-c047 Completing Rework of Get/SetBulkMarkers()
+// 12-03-15 AJ  5.6-c045 Reworking glue code for Get/SetBulkMarkers()
+// 03-02-15 AJ  5.6-c039 Marker Extensibility - Backward compatibility for extensions in GetBulkMarkers() and SetBulkMarkers()
 // 07-21-09 AWL 5.0-c047 Add XMPUtils::ApplyTemplate.
 // 05-21-09 AWL 5.0-c032 Revamp glue again to pass SetClientString with each function.
 // 05-19-09 AWL 5.0-c031 First part of threading improvements, revamp the client glue.
@@ -637,6 +644,19 @@ GetBulkMarkers ( const TXMPMeta<tStringObj> & xmp,
 														clientMarkers, sizeof(XMPDMO_MarkerInfo),
 														AllocClientMarkers, AllocClientCuePoints ) );
 
+	#if ENABLE_CPP_DOM_MODEL
+	/*
+	if ( found && clientMarkers ) {
+		for ( size_t index = 0, endIndex = clientMarkers->size(); index < endIndex; index++ ) {
+			XMPDMO_MarkerInfo & markerRef = (*clientMarkers)[index];
+			if ( markerRef.extension && markerRef.extensionReleaseProc ) {
+				markerRef.spExtension = shared_ptr< void >( markerRef.extension, markerRef.extensionReleaseProc );
+			}
+		}
+	}
+	*/
+	#endif
+
 	return found;
 
 }
@@ -652,6 +672,7 @@ GetCuePointParams ( const XMPDMO_MarkerInfo * marker,
 	if ( *cpCount > 0 ) *cpInfo  = &(marker->cuePointParams[0]);
 }
 
+
 // -------------------------------------------------------------------------------------------------
 
 XMP_MethodIntro(TXMPUtils,void)::
@@ -662,10 +683,21 @@ SetBulkMarkers ( TXMPMeta<tStringObj> * xmp,
 	if ( xmp == 0 ) throw XMP_Error ( kXMPErr_BadParam, "Null output SXMPMeta pointer" );
 	XMP_Index count = (XMP_Index)markers.size();
 	if ( count > 0 ) {
+	    #if ENABLE_CPP_DOM_MODEL
+		/*
+		for ( size_t index = 0, endIndex = markers.size(); index < endIndex; index++ ) {
+			XMPDMO_MarkerInfo & markerRef = const_cast <XMPDMO_MarkerInfo &>( markers[index] );
+			markerRef.extension = markerRef.spExtension.get(); 
+		}
+		*/
+		#endif
 		WrapCheckVoid ( zXMPUtils_SetBulkMarkers_1 ( xmp->GetInternalRef(), ns, path, count,
 													 &markers[0], sizeof(XMPDMO_MarkerInfo), GetCuePointParams ) );
 	}
 }
+
+
+// -------------------------------------------------------------------------------------------------
 
 #endif	// AdobePrivate
 

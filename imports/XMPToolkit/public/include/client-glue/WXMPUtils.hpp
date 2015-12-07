@@ -20,6 +20,11 @@
 //
 // mm-dd-yy who Description of changes, most recent on top.
 //
+// 03-16-15 AJ  5.6-c048 Fixing build break due to XMPCore.def
+// 03-16-15 AJ  5.6-c047 Completing Rework of Get/SetBulkMarkers()
+// 12-03-15 AJ  5.6-c045 Reworking glue code for Get/SetBulkMarkers()
+// 03-02-15 AJ  5.6-c041 Fixed build break.
+// 03-02-15 AJ  5.6-c039 Marker Extensibility - Backward compatibility for extensions in GetBulkMarkers() and SetBulkMarkers()
 // 02-24-14 ADC 5.6-c001 XMPCommon Framework and XMPCore new APIs ported to Mac Environment.
 //
 // 07-21-09 AWL 5.0-c047 Add XMPUtils::ApplyTemplate.
@@ -61,7 +66,6 @@
 #endif // AdobePrivate
 
 #include "client-glue/WXMP_Common.hpp"
-
 #if __cplusplus
 extern "C" {
 #endif
@@ -189,6 +193,12 @@ extern "C" {
 
 #define zXMPUtils_SetBulkMarkers_1(xmp,ns,path,count,array,elemSize,getProc) \
     WXMPUtils_SetBulkMarkers_1 ( xmp, ns, path, count, array, elemSize, getProc, &wResult );
+
+#define zXMPUtils_GetBulkMarkers_2(xmp,ns,path,array,elemSize,allocMarker,allocCue) \
+    WXMPUtils_GetBulkMarkers_2 ( xmp, ns, path, array, elemSize, allocMarker,allocCue, &wResult );
+
+#define zXMPUtils_SetBulkMarkers_2(xmp,ns,path,count,array,elemSize,getProc) \
+    WXMPUtils_SetBulkMarkers_2 ( xmp, ns, path, count, array, elemSize, getProc, &wResult );
 
 #endif	// AdobePrivate
 
@@ -450,9 +460,9 @@ XMP_PUBLIC WXMPUtils_RemoveMultiValueInfo_1 ( XMPMetaRef    multiXMP,
 
 // -------------------------------------------------------------------------------------------------
 
-typedef void * (* XMPDMO_AllocClientMarkersProc) ( void * clientPtr, XMP_Index count );
-typedef void * (* XMPDMO_AllocClientCuePointsProc) ( XMPDMO_MarkerInfo * clientMarker, XMP_Index count );
 
+typedef void * (*XMPDMO_AllocClientMarkersProc) (void * clientPtr, XMP_Index count);
+typedef void * (* XMPDMO_AllocClientCuePointsProc) ( XMPDMO_MarkerInfo * clientMarker, XMP_Index count );
 typedef void (* XMPDMO_GetCuePointParamsProc) ( const XMPDMO_MarkerInfo * marker,
 												const XMPDMO_CuePointInfo ** cpInfo,
 												XMP_Index * cpCount );
@@ -463,8 +473,8 @@ XMP_PUBLIC WXMPUtils_GetBulkMarkers_1 ( XMPMetaRef    wXMP,
 							 XMP_StringPtr path,
 							 void *        clientPtr,
 							 XMP_Uns32     clientElemSize,
-							 XMPDMO_AllocClientMarkersProc   AllocClientMarkers,
-							 XMPDMO_AllocClientCuePointsProc AllocClientCuePoints,
+							 XMPDMO_AllocClientMarkersProc AllocClientMarkers,
+							 XMPDMO_AllocClientCuePointsProc  AllocClientCuePoints,
 							 WXMP_Result * wResult );
 
 extern void
@@ -476,6 +486,7 @@ XMP_PUBLIC WXMPUtils_SetBulkMarkers_1 ( XMPMetaRef    wXMP,
 							 XMP_Uns32     clientElemSize,
 							 XMPDMO_GetCuePointParamsProc GetCuePointParams,
 							 WXMP_Result * wResult );
+
 
 #endif	// AdobePrivate
 

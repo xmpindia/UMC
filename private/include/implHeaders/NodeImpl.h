@@ -11,38 +11,38 @@
 // =================================================================================================
 
 #include "UMCFwdDeclarations_I.h"
-#include "interfaces/INodeI.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNodeI.h"
+#include "interfaces/IUMCNode.h"
 #include "utils/UMCAndXMPMapping.h"
 #include <map>
 
 namespace INT_UMC {
 
 	class NodeImpl
-		: public INodeI
+		: public IUMCNodeI
 	{
 	public:
 		NodeImpl();
-		NodeImpl( const spIXMPStructureNode & xmpStructureNode );
+		NodeImpl( const spIStructureNode & xmpStructureNode );
 
 		NodeImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType,
+			const spIUniqueIDGenerator & uniqueIDGenerator, IUMCNode::eNodeTypes nodeType,
 			const NamespacePropertyNamePair & namespacePropertyNamePair );
 
 		NodeImpl( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType,
-			const spIXMPStructureNode & xmpStructureNode );
+			const spIUniqueIDGenerator & uniqueIDGenerator, IUMCNode::eNodeTypes nodeType,
+			const spIStructureNode & xmpStructureNode );
 
 		void Init( const spIUniqueIDAndReferenceTracker & uniqueIDAndReferenceTracker,
-			const spIUniqueIDGenerator & uniqueIDGenerator, INode::eNodeTypes nodeType );
+			const spIUniqueIDGenerator & uniqueIDGenerator, IUMCNode::eNodeTypes nodeType );
 
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetParsedID() const;
 		virtual bool SetUniqueID( const std::string & newUniqueID );
 		virtual void ChangeUniqueID( const std::string & newUniqueID );
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		virtual wpcIUMCNode GetParentNode() const;
+		virtual wpIUMCNode GetParentNode();
 
 		virtual size_t GetReferenceCount() const;
 
@@ -52,7 +52,7 @@ namespace INT_UMC {
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const;
 
 		virtual void RemoveFromDOM();
-		virtual void AddToDOM( const spINode & parent );
+		virtual void AddToDOM( const spIUMCNode & parent );
 
 		virtual void SyncUMCToXMP() const;
 		virtual void SyncXMPToUMC();
@@ -80,12 +80,12 @@ namespace INT_UMC {
 		virtual void SetIndex( size_t index );
 		virtual size_t GetIndex() const;
 
-		NS_XMPCORE::spIXMPStructureNode						mXMPStructureNode;
-		NS_XMPCORE::spIXMPStructureNode						mExtensionNode;
+		AdobeXMPCore::spIStructureNode						mXMPStructureNode;
+		AdobeXMPCore::spIStructureNode						mExtensionNode;
 		std::string											mUniqueID;
 		std::map< std::string, spICustomData >				mCustomDataMap;
 
-		weak_ptr< INode >									mwpParentNode;
+		weak_ptr< IUMCNode >									mwpParentNode;
 		spIUniqueIDAndReferenceTracker						mspUniqueIDAndReferenceTracker;
 		spIUniqueIDGenerator								mspUniqueIDGenerator;
 		size_t												mIndex;

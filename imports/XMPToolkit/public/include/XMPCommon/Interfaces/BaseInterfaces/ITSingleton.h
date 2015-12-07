@@ -33,7 +33,7 @@
 
 #include "XMPCommon/XMPCommonDefines.h"
 
-namespace NS_XMPCOMMON {
+namespace AdobeXMPCommon {
 
 	//!
 	//! \brief Template class that can serve as the base class for the interfaces that needs

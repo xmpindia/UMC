@@ -19,7 +19,7 @@
 
 namespace INT_UMC {
 
-	using namespace NS_XMPCORE;
+	using namespace AdobeXMPCore;
 
 	class UMCImpl
 		: public IUMC
@@ -28,7 +28,7 @@ namespace INT_UMC {
 	{
 	public:
 		UMCImpl();
-		UMCImpl( const spIXMPStructureNode & metadata );
+		UMCImpl( const spIStructureNode & metadata );
 
 		virtual spIVideoSource AddVideoSource();
 		virtual spIVideoSource AddVideoSource( const std::string & buffer );
@@ -111,11 +111,11 @@ namespace INT_UMC {
 
 		virtual eNodeTypes GetNodeType() const;
 
-		virtual spcINode GetDecendantNode( const std::string & uniqueID ) const;
-		virtual spINode GetDecendantNode( const std::string & uniqueID );
+		virtual spcIUMCNode GetDecendantNode( const std::string & uniqueID ) const;
+		virtual spIUMCNode GetDecendantNode( const std::string & uniqueID );
 
-		virtual spcINode GetChildNode( const std::string & uniqueID ) const;
-		virtual spINode GetChildNode( const std::string & uniqueID );
+		virtual spcIUMCNode GetChildNode( const std::string & uniqueID ) const;
+		virtual spIUMCNode GetChildNode( const std::string & uniqueID );
 
 		virtual NodeList GetAllChildren();
 		virtual cNodeList GetAllChildren() const;
@@ -123,8 +123,8 @@ namespace INT_UMC {
 		virtual NodeList GetAllDecendants();
 		virtual cNodeList GetAllDecendants() const;
 
-		virtual INT_UMC::pINodeI GetInternalNode();
-		virtual INT_UMC::pcINodeI GetInternalNode() const;
+		virtual INT_UMC::pIUMCNodeI GetInternalNode();
+		virtual INT_UMC::pcIUMCNodeI GetInternalNode() const;
 
 		virtual void CleanUpOnRemovalFromDOM();
 		virtual void SetUpOnAdditionToDOM();
@@ -132,13 +132,13 @@ namespace INT_UMC {
 		virtual void SyncInternalStuffToXMP() const;
 		virtual void SyncXMPToInternalStuff();
 
-		virtual spIXMPStructureNode GetXMPNode() const;
+		virtual spIStructureNode GetXMPNode() const;
 
 		virtual const std::string & GetUniqueID() const;
 		virtual std::string GetParsedID() const;
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		virtual wpcIUMCNode GetParentNode() const;
+		virtual wpIUMCNode GetParentNode();
 
 		virtual size_t GetReferenceCount() const;
 
@@ -150,23 +150,23 @@ namespace INT_UMC {
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData );
 
 	protected:
-		spIVideoSource AddVideoSource( const spIXMPStructureNode & node );
-		spIAudioSource AddAudioSource( const spIXMPStructureNode & node );
-		spIImageSource AddImageSource( const spIXMPStructureNode & node );
-		spIVideoFrameSource AddVideoFrameSource( const spIXMPStructureNode & node );
+		spIVideoSource AddVideoSource( const spIStructureNode & node );
+		spIAudioSource AddAudioSource( const spIStructureNode & node );
+		spIImageSource AddImageSource( const spIStructureNode & node );
+		spIVideoFrameSource AddVideoFrameSource( const spIStructureNode & node );
 
-		spIOutput AddOutput( const spIXMPStructureNode & node );
+		spIOutput AddOutput( const spIStructureNode & node );
 
 		virtual bool ValidateXMPNode() const;
 
-		virtual pINode GetNode();
+		virtual pIUMCNode GetNode();
 
-		virtual pcINode GetNode() const;
+		virtual pcIUMCNode GetNode() const;
 
 		virtual bool SetUniqueID( const std::string & uniqueID );
-		virtual bool ChangeChildUniqueID( const spINode & childNode, const std::string & newUniqueID );
+		virtual bool ChangeChildUniqueID( const spIUMCNode & childNode, const std::string & newUniqueID );
 
-		virtual spINode GetExternalNode();
+		virtual spIUMCNode GetExternalNode();
 
 		typedef std::map< const std::string, spIVideoSource > VideoSourceMap;
 		typedef std::map< const std::string, spIAudioSource > AudioSourceMap;
@@ -174,12 +174,12 @@ namespace INT_UMC {
 		typedef std::map< const std::string, spIImageSource > ImageSourceMap;
 		typedef std::map< const std::string, spIOutput > OutputMap;
 
-		spIXMPArrayNode					mOutputs;
-		spIXMPStructureNode				mSources;
-		spIXMPArrayNode					mVideoSources;
-		spIXMPArrayNode					mAudioSources;
-		spIXMPArrayNode					mVideoFrameSources;
-		spIXMPArrayNode					mImageSources;
+		spIArrayNode					mOutputs;
+		spIStructureNode				mSources;
+		spIArrayNode					mVideoSources;
+		spIArrayNode					mAudioSources;
+		spIArrayNode					mVideoFrameSources;
+		spIArrayNode					mImageSources;
 
 		VideoSourceMap					mVideoSourceMap;
 		AudioSourceMap					mAudioSourceMap;

@@ -7,80 +7,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//	AWL Alan Lillich
-//  FNO Frank Nocke
-//  ADC	Amandeep Chawla
-//	ANS	Ankita Sharma
-//	SKP Sunil Kishor Pathak
-//  AJ Abhishek Jindal
-//
-// mm-dd-yy who Description of changes, most recent on top
-//
-// 01-09-14 AJ 5.6-c031 Renamed UseNewCoreAPIs() to Use_CPP_DOM_APIs()
-// 12-05-14 SKP 5.6-c030 Renamed GetNewMetadataObject() to GetIXMPMetadata()
-// 11-05-14 ANS 5.6-c024 Moving new DOM API references inside the AdobePrivate flag.
-// 07-10-14 ADC 5.6-c015 Refactoring, partial documentation and bug fixes of XMPCommon and XMPCore C++ APIs.
-// 04-11-14 ADC 1.0-m019 [3739647] Find a Strategy to resolve the issues of "multiple definitions" faced
-//						 by clients while integrating the new builds containing Compare and Merge.
-// 02-24-14 ADC 5.6-c002 Fixing issues with Linux build.
-// 02-24-14 ADC 5.6-c001 XMPCommon Framework and XMPCore new APIs ported to Mac Environment.
-//
-// 05-13-13 ADC 5.5-c018 Removing usage of bool in APIs exposed at DLL boundaries.
-// 08-01-12 AWL 5.5-c004 Implement public API and glue layer for XMPCore error notifications.
-//
-// 06-11-09 AWL 5.0-c034 Finish threading revamp, implement friendly reader/writer locking.
-// 05-27-09 AWL 5.0-c033 Remove XMPMeta::SendAssertNotify.
-// 05-21-09 AWL 5.0-c032 Revamp glue again to pass SetClientString with each function.
-// 05-19-09 AWL 5.0-c031 First part of threading improvements, revamp the client glue.
-// 05-14-09 AWL 5.0-c030 Improve the call tracing mechanism.
-// 05-12-09 AWL 5.0-c029 Finish deprecated function removal.
-// 02-17-09 FNO 5.0-c010 [1647989] "type-patch.diff" replacing long/int with safer XMP_ type counterparts.
-// 02-16-09 FNO 5.0-c009 [2279004] Client Glue: fixing pragma/warning (disable: 4127) needed in order to link.
-// 02-16-09 FNO 5.0-c008 [1647989] Adding 3rd patch by H. Figuiere: adding delete-localized-text function.
-// 02-04-09 FNO 5.0-c006 Make XMP_TypeCheck error messages more specific.
-//
-// 02-28-08 AWL 4.2-c046 Add SXMPMeta::Erase.
-// 08-27-07 AWL 4.2-c020 Add Sort, change the Dump* routines to hexify non-ASCII characters.
-// 08-24-07 AWL 4.2-c019 Remove support for ancient CXMP_* init/term routines and non-public (AXE) expat.
-//
-// 11-17-06 AWL 4.1-c026 [1424757] Fix the client glue for the parsing constructor to clean up after an exception.
-// 10-12-06 AWL 4.1-c021 [1235816] Remove the new/delete overrides from static builds.
-//
-// 04-14-06 AWL 4.0-c003 Undo the previous edits. There seems to be no way on the UNIX platforms to
-//				determine the endianness safely. There are no standard macros, we can't force it on
-//				the client's build scripts.
-// 04-14-06 AWL 4.0-c002 Add XMP_NativeBigEndian macro to XMP_Environment.h, verify the setting at
-//				init time in both the client and DLL. Verify that this matches the expat_config.h
-//				settings. Change UnicodeConversions to use the macro.
-// 03-24-06 AWL 4.0 Adapt for move to ham-perforce, integrate XMPFiles, bump version to 4.
-//
-// 07-18-05 AWL 3.3-002 Add GetMemProcs so that DocMetaLib can use the same ones as XMP.
-//
-// 05-16-05 AWL 3.3-100 Complete the deBIBification, integrate the internal and SDK source.
-// 04-14-05 AWL 3.2-018 Move the padding param, add overloads to simplify use of SerializeToBuffer.
-// 03-22-05 AWL [1160537] Fix GetObjectName to tolerate null output pointer. Client side only.
-// 02-11-05 AWL 3.2-002 Add client reference counting.
-// 01-28-05 AWL Remove BIB.
-//
-// 10-20-04 AWL 3.1.1-085 [1084185] Fix XMP_InternalRef to not depend on BIBContainerBase layout.
-// 02-14-04 AWL Remove all default parameters from the CXMP* classes.
-// 01-29-04 AWL Add overloads for SetProperty and friends. Add AppendArrayItem. Remove BIBStream
-//				constructor and functions ParseFromStream and SerailizeToStream.
-// 01-17-04 AWL Move into new Perforce depot, cosmetic cleanup.
-// 04-18-03 AWL Remove formsMatch parameter from RegisterAlias.
-// 03-05-03 AWL Add implementation guidelines.
-// 10-29-02 AWL Update for latest CXMPMeta.hpp revisions.
-// 09-12-02 AWL Started first draft.
-//
-// =================================================================================================
-#endif // AdobePrivate
-
 //	================================================================================================
 /// \file TXMPMeta.incl_cpp
 /// \brief The implementation of the TXMPMeta template class.
@@ -94,10 +20,9 @@
 #if AdobePrivate
 	#include "XMPCore/XMPCoreDefines.h"
 
-	#if ENABLE_NEW_DOM_MODEL
-		#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
-		#include "XMPCommon/Utilities/TSmartPointers.h"
-		namespace NS_XMPCORE {};
+	#if ENABLE_CPP_DOM_MODEL
+		#include "XMPCore/Interfaces/IMetadata.h"
+		#include "XMPCore/Interfaces/ICoreObjectFactory.h"
 	#endif
 #endif
 
@@ -203,7 +128,7 @@ Initialize()
 	WrapCheckBool ( ok, zXMPMeta_Initialize_1() );
 
 	#if AdobePrivate
-		#if ENABLE_NEW_DOM_MODEL
+		#if ENABLE_CPP_DOM_MODEL
 			NS_XMPCORE::IXMPCoreObjectFactory_v1::CreateInstance();
 		#endif
 	#endif
@@ -250,8 +175,8 @@ Initialize ( XMP_AllocateProc AllocateProc /* = 0 */,
 	WrapCheckBool ( ok, zXMPMeta_Initialize_1 ( AllocateProc, DeleteProc ) );
 
 	#if AdobePrivate
-		#if ENABLE_NEW_DOM_MODEL
-			NS_XMPCORE::IXMPCoreObjectFactory_v1::CreateInstance();
+		#if ENABLE_CPP_DOM_MODEL
+			AdobeXMPCore::ICoreObjectFactory::SetupCoreObjectFactory();
 		#endif
 	#endif
 
@@ -266,8 +191,8 @@ XMP_MethodIntro(TXMPMeta,void)::
 Terminate()
 {
 	#if AdobePrivate
-		#if ENABLE_NEW_DOM_MODEL
-			NS_XMPCORE::IXMPCoreObjectFactory_v1::DestroyInstance();
+		#if ENABLE_CPP_DOM_MODEL
+			AdobeXMPCore::ICoreObjectFactory::DestroyCoreObjectFactory();
 		#endif
 	#endif
 
@@ -405,7 +330,7 @@ GetMemProcs ( XMP_AllocateProc * AllocateProc,
 {
 	WrapCheckVoid ( zXMPMeta_GetMemProcs_1 ( AllocateProc, DeleteProc ) );
 }
-#if ENABLE_NEW_DOM_MODEL
+#if ENABLE_CPP_DOM_MODEL
 XMP_MethodIntro(TXMPMeta, void)::
 Use_CPP_DOM_APIs( XMP_Bool useNewCoreAPIs )
 {
@@ -505,17 +430,17 @@ RegisterPropertyTraits ( XMP_StringPtr  schemaNS,
 	WrapCheckVoid ( zXMPMeta_RegisterPropertyTraits_1 ( schemaNS, propName, options ) );
 }
 
-#if ENABLE_NEW_DOM_MODEL
-XMP_MethodIntro(TXMPMeta,NS_XMPCORE::spIXMPMetadata)::
-GetIXMPMetadata()
+#if ENABLE_CPP_DOM_MODEL
+XMP_MethodIntro(TXMPMeta,AdobeXMPCore::spIMetadata)::
+GetIMetadata()
 {
 	WrapCheckNewMetadata( result, zXMPMeta_GetIXMPMetadata_1() );
 	if ( result ) {
-		NS_XMPCORE::pIXMPMetadata ptr = static_cast< NS_XMPCORE::pIXMPMetadata >( result );
-		NS_XMPCORE::spIXMPMetadata sp = NS_XMPCOMMON::MakeSharedPointer< NS_XMPCORE::IXMPMetadata >( ptr );
+		AdobeXMPCore::pIMetadata_base ptr = static_cast< AdobeXMPCore::pIMetadata_base >( result );
+		AdobeXMPCore::spIMetadata sp = AdobeXMPCore::IMetadata::MakeShared( ptr );
 		return sp;
 	}
-	return NS_XMPCORE::spIXMPMetadata();
+	return AdobeXMPCore::spIMetadata();
 }
 #endif
 #endif

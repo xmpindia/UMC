@@ -15,13 +15,13 @@
 #include "baseTypes/RationalType.h"
 #include "baseTypes/TimeCode.h"
 
-#include "XMPCore/Interfaces/IXMPStructureNode.h"
-#include "XMPCore/Interfaces/IXMPSimpleNode.h"
-#include "XMPCore/Interfaces/IXMPCoreObjectFactory.h"
+#include "XMPCore/Interfaces/IStructureNode.h"
+#include "XMPCore/Interfaces/ISimpleNode.h"
+#include "XMPCore/Interfaces/ICoreObjectFactory.h"
 
 namespace INT_UMC {
 	using namespace UMC;
-	using namespace NS_XMPCORE;
+	using namespace AdobeXMPCore;
 
 	// Pair for namespace and property name
 	typedef std::pair< const char *, const char * >				NamespacePropertyNamePair;
@@ -62,12 +62,12 @@ namespace INT_UMC {
 
 	void AddOrUpdateDataToXMPDOM( const std::string & stringValue,
 		const NamespacePropertyNamePair & namespacePropertyNamePair,
-		const spIXMPStructureNode & parentNode );
+		const spIStructureNode & parentNode );
 	
 	template< typename dataType >
 	void AddOrUpdateDataToXMPDOM( const dataType & dataValue,
 		const NamespacePropertyNamePair & namespacePropertyNamePair,
-		const spIXMPStructureNode & parentNode,
+		const spIStructureNode & parentNode,
 		bool (*ignore)( const dataType & ) = NULL )
 	{
 		if ( ignore != NULL ) {
@@ -78,7 +78,7 @@ namespace INT_UMC {
 		AddOrUpdateDataToXMPDOM( temp, namespacePropertyNamePair, parentNode );
 	}
 
-	void AddOrUpdateDataToXMPDOM( const TimeCode & timeCodeValue, const spIXMPStructureNode & parentNode );
+	void AddOrUpdateDataToXMPDOM( const TimeCode & timeCodeValue, const spIStructureNode & parentNode );
 
 	bool IgnoreEditUnitInCount( const EditUnitInCount & value );
 	bool IgnoreEditUnitDuration( const EditUnitDuration & value );
@@ -89,11 +89,11 @@ namespace INT_UMC {
 	Signed64RationalType stos64rt( const std::string & strValue );
 
 	bool UpdateDataFromXMPDOM( std::string & dataValue, const NamespacePropertyNamePair & pair,
-		const spIXMPStructureNode & parentNode, const std::string & resetValue );
+		const spIStructureNode & parentNode, const std::string & resetValue );
 
 	template< typename dataType >
 	bool UpdateDataFromXMPDOM( dataType & dataValue, const NamespacePropertyNamePair & pair,
-		const spIXMPStructureNode & parentNode, dataType( *ConvertFromString ) ( const std::string & ),
+		const spIStructureNode & parentNode, dataType( *ConvertFromString ) ( const std::string & ),
 		const dataType * resetValue = NULL )
 	{
 		std::string strValue;
@@ -109,13 +109,13 @@ namespace INT_UMC {
 
 	}
 
-	bool UpdateDataFromXMPDOM( TimeCode & dataValue, const spIXMPStructureNode & parentNode );
+	bool UpdateDataFromXMPDOM( TimeCode & dataValue, const spIStructureNode & parentNode );
 
-	spIXMPStructureNode ParseRDF( const std::string & buffer );
+	spIStructureNode ParseRDF( const std::string & buffer );
 
-	spIXMPStructureNode TryToGetActualNode( const spIXMPStructureNode & node, const NamespacePropertyNamePair & pair );
+	spIStructureNode TryToGetActualNode( const spIStructureNode & node, const NamespacePropertyNamePair & pair );
 
-	size_t GetMatchingIndexForActualNode( const spIXMPStructureNode & node, const NamespacePropertyNamePair ** array, size_t nElement );
+	size_t GetMatchingIndexForActualNode( const spIStructureNode & node, const NamespacePropertyNamePair ** array, size_t nElement );
 
 }
 
