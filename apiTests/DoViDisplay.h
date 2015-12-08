@@ -11,7 +11,7 @@
 // =================================================================================================
 
 #include "interfaces/ICustomData.h"
-#include "interfaces/INode.h"
+#include "interfaces/IUMCNode.h"
 
 namespace DoVi {
 	using namespace UMC;
@@ -28,10 +28,10 @@ namespace DoVi {
 		double getDiagonalSize();
 		void setDiagonalSize( const double & dz );
 
-		virtual void SetParentNode( const wpINode & parentNode );
+		virtual void SetParentNode( const wpIUMCNode & parentNode );
 
-		virtual wpcINode GetParentNode() const;
-		virtual wpINode GetParentNode();
+		virtual wpcIUMCNode GetParentNode() const;
+		virtual wpIUMCNode GetParentNode();
 
 		virtual ~Display();
 
@@ -42,7 +42,7 @@ namespace DoVi {
 		std::string		_id;
 		std::string		_name;
 		double			_diagonalSize;
-		wpINode			_parent;
+		wpIUMCNode			_parent;
 	};
 }
 
