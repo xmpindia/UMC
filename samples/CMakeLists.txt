@@ -20,7 +20,7 @@ add_custom_command( TARGET CreatingAndSerializingMetadata POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION} ${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}
 )
 
-set(LIB_ADOBEXMP "AdobeXMP")
+set(LIB_ADOBEXMP "XMPCore")
 if ( UNIX AND APPLE )
 	set_target_properties( CreatingAndSerializingMetadata PROPERTIES LINK_FLAGS 
 		"-Wl,-F${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION}" )

@@ -33,7 +33,7 @@ namespace AdobeXMPCommon {
 			mRawPtr->Acquire();
 		}
 
-		~IErrorProxy() { mRawPtr->Release(); }
+		~IErrorProxy() __NOTHROW__ { mRawPtr->Release(); }
 
 		pIError APICALL GetActualIError() __NOTHROW__ { return mRawPtr; }
 

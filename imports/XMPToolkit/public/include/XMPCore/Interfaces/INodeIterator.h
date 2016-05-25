@@ -174,7 +174,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~INodeIterator_v1() {}
+		virtual ~INodeIterator_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual uint32 APICALL getNodeType( pcIError_base & error ) const __NOTHROW__ = 0;

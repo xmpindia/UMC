@@ -91,7 +91,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~ICoreConfigurationManager_v1() {}
+		virtual ~ICoreConfigurationManager_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 

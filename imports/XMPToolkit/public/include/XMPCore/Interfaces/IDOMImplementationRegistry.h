@@ -130,7 +130,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IDOMImplementationRegistry_v1() {}
+		virtual ~IDOMImplementationRegistry_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual pIDOMParser_base APICALL getParser( const char * key, pcIError_base & error ) const __NOTHROW__ = 0;

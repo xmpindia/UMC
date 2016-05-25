@@ -56,6 +56,7 @@ namespace AdobeXMPCore {
 		//! and in case of structure node qualified name of the node to be inserted determines its position.
 		//! \param[in] node Shared pointer to an object of \#AdobeXMPCore::INode containing the node to be
 		//!  appended as the last child.
+		//! \note This operation is not currently implemented for the ICompositeNode interface.
 		//! \attention Error is thrown in following cases:
 		//!		-# provided node is invalid.
 		//!		-# type of given node is not same as other child items of the array node.
@@ -70,6 +71,7 @@ namespace AdobeXMPCore {
 		//!  inserted at the specified relative path.
 		//! \param[in] path Shared pointer to a const \#AdobeXMPCore::IPath object containing the relative path.
 		//! \note All the hierarchy of nodes is created if not present.
+		//! \note This operation is not currently implemented for the ICompositeNode interface.
 		//! \attention Error is thrown in following cases:
 		//!		-# given node is invalid.
 		//!		-# type of given node is not same as other child items of the array node.
@@ -85,6 +87,7 @@ namespace AdobeXMPCore {
 		//! \param[in] node Shared pointer to an object of \#AdobeXMPCore::INode.
 		//! \param[in] path Shared pointer to a const \#AdobeXMPCore::IPath object containing the relative path.
 		//! \return a Shared pointer to the node being replaced.
+		//! \note This operation is not currently implemented for the ICompositeNode interface.
 		//! \attention Error is thrown in following cases:
 		//!		-# given node is invalid.
 		//!		-# type of given node is not same as other child items of the array node.
@@ -251,7 +254,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~ICompositeNode_v1() {}
+		virtual ~ICompositeNode_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual uint32 APICALL getNodeTypeAtPath( pcIPath_base path, pcIError_base & error ) const __NOTHROW__ = 0;
@@ -291,7 +294,7 @@ namespace AdobeXMPCore {
 
 	public:
 		ICompositeNodeProxy( pICompositeNode ptr );
-		~ICompositeNodeProxy();
+		~ICompositeNodeProxy() __NOTHROW__ ;
 
 		pICompositeNode APICALL GetActualICompositeNode() __NOTHROW__;
 		AdobeXMPCore_Int::pICompositeNode_I APICALL GetICompositeNode_I() __NOTHROW__;

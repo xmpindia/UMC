@@ -212,7 +212,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~INameSpacePrefixMap_v1() {}
+		virtual ~INameSpacePrefixMap_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		const uint32 kPrefixIsParameter = 0;

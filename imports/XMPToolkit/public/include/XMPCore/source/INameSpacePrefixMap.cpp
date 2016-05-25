@@ -25,6 +25,11 @@ namespace AdobeXMPCore {
 
 namespace AdobeXMPCore {
 
+
+	bool INameSpacePrefixMap::IsEmpty() const __NOTHROW__{
+		return this->Size() == 0;
+	}
+
 	class INameSpacePrefixMapProxy
 		: public virtual INameSpacePrefixMap
 	{
@@ -38,7 +43,7 @@ namespace AdobeXMPCore {
 			mRawPtr->Acquire();
 		}
 
-		~INameSpacePrefixMapProxy() { mRawPtr->Release(); }
+		~INameSpacePrefixMapProxy() __NOTHROW__ { mRawPtr->Release(); }
 
 		pINameSpacePrefixMap APICALL GetActualINameSpacePrefixMap() __NOTHROW__ { return mRawPtr; }
 
@@ -157,7 +162,7 @@ namespace AdobeXMPCore {
 		virtual AdobeXMPCommon_Int::pIThreadSafe_I APICALL GetIThreadSafe_I() __NOTHROW__ override {
 			return mRawPtr->GetIThreadSafe_I();
 		}
-
+		
 	};
 
 	spINameSpacePrefixMap INameSpacePrefixMap_v1::MakeShared( pINameSpacePrefixMap_base ptr ) {

@@ -104,7 +104,10 @@ namespace AdobeXMPCommon {
 		XMP_PRIVATE static uint32 GetInterfaceVersion() { return 1; }
 		//! \endcond
 
+        virtual ~IConfigurationManager_v1() __NOTHROW__ {}
+    
 	protected:
+    
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual uint32 APICALL registerMemoryAllocator( pIMemoryAllocator_base memoryAllocator, pcIError_base & error ) __NOTHROW__ = 0;
 		virtual uint32 APICALL registerErrorNotifier( pIErrorNotifier_base clientErrorNotifier, pcIError_base & error ) __NOTHROW__ = 0;
@@ -137,7 +140,7 @@ namespace AdobeXMPCommon {
 			mRawPtr->Acquire();
 		}
 
-		~IConfigurationManagerProxy() { mRawPtr->Release(); }
+		~IConfigurationManagerProxy() __NOTHROW__ { mRawPtr->Release(); }
 		pIConfigurationManager APICALL GetActualIConfigurationManager() __NOTHROW__ { return mRawPtr; }
 		AdobeXMPCommon_Int::pISharedObject_I APICALL GetISharedObject_I() __NOTHROW__ { return mRawPtr->GetISharedObject_I(); }
 

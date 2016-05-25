@@ -121,7 +121,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IMetadata_v1() {}
+		virtual ~IMetadata_v1() __NOTHROW__ {}
 
 		//! Hiding some functions from derived classes
 		using INode_v1::GetParent;

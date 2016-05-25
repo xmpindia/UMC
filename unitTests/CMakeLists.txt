@@ -59,7 +59,7 @@ link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CO
 add_executable( UnitTests ${UMC_FILES} ${TEST_FILES} )
 add_dependencies( UnitTests CPPUnitStatic UMC)
 
-set(LIB_ADOBEXMP "AdobeXMP")
+set(LIB_ADOBEXMP "XMPCore")
 
 target_link_libraries( UnitTests
 	${PROJECT_BINARY_DIR}/../imports/cppunit/${BUILD_CONFIGURATION}/${STATIC_LIB_PREFIX}CPPUnitStatic.${STATIC_LIB_EXTENSION}

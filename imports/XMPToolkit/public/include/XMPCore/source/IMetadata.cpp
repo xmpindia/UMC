@@ -44,7 +44,7 @@ namespace AdobeXMPCore {
 			, ICompositeNodeProxy( ptr )
 			, INodeProxy( ptr ) {}
 
-		~IMetadataProxy() {}
+		~IMetadataProxy() __NOTHROW__ {}
 
 		pIMetadata APICALL GetActualIMetadata() __NOTHROW__ { return mRawPtr; }
 
