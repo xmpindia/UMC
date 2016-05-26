@@ -1,0 +1,86 @@
+cmake_minimum_required (VERSION 2.8.6)
+
+set(SAMPLE_NAME "AddingSources")
+
+project(${SAMPLE_NAME})
+
+if(NOT DEFINED COMMON_BUILD_SHARED_DIR)
+	set(COMMON_BUILD_SHARED_DIR "${PROJECT_SOURCE_DIR}/../build")
+endif()
+
+set(XMPTOOLKIT_INCLUDE "${PROJECT_SOURCE_DIR}/../../imports/XMPToolkit/public/include")
+set(UMC_PUBLIC_DIR "${PROJECT_SOURCE_DIR}/../../public")
+set(UMC_PUBLIC_INCLUDE_DIR "${UMC_PUBLIC_DIR}/include")
+set(UMC_PUBLIC_SOURCE_DIR "${UMC_PUBLIC_DIR}/source")
+set(SAMPLE_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}") 
+
+
+MESSAGE( STATUS " UMC_PUBLIC_DIR: " ${UMC_PUBLIC_DIR} )
+MESSAGE( STATUS " UMC_PUBLIC_DIR: " ${SAMPLE_SOURCES_DIR} )
+
+# include public header files and source files.
+file(GLOB_RECURSE PUBLIC_UMC_HEADERS ${UMC_PUBLIC_INCLUDE_DIR}/*.h)
+source_group("UMC\\Public\\Headers" FILES ${PUBLIC_UMC_HEADERS})
+file(GLOB_RECURSE PUBLIC_UMC_SOURCES ${UMC_PUBLIC_SOURCE_DIR}/*.cpp)
+source_group("UMC\\Public\\Sources" FILES ${PUBLIC_UMC_SOURCES})
+
+file(GLOB_RECURSE SAMPLE_HEADERS ${SAMPLE_SOURCES_DIR}/*.h)
+source_group("Sample\\Headers" FILES ${SAMPLE_HEADERS})
+file(GLOB_RECURSE SAMPLE_SOURCES ${SAMPLE_SOURCES_DIR}/*.cpp)
+source_group("Sample\\Sources" FILES ${SAMPLE_SOURCES})
+
+list(APPEND UMC_FILES 
+	${PUBLIC_UMC_HEADERS}
+	${PUBLIC_UMC_SOURCES}
+	${SAMPLE_HEADERS}
+	${SAMPLE_SOURCES}
+)
+
+MESSAGE( STATUS " PRoject source dir: " ${PROJECT_SOURCE_DIR} )
+
+include(${COMMON_BUILD_SHARED_DIR}/SharedConfig.cmake)
+include(${PROJECT_SOURCE_DIR}/../../CommonDefines.cmake)
+
+include_directories(${XMPTOOLKIT_INCLUDE})
+include_directories(${UMC_PUBLIC_INCLUDE_DIR})
+include_directories(${UMC_PUBLIC_SOURCE_DIR})
+
+MESSAGE( STATUS " OS FOLDER NAME: " ${OS_FOLDER_NAME} )
+
+link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION})
+
+
+
+add_executable( ${SAMPLE_NAME} ${PUBLIC_XMPTOOLKIT_FILES} ${PUBLIC_UMC_HEADERS} ${PUBLIC_UMC_SOURCES} ${SAMPLE_HEADERS} ${SAMPLE_SOURCES} )
+add_dependencies( ${SAMPLE_NAME} UMC)
+
+
+
+MESSAGE( STATUS " build directory for toolkit" ${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION} )
+MESSAGE( STATUS " PROJECT BINARY DIR: " ${PROJECT_BINARY_DIR} )
+
+add_custom_command( TARGET ${SAMPLE_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION} ${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}
+)
+
+MESSAGE( STATUS " PROJECT BINARY DIR: " ${PROJECT_BINARY_DIR} )
+
+MESSAGE( STATUS " UMC BINARY DIR: " ${PROJECT_BINARY_DIR}/../../private/ )
+
+target_link_libraries( ${SAMPLE_NAME}
+	${PROJECT_BINARY_DIR}/../../../private/${BUILD_CONFIGURATION}/${STATIC_LIB_PREFIX}UMC.${STATIC_LIB_EXTENSION}
+)
+
+set(LIB_ADOBEXMP "AdobeXMP")
+if ( UNIX AND APPLE )
+	set_target_properties( ${SAMPLE_NAME} PROPERTIES LINK_FLAGS 
+		"-Wl,-F${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION}" )
+	target_link_libraries( ${SAMPLE_NAME} "-framework ${LIB_ADOBEXMP}" )
+else()
+	target_link_libraries( ${SAMPLE_NAME} ${LIB_ADOBEXMP} )
+endif()
+
+if (UNIX OR APPLE)
+	set_target_properties(${SAMPLE_NAME} PROPERTIES
+		RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
+endif()
