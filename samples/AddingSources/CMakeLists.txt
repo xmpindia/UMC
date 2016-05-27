@@ -52,7 +52,7 @@ link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CO
 
 
 add_executable( ${SAMPLE_NAME} ${PUBLIC_XMPTOOLKIT_FILES} ${PUBLIC_UMC_HEADERS} ${PUBLIC_UMC_SOURCES} ${SAMPLE_HEADERS} ${SAMPLE_SOURCES} )
-add_dependencies( ${SAMPLE_NAME} UMC)
+
 
 
 
