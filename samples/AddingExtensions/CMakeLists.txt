@@ -36,7 +36,7 @@ list(APPEND UMC_FILES
 	${SAMPLE_SOURCES}
 )
 
-MESSAGE( STATUS " PRoject source dir: " ${PROJECT_SOURCE_DIR} )
+MESSAGE( STATUS " Project source dir: " ${PROJECT_SOURCE_DIR} )
 
 include(${COMMON_BUILD_SHARED_DIR}/SharedConfig.cmake)
 include(${PROJECT_SOURCE_DIR}/../../CommonDefines.cmake)
@@ -52,9 +52,6 @@ link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CO
 
 
 add_executable( ${SAMPLE_NAME} ${PUBLIC_XMPTOOLKIT_FILES} ${PUBLIC_UMC_HEADERS} ${PUBLIC_UMC_SOURCES} ${SAMPLE_HEADERS} ${SAMPLE_SOURCES} )
-add_dependencies( ${SAMPLE_NAME} UMC)
-
-
 
 MESSAGE( STATUS " build directory for toolkit" ${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION} )
 MESSAGE( STATUS " PROJECT BINARY DIR: " ${PROJECT_BINARY_DIR} )
