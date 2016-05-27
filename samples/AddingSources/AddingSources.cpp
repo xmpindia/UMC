@@ -1,19 +1,5 @@
 
 #include <string>
-#define ENABLE_XMP_CPP_INTERFACE 1
-#include "XMPCommon/XMPCommonDefines.h"
-#define TXMP_STRING_TYPE std::string
-#include "XMP.incl_cpp"
-
-#include "XMPCore/Interfaces/IMetadata.h"
-#include "XMPCore/Interfaces/IArrayNode.h"
-#include "XMPCore/Interfaces/ISimpleNode.h"
-
-#include "XMPCore/Interfaces/IDOMImplementationRegistry.h"
-#include "XMPCore/Interfaces/IDOMSerializer.h"
-#include "XMPCommon/Interfaces/IUTF8String.h"
-#include "XMPCore/Interfaces/ICoreObjectFactory.h"
-
 #include <iostream>
 #include <fstream>
 #include "interfaces/IUMC.h"
@@ -23,8 +9,7 @@
 #include "interfaces/IImageSource.h"
 #include "interfaces/IVideoFrameSource.h"
 
-using namespace AdobeXMPCore;
-using namespace AdobeXMPCommon;
+
 
 std::string defaultIndent = "\t\t\t\t\t";
 
