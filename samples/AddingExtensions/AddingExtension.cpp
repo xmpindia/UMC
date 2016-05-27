@@ -9,10 +9,15 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 #include "interfaces/IUMC.h"
 #include "interfaces/ITrack.h"
 #include "DisplayExtensionHandler.h"
+
+std::string defaultIndent = "\t\t\t\t\t";
+int maxFieldWidth = 30;
+
 
 
 /*Printing values of the Display Extension properties in a human readable format*/
@@ -20,9 +25,10 @@ void printDisplayExtension( std::shared_ptr< NS_DisplayExtension::Display> & dis
 
 	using namespace std;
 
-	cout << "Display Name" << displayObj->getName() << endl;
-	cout << "Display Id" << displayObj->getID() << endl;
-	cout << "Display Diagonal Size" << displayObj->getDiagonalSize() << endl;
+	cout << setw(maxFieldWidth) << "Display Name" <<  defaultIndent << setw(maxFieldWidth) << displayObj->getName()  << endl;
+	cout << setw(maxFieldWidth) << "Display Id" <<  defaultIndent<< setw(maxFieldWidth) << displayObj->getID() << defaultIndent << endl;
+	cout << setw(maxFieldWidth) << "Display Diagonal Size" <<  defaultIndent << setw(maxFieldWidth) << displayObj->getDiagonalSize() << defaultIndent << endl;
+	cout << endl;
 }
 
 int main() {
@@ -56,6 +62,8 @@ int main() {
 	/*Add the custom data to the UMC object*/
 	umcObj->SetCustomData( Display::GetNameSpace(), Display::GetPropertyName(), display);
 
+	std::cout << defaultIndent << " Printing the contents of the display extension" << std::endl<< std::endl;;
+
 	/*Print the contents of the display extension*/
 	printDisplayExtension(display);
 
@@ -78,8 +86,11 @@ int main() {
 	/*Getting the display extension from the parsed UMC object*/
 	std::shared_ptr< Display >parsedDisplay = std::dynamic_pointer_cast< Display >( parsedUMCObject->GetCustomData(Display::GetNameSpace(), Display::GetPropertyName()));
 	
+	std::cout << defaultIndent << " Printing the contents of the parsed display extension" << std::endl << std::endl;
+
 	/*Displaying the content of the parsed display extension*/
 	printDisplayExtension(parsedDisplay);
+
 	/*
 	There must be a matching UMC_Terminate() call for each UMC_Initialize() call
 	*/
