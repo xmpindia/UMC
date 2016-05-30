@@ -64,8 +64,6 @@ void displayVideoSource(const  UMC::spIVideoSource & videoSource, std::string be
 	displayEditRate(videoSource->GetAudioEditRate());
 	cout << endl;
 	cout << endl;
-
-
 }
 
 void displayAudioSource(const  UMC::spIAudioSource & audioSource, std::string beginIndent = "\t\t\t\t\t") {
@@ -101,8 +99,6 @@ void displayAudioSource(const  UMC::spIAudioSource & audioSource, std::string be
 	displayEditRate(audioSource->GetAudioEditRate());
 	cout << endl;
 	cout << endl;
-
-
 }
 
 
@@ -198,8 +194,7 @@ int main() {
 
 	std::cout << "Number of video sources present is " << umcObject->GetAllVideoSources().size() << std::endl;
 	
-	// add 5 audio source( 2 filled, 1 blank )
-
+	/*Adding an audio source to the UMC object*/
 	auto audioSourceOne = umcObject->AddAudioSource();
 
 	std::cout << "Adding the first audio source to the umc object" << std::endl;
