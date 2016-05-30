@@ -36,4 +36,5 @@ link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CO
 
 add_subdirectory(${PROJECT_ROOT}/AddingExtensions ${SAMPLES_BUILD_DIR}/AddingExtensions/build${POSTFIX})
 add_subdirectory(${PROJECT_ROOT}/AddingSources ${SAMPLES_BUILD_DIR}/AddingSources/build${POSTFIX})
+add_subdirectory(${PROJECT_ROOT}/AddingOutputs ${SAMPLES_BUILD_DIR}/AddingOutputs/build${POSTFIX})
 
