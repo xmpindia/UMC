@@ -42,7 +42,7 @@ namespace AdobeXMPCore {
 			, ICompositeNodeProxy( ptr )
 			, INodeProxy( ptr ) {}
 
-		~IArrayNodeProxy() {}
+		~IArrayNodeProxy() __NOTHROW__ {}
 
 		pIArrayNode APICALL GetActualIArrayNode() __NOTHROW__ { return mRawPtr; }
 

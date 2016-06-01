@@ -10,23 +10,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  AWL Alan Lillich
-//
-// mm-dd-yy who Description of changes, most recent first.
-//
-// 08-27-10 AWL 5.2-f009 Add comments to Host_IO.hpp, fix semantic irregularities in the code.
-// 08-19-10 AWL 5.2-f006 Move the seek mode constants to XMP_Const.
-// 08-17-10 AWL 5.2-f003 Integrate I/O revamp to main.
-//
-// =================================================================================================
-#endif	// AdobePrivate
-
 #include "XMP_Environment.h"	// ! XMP_Environment.h must be the first included header.
 
 #include "XMP_Const.h"

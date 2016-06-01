@@ -38,11 +38,13 @@ namespace AdobeXMPCore {
 		virtual spcINameSpacePrefixMap APICALL RegisterNameSpacePrefixMap( const spcINameSpacePrefixMap & map ) = 0;
 
 		//!
-		//! @brief Serializes the IPath object to a utf8 string representation.
+		//! @brief Serializes the IPath object to a utf8 string representation. This will produce either a long form of the path using
+		//! the full namespace strings or short form of the path using the prefix for the namespace.
 		//! \param[in] map A shared pointer to a const \#AdobeXMPCore::INameSpacePrefixMap object which can contain the
 		//! mapping for nameSpaces to prefixes. They will take precedence over the map registered with the object.
 		//! \return A shard pointer to \#AdobeXMPCommon::IUTF8String object containing serialized form of path.
 		//! \note In case map is not a valid shared pointer all the mappings will be picked from the map registered with the object.
+		//! \If neither a map is registered nor it is provided in the arguments then it will serialize to long form of the path.
 		//! \attention Error will be thrown in case
 		//!		- no prefix exists for a namespace used in the path.
 		//!
@@ -175,6 +177,7 @@ namespace AdobeXMPCore {
 		//!  mapping from nameSpaces to prefixes.
 		//! \return A shared pointer to a \#AdobeXMPCore::IPath object.
 		//! \note In case the serializedPath is NULL or the contents are empty then it will result in an empty path.
+		//! \note This operation is currently not implemented for the IPath interface.
 		//! \attention Error is thrown in case
 		//!		- no mapping exists for a prefix to name space.
 		//!		- path contains invalid data.
@@ -186,7 +189,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IPath_v1() {}
+		virtual ~IPath_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual pcINameSpacePrefixMap_base APICALL registerNameSpacePrefixMap( pcINameSpacePrefixMap_base map, pcIError_base & error ) __NOTHROW__ = 0;

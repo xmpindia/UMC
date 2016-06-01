@@ -10,57 +10,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//	AWL Alan Lillich
-//	ADC Amandeep Chawla
-//	IJS Inder Jeet Singh
-//
-// mm-dd-yy who Description of changes, most recent on top
-//
-// 05-13-13 ADC 5.6-f060 Removing usage of bool in APIs exposed at DLL boundaries.
-// 01-30-13 IJS 5.6-f029 Removed LocateMetadataFiles API from XMPFiles
-// 01-07-13 IJS 5.6-f018 Changed name of API IsWritable to IsMetadataWritable.
-//                       Added root Path folder as associated Resource for folder based Formats.
-// 12-21-12 IJS 5.6-f008 Added GetAssociatedResources and IsWritable APIs 
-//
-// 09-28-12 AWL 5.5-f039 Add LocateMetadataFiles.
-// 09-28-12 ADC 5.5-f038 Implement public API and glue layer for XMPFiles error notifications.
-// 06-22-12 AWL 5.5-f019 Add file update progress tracking to the MPEG-4 handler.
-// 06-20-12 AWL 5.5-f018 Add outer layers for XMPFiles progress notifications, no handlers use it yet.
-//
-// 10-27-11 AWL 5.4-f030 [3007461] Improve performance of GetFileModDate.
-// 09-23-11 AWL 5.4-f012 Add GetFileModDate.
-//
-// 08-17-10 AWL 5.3-f001 Integrate I/O revamp to main.
-//
-// 05-21-09 AWL 5.0-f040 Revamp glue again to pass SetClientString with each function.
-// 05-19-09 AWL 5.0-f039 First part of threading improvements, revamp the client glue.
-//
-// 01-28-08 AWL 4.2-f062 Add public CheckFileFormat and CheckPackageFormat functions.
-// 08-24-07 AWL 4.2-c019 Remove support for ancient CXMP_* init/term routines and non-public (AXE) expat.
-// 01-11-07 AWL 4.2-f007 [1454747] Change QuickTime init/term calls to handle main and background thread issues.
-//
-// 04-07-06 AWL 4.0-f002 Add XMPFiles::GetThumbnail. Change XMPFiles::OpenFile to close the disk file
-//				early for read-only access. Change XMPFileHandler::ExtractXMP to CacheFileData.
-// 03-24-06 AWL 4.0 Adapt for move to ham-perforce, integrate XMPFiles, bump version to 4.
-//
-// 07-21-05 AWL 1.3-001 Remove BIB, same as XMP. Create Xcode project. Bump version to 1.3.
-//
-// 10-07-04 AWL 1.0-008 Add missing SetAbortProc in WXMPFiles.cpp and export lists.
-// 09-23-04 AWL 1.0-007 Use the XMP toolkit's build number and timestamp. Add current position
-//				result to LFA_Seek. Add SetAbortProc and abort checking.
-// 08-20-04 AWL Add handlerFlags output to GetFileInfo.
-// 08-13-04 AWL Checkpoint, almost full implementation, compiles.
-// 06-25-04 AWL First draft.
-//
-// =================================================================================================
-#endif // AdobePrivate
-
 #include "client-glue/WXMP_Common.hpp"
 
 #if XMP_StaticBuild	// ! Client XMP_IO objects can only be used in static builds.

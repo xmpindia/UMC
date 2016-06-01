@@ -43,7 +43,7 @@ namespace AdobeXMPCore {
 			mRawPtr->Acquire();
 		}
 
-		~IDOMParserProxy() { mRawPtr->Release(); }
+		~IDOMParserProxy() __NOTHROW__ { mRawPtr->Release(); }
 
 		pIDOMParser APICALL GetActualIDOMParser() __NOTHROW__ { return mRawPtr; }
 

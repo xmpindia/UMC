@@ -21,27 +21,9 @@
 // All Platform Settings
 // ===========================
 #include "XMP_Environment.h"
-/*
-ENABLE_XMP_CPP_INTERFACE is used for checking availability of C++11 on non-Windows platforms. 
-ENABLE_XMP_CPP_INTERFACE is set to 0 in case C++11 is not available.
-On Windows,ENABLE_XMP_CPP_INTERFACE is set to 1 by default.
-Clients should set ENABLE_XMP_CPP_INTERFACE to 0, if they don't want to use the new XMPCore or XMPExtensions libraries.
-If ENABLE_XMP_CPP_INTERFACE is 1, some clients might have to include additional public source files in order to compile their projects.
-*/
-#ifndef ENABLE_XMP_CPP_INTERFACE
-	#if !XMP_WinBuild
-		#include <ciso646>
-		#if __cplusplus < 201103
-			#define ENABLE_XMP_CPP_INTERFACE 0
-		#else
-			#define ENABLE_XMP_CPP_INTERFACE 1
-		#endif
-	#else
-		#define ENABLE_XMP_CPP_INTERFACE 1
-	#endif
+#if !XMP_WinBuild
+    #include <ciso646>
 #endif
-
-#if ENABLE_XMP_CPP_INTERFACE
 	// =================================================================================================
 	// Macintosh Specific Settings
 	// ===========================
@@ -72,8 +54,6 @@ If ENABLE_XMP_CPP_INTERFACE is 1, some clients might have to include additional 
 			#define SUPPORT_SHARED_POINTERS_IN_TR1 1
 			#define SUPPORT_SHARED_POINTERS_IN_STD 0
 		#endif
-		#define SUPPORT_SHARED_POINTERS_IN_TR1 0
-		#define SUPPORT_SHARED_POINTERS_IN_STD 1
 		#define SUPPORT_SHARED_POINTERS_WITH_ALLOCATORS 0
 		#define BAD_EXCEPTION_SUPPORT_STRINGS 0
 		#define VECTOR_SUPPORT_CONST_ITERATOR_FUNCTIONS 0
@@ -182,7 +162,5 @@ If ENABLE_XMP_CPP_INTERFACE is 1, some clients might have to include additional 
 		static const uint64 kIErrorNotifierID			( 0x6e4572724e6f7466 /* nErrNotf */ );
 		static const uint64 kIConfigurationManagerID	( 0x6e436f6e664d6772 /* nConfMgr */ );
 	}  // namespace AdobeXMPCommon
-
-#endif  // ENABLE_XMP_CPP_INTERFACE
 
 #endif  // __XMPCommonDefines_h__

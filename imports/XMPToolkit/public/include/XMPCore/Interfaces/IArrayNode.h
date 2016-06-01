@@ -281,7 +281,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IArrayNode_v1() {}
+		virtual ~IArrayNode_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual uint32 APICALL getArrayForm( pcIError_base & error ) const __NOTHROW__ = 0;

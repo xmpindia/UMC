@@ -234,7 +234,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~ICoreObjectFactory_v1() {}
+		virtual ~ICoreObjectFactory_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 

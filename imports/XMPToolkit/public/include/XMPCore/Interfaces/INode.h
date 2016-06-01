@@ -312,11 +312,15 @@ namespace AdobeXMPCore {
 		//!
 		//! @brief Returns the status about any change done to the node or its children or qualifiers.
 		//! returns a bool value indicating whether some changes have been performed on the node or its children or qualifiers.
+		//! for a simple node, true will be returned in scenarios like when the node's value or qualifiers are modified.
+		//! for an array node or a structure node, true will be returned in scenarios like when the node's children or the node's qualifiers are modified.
 		//!
 		virtual bool APICALL HasChanged() const = 0;
 
 		//!
 		//! @brief Acknowledges that changes for the node and its children and qualifiers have been taken care of.
+		//! for a simple node, changes that will be acknowledged in scenarios like when the node's value or node's qualifiers were modified.
+		//! for an array node or a structure node, changes will be acknowledged in scenarios like when the node's children were or the node's qualifiers were modified.
 		//!
 		virtual void APICALL AcknowledgeChanges() const __NOTHROW__ = 0;
 
@@ -330,9 +334,7 @@ namespace AdobeXMPCore {
 		//!
 		//! @{
 		//! @brief Converts Node to a simple node, if possible.
-		//! \return Shared pointer to const or non const ISimpleNode object.
-		//! \attention Error is thrown in case
-		//!		- actual node is not a simple node.
+		//! \return Shared pointer to const or non const ISimpleNode object. An empty simple node is thrown in case actual node is not a simple node.
 		//!
 		XMP_PRIVATE spcISimpleNode ConvertToSimpleNode() const {
 			return const_cast< INode_v1 * >( this )->ConvertToSimpleNode();
@@ -343,9 +345,7 @@ namespace AdobeXMPCore {
 		//!
 		//! @{
 		//! @brief Converts Node to a structure node type, if possible.
-		//! \return Shared pointer to const or non const IStructureNode object.
-		//! \attention Error is thrown in case
-		//!		- actual node is not a structure node.
+		//! \return Shared pointer to const or non const IStructureNode object. An empty structure node is thrown in case actual node is not a structure node.
 		//!
 		XMP_PRIVATE spcIStructureNode ConvertToStructureNode() const {
 			return const_cast< INode_v1 * >( this )->ConvertToStructureNode();
@@ -356,9 +356,7 @@ namespace AdobeXMPCore {
 		//!
 		//! @{
 		//! @brief Converts Node to an array node type, if possible.
-		//! \return Shared pointer to const or non const IArrayNode object.
-		//! \attention Error is thrown in case
-		//!		- actual node is not an array node.
+		//! \return Shared pointer to const or non const IArrayNode object. An empty array node is thrown in case actual node is not an array node.
 		//!
 		XMP_PRIVATE spcIArrayNode ConvertToArrayNode() const {
 			return const_cast< INode_v1 * >( this )->ConvertToArrayNode();
@@ -369,9 +367,7 @@ namespace AdobeXMPCore {
 		//!
 		//! @{
 		//! @brief Converts Node to a metadata node type, if possible.
-		//! \return Shared pointer to const or non const IMetadata object.
-		//! \attention Error is thrown in case
-		//!		- actual node is not a metadata node.
+		//! \return Shared pointer to const or non const IMetadata object. An empty metadata node is thrown in case actual node is not a metadata node.
 		//!
 		XMP_PRIVATE spcIMetadata ConvertToMetadata() const {
 			return const_cast< INode_v1 * >( this )->ConvertToMetadata();
@@ -448,7 +444,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~INode_v1() {}
+		virtual ~INode_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual uint32 APICALL getParentNodeType( pcIError_base & error ) const __NOTHROW__ = 0;
@@ -502,7 +498,7 @@ namespace AdobeXMPCore {
 
 		public:
 			INodeProxy( pINode ptr );
-			~INodeProxy();
+			~INodeProxy() __NOTHROW__ ;
 
 			pINode APICALL GetActualINode() __NOTHROW__;
 			void APICALL Acquire() const __NOTHROW__;

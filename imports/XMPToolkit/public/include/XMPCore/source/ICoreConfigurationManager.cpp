@@ -40,7 +40,7 @@ namespace AdobeXMPCore {
 			: IConfigurationManagerProxy( ptr )
 			, mRawPtr( ptr ) {}
 
-		~ICoreConfigurationManagerProxy() {}
+		~ICoreConfigurationManagerProxy() __NOTHROW__ {}
 
 		pICoreConfigurationManager APICALL GetActualICoreConfigurationManager() __NOTHROW__ { return mRawPtr; }
 

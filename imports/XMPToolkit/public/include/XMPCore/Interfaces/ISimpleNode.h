@@ -130,7 +130,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~ISimpleNode_v1() {}
+		virtual ~ISimpleNode_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual pcIUTF8String_base APICALL getValue( pcIError_base & error ) const __NOTHROW__ = 0;

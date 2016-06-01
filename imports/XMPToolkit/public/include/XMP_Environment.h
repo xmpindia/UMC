@@ -18,49 +18,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-//  AWL Alan Lillich
-//  JKR Jens Krueger
-//  IJS Inder Jeet Singh
-//  HK  Honey Kansal
-//  ADC	Amandeep Chawla
-//
-// mm/dd/yy who Description of changes, most recent on top.
-//
-// 02-24-14 ADC 5.6-c001 XMPCommon Framework and XMPCore new APIs ported to Mac Environment.
-//
-// 01-03-14 HK  5.6-f087 [3688857] Fixing data alignment issues on ARM processor.
-//
-// 12-19-12 IJS 5.6-f005 Making the importToXMP and exportFromXMP as public Plug-in methods
-//
-// 05-18-12	JKR	5.4-c005 Add iOS targets, separate iOS specific code behind XMP_iOSBuild preprocessor define.
-//
-// 05-19-09 AWL 5.0-c031-f039 First part of threading improvements. Force full rebuilds.
-//
-// 01-23-09 AWL Add a comment just to force full client and library rebuilds for bug 2261961 changes.
-//
-// 08-24-07 AWL 4.2-c019 Remove support for ancient CXMP_* init/term routines and non-public (AXE) expat.
-//
-// 04-14-06 AWL 4.0-c003 Undo the previous edits. There seems to be no way on the UNIX platforms to
-//				determine the endianness safely. There are no standard macros, we can't force it on
-//				the client's build scripts.
-// 04-14-06 AWL 4.0-c002 Add XMP_NativeBigEndian macro to XMP_Environment.h, verify the setting at
-//				init time in both the client and DLL. Verify that this matches the expat_config.h
-//				settings. Change UnicodeConversions to use the macro.
-// 03-24-06 AWL 4.0 Adapt for move to ham-perforce, integrate XMPFiles, bump version to 4.
-//
-// 01-28-05 AWL Remove BIB.
-// 01-17-04 AWL Move into new Perforce depot, cosmetic cleanup.
-// 09-11-02 AWL Started first draft.
-//
-// =================================================================================================
-#endif // AdobePrivate
-
 // =================================================================================================
 // Determine the Platform
 // ======================
@@ -160,20 +117,6 @@
 #if XMP_DebugBuild
     #include <stdio.h>  // The assert macro needs printf.
 #endif
-
-#ifndef AdobePrivate
-	#define AdobePrivate 1
-#endif
-
-#if AdobePrivate
-    #ifdef XMP_PRESERVE_BIB_CLIENT
-        #error "Use of XMP_PRESERVE_BIB_CLIENT is no longer supported"
-    #endif
-    #ifdef UsePublicExpat
-		#error "Use of a non-public Expat (like AXE) is no longer supported"
-    #endif
-#endif
-
 
 #ifndef DISABLE_SERIALIZED_IMPORT_EXPORT 
 	#define DISABLE_SERIALIZED_IMPORT_EXPORT 0

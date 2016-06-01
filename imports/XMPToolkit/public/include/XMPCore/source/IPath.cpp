@@ -40,7 +40,7 @@ namespace AdobeXMPCore {
 			mRawPtr->Acquire();
 		}
 
-		~IPathProxy() { mRawPtr->Release(); }
+		~IPathProxy() __NOTHROW__ { mRawPtr->Release(); }
 
 		pIPath APICALL GetActualIPath() __NOTHROW__ { return mRawPtr; }
 

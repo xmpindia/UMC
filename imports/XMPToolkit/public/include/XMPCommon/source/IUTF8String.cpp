@@ -34,7 +34,7 @@ namespace AdobeXMPCommon {
 			mRawPtr->Acquire();
 		}
 
-		~IUTF8StringProxy() { mRawPtr->Release(); }
+		~IUTF8StringProxy() __NOTHROW__ { mRawPtr->Release(); }
 
 		pIUTF8String APICALL GetActualIUTF8String() __NOTHROW__ { return mRawPtr; }
 

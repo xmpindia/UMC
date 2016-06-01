@@ -22,37 +22,35 @@
 // ===========================
 #include "XMPCommon/XMPCommonDefines.h"
 
-#if ENABLE_XMP_CPP_INTERFACE
 #ifndef ENABLE_CPP_DOM_MODEL
 // =================================================================================================
 // Macintosh Specific Settings
 // ===========================
 #if XMP_MacBuild
-	#define ENABLE_CPP_DOM_MODEL 1
+	#define ENABLE_CPP_DOM_MODEL 0
 #endif
 
 // =================================================================================================
 // IOS Specific Settings
 // ===========================
 #if XMP_iOSBuild
-	#define ENABLE_CPP_DOM_MODEL 1
+	#define ENABLE_CPP_DOM_MODEL 0
 #endif
 
 // =================================================================================================
 // Windows Specific Settings
 // =========================
 #if XMP_WinBuild
-	#define ENABLE_CPP_DOM_MODEL 1
+	#define ENABLE_CPP_DOM_MODEL 0
 #endif
 
 // =================================================================================================
 // UNIX Specific Settings
 // ======================
 #if XMP_UNIXBuild
-#define ENABLE_CPP_DOM_MODEL 1
+#define ENABLE_CPP_DOM_MODEL 0
 #endif
 #endif // ENABLE_CPP_DOM_MODEL
-#endif  // ENABLE_XMP_CPP_INTERFACE
 
 #ifndef ENABLE_CPP_DOM_MODEL
 	#define ENABLE_CPP_DOM_MODEL 0

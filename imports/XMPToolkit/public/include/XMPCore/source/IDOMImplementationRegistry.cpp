@@ -38,7 +38,7 @@ namespace AdobeXMPCore {
 			mRawPtr->Acquire();
 		}
 
-		~IDOMImplementationRegistryProxy() { mRawPtr->Release(); }
+		~IDOMImplementationRegistryProxy() __NOTHROW__ { mRawPtr->Release(); }
 
 		pIDOMImplementationRegistry APICALL GetActualIDOMImplementationRegistry() __NOTHROW__ { return mRawPtr; }
 

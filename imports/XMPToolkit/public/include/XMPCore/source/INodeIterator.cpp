@@ -35,7 +35,7 @@ namespace AdobeXMPCore {
 			mRawPtr->Acquire();
 		}
 
-		~INodeIteratorProxy() { mRawPtr->Release(); }
+		~INodeIteratorProxy() __NOTHROW__ { mRawPtr->Release(); }
 
 		pINodeIterator APICALL GetActualINodeIterator() __NOTHROW__ { return mRawPtr; }
 
