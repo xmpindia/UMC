@@ -23,13 +23,18 @@ add_custom_command( TARGET CreatingAndSerializingMetadata POST_BUILD
 set(LIB_ADOBEXMP "AdobeXMP")
 if ( UNIX AND APPLE )
 	set_target_properties( CreatingAndSerializingMetadata PROPERTIES LINK_FLAGS 
-		"-Wl,-F${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION}" )
+		"-Wl,-F${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/" )
 	target_link_libraries( CreatingAndSerializingMetadata "-framework ${LIB_ADOBEXMP}" )
 else()
 	target_link_libraries( CreatingAndSerializingMetadata ${LIB_ADOBEXMP} )
 endif()
 
-if (UNIX OR APPLE)
+if (UNIX AND NOT APPLE)
 	set_target_properties(CreatingAndSerializingMetadata PROPERTIES
 		RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
+endif()
+
+if (UNIX AND APPLE)
+	set_target_properties(CreatingAndSerializingMetadata PROPERTIES
+		RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}" )
 endif()

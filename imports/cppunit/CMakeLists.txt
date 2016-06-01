@@ -26,8 +26,11 @@ include_directories( ${CPPUNIT_INCLUDE_DIR} )
 
 add_library( CPPUnitStatic STATIC ${CPPUNIT_FILES} )
 
-if (UNIX OR APPLE)
+if (UNIX AND NOT APPLE)
 	set_target_properties(CPPUnitStatic PROPERTIES
 		ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
 endif()
-
+if (UNIX AND APPLE)
+	set_target_properties(CPPUnitStatic PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}" )
+endif()

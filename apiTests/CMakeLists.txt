@@ -40,7 +40,15 @@ include_directories(${UMC_PUBLIC_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../imports/cppunit/include)
 
 set(XMPTOOLKIT_INCLUDE "${PROJECT_SOURCE_DIR}/../imports/XMPToolkit/public/include")
-link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION})
+
+if(NOT APPLE)
+	link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION})
+
+endif()
+
+if(APPLE)
+ 	link_directories(${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME})
+endif()
 
 add_executable( APITests ${UMC_FILES} ${TEST_FILES} )
 add_dependencies( APITests CPPUnitStatic UMC)
@@ -64,7 +72,12 @@ else()
 	target_link_libraries( APITests ${LIB_ADOBEXMP} )
 endif()
 
-if (UNIX OR APPLE)
+if (UNIX AND NOT APPLE)
 	set_target_properties(APITests PROPERTIES
 		RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${BUILD_CONFIGURATION}" )
+endif()
+
+if (UNIX AND APPLE)
+	set_target_properties(APITests PROPERTIES
+		RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}" )
 endif()
