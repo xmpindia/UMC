@@ -27,7 +27,7 @@ namespace AdobeXMPCore {
 		: mRawPtr( ptr )
 		, INodeProxy( ptr ) {}
 
-	ICompositeNodeProxy::~ICompositeNodeProxy() {}
+	ICompositeNodeProxy::~ICompositeNodeProxy() __NOTHROW__ {}
 
 	pICompositeNode APICALL ICompositeNodeProxy::GetActualICompositeNode() __NOTHROW__ { return mRawPtr; }
 

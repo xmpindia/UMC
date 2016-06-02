@@ -9,33 +9,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-#if AdobePrivate
-// =================================================================================================
-// Change history
-// ==============
-//
-// Writers:
-// AWL Alan Lillich
-//
-// mm-dd-yy who Description of changes, most recent on top.
-//
-// 09-28-12 AWL 5.5-f039 Add LocateMetadataFiles.
-//
-// 06-11-09 AWL 5.0-c034-f043 Finish threading revamp, implement friendly reader/writer locking.
-// 05-19-09 AWL 5.0-c031-f039 First part of threading improvements, revamp the client glue.
-// 05-14-09 AWL 5.0-c030-f038 Improve the call tracing mechanism.
-//
-// 01-28-08 AWL 4.2-f062 Add public CheckFileFormat and CheckPackageFormat functions.
-// 10-31-07 AWL 4.2-c023 Add new class XMPDocOps.
-// 08-24-07 AWL 4.2-c019 Remove support for ancient CXMP_* init/term routines and non-public (AXE) expat.
-//
-// 03-24-06 AWL 4.0 Adapt for move to ham-perforce, integrate XMPFiles, bump version to 4.
-//
-// 05-16-05 AWL Initial creation.
-//
-// =================================================================================================
-#endif // AdobePrivate
-
 #ifndef XMP_Inline
 	#if TXMP_EXPAND_INLINE
 		#define XMP_Inline inline

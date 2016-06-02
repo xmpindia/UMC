@@ -33,7 +33,7 @@ namespace AdobeXMPCore {
 		mRawPtr->Acquire();
 	}
 
-	INodeProxy::~INodeProxy() {
+	INodeProxy::~INodeProxy() __NOTHROW__ {
 		mRawPtr->Release();
 	}
 

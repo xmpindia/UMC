@@ -205,7 +205,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IPathSegment_v1() {}
+		virtual ~IPathSegment_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual pcIUTF8String_base APICALL getNameSpace( pcIError_base & error ) const __NOTHROW__ = 0;

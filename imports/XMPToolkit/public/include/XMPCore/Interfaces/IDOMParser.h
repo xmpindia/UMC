@@ -50,11 +50,13 @@ namespace AdobeXMPCore {
 			//!
 			kATReplaceChildren				= 1,
 
-			//! @brief Either append all the nodes parsed from the buffer as the child of the context node or
-			//!        the children of the context node with nodes parsed from the buffer based on the situation.
+			//! @brief Either append all the nodes parsed from the buffer as the child/children of the context node.
+			//! \attention Error is thrown in case
 			//!		- Context Node is invalid.
 			//!		- Context Node is not array or structure node.
 			//!		- Context Node is an array node but the type of all parsed nodes are not same.
+			//!     - If a structure node is the parsed node, it is appended if it already not present, otherwise it is replaced.
+			//!     - If an array node is the parsed node, it is appended if it already not present, otherwise it is removed.
 			kATAppendOrReplaceChildren		= 2,
 
 			//! @brief Treats all the parsed nodes as the siblings of the context node and place them before the context node, if possible.
@@ -160,7 +162,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IDOMParser_v1() {}
+		virtual ~IDOMParser_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual pIMetadata_base APICALL parse( const char * buffer, sizet bufferLength, pcIError_base & error ) __NOTHROW__ = 0;

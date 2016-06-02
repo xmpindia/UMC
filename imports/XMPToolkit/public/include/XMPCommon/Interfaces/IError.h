@@ -311,7 +311,7 @@ namespace AdobeXMPCommon {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IError_v1() {}
+		virtual ~IError_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual uint32 APICALL getCode( pcIError_base & error ) const __NOTHROW__ = 0;

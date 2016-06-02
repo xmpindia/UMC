@@ -470,7 +470,7 @@ namespace AdobeXMPCommon {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IUTF8String_v1() {}
+		virtual ~IUTF8String_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual pIUTF8String_base APICALL assign( const char * buffer, sizet count, pcIError_base & error ) __NOTHROW__ = 0;

@@ -32,7 +32,7 @@ namespace AdobeXMPCore {
 		//! \param[in] name Pointer to a constant char buffer containing local name of the child node.
 		//! \param[in] nameLength Number of characters in name. In case name is null terminated set it to AdobeXMPCommon::npos.
 		//! \return An object of type #eNodeType indicating the type of the node's child.
-		//! \note In case no child exists with the specified nameSpace and name combination then an eNodeType::kNTNode is returned.
+		//! \note In case no child exists with the specified nameSpace and name combination then an eNodeType::kNTNone is returned.
 		//!
 		virtual eNodeType APICALL GetChildNodeType( const char * nameSpace, sizet nameSpaceLength, const char * name, sizet nameLength ) const = 0;
 
@@ -238,7 +238,7 @@ namespace AdobeXMPCore {
 		//!
 		//! Destructor
 		//! 
-		virtual ~IStructureNode_v1() {}
+		virtual ~IStructureNode_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
 		virtual uint32 APICALL getChildNodeType( const char * nameSpace, sizet nameSpaceLength, const char * name, sizet nameLength, pcIError_base & error ) const __NOTHROW__ = 0;
@@ -275,7 +275,7 @@ namespace AdobeXMPCore {
 
 	public:
 		IStructureNodeProxy( pIStructureNode ptr );
-		~IStructureNodeProxy();
+		~IStructureNodeProxy() __NOTHROW__ ;
 
 		AdobeXMPCore_Int::pIStructureNode_I APICALL GetIStructureNode_I() __NOTHROW__;
 		virtual pIStructureNode APICALL GetActualIStructureNode() __NOTHROW__;

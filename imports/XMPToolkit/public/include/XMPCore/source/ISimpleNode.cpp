@@ -42,7 +42,7 @@ namespace AdobeXMPCore {
 			: mRawPtr( ptr )
 			, INodeProxy( ptr ) {}
 
-		~ISimpleNodeProxy() {}
+		~ISimpleNodeProxy() __NOTHROW__ {}
 
 		pISimpleNode APICALL GetActualISimpleNode() __NOTHROW__ { return mRawPtr; }
 

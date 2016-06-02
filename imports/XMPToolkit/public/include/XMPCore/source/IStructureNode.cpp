@@ -28,7 +28,7 @@ namespace AdobeXMPCore {
 		, ICompositeNodeProxy( ptr )
 		, INodeProxy( ptr ) { }
 
-	IStructureNodeProxy::~IStructureNodeProxy() { }
+	IStructureNodeProxy::~IStructureNodeProxy() __NOTHROW__ { }
 
 	AdobeXMPCore_Int::pIStructureNode_I APICALL IStructureNodeProxy::GetIStructureNode_I() __NOTHROW__ {
 		return mRawPtr->GetIStructureNode_I();

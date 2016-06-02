@@ -46,7 +46,7 @@ namespace AdobeXMPCore {
 			mRawPtr->Acquire();
 		}
 
-		~IDOMSerializerProxy() { mRawPtr->Release();  }
+		~IDOMSerializerProxy() __NOTHROW__ { mRawPtr->Release();  }
 
 		pIDOMSerializer APICALL GetActualIDOMSerializer() __NOTHROW__ { return mRawPtr; }
 
