@@ -15,15 +15,18 @@
 #include "interfaces/ITrack.h"
 #include "DisplayExtensionHandler.h"
 
-std::string defaultIndent = "\t\t\t\t\t";
-int maxFieldWidth = 30;
+#include "SampleUtils.h"
+
+#include "SampleUtils.h"
 
 
+using namespace SampleUtils;
 
 /*Printing values of the Display Extension properties in a human readable format*/
 void printDisplayExtension( std::shared_ptr< NS_DisplayExtension::Display> & displayObj) {
 
 	using namespace std;
+	
 
 	cout << setw(maxFieldWidth) << "Display Name" <<  defaultIndent << setw(maxFieldWidth) << displayObj->getName()  << endl;
 	cout << setw(maxFieldWidth) << "Display Id" <<  defaultIndent<< setw(maxFieldWidth) << displayObj->getID() << defaultIndent << endl;
@@ -35,6 +38,7 @@ int main() {
 
 	//get set delete modify
 	using namespace NS_DisplayExtension;
+
 
 	/*
 	Initializing the UMC SDK is necessary before using any of the UMC APIs
