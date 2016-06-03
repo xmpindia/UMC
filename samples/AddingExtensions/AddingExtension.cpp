@@ -7,6 +7,17 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+
+
+/*
+ This sample seeks to demonstrate adding an extension to the UMC. It more specifically elucidates creating an extension,
+ creating an extension handler, registering an extension handler, adding the extension to the UMC object and retrieving
+ the extension from the UMC object. Although this sample adds an extension to the top level UMC object, it is also
+ possible to add extensions to all source and output objects.For more details, programmer's guide and interface
+ documentation should be referred.
+ */
+
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -20,6 +31,7 @@
 #include "SampleUtils.h"
 
 
+
 using namespace SampleUtils;
 
 /*Printing values of the Display Extension properties in a human readable format*/
@@ -29,8 +41,11 @@ void printDisplayExtension( std::shared_ptr< NS_DisplayExtension::Display> & dis
 	
 
 	cout << setw(maxFieldWidth) << "Display Name" <<  defaultIndent << setw(maxFieldWidth) << displayObj->getName()  << endl;
+    
 	cout << setw(maxFieldWidth) << "Display Id" <<  defaultIndent<< setw(maxFieldWidth) << displayObj->getID() << defaultIndent << endl;
+    
 	cout << setw(maxFieldWidth) << "Display Diagonal Size" <<  defaultIndent << setw(maxFieldWidth) << displayObj->getDiagonalSize() << defaultIndent << endl;
+    
 	cout << endl;
 }
 

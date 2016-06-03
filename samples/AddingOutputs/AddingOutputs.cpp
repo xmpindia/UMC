@@ -7,6 +7,16 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+
+/*
+ This sample seeks to demonstrate adding various kinds of outputs to the UMC. It more specifically elucidates creating
+ various kinds of outputs (video tracks, audio tracks, clip shots, transition shots, frames and shot sources),adding
+ different kind of properties to the outputs, adding the outputs created to the UMC object, removing outputs, and
+ retrieving various output properties. For more details, programmer's guide and interface documentation should be
+ referred.
+ */
+
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>

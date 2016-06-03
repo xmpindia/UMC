@@ -1,3 +1,22 @@
+// =================================================================================================
+// ADOBE SYSTEMS INCORPORATED
+// Copyright 2016 Adobe Systems Incorporated
+// All Rights Reserved
+//
+// NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
+// of the Adobe license agreement accompanying it.
+// =================================================================================================
+
+
+
+/*
+ This sample seeks to demonstrate adding various kinds of sources to the UMC. It more specifically elucidates creating
+ various kinds of sources (video sources, image sources, audio sources and video frame sources), adding different kind
+ of properties to the sources, adding the sources created to the UMC object, removing sources, and retrieving various
+ source properties. For more details, programmer's guide and interface
+ documentation should be referred.
+ */
+
 
 #include <string>
 #include <iostream>
