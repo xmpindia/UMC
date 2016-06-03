@@ -12,13 +12,13 @@
 
 namespace SampleUtils {
 
-	void displayEditRate(UMC::EditRate  editRate) {
+	void displayEditRate(UMC::EditRate editRate) {
 
 		std::cout << editRate;
 
 	}
 
-	void displayAspectRatio(UMC::AspectRatio & aspectRatio) {
+	void displayAspectRatio(UMC::AspectRatio aspectRatio) {
 
 		std::cout << aspectRatio;
 	}
