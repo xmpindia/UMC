@@ -1,6 +1,7 @@
 add_definitions(-DUNIX_ENV=1)
 
 set (OS_FOLDER_NAME "i80386linux_x64")
+set (BUILD_CONFIGURATION "")
 string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_CONFIGURATION)
 
 set(STATIC_LIB_PREFIX "lib")

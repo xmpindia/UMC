@@ -11,6 +11,7 @@
 #include "utils/UMCAndXMPMapping.h"
 #include "utils/Utils.h"
 #include <sstream>
+#include <cstring>
 
 #include "XMPCore/Interfaces/IDOMImplementationRegistry.h"
 #include "XMPCore/Interfaces/IDOMParser.h"
