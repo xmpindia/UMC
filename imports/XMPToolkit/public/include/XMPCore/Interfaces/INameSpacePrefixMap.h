@@ -215,8 +215,8 @@ namespace AdobeXMPCore {
 		virtual ~INameSpacePrefixMap_v1() __NOTHROW__ {}
 
 		//! \cond XMP_INTERNAL_DOCUMENTATION
-		const uint32 kPrefixIsParameter = 0;
-		const uint32 kNameSpaceIsParameter = 1;
+		static const uint32 kPrefixIsParameter = 0;
+		static const uint32 kNameSpaceIsParameter = 1;
 
 		virtual uint32 APICALL insert( const char * prefix, sizet prefixLength, const char * nameSpace, sizet nameSpaceLength, pcIError_base & error ) __NOTHROW__ = 0;
 		virtual uint32 APICALL remove( uint32 keyType, const char * key, sizet keyLength, pcIError_base & error ) __NOTHROW__ = 0;

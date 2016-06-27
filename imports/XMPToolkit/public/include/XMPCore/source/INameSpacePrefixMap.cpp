@@ -159,7 +159,7 @@ namespace AdobeXMPCore {
 			return mRawPtr->isThreadSafe();
 		}
 
-		virtual AdobeXMPCommon_Int::pIThreadSafe_I APICALL GetIThreadSafe_I() __NOTHROW__ override {
+		virtual AdobeXMPCommon_Int::pIThreadSafe_I APICALL GetIThreadSafe_I() __NOTHROW__ { 
 			return mRawPtr->GetIThreadSafe_I();
 		}
 		
