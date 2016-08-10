@@ -165,8 +165,8 @@ namespace INT_UMC {
 			return it->second;
 		else {
 			auto handler = ICustomDataHandlerRegistry::GetInstance()->GetHandler( customDataNameSpace, customDataName );
-			auto node = mExtensionNode->GetStructureNode( customDataNameSpace.c_str(), npos, customDataName.c_str(), npos );
-			if ( handler && node ) {
+			auto node = mExtensionNode != nullptr ? mExtensionNode->GetStructureNode( customDataNameSpace.c_str(), npos, customDataName.c_str(), npos ): nullptr;
+			if ( handler && node ) { 
 				auto returnValue = ParseNode( handler, node );
 				mCustomDataMap[ combinedString ] = returnValue;
 				returnValue->SetParentNode( mwpParentNode.lock() );

@@ -35,6 +35,10 @@ namespace INT_UMC {
 	}
 
 	bool CustomDataHandlerRegistryImpl::RegisterHandler( const std::string & nameSpace, const std::string & name, const spICustomDataHandler & handler ) {
+		if(nameSpace.empty() || name.empty()) {
+                        return false;
+                }
+
 		std::string combinedString = GetCombinedString( nameSpace, name );
 		if ( handler ) {
 			if ( IsHandlerRegistered( combinedString ) ) return false;
