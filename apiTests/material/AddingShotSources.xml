@@ -1,0 +1,122 @@
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 5.6.0">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""
+            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+            xmlns:umc="http://ns.umc.com/xmp/1.0/UniversalMetadataContainer/"
+            xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/">
+         <xmpMM:DocumentID>0</xmpMM:DocumentID>
+         <umc:outputs>
+            <rdf:Bag>
+               <rdf:li rdf:parseType="Resource">
+                  <xmpMM:DocumentID>1</xmpMM:DocumentID>
+                  <umc:audioEditRate>1</umc:audioEditRate>
+                  <umc:canvasAspectRatio>1</umc:canvasAspectRatio>
+                  <umc:imageAspectRatio>1</umc:imageAspectRatio>
+                  <umc:tracks rdf:parseType="Resource">
+                     <umc:videoTracks>
+                        <rdf:Bag>
+                           <rdf:li rdf:parseType="Resource">
+                              <xmpMM:DocumentID>4</xmpMM:DocumentID>
+                              <umc:audioEditRate>1</umc:audioEditRate>
+                              <umc:shots rdf:parseType="Resource">
+                                 <umc:clipShots>
+                                    <rdf:Bag>
+                                       <rdf:li rdf:parseType="Resource">
+                                          <xmpMM:DocumentID>5</xmpMM:DocumentID>
+                                          <umc:record rdf:parseType="Resource">
+                                             <umc:duration>15</umc:duration>
+                                             <umc:inCount>10</umc:inCount>
+                                          </umc:record>
+                                          <umc:shotSources>
+                                             <rdf:Bag>
+                                                <rdf:li rdf:parseType="Resource">
+                                                   <xmpMM:DocumentID>6</xmpMM:DocumentID>
+                                                   <umc:inCount>10</umc:inCount>
+                                                   <umc:source rdf:parseType="Resource">
+                                                      <xmpMM:DocumentID>2</xmpMM:DocumentID>
+                                                      <umc:duration>4</umc:duration>
+                                                      <umc:inCount>12</umc:inCount>
+                                                   </umc:source>
+                                                </rdf:li>
+                                             </rdf:Bag>
+                                          </umc:shotSources>
+                                       </rdf:li>
+                                    </rdf:Bag>
+                                 </umc:clipShots>
+                                 <umc:transitionShots>
+                                    <rdf:Bag>
+                                       <rdf:li rdf:parseType="Resource">
+                                          <xmpMM:DocumentID>7</xmpMM:DocumentID>
+                                          <umc:shotSources>
+                                             <rdf:Bag>
+                                                <rdf:li rdf:parseType="Resource">
+                                                   <xmpMM:DocumentID>8</xmpMM:DocumentID>
+                                                   <umc:source rdf:parseType="Resource">
+                                                      <xmpMM:DocumentID>2</xmpMM:DocumentID>
+                                                   </umc:source>
+                                                </rdf:li>
+                                                <rdf:li rdf:parseType="Resource">
+                                                   <xmpMM:DocumentID>9</xmpMM:DocumentID>
+                                                   <umc:source rdf:parseType="Resource">
+                                                      <xmpMM:DocumentID>3</xmpMM:DocumentID>
+                                                   </umc:source>
+                                                </rdf:li>
+                                             </rdf:Bag>
+                                          </umc:shotSources>
+                                       </rdf:li>
+                                    </rdf:Bag>
+                                 </umc:transitionShots>
+                              </umc:shots>
+                              <umc:videoEditRate>1</umc:videoEditRate>
+                           </rdf:li>
+                        </rdf:Bag>
+                     </umc:videoTracks>
+                  </umc:tracks>
+                  <umc:videoEditRate>1</umc:videoEditRate>
+               </rdf:li>
+            </rdf:Bag>
+         </umc:outputs>
+         <umc:sources rdf:parseType="Resource">
+            <umc:videoSources>
+               <rdf:Bag>
+                  <rdf:li rdf:parseType="Resource">
+                     <xmpMM:DocumentID>2</xmpMM:DocumentID>
+                     <xmpDM:title>source 1</xmpDM:title>
+                     <umc:audioEditRate>48000</umc:audioEditRate>
+                     <umc:videoEditRate>1</umc:videoEditRate>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                     <xmpMM:DocumentID>3</xmpMM:DocumentID>
+                     <xmpDM:title>source 2</xmpDM:title>
+                     <umc:audioEditRate>48000</umc:audioEditRate>
+                     <umc:videoEditRate>1</umc:videoEditRate>
+                  </rdf:li>
+               </rdf:Bag>
+            </umc:videoSources>
+         </umc:sources>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xpacket end="w"?>
