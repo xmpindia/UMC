@@ -2,7 +2,7 @@
 										
 1 XMP Media Productions SDK Overview
 
-The Adobe Extensible Metadata Platform (XMP) is an international standard [ISO 16684-1]. The standardized data model and the associated operations are fully implemented as an XMP Toolkit Software Development Kit (SDK) by Adobe (http://www.adobe.com/devnet/xmp.html).
+The Adobe Extensible Metadata Platform (XMP) is an international standard [ISO 16684-1]. The standardized data model and the associated operations are fully implemented as an XMP Toolkit Software Development Kit (SDK) by Adobe .
 
 As part of enabling custom metadata for digital video production and distribution workflows via XMP, the XMP Media Productions SDK is an extension layer over XMP Toolkit SDK which should allow convenient editing and storing of static, temporal and other custom metadata. The XMP Media Productions SDK provides an extension mechanism for storing vendor specific metadata and other custom metadata to be carried along with the composition throughout the video production and editing workflows.
 
@@ -40,7 +40,7 @@ However, it is possible to build XMP Media Productions SDK on other platforms as
 3.2 REQUIRED DEPENDENCIES FOR BUILDING XMP Media Productions SDK
 
 In the top level directory of XMP Media Productions SDK, there will be an imports directory.
-It should contain the following the latest available Adobe XMP Toolkit SDK which can be obtained from the XMP Devnet page. (http://www.adobe.com/devnet/xmp.html)
+It should contain the following the latest available Adobe XMP Toolkit SDK which can be obtained from the XMP Devnet page. 
 
 The XMP Toolkit SDK root directory should be copied into the imports directory of the XMP Media Productions SDK such that imports should contain the following path.
 XMP_MP_ROOT_DIR/imports/XMPToolkit/ .
@@ -59,8 +59,7 @@ The root directory of the XMP Media Productions SDK is referred as the XMP_MP_RO
 •	Cmake is required to build the SDK.
 •	Cmake : minimum version should be 2.8.6
 
-Obtain a copy of the CMake distribution for your platform from:
-http://www.cmake.org/cmake/resources/software.html
+Obtain a copy of the CMake distribution for your platform from cmake official site.
 
 Cmake-gui tools comes bundled with Cmake for Macintosh and Windows platforms. 
 For Unix platforms, Cmake-gui can be conveniently installed by a command like 

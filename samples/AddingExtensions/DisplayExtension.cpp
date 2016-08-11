@@ -1,4 +1,4 @@
-/*
+	/*
 *  Copyright 2016 Adobe Systems Incorporated. All rights reserved.
 *  This file is licensed to you under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License. You may obtain a copy
@@ -62,7 +62,7 @@ namespace NS_DisplayExtension {
 
 	/* Return the intended namespace for the Display Extension*/
 	const std::string & Display::GetNameSpace() {
-		static std::string nameSpace( "www.myns.com/" );
+		static std::string nameSpace( "writeOwnNameSpace" );
 		return nameSpace;
 	}
 

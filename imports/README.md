@@ -4,7 +4,7 @@
  
  To get XMP Toolkit SDK :
  
- 1. Obtain a copy of the XMP Toolkit SDK source code (not the compiled dll) from (http://www.adobe.com/devnet/xmp.html).  
+ 1. Obtain a copy of the XMP Toolkit SDK source code (not the compiled dll) from the XMP Devnet page.  
 
  2. Build the libraries of XMP for the platform you need.
  
