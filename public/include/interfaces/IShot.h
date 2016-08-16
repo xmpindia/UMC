@@ -74,7 +74,7 @@ namespace UMC {
 		virtual EditUnitDuration GetDuration() const = 0;
 
 		//!
-		//! Creates a new frame from a buffer and adds it to the shot
+		//! Creates a new frame from a source and adds it to the shot
 		//! \param[in] a value of type std::string indicating the buffer from which the frame is to be created
 		//! \return a shared pointer to a non-object of type IFrame. A parsing error will be thrown in case the creation of the frame fails.
 		//!
@@ -84,14 +84,22 @@ namespace UMC {
 		//! Creates a new frame from a buffer and adds it to the shot
 		//! \param[in] a value of type std::string indicating the buffer from which the frame is to be created
 		//! \return a shared pointer to a non-object of type IFrame. A parsing error will be thrown in case the creation of the frame fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIFrame AddFrame( const std::string & buffer ) = 0;
+        
+        //!
+        //! Creates a new shot source from a source and adds it to the shot
+        //! \param[in] a value of type std::string indicating the buffer from which the frame is to be created
+        //! \return a shared pointer to a non-const of type IFrame. A parsing error will be thrown in case the creation of the frame fails.
+        //!
 		virtual spIShotSource AddShotSource( const spISource & source ) = 0;
 
 		//!
 		//! Creates a new shot source from a buffer and adds it to the shot
 		//! \param[in] a value of type std::string indicating the buffer from which the shot source is to be created
-		//! \return a shared pointer to a non-object of type IShotSource. A parsing error will be thrown in case the creation of the shot source fails.
+		//! \return a shared pointer to a non-const of type IShotSource. A parsing error will be thrown in case the creation of the shot source fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIShotSource AddShotSource( const std::string & buffer ) = 0;
 
@@ -123,13 +131,13 @@ namespace UMC {
 		//!
 		//! Gets a shot source with a particular unique id from the shot
 		//! \param[in] a value of type std::string indicating the unique id of the frame
-		//! \return a shared pointer to a non-const object of type IFrame. An empty shared pointer is returned if no frame is found with the specified id.
+		//! \return a shared pointer to a const object of type IFrame. An empty shared pointer is returned if no frame is found with the specified id.
 		//!
 		virtual spcIFrame GetFrame( const std::string & uniqueID ) const = 0;
 
 		//!
-		//! Gets the number of frames present in the shot
-		//! \return value of type size_t indicating the number of frames present in the shot
+		//! Gets the number of shot sources present in the shot
+		//! \return value of type size_t indicating the number of shot sources present in the shot
 		//!
 		virtual size_t ShotSourceCount() const = 0;
 
@@ -168,7 +176,6 @@ namespace UMC {
 		//!
 		//! Removes all the frames from the shot
 		//! \return a value of type size_t indicating the count of the frames present in the track before removal.
-		//! \return a value of type size_t indicating whether the removal of the shot source was successful
 		//!
 		virtual size_t RemoveAllFrames() = 0;
 

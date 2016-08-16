@@ -94,6 +94,7 @@ static UMC::spIUMC CreateDefaultUMC() {
     output1->SetCanvasAspectRatio( AspectRatio( 640, 480 ) );
     
     sp->AddOutput();
+    //std::cout<<output1->Serialize();
     return sp;
 }
 
@@ -103,9 +104,6 @@ void AddingOutputsToUMCTests::CountOfOutputs() {
     CPPUNIT_ASSERT_EQUAL( sp ? true : false, true );
     CPPUNIT_ASSERT_EQUAL( sp->OutputCount(), ( size_t ) 2 );
     
-    // remove non existent output
-    sp->RemoveOutput( "notAvailable" );
-    CPPUNIT_ASSERT_EQUAL( sp->OutputCount(), ( size_t ) 2 );
     using namespace UMC;
     IUMC::OutputList outputs = sp->GetAllOutputs();
     
@@ -190,41 +188,6 @@ void AddingOutputsToUMCTests::OutputsContent() {
 
     //error scenarios
     auto output4 = sp->AddOutput();
-    /*
-    try {
-        output4->SetAudioEditRate( EditRate( -2400 ) );
-        CPPUNIT_ASSERT(false);
-        
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
-    
-    try {
-        output4->SetVideoEditRate( EditRate( -50 ) );
-        CPPUNIT_ASSERT(false);
-        
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
-    
-    
-    try {
-        output4->SetImageAspectRatio( AspectRatio( -1920, 1080 ) );
-        CPPUNIT_ASSERT(false);
-        
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
-    
-    
-    try {
-        output4->SetCanvasAspectRatio( AspectRatio( 1000, -500 ) );
-        CPPUNIT_ASSERT(false);
-        
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
-     */
     
     //Aspect Ratio shouldn't contain 0
     try {
@@ -261,25 +224,6 @@ void AddingOutputsToUMCTests::OutputsContent() {
         CPPUNIT_ASSERT(true);
     }
     
-    //error scenarios with NULL
-    try {
-        output4->SetName( NULL );
-        CPPUNIT_ASSERT(false);
-        
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
-    
-    
-    try {
-        output4->SetTitle( NULL );
-        CPPUNIT_ASSERT(false);
-        
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
-    
-    
     
     //check for default values when values not set
     outputs = sp->GetAllOutputs();
@@ -291,14 +235,8 @@ void AddingOutputsToUMCTests::OutputsContent() {
     spIOutput out1=sp->GetOutput("Not Available");
     if(out1.get()==NULL)
         CPPUNIT_ASSERT(true);
-    
-    
-    try {
-        spIOutput out1=sp->GetOutput(NULL);
+    else
         CPPUNIT_ASSERT(false);
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
     
     
     sp->RemoveAllOutputs();
@@ -311,7 +249,7 @@ void AddingOutputsToUMCTests::OutputsContent() {
 void AddingOutputsToUMCTests::SerializeOutputs() {
     std::cout<< "********** AddingOutputsToUMCTests::SerializeOutputs **********"<<"\n";
     auto sp = CreateDefaultUMC();
-    //std::cout<<sp->SerializeToBuffer();
+    std::cout<<sp->SerializeToBuffer();
     using namespace TestUtils;
     std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingOutputs.xml" ) );
     CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
@@ -345,30 +283,25 @@ void AddingOutputsToUMCTests::ParseOutputs() {
     CPPUNIT_ASSERT_EQUAL( outputs[ 0 ]->GetCanvasAspectRatio(), AspectRatio( 1 ) );
     
     
-    //creating only Output from Buffer
+    
     
     //error scenarios
     spIUMC sp2 = IUMC::CreateEmptyUMC();
-    
     try {
         sp2->AddOutput("");
     } catch (std::logic_error) {
         CPPUNIT_ASSERT(true);
     }
     
-    try {
-        sp2->AddOutput(NULL);
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
     
     sp2->AddOutput( ReadTextFileIntoString( Join( GetMaterialDir(), "OutputBuffer.xml" ) ) );
     IUMC::OutputList outputs2 = sp2->GetAllOutputs();
     std::cout<<outputs2.size();
-    CPPUNIT_ASSERT_EQUAL( outputs2.size(), (size_t) 2 );
-    
-    
-    
+    CPPUNIT_ASSERT_EQUAL( outputs2.size(), (size_t) 1 );
+    CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetAudioEditRate(), EditRate( 48000 ) );
+    CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetVideoEditRate(), EditRate( 24 ) );
+    CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetImageAspectRatio(), AspectRatio( 1080, 720 ) );
+    CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetCanvasAspectRatio(), AspectRatio( 640, 480 ) );
     
 }
 
@@ -381,7 +314,6 @@ void AddingOutputsToUMCTests::RemoveOutputs(){
     try{
         sp->RemoveAllOutputs();
         CPPUNIT_ASSERT(true);
-        
     }
     catch(std::logic_error){
         CPPUNIT_ASSERT(false);
@@ -397,19 +329,10 @@ void AddingOutputsToUMCTests::RemoveOutputs(){
     output1->SetCanvasAspectRatio( AspectRatio( 640, 480 ) );
     output1->SetUniqueID("out1");
     
-    //passing NULL to function
-    
-    try{ 
-        sp->RemoveOutput(NULL);
-        CPPUNIT_ASSERT(false);
-    }
-    catch(std::logic_error){
-        CPPUNIT_ASSERT(true);
-        
-    }
-    
-    
-    std::cout<<output1->GetReferenceCount();
+    // remove non existent output
+    sp->RemoveOutput( "notAvailable" );
+    CPPUNIT_ASSERT_EQUAL( sp->OutputCount(), ( size_t ) 1 );
+   
     
     
 }

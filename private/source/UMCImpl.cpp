@@ -164,6 +164,8 @@ namespace INT_UMC {
 	}
 
 	spIOutput UMCImpl::AddOutput( const std::string & buffer ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
 		spIStructureNode node = ParseRDF( buffer );
 		return AddOutput( node );
 	}
@@ -504,10 +506,15 @@ namespace INT_UMC {
 	}
 
 	spIOutput UMCImpl::GetOutput( const std::string & uniqueID ) {
+        //if(!uniqueID)
+           // THROW_UNIQUE_ID_CANT_BE_NULL;
+        
 		return GetElementFromMap< spIOutput > ( mOutputMap, uniqueID );
 	}
 
 	spcIOutput UMCImpl::GetOutput( const std::string & uniqueID ) const {
+        //if(!uniqueID)
+          //  THROW_UNIQUE_ID_CANT_BE_NULL;
 		return GetElementFromMap< spcIOutput >( mOutputMap, uniqueID );
 	}
 

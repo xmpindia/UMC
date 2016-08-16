@@ -4,15 +4,13 @@
         <rdf:Description rdf:about=""
             xmlns:umc="http://ns.umc.com/xmp/1.0/UniversalMetadataContainer/"
             xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/">
-            <umc:shotSources rdf:parseType="Resource">
-                <xmpMM:DocumentID>6</xmpMM:DocumentID>
-                <umc:inCount>10</umc:inCount>
+            <umc:frames rdf:parseType="Resource">
+                <xmpMM:DocumentID>5</xmpMM:DocumentID>
+                <umc:inCount>12</umc:inCount>
                 <umc:source rdf:parseType="Resource">
                     <xmpMM:DocumentID>2</xmpMM:DocumentID>
-                    <umc:duration>4</umc:duration>
-                    <umc:inCount>12</umc:inCount>
                 </umc:source>
-            </umc:shotSources>
+            </umc:frames>
         </rdf:Description>
     </rdf:RDF>
 </x:xmpmeta>

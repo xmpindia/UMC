@@ -1,68 +1,37 @@
 <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 5.6.0">
-   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdf:Description rdf:about=""
-            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description rdf:about=""
             xmlns:umc="http://ns.umc.com/xmp/1.0/UniversalMetadataContainer/"
+            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
             xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/">
-         <xmpMM:DocumentID>0</xmpMM:DocumentID>
-         <umc:outputs>
-            <rdf:Bag>
-               <rdf:li rdf:parseType="Resource">
-                  <xmpMM:DocumentID>1</xmpMM:DocumentID>
-                  <umc:audioEditRate>1</umc:audioEditRate>
-                  <umc:canvasAspectRatio>1</umc:canvasAspectRatio>
-                  <umc:imageAspectRatio>1</umc:imageAspectRatio>
-                  <umc:tracks rdf:parseType="Resource">
-                     <umc:audioTracks>
-                        <rdf:Bag>
-                           <rdf:li rdf:parseType="Resource">
-                              <xmpMM:DocumentID>5</xmpMM:DocumentID>
-                              <xmpDM:description>audio1</xmpDM:description>
-                              <umc:audioEditRate>4400</umc:audioEditRate>
-                           </rdf:li>
-                           <rdf:li rdf:parseType="Resource">
-                              <xmpMM:DocumentID>6</xmpMM:DocumentID>
-                              <xmpDM:description>audio2</xmpDM:description>
-                              <umc:audioEditRate>20</umc:audioEditRate>
-                           </rdf:li>
-                           <rdf:li rdf:parseType="Resource">
-                              <xmpMM:DocumentID>7</xmpMM:DocumentID>
-                              <umc:audioEditRate>1</umc:audioEditRate>
-                           </rdf:li>
-                           <rdf:li rdf:parseType="Resource">
-                              <xmpMM:DocumentID>8</xmpMM:DocumentID>
-                              <umc:audioEditRate>1</umc:audioEditRate>
-                           </rdf:li>
-                        </rdf:Bag>
-                     </umc:audioTracks>
-                  </umc:tracks>
-                  <umc:videoEditRate>1</umc:videoEditRate>
-               </rdf:li>
-            </rdf:Bag>
-         </umc:outputs>
-      </rdf:Description>
-   </rdf:RDF>
+            <umc:audioTracks rdf:parseType="Resource">
+                <xmpMM:DocumentID>5</xmpMM:DocumentID>
+                <xmpDM:description>audioTrack1</xmpDM:description>
+                <umc:audioEditRate>4400</umc:audioEditRate>
+            </umc:audioTracks>
+        </rdf:Description>
+    </rdf:RDF>
 </x:xmpmeta>
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?xpacket end="w"?>

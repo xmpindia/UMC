@@ -5,12 +5,15 @@
             xmlns:umc="http://ns.umc.com/xmp/1.0/UniversalMetadataContainer/"
             xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
             xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/">
-            <umc:videoTracks rdf:parseType="Resource">
-                <xmpMM:DocumentID>2</xmpMM:DocumentID>
-                <xmpDM:description>videoTrack1</xmpDM:description>
-                <umc:audioEditRate>4800</umc:audioEditRate>
-                <umc:videoEditRate>2400/1001</umc:videoEditRate>
-            </umc:videoTracks>
+            <umc:outputs rdf:parseType="Resource">
+                <xmpMM:DocumentID>12</xmpMM:DocumentID>
+                <xmpDM:description>Output One</xmpDM:description>
+                <xmpDM:title>Video for Output One</xmpDM:title>
+                <umc:audioEditRate>48000</umc:audioEditRate>
+                <umc:canvasAspectRatio>640/480</umc:canvasAspectRatio>
+                <umc:imageAspectRatio>1080/720</umc:imageAspectRatio>
+                <umc:videoEditRate>24</umc:videoEditRate>
+            </umc:outputs>
         </rdf:Description>
     </rdf:RDF>
 </x:xmpmeta>

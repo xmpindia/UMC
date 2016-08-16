@@ -17,6 +17,7 @@
 #include "interfaces/IClipShot.h"
 #include "interfaces/ITransitionShot.h"
 #include "utils/Utils.h"
+#include "UMCDefines_I.h"
 
 namespace INT_UMC {
 
@@ -33,6 +34,15 @@ namespace INT_UMC {
 		, mAudioEditRate( 1 ) {}
 
 	void VideoTrackImpl::SetVideoEditRate( const EditRate & editRate ) {
+        if (editRate.Numerator()==0) {
+            //THROW_INPUT_CANT_BE_ZERO;
+            throw std::logic_error("Input can't be zero");
+
+        }
+        if (editRate.Denominator()==0) {
+            THROW_INPUT_CANT_BE_ZERO;
+        }
+
 		mVideoEditRate = editRate;
 	}
 
@@ -41,6 +51,15 @@ namespace INT_UMC {
 	}
 
 	void VideoTrackImpl::SetAudioEditRate( const EditRate & editRate ) {
+        if (editRate.Numerator()==0) {
+            //THROW_INPUT_CANT_BE_ZERO;
+            throw std::logic_error("Input can't be zero");
+
+        }
+        if (editRate.Denominator()==0) {
+            THROW_INPUT_CANT_BE_ZERO;
+        }
+
 		mAudioEditRate = editRate;
 	}
 
@@ -304,6 +323,8 @@ namespace INT_UMC {
 	}
 
 	UMC::spIShot VideoTrackImpl::AddShot( const std::string & buffer ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
 		return TrackImpl::AddShot( buffer, shared_from_this() );
 	}
 

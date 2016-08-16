@@ -39,6 +39,9 @@ namespace INT_UMC {
 	}
 
 	spIFrame ShotImpl::AddFrame( const spISource & source, const spIUMCNode & spSelf ) {
+        if(!source){
+            THROW_INPUT_CANT_BE_NULL;
+        }
 		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, source );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mFrames, kFramesPair );
 		AddElementToMap( mFrameMap, frame, spSelf, mFrames );
@@ -46,6 +49,9 @@ namespace INT_UMC {
 	}
 
 	UMC::spIFrame ShotImpl::AddFrame( const std::string & buffer, const spIUMCNode & spSelf ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
+        
 		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddFrame( xmpNode, spSelf );
 	}
@@ -73,6 +79,9 @@ namespace INT_UMC {
 	}
 
 	spIShotSource ShotImpl::AddShotSource( const spISource & source, const spIUMCNode & spSelf ) {
+        if(!source){
+            THROW_INPUT_CANT_BE_NULL;
+        }
 		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, source );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mShotSources, kShotSourcesPair );
 		AddElementToMap( mShotSourceMap, shotSource, spSelf, mShotSources );
@@ -80,6 +89,8 @@ namespace INT_UMC {
 	}
 
 	UMC::spIShotSource ShotImpl::AddShotSource( const std::string & buffer, const spIUMCNode & spSelf ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
 		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddShotSource( xmpNode, spSelf );
 	}

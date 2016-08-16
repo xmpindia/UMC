@@ -175,6 +175,9 @@ namespace INT_UMC {
 	}
 
 	UMC::spITrack OutputImpl::AddTrack( const std::string & buffer ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
+        
 		spIStructureNode parentNode = ParseRDF( buffer );
 		const NamespacePropertyNamePair * pairs[ 2 ] = { &kVideoTracksPair, &kAudioSourcesPair };
 		size_t matchedIndex =  GetMatchingIndexForActualNode( parentNode, &pairs[ 0 ], ( size_t ) 2 );
@@ -198,6 +201,9 @@ namespace INT_UMC {
 	}
 
 	UMC::spIVideoTrack OutputImpl::AddVideoTrack( const std::string & buffer ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
+        
 		spIStructureNode node = ParseRDF( buffer );
 		return AddVideoTrack( node );
 	}
@@ -270,6 +276,9 @@ namespace INT_UMC {
 	}
 
 	UMC::spIAudioTrack OutputImpl::AddAudioTrack( const std::string & buffer ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
+        
 		spIStructureNode node = ParseRDF( buffer );
 		return AddAudioTrack( node );
 	}
@@ -301,6 +310,13 @@ namespace INT_UMC {
 	}
 
 	void OutputImpl::SetCanvasAspectRatio( const AspectRatio & canvasAspectRatio ) {
+        if (canvasAspectRatio.Numerator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Numerator");
+        }
+        if (canvasAspectRatio.Denominator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Denominator");
+        }
+        
 		mCanvasAspectRatio = canvasAspectRatio;
 	}
 
@@ -309,6 +325,12 @@ namespace INT_UMC {
 	}
 
 	void OutputImpl::SetImageAspectRatio( const AspectRatio & imageAspectRatio ) {
+        if (imageAspectRatio.Numerator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Numerator");
+        }
+        if (imageAspectRatio.Denominator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Denominator");
+        }
 		mImageAspectRatio = imageAspectRatio;
 	}
 
@@ -317,6 +339,12 @@ namespace INT_UMC {
 	}
 
 	void OutputImpl::SetVideoEditRate( const EditRate & videoEditRate ) {
+        if (videoEditRate.Numerator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Numerator");
+        }
+        if (videoEditRate.Denominator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Denominator");
+        }
 		mVideoEditRate = videoEditRate;
 	}
 
@@ -325,6 +353,12 @@ namespace INT_UMC {
 	}
 
 	void OutputImpl::SetAudioEditRate( const EditRate & audioEditRate ) {
+        if (audioEditRate.Numerator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Numerator");
+        }
+        if (audioEditRate.Denominator()==0) {
+            THROW_INPUT_CANT_BE_ZERO("Denominator");
+        }
 		mAudioEditRate = audioEditRate;
 	}
 

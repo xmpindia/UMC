@@ -16,11 +16,13 @@ class SetUniqueIDTests : public CppUnit::TestCase {
 	CPPUNIT_TEST_SUITE( SetUniqueIDTests );
 		CPPUNIT_TEST( ReferenceCountPreserved );
 		CPPUNIT_TEST( ParsedIDPreserved );
+        CPPUNIT_TEST( UniqueIDPreserved );
 	CPPUNIT_TEST_SUITE_END();
 
 protected:
 	void ReferenceCountPreserved();
 	void ParsedIDPreserved();
+    void UniqueIDPreserved();
 
 public:
 	virtual void setUp();
@@ -87,12 +89,23 @@ void SetUniqueIDTests::tearDown() {
 	UMC_Terminate();
 }
 
+void SetUniqueIDTests::UniqueIDPreserved() {
+    std::cout << "********** SetUniqueIDTests::UniqueIDPreserved **********" << "\n";
+    auto sp = CreateDefaultUMC();
+
+    sp->SetUniqueID("umc 1");
+    CPPUNIT_ASSERT_EQUAL(sp->GetUniqueID(), std::string("umc 1") );
+    
+    
+}
+
 void SetUniqueIDTests::ParsedIDPreserved() {
 	std::cout << "********** SetUniqueIDTests::ParsedIDPreserved **********" << "\n";
 	using namespace UMC;
 
 	auto temp = CreateDefaultUMC();
 	auto sp = IUMC::CreateUMCFromBuffer( temp->Serialize() );
+    auto sp2=IUMC::CreateUMCFromBuffer("");
 	std::cout<<temp->Serialize();
 	std::cout<<sp->Serialize();
 
