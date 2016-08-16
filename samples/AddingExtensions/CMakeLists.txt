@@ -79,14 +79,18 @@ MESSAGE( STATUS " PROJECT BINARY DIR: " ${PROJECT_BINARY_DIR} )
 
 MESSAGE( STATUS " UMC BINARY DIR: " ${PROJECT_BINARY_DIR}/../../private/ )
 
-target_link_libraries( ${SAMPLE_NAME}
-	${PROJECT_BINARY_DIR}/../../../../private/${BUILD_CONFIGURATION}/${STATIC_LIB_PREFIX}UMC.${STATIC_LIB_EXTENSION}
-)
+if(UNIX AND NOT APPLE)
+	target_link_libraries( ${SAMPLE_NAME}
+		${PROJECT_BINARY_DIR}/../../../../private/${BUILD_CONFIGURATION}/${STATIC_LIB_PREFIX}UMC.${STATIC_LIB_EXTENSION})
+else()
+	target_link_libraries( ${SAMPLE_NAME}
+                ${PROJECT_BINARY_DIR}/../../../private/${BUILD_CONFIGURATION}/${STATIC_LIB_PREFIX}UMC.${STATIC_LIB_EXTENSION})
+endif()
 
 set(LIB_ADOBEXMP "XMPCore")
 if ( UNIX AND APPLE )
 	set_target_properties( ${SAMPLE_NAME} PROPERTIES LINK_FLAGS 
-		"-Wl,-F,-Shared ${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION}" )
+		"-Wl,-F ${XMPTOOLKIT_INCLUDE}/../libraries/${OS_FOLDER_NAME}/${BUILD_CONFIGURATION}" )
 	target_link_libraries( ${SAMPLE_NAME} "-framework ${LIB_ADOBEXMP}" )
 else()
 	target_link_libraries( ${SAMPLE_NAME} ${LIB_ADOBEXMP} )
