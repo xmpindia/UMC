@@ -17,38 +17,41 @@
 
 namespace UMC {
 
+	//!
+	//! \brief This interface represents VideoFrame Source of UMC.
+	//! \details Provides all the functions to get and set various properties of the video frame source.
+	//!
 	class IVideoFrameSource
 		: public ISource
 	{
 	public:
 
 		//!
-		//! Set the in count for the video frame source
-		//! \param[in] a value of type EditUnitCount indicating the in count for the video frame source
+		//! \brief Set the incount for the video frame source
+		//! \param[in] inCount A value of type EditUnitInCount indicating the incount for the video frame source
 		//!
 		virtual void SetInCount( const EditUnitInCount & inCount ) = 0;
 
 		//!
-		//! Get the edit in count for the video frame source
-		//! \return  a value of type EditUnitCount indicating the in count for the video frame source
+		//! \brief Get the edit incount for the video frame source
+		//! \return  A value of type EditUnitInCount indicating the incount for the video frame source
 		//!
 		virtual EditUnitInCount GetInCount() const = 0;
 
-
 		//!
-		//! Get the time code for the video frame source
+		//! \brief Get the time code for the video frame source
 		//! \return a value of type TimeCode indicating the time code of the video frame source
 		//!
 		virtual TimeCode GetTimeCode() const = 0;
 
 		//!
-		//! Get the associated video source for the video frame source
+		//! \brief Get the associated video source for the video frame source
 		//! \return a shared pointer to a non-const object of type IVideoSource
 		//!
 		virtual spIVideoSource GetVideoSource() = 0;
 
 		//!
-		//! Get the associated video source for the video frame source
+		//! \brief Get the associated video source for the video frame source
 		//! \return a shared pointer to a const object of type IVideoSource
 		//!
 		virtual spcIVideoSource GetVideoSource() const = 0;

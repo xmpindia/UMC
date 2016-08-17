@@ -18,6 +18,10 @@
 
 namespace UMC {
 
+	//!
+	//! \brief This interface represents Image Source of UMC.
+	//! \details Provides all the functions to get and set various properties of the image source.
+	//!
 	class IImageSource
 		: public ISource
 	{

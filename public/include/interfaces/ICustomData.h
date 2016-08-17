@@ -18,24 +18,29 @@
 
 namespace UMC {
 
+	//!
+    //! \brief Interface for CustomData.
+    //! \details This interface need to be implemented by all client's custom data classes to support custom data.
+    //!
+
 	class ICustomData {
 	
 	public:
 
 		//!
-		//! Set the parent node for the current node
-		//! \param[in] a weak pointer to the parent node
+		//! \brief Set the parent node for the current node
+		//! \param[in] parentNode A weak pointer to the parent node
 		//!
 		virtual void SetParentNode( const wpIUMCNode & parentNode ) = 0;
 
 		//!
-		//! Get the parent node for the current node
-		//! \return  a weak pointer to a const object of IUMCNode indicating the parent of the current node
+		//! \brief Get the parent node for the current node
+		//! \return a weak pointer to a const object of IUMCNode indicating the parent of the current node
 		//!
 		virtual wpcIUMCNode GetParentNode() const = 0;
 
 		//!
-		//! Get the parent node for the current node
+		//! \brief Get the parent node for the current node
 		//! \return  a weak pointer to a non-const object of IUMCNode indicating the parent of the current node
 		//!
 		virtual wpIUMCNode GetParentNode() = 0;

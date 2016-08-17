@@ -19,12 +19,17 @@
 #include "interfaces/IUMCNode.h"
 
 namespace UMC {
+
+	//!
+	//! \brief This interface is used for generating unique ID for the node 
+	//!
+
 	class IUniqueIDGenerator {
 	public:
 
 		//!
-		//! Generate a unique id based on the node type
-		//! param[in] a value of type IUMCNode::eNodeTypes indicating the type of the node for which the unique id is to be generated
+		//! \brief Generate a unique id based on the node type
+		//! \param[in] nodeType A value of type IUMCNode::eNodeTypes indicating the type of the node for which the unique id is to be generated
 		//! \return a value of type std::string indicating the generated unique id
 		//!
 		virtual std::string GenerateUniqueID( IUMCNode::eNodeTypes nodeType ) = 0;
