@@ -249,10 +249,11 @@ void AddingOutputsToUMCTests::OutputsContent() {
 void AddingOutputsToUMCTests::SerializeOutputs() {
     std::cout<< "********** AddingOutputsToUMCTests::SerializeOutputs **********"<<"\n";
     auto sp = CreateDefaultUMC();
-    std::cout<<sp->SerializeToBuffer();
+    //std::cout<<sp->SerializeToBuffer();
     using namespace TestUtils;
     std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingOutputs.xml" ) );
     CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+    std::cout<<sp->SerializeToBuffer();
 }
 
 void AddingOutputsToUMCTests::ParseOutputs() {

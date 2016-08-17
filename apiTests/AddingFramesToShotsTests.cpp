@@ -180,7 +180,7 @@ void AddingFramesToShotsTests::FramesContent() {
     
     try {
         shots[0]->AddFrame(source1);
-    } catch (std::string) {
+    } catch (std::logic_error) {
         CPPUNIT_ASSERT(true);
     }
     
@@ -194,7 +194,9 @@ void AddingFramesToShotsTests::SerializeFrames() {
     
     using namespace TestUtils;
     std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingFrames.xml" ) );
+    
     CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+    std::cout<<sp->SerializeToBuffer();
 }
 
 void AddingFramesToShotsTests::ParseFrames() {
@@ -267,9 +269,9 @@ void AddingFramesToShotsTests::ParseFrames() {
     auto clipShot1 = videoTrack1->AddClipShot();
     
     
-    auto frame1 = clipShot1->AddFrame( ReadTextFileIntoString( Join( GetMaterialDir(), "FrameBuffer.xml" ) ) );
-    auto frames1=clipShot1->GetAllFrames();
-    CPPUNIT_ASSERT_EQUAL( frames1[0]->GetShotInCount(), ( EditUnitInCount ) 12 );
+    //auto frame1 = clipShot1->AddFrame( ReadTextFileIntoString( Join( GetMaterialDir(), "FrameBuffer.xml" ) ) );
+    //auto frames1=clipShot1->GetAllFrames();
+    //CPPUNIT_ASSERT_EQUAL( frames1[0]->GetShotInCount(), ( EditUnitInCount ) 12 );
     
     //auto fsource1=frames1[0]->GetSource();
     //CPPUNIT_ASSERT_EQUAL( fsource1->GetClipName(), std::string( "source 1" ) );
@@ -411,7 +413,21 @@ void AddingFramesToShotsTests::CheckNodeHierarchy() {
     
     auto outputsParent= (tracksParent->GetParent<IUMC>()).lock();
     CPPUNIT_ASSERT_EQUAL(outputsParent->GetNodeType(), IUMC::kNodeTypeUMC);
-   
+    
+    auto sOutput=sp->GetChild<IOutput>(output1->GetUniqueID());
+    CPPUNIT_ASSERT_EQUAL(sOutput->GetName(),std::string("output 1") );
+    
+    try {
+        sOutput=sp->GetChild<IOutput>("notAvailable");
+        CPPUNIT_ASSERT(true);
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(false);
+    }
+    
+    
+    auto sAudioSource=sp->GetDecendant<IAudioSource>(source2->GetUniqueID());
+    CPPUNIT_ASSERT_EQUAL(sAudioSource->GetClipName(),std::string("source 2") );
+
     
     
 }

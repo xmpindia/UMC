@@ -352,7 +352,7 @@ void AddingShotsToTracksTests::RemoveShots() {
     } catch (std::logic_error) {
         CPPUNIT_ASSERT(false);
     }
-    
+    videoTracks2[0]->AddTransitionShot();
     videoTracks2[0]->RemoveShot( "notAvailable" );
     
     CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ShotCount(), (size_t) 6 );

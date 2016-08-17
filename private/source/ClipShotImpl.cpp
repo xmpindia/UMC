@@ -185,7 +185,7 @@ namespace INT_UMC {
 	}
 
 	size_t ClipShotImpl::RemoveAllShotSources() {
-		return ShotImpl::RemoveAllFrames();
+		return ShotImpl::RemoveAllShotSources();
 	}
 
 	UMC::spcIShotSource ClipShotImpl::GetShotSource( const std::string & uniqueID ) const {
