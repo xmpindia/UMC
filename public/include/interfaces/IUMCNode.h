@@ -26,8 +26,18 @@ namespace INT_UMC {
 };
 
 namespace UMC {
+
+	//!
+	//! \brief This interface acts as a base interface for all types of nodes in UMC
+	//! \details Provides all the functions to get and set various properties nodes.
+	//!
+
 	class IUMCNode {
 	public:
+
+		//!
+		//! @brief Indicates various types of node available in UMC.
+		//!
 		typedef enum {
 			kNodeTypeNone				= 0,
 
@@ -52,35 +62,35 @@ namespace UMC {
 		typedef std::vector< spcIUMCNode >		cNodeList;
 
 		//!
-		//! Get the node type of the node.
-		//! \return an object of type eNodeType indicating the type of the node.
+		//! \brief Get the node type of the node.
+		//! \return An object of type eNodeTypes indicating the type of the node.
 		//!
 		virtual eNodeTypes GetNodeType() const = 0;
 
 
 		//!
-		//! Get the unique id of the node
-		//! \return a value of type std::string indicating the unique id of the node.
+		//! \brief Get the unique id of the node
+		//! \return A value of type std::string indicating the unique id of the node.
 		//!
 		virtual const std::string & GetUniqueID() const = 0;
 
 
 		//!
-		//! Set the unique id of the node
-		//! \param[in] a value of type std::string indicating the unique id of the node.
-		//! \return a value of type bool indicating whether the unique id was successfully set. False is returned if the id is not unique, has length zero.
+		//! \brief Set the unique id of the node
+		//! \param[in] uniqueID a value of type std::string indicating the unique id of the node.
+		//! \return A value of type bool indicating whether the unique id was successfully set. False is returned if the id is not unique, has length zero.
 		//!
 		virtual bool SetUniqueID( const std::string & uniqueID ) = 0;
 
 
 		//!
-		//! Get the parsed id of the node
-		//! \return a value of type std::string indicating the parsed id of the node.
+		//! \brief Get the parsed id of the node
+		//! \return A value of type std::string indicating the parsed id of the node.
 		//!
 		virtual std::string GetParsedID() const = 0;
 
 		//!
-		//! Get the parent node of the current node
+		//! \brief Get the parent node of the current node
 		//! \return a weak pointer to non-const object of type requiredNodeType indicating the parent node of the current node
 		//!
 		template< typename requiredNodeType >
@@ -88,7 +98,7 @@ namespace UMC {
 
 
 		//!
-		//! Get the parent node of the current node
+		//! \brief Get the parent node of the current node
 		//! \return a weak pointer to const object of type requiredNodeType indicating the parent node of the current node
 		//!
 		template< typename requiredNodeType >
@@ -96,8 +106,8 @@ namespace UMC {
 
 
 		//!
-		//! Get the child node of the current node with a particular unique id
-		//! \param[in] a value of type std::string indicating the unique id of the node.
+		//! \brief Get the child node of the current node with a particular unique id
+		//! \param[in] uniqueID A value of type std::string indicating the unique id of the node.
 		//! \return a shared pointer to const object of type requiredNodeType indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		template< typename requiredNodeType >
@@ -105,8 +115,8 @@ namespace UMC {
 
 
 		//!
-		//! Get the child node of the current node with a particular unique id
-		//! \param[in] a value of type std::string indicating the unique id of the node.
+		//! \brief Get the child node of the current node with a particular unique id
+		//! \param[in] uniqueID A value of type std::string indicating the unique id of the node.
 		//! \return a shared pointer to const object of type requiredNodeType indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		template< typename requiredNodeType >
@@ -114,8 +124,8 @@ namespace UMC {
 
 
 		//!
-		//! Get the descendant node of the current node with a particular unique id
-		//! param[in] a value of type std::string indicating the unique id of the descendant node to be found
+		//! \brief Get the descendant node of the current node with a particular unique id
+		//! param[in] uniqueID A value of type std::string indicating the unique id of the descendant node to be found
 		//! \return a shared pointer to non-const object of type requiredNodeType indicating the descendant node with the unique id. An empty shared pointer will be returned if no descendant node is found with the provided unique id. 
 		//!
 		template< typename requiredNodeType >
@@ -123,90 +133,90 @@ namespace UMC {
 
 
 		//!
-		//! Get the descendant node of the current node with a particular unique id
-		//! param[in] a value of type std::string indicating the unique id of the descendant node to be found
+		//! \brief Get the descendant node of the current node with a particular unique id
+		//! param[in] uniqueID A value of type std::string indicating the unique id of the descendant node to be found
 		//! \return a shared pointer to const object of type requiredNodeType indicating the descendant node with the unique id. An empty shared pointer will be returned if no descendant node is found with the provided unique id. 
 		//!
 		template< typename requiredNodeType >
 		shared_ptr< const requiredNodeType > GetDecendant( const std::string & uniqueID ) const;
 
 		//!
-		//! Get the parent node of the current node
+		//! \brief Get the parent node of the current node
 		//! \return a weak pointer to const object of type IUMCNode indicating the parent node of the current node
 		//!
 		virtual wpcIUMCNode GetParentNode() const = 0;
 
 		//!
-		//! Get the parent node of the current node
+		//! \brief Get the parent node of the current node
 		//! \return a weak pointer to non-const object of type IUMCNode indicating the parent node of the current node
 		//!
 		virtual wpIUMCNode GetParentNode() = 0;
 
 
 		//!
-		//! Get the descendant node of the current node with a particular unique id
-		//! param[in] a value of type std::string indicating the unique id of the descendant node to be found
+		//! \brief Get the descendant node of the current node with a particular unique id
+		//! \param[in] uniqueID A value of type std::string indicating the unique id of the descendant node to be found
 		//! \return a shared pointer to const object of type IUMCNode indicating the descendant node with the unique id. An empty shared pointer will be returned if no descendant node is found with the provided unique id. 
 		//!
 		virtual spcIUMCNode GetDecendantNode( const std::string & uniqueID ) const = 0;
 
 		//!
-		//! Get the descendant node of the current node with a particular unique id
-		//! param[in] a value of type std::string indicating the unique id of the descendant node to be found
+		//! \brief Get the descendant node of the current node with a particular unique id
+		//! param[in] uniqueID A value of type std::string indicating the unique id of the descendant node to be found
 		//! \return a shared pointer to non-const object of type IUMCNode indicating the descendant node with the unique id. An empty shared pointer will be returned if no descendant node is found with the provided unique id. 
 		//!
 		virtual spIUMCNode GetDecendantNode( const std::string & uniqueID ) = 0;
 
 
 		//!
-		//! Get the child node of the current node with a particular unique id
-		//! \param[in] a value of type std::string indicating the unique id of the node.
+		//! \brief Get the child node of the current node with a particular unique id
+		//! \param[in] uniqueID A value of type std::string indicating the unique id of the node.
 		//! \return a shared pointer to const object of type IUMCNode indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		virtual spcIUMCNode GetChildNode( const std::string & uniqueID ) const = 0;
 
 		//!
-		//! Get the child node of the current node with a particular unique id
-		//! \param[in] a value of type std::string indicating the unique id of the node.
+		//! \brief Get the child node of the current node with a particular unique id
+		//! \param[in] uniqueID A value of type std::string indicating the unique id of the node.
 		//! \return a shared pointer to non-const object of type IUMCNode indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		virtual spIUMCNode GetChildNode( const std::string & uniqueID ) = 0;
 
 		//!
-		//! Get the list of all the children of the node
+		//! \brief Get the list of all the children of the node
 		//! \return a std::vector of non-const objects of type IUMCNode indicating all the child nodes of the current node.
 		//!
 		virtual NodeList GetAllChildren() = 0;
 
 		//!
-		//! Get the list of all the children of the node
+		//! \brief Get the list of all the children of the node
 		//! \return a std::vector of const objects of type IUMCNode indicating all the child nodes of the current node.
 		//!
 		virtual cNodeList GetAllChildren() const = 0;
 
 
 		//!
-		//! Get the list of all the descendants of the node
+		//! \brief Get the list of all the descendants of the node
 		//! \return a std::vector of non-const objects of type IUMCNode indicating all the descendants of the current node.
 		//!
 		virtual NodeList GetAllDecendants() = 0;
 
 		//!
-		//! Get the list of all the descendants of the node
+		//! \brief Get the list of all the descendants of the node
 		//! \return a std::vector of const objects of type IUMCNode indicating all the descendants of the current node.
 		//!
 		virtual cNodeList GetAllDecendants() const = 0;
 
 
 		//!
-		//! Get the reference count of the node based on the unique id of the node
+		//! \brief Get the reference count of the node based on the unique id of the node
 		//! \return a value of type size_t indicating the reference count of the node.
 		//!
 		virtual size_t GetReferenceCount() const = 0;
 
 
 		//!
-		//! Get the serialized XMP representation of the node
+		//! \brief Get the serialized XMP representation of the node
 		//! \return a value of type std::string indicating the serialized XMP representation of the node.
 		//!
 		virtual std::string Serialize() const = 0;
@@ -214,39 +224,39 @@ namespace UMC {
 		// plugin-able extension node handling
 
 		//!
-		//! Get the custom data associated with the node having a certain namespace and name
-		//! \param[in] a value of type std::string indicating the namespace of the custom data
-		//! \param[in] a value of type std::string indicating the name of the custom data
+		//! \brief Get the custom data associated with the node having a certain namespace and name
+		//! \param[in] customDataNameSpace A value of type std::string indicating the namespace of the custom data
+		//! \param[in] customDataName A value of type std::string indicating the name of the custom data
 		//! \return a shared pointer to a non-const object of type ICustomData indicating the custom data. An empty shared pointer will be returned in case no custom data is found with the provided namespace and name.
 		//!
 		virtual spICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) = 0;
 
 		//!
-		//! Get the custom data associated with the node having a certain namespace and name
-		//! \param[in] a value of type std::string indicating the namespace of the custom data
-		//! \param[in] a value of type std::string indicating the name of the custom data
+		//! \brief Get the custom data associated with the node having a certain namespace and name
+		//! \param[in] customDataNameSpace A value of type std::string indicating the namespace of the custom data
+		//! \param[in] customDataName A value of type std::string indicating the name of the custom data
 		//! \return a shared pointer to a const object of type ICustomData indicating the custom data. An empty shared pointer will be returned in case no custom data is found with the provided namespace and name.
 		//!
 		virtual spcICustomData GetCustomData( const std::string & customDataNameSpace, const std::string & customDataName ) const = 0;
 
 		//!
-		//! Add the custom data associated with the node having a certain namespace and name
-		//! \param[in] a value of type std::string indicating the namespace of the custom data
-		//! \param[in] a value of type std::string indicating the name of the custom data
-		//! \param[in] a shared pointer to a const object of type ICustomData indicating the custom data
+		//! \brief Add the custom data associated with the node having a certain namespace and name
+		//! \param[in] customDataNameSpace A value of type std::string indicating the namespace of the custom data
+		//! \param[in] customDataName A value of type std::string indicating the name of the custom data
+		//! \param[in] customData A shared pointer to a const object of type ICustomData indicating the custom data
 		//! \return a value of type bool indicating whether the custom data was successfully added to the node.
 		//!
 		virtual bool SetCustomData( const std::string & customDataNameSpace, const std::string & customDataName, const spICustomData & customData ) = 0;
 
 
 		//!
-		//! Get the pointer to the internal node object
+		//! \brief Get the pointer to the internal node object
 		//! \return a pointer to const object of type IUMCNode indicating the internal node.
 		//!
 		virtual INT_UMC::pIUMCNodeI GetInternalNode() = 0;
 
 		//!
-		//! Get the pointer to the internal node object
+		//! \brief Get the pointer to the internal node object
 		//! \return a pointer to const object of type IUMCNode indicating the internal node.
 		//!
 		virtual INT_UMC::pcIUMCNodeI GetInternalNode() const = 0;

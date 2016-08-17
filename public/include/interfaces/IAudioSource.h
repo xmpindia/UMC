@@ -20,6 +20,10 @@
 
 namespace UMC {
 
+	//!
+	//! \brief This interface represents Audio Source of UMC.
+	//! \details Provides all the functions to get and set various properties of the audio source.
+	//!
 	class IAudioSource
 		: public ISource
 	{
@@ -27,50 +31,49 @@ namespace UMC {
 	public:
 
 		//!
-		//! Set the audio edit rate for the audio source
-		//! \param[in] a value of type EditRate indicating the audio edit rate for the audio source
+		//! \brief Set the audio edit rate for the audio source
+		//! \param[in] editRate A value of type EditRate indicating the audio edit rate for the audio source
 		//!
 		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
 
 		//!
-		//! Get the audio edit rate for the audio source
+		//! \brief Get the audio edit rate for the audio source
 		//! \return a value of type EditRate indicating the audio edit rate for the audio source
 		//!
 		virtual EditRate GetAudioEditRate() const = 0;
 
 		//!
-		//! Set the edit in count for the audio source
-		//! \param[in] a value of type EditUnitCount indicating the in count for the audio source
+		//! \brief Set the edit incount for the audio source
+		//! \param[in] inCount A value of type EditUnitInCount indicating the incount for the audio source
 		//!
 		virtual void SetInCount( const EditUnitInCount & inCount ) = 0;
 
 		//!
-		//! Get the edit in count for the audio source
-		//! \return  a value of type EditUnitCount indicating the in count for the audio source
+		//! \brief Get the edit incount for the audio source
+		//! \return  a value of type EditUnitInCount indicating the incount for the audio source
 		//!
 		virtual EditUnitInCount GetInCount() const = 0;
 
 		//!
-		//! Set the duration for the audio source
-		//! \param[in] a value of type EditUnitDuration indicating the duration of the audio source
+		//! \brief Set the duration for the audio source
+		//! \param[in] duration A value of type EditUnitDuration indicating the duration of the audio source
 		//!
 		virtual void SetDuration( const EditUnitDuration & duration ) = 0;
 
 		//!
-		//! Get the duration for the audio source
-		//! \return a value of type EditUnitDuration indicating the duration of the audio source 
+		//! \brief Get the duration for the audio source
+		//! \return A value of type EditUnitDuration indicating the duration of the audio source 
 		//!
 		virtual EditUnitDuration GetDuration() const = 0;
 
 		//!
-		//! Set the time code for the audio source
-		//! \param[in] a value of type TimeCode indicating the time code of the audio source
+		//! \brief Set the time code for the audio source
+		//! \param[in] timeCode A value of type TimeCode indicating the time code of the audio source
 		//!
 		virtual void SetTimeCode( const TimeCode & timeCode ) = 0;
 
-
 		//!
-		//! Get the time code for the audio source
+		//! \brief Get the time code for the audio source
 		//! \return a value of type TimeCode indicating the time code of the audio source
 		//!
 		virtual TimeCode GetTimeCode() const = 0;

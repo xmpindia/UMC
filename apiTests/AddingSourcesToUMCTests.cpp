@@ -19,6 +19,9 @@ class AddingSourcesToUMCTests : public CppUnit::TestCase {
 		CPPUNIT_TEST( SourcesContent );
 		CPPUNIT_TEST( SerializeSources );
 		CPPUNIT_TEST( ParseSources );
+		CPPUNIT_TEST(referenceCountTest);
+		CPPUNIT_TEST(parentChildTest);
+		CPPUNIT_TEST(TimeCodeTest);
 	CPPUNIT_TEST_SUITE_END();
 
 
@@ -27,6 +30,9 @@ protected:
 	void SourcesContent();
 	void SerializeSources();
 	void ParseSources();
+	void referenceCountTest();
+	void parentChildTest();
+	void TimeCodeTest();
 
 public:
 	virtual void setUp();
@@ -430,6 +436,112 @@ void AddingSourcesToUMCTests::ParseSources() {
 		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetClipName(), std::string( "" ) );
 		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetType(), ISource::kSourceTypeImage );
 	}
+}
+
+void AddingSourcesToUMCTests::referenceCountTest()
+{
+	auto sp = CreateDefaultUMC();
+	auto videoSrcs = sp->GetAllVideoSources();
+	int count = videoSrcs[0]->GetReferenceCount();
+	CPPUNIT_ASSERT(count==5);
+	int i;
+	for (i = 1; i < 5; i++)
+	{
+		count = videoSrcs[i]->GetReferenceCount();
+		CPPUNIT_ASSERT(count == 0);
+	}
+
+	auto audioSrcs = sp->GetAllAudioSources();
+	for (i = 0; i < 5; i++)
+	{
+		count = audioSrcs[i]->GetReferenceCount();
+		CPPUNIT_ASSERT(count == 0);
+	}
+
+	auto imageSrcs = sp->GetAllImageSources();
+	for (i = 0; i < 5; i++)
+	{
+		count = imageSrcs[i]->GetReferenceCount();
+		CPPUNIT_ASSERT(count == 0);
+	}
+
+	auto vframeSrcs = sp->GetAllVideoFrameSources();
+	for (i = 0; i < 5; i++)
+	{
+		count = vframeSrcs[i]->GetReferenceCount();
+		CPPUNIT_ASSERT(count == 0);
+	}
+
+	sp->RemoveVideoFrameSource("16");
+	CPPUNIT_ASSERT(videoSrcs[0]->GetReferenceCount()==4);
+
+	int result;
+	bool exception = false;
+	try {
+		sp->RemoveVideoSource("1");
+	}
+	catch (...)
+	{
+		exception = true;
+	}
+	CPPUNIT_ASSERT(exception == true);
+
+	sp->RemoveVideoFrameSource("17");
+	sp->RemoveVideoFrameSource("18");
+	sp->RemoveVideoFrameSource("19");
+	sp->RemoveVideoFrameSource("20");
+
+	CPPUNIT_ASSERT(videoSrcs[0]->GetReferenceCount() == 0);
+	result = sp->RemoveVideoSource("1");
+	CPPUNIT_ASSERT(result == 1);
+	
+	result=sp->RemoveAudioSource("8");
+	CPPUNIT_ASSERT(result != 0);
+
+}
+
+void AddingSourcesToUMCTests::parentChildTest()
+{
+	/*
+	using namespace std;
+	auto sp = CreateDefaultUMC();
+	auto childs=sp->GetAllChildren();
+	int i;
+	for (i = 0; i < 20; i++)
+	{
+		childs[i]->
+
+	}
+	*/
+}
+
+void AddingSourcesToUMCTests::TimeCodeTest()
+{
+	using namespace UMC;
+	TimeCode ts(TimeCode::k30Fps, "03:05:22:41");
+	CPPUNIT_ASSERT(ts.Hours() == 3);
+	CPPUNIT_ASSERT(ts.Minutes() == 05);
+	CPPUNIT_ASSERT(ts.Seconds() == 22);
+	CPPUNIT_ASSERT(ts.StandardFrameRate() == TimeCode::k30Fps);
+
+	// Invalid time should not be set in timecode object
+	TimeCode ts1(2, "25:61:65:68");
+	CPPUNIT_ASSERT(ts1.Hours() == 25);
+	CPPUNIT_ASSERT(ts1.Minutes() == 61);
+	CPPUNIT_ASSERT(ts1.Seconds() == 65);
+
+	try {
+		TimeCode ts2(TimeCode::k30Fps, "Lets test this");
+	}
+	catch (std::logic_error)
+	{
+		CPPUNIT_ASSERT(true);
+	}
+
+	TimeCode ts3(TimeCode::k30Fps, "3:5:22:41");
+	std::string temp=ts3.SMPTETimecode();
+	CPPUNIT_ASSERT(strcmp(temp.c_str(), "03:05:22:41") == 0);
+
 }
 
 void AddingSourcesToUMCTests::setUp() {

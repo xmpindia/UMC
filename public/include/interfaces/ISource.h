@@ -23,6 +23,10 @@
 
 namespace UMC {
 
+	//!
+	//! \brief This interface acts as a base interface to all types of sources of UMC.
+	//! \details Provides functions to get and set clipname of the source. It also allows us to get type of source i.e, AudioSource,VideoSource,ImageSource, VideoFrameSource
+	//!
 	class ISource
 		: public IUMCNode
 	{
@@ -39,20 +43,20 @@ namespace UMC {
 		} eSourceTypes;
 
 		//!
-		//! Set the clip name of the source
-		//! \param[in] std::string object containing the clip name of the source
+		//! \brief Set the clip name of the source
+		//! \param[in] clipName A std::string object containing the clip name of the source
 		//!
 		virtual void SetClipName( const std::string & clipName ) = 0;
 
 		//!
-		//! Get the clip name of the source
-		//! \return a value of type std::string containing the clip name of the souce
+		//! \brief Get the clip name of the source
+		//! \return A value of type std::string containing the clip name of the souce
 		//!
 		virtual std::string GetClipName() const = 0;
 
 		//!
-		//! Get the type of the source
-		//! \return a value of eSourceType containing the type of the source
+		//! \brief Get the type of the source
+		//! \return A value of eSourceType containing the type of the source
 		//!
 		virtual eSourceTypes GetType() const = 0;
 
