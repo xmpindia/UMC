@@ -65,6 +65,9 @@ namespace INT_UMC {
 	}
 
 	UMC::spIShot TrackImpl::AddShot( const std::string & buffer, const spIUMCNode & node2 ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
+        
 		spIStructureNode parentNode = ParseRDF( buffer );
 		const NamespacePropertyNamePair * pairs[2] = { &kClipShotsPair, &kTransitionShotsPair };
 		size_t matchedIndex = GetMatchingIndexForActualNode( parentNode, &pairs[ 0 ], ( size_t ) 2 );
@@ -89,6 +92,8 @@ namespace INT_UMC {
 	}
 
 	UMC::spIClipShot TrackImpl::AddClipShot( const std::string & buffer, const spIUMCNode & node ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
 		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddClipShot( xmpNode, node );
 	}
@@ -111,6 +116,9 @@ namespace INT_UMC {
 	}
 
 	UMC::spITransitionShot TrackImpl::AddTransitionShot( const std::string & buffer, const spIUMCNode & node ) {
+        if(buffer.empty())
+            THROW_BUFFER_CANT_BE_EMPTY;
+        
 		spIStructureNode xmpNode = ParseRDF( buffer );
 		return AddTransitionShot( xmpNode, node );
 	}

@@ -53,6 +53,7 @@ namespace UMC {
 		//! Creates a new video frame source using an existing video source and adds the newly created video frame source to UMC
 		//! \param[in] a shared pointer to non const IVideoSource object representing the video source from which video frame source is to be created.
 		//! \return a shared pointer to non const IVideoFrameSource object representing the newly added video frame source.
+        //! \std::logic_error exception is thrown in case buffer is empty
 		//!
 		virtual spIVideoFrameSource AddVideoFrameSource( const spIVideoSource & videoSource ) = 0;
 
@@ -66,6 +67,7 @@ namespace UMC {
 		//! Creates a new source from a buffer
 		//! param[in] a value of type std::string indicating the buffer from which the source object is to be created
 		//! \return a shared pointer to a non-const object of type ISource representing the newly created source. A parsing error will be thrown in case the parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spISource AddSource( const std::string & buffer ) = 0;
 
@@ -73,6 +75,7 @@ namespace UMC {
 		//! Creates a new video source from a buffer
 		//! param[in] a value of type std::string indicating the buffer from which the video source object is to be created
 		//! \return a shared pointer to a non-const object of type IVideoSource representing the newly created video source. A parsing error will be thrown in case the parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIVideoSource AddVideoSource( const std::string & buffer ) = 0;
 
@@ -80,13 +83,15 @@ namespace UMC {
 		//! Creates a new audio source from a buffer
 		//! param[in] a value of type std::string indicating the buffer from which the source object is to be created
 		//! \return a shared pointer to a non-const object of type IAudioSource representing the newly created audio source. A parsing error will be thrown in case the parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIAudioSource AddAudioSource( const std::string & buffer ) = 0;
 
 		//!
-		//! Creates a new video source from a buffer
+		//! Creates a new video frame source from a buffer
 		//! param[in] a value of type std::string indicating the buffer from which the video frame source source object is to be created
 		//! \return a shared pointer to a non-const object of type IVideoFrameSource representing the newly created video frame source. A parsing error will be thrown in case the parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIVideoFrameSource AddVideoFrameSource( const std::string & buffer ) = 0;
 
@@ -94,21 +99,23 @@ namespace UMC {
 		//! Creates a new image source from a buffer
 		//! param[in] a value of type std::string indicating the buffer from which the image source source object is to be created
 		//! \return a shared pointer to a non-const object of type IImageSource representing the newly created image source. A parsing error will be thrown in case the parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIImageSource AddImageSource( const std::string & buffer ) = 0;
 
 
 		//!
-		//! Adds a new audio source to UMC
+		//! Adds a new output to UMC
 		//! \return a shared pointer to non const IOutput object representing the newly added output.
 		//!
 		virtual spIOutput AddOutput() = 0;
 
 		//!
-		//! Adds a new audio source to UMC
-		//! param[in] 
-		//! \return a shared pointer to non const IOutput object representing the newly added output.
-		//!
+		//! Creates a new output from a buffer
+		//! param[in] a value of type std::string indicating the buffer from which the output object is to be created
+		//! \return a shared pointer to non const object of type IOutput object representing the newly added output. A parsing error will be thrown in case the parsing of the buffer fails.
+		//! \Error is thrown in case buffer is empty
+        //!
 		virtual spIOutput AddOutput( const std::string & buffer ) = 0;
 
 		//!
@@ -196,7 +203,7 @@ namespace UMC {
 		virtual ImageSourceList GetAllImageSources() = 0;
 
 		//!
-		//! Gets the list of all the image frame sources present in the UMC
+		//! Gets the list of all the image sources present in the UMC
 		//! \return an object of type cImageSourceList representing list of const objects of type IImageSource.
 		//!
 		virtual cImageSourceList GetAllImageSources() const = 0;
@@ -246,14 +253,14 @@ namespace UMC {
 		//!
 		//! Gets the video frame source from the UMC with a particular unique id
 		//! param[in] a value of type std::string indicating the unique id of the video frame source
-		//! \return a shared pointer to a non-const object of type IAudioSource. An empty shared pointer will be returned if no video frame source is found with the particular unique id.
+		//! \return a shared pointer to a non-const object of type IVideoFrameSource. An empty shared pointer will be returned if no video frame source is found with the particular unique id.
 		//!
 		virtual spIVideoFrameSource GetVideoFrameSource( const std::string & uniqueID ) = 0;
 
 		//!
 		//! Gets the video frame source from the UMC with a particular unique id
 		//! param[in] a value of type std::string indicating the unique id of the audio source
-		//! \return a shared pointer to a const object of type IAudioSource. An empty shared pointer will be returned if no audio source is found with the particular unique id.
+		//! \return a shared pointer to a const object of type IVideoFrameSource. An empty shared pointer will be returned if no audio source is found with the particular unique id.
 		//!
 		virtual spcIVideoFrameSource GetVideoFrameSource( const std::string & uniqueID ) const = 0;
 
@@ -381,8 +388,8 @@ namespace UMC {
 		virtual size_t RemoveOutput( const std::string & uniqueID ) = 0;
 		
 		//!
-		//! Removes all the outputs present in the UMC
-		//! \return a value of type size_t indicating the count of outputs present in the UMC
+		//! Serialize UMC object to std::string
+		//! \return serialized object in form of std::string
 		//!
 		virtual std::string SerializeToBuffer() const = 0;
 

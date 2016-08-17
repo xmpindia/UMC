@@ -36,6 +36,11 @@ namespace INT_UMC {
 	#define THROW_UNIQUE_ID_IS_MISSING throw std::logic_error( "validation of serialized buffer failed since uniqueID is missing" );
 	#define THROW_PARSED_ID_NOT_UNIQUE throw std::logic_error( "validation of serialized buffer failed since uniqueID is already used in the DOM" );
 	#define THROW_XMPSTRUCTURE_NODE_VALIDATION_FAILED( reason ) throw std::logic_error( "validation of serialized buffer failed since " reason );
+    #define THROW_BUFFER_CANT_BE_EMPTY throw std::logic_error("input buffer can't be empty");
+    #define THROW_INPUT_CANT_BE_ZERO throw std::logic_error("Input can't be zero");
+    #define THROW_INPUT_CANT_BE_NULL throw std::logic_error("input can't be null");
+
+
 }
 
 #endif  // UMCDefines_I_h__

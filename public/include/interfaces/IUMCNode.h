@@ -98,7 +98,7 @@ namespace UMC {
 		//!
 		//! Get the child node of the current node with a particular unique id
 		//! \param[in] a value of type std::string indicating the unique id of the node.
-		//! \return a weak pointer to const object of type requiredNodeType indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
+		//! \return a shared pointer to const object of type requiredNodeType indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		template< typename requiredNodeType >
 		shared_ptr< requiredNodeType > GetChild( const std::string & uniqueID );
@@ -107,7 +107,7 @@ namespace UMC {
 		//!
 		//! Get the child node of the current node with a particular unique id
 		//! \param[in] a value of type std::string indicating the unique id of the node.
-		//! \return a weak pointer to const object of type requiredNodeType indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
+		//! \return a shared pointer to const object of type requiredNodeType indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		template< typename requiredNodeType >
 		shared_ptr< const requiredNodeType > GetChild( const std::string & uniqueID ) const;
@@ -161,14 +161,14 @@ namespace UMC {
 		//!
 		//! Get the child node of the current node with a particular unique id
 		//! \param[in] a value of type std::string indicating the unique id of the node.
-		//! \return a weak pointer to const object of type IUMCNode indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
+		//! \return a shared pointer to const object of type IUMCNode indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		virtual spcIUMCNode GetChildNode( const std::string & uniqueID ) const = 0;
 
 		//!
 		//! Get the child node of the current node with a particular unique id
 		//! \param[in] a value of type std::string indicating the unique id of the node.
-		//! \return a weak pointer to non-const object of type IUMCNode indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
+		//! \return a shared pointer to non-const object of type IUMCNode indicating the child node of the current node. If no child node with the provided unique id is found, an empty shared pointer is returned.
 		//!
 		virtual spIUMCNode GetChildNode( const std::string & uniqueID ) = 0;
 

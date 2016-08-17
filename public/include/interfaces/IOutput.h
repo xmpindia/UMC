@@ -33,13 +33,13 @@ namespace UMC {
 		typedef std::vector< spcIAudioTrack > cAudioTrackList;
 
 		//!
-		//! Create an empty video source and adds it to the video track list
+		//! Create an empty video track and adds it to the video track list
 		//! \return a shared pointer to non const IVideoTrack representing the video track after an empty video source has been added to it.
 		//!
 		virtual spIVideoTrack AddVideoTrack() = 0;
 
 		//!
-		//! Create an empty audio source and adds it to the audio track list
+		//! Create an empty audio track and adds it to the audio track list
 		//! \return a shared pointer to non const IAudioTrack representing the video track after an empty audio source has been added to it.
 		//!
 		virtual spIAudioTrack AddAudioTrack() = 0;
@@ -48,6 +48,7 @@ namespace UMC {
 		//! Create a new video track from the provided buffer
 		//! \param[in] a std::string indicating the serialized form of a video track
 		//! \return a shared pointer to non const IVideoTrack representing the newly added video track.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIVideoTrack AddVideoTrack( const std::string & buffer ) = 0;
 
@@ -55,6 +56,7 @@ namespace UMC {
 		//! Create a new audio track from the provided buffer
 		//! \param[in] a std::string indicating the serialized form of a audio track
 		//! \return a shared pointer to non const IAudioTrack representing the newly added audio track.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIAudioTrack AddAudioTrack( const std::string & buffer ) = 0;
 
@@ -62,6 +64,7 @@ namespace UMC {
 		//! Create a new track from the provided buffer
 		//! \param[in] a std::string indicating the serialized form of a track
 		//! \return a shared pointer to non const ITrack representing the newly added track.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spITrack AddTrack( const std::string & buffer ) = 0;
 
@@ -246,7 +249,7 @@ namespace UMC {
 		virtual size_t RemoveAllVideoTracks() = 0;
 
 		//!
-		//! Remove all the video tracks present in the output
+		//! Remove all the audio tracks present in the output
 		//! \return  a value of type size_t indicating the count of audio tracks present in the output before removal
 		//!
 		virtual size_t RemoveAllAudioTracks() = 0;

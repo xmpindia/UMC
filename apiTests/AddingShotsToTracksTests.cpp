@@ -18,6 +18,7 @@ class AddingShotsToTracksTests : public CppUnit::TestCase {
 	CPPUNIT_TEST( ShotsContent );
 	CPPUNIT_TEST( SerializeShots );
 	CPPUNIT_TEST( ParseShots );
+    CPPUNIT_TEST( RemoveShots );
 	CPPUNIT_TEST_SUITE_END();
 
 
@@ -26,6 +27,7 @@ protected:
 	void ShotsContent();
 	void SerializeShots();
 	void ParseShots();
+    void RemoveShots();
 
 public:
 	virtual void setUp();
@@ -67,6 +69,8 @@ static UMC::spIUMC CreateDefaultUMC() {
 	transitionShot1->SetDuration( 3 );
 
 	videoTrack1->AddTransitionShot();
+    //std::cout<<clipShot1->Serialize();
+    //std::cout<<transitionShot1->Serialize();
 
 	return sp;
 }
@@ -120,11 +124,6 @@ void AddingShotsToTracksTests::CountOfShots() {
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 3 );
 
-	videoTracks[0]->RemoveShot( "notAvailable" );
-
-	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 6 );
-	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 3 );
-	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 3 );
 
 	videoTracks[0]->RemoveAllClipShots();
 
@@ -161,9 +160,22 @@ void AddingShotsToTracksTests::ShotsContent() {
 	auto outputs = sp->GetAllOutputs();
 	auto videoTracks = outputs[0]->GetAllVideoTracks();
 	auto shots = videoTracks[0]->GetAllShots();
+    CPPUNIT_ASSERT_EQUAL(shots.size(), (size_t)5 );
 
 	CPPUNIT_ASSERT_EQUAL( shots[0]->GetInCount(), (EditUnitInCount) 10 );
 	CPPUNIT_ASSERT_EQUAL( shots[0]->GetDuration(), (EditUnitDuration) 15 );
+    
+    shots[0]->SetUniqueID("sh1");
+    auto shot1=videoTracks[0]->GetShot("sh1");
+    
+    CPPUNIT_ASSERT_EQUAL( shot1->GetInCount(), (EditUnitInCount) 10 );
+    CPPUNIT_ASSERT_EQUAL( shot1->GetDuration(), (EditUnitDuration) 15 );
+    
+    auto clipShot1=videoTracks[0]->GetClipShot("sh1");
+    
+    CPPUNIT_ASSERT_EQUAL( clipShot1->GetInCount(), (EditUnitInCount) 10 );
+    CPPUNIT_ASSERT_EQUAL( clipShot1->GetDuration(), (EditUnitDuration) 15 );
+
 
 	CPPUNIT_ASSERT_EQUAL( shots[1]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
 	CPPUNIT_ASSERT_EQUAL( shots[1]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
@@ -173,9 +185,55 @@ void AddingShotsToTracksTests::ShotsContent() {
 
 	CPPUNIT_ASSERT_EQUAL( shots[3]->GetInCount(), (EditUnitInCount) 8 );
 	CPPUNIT_ASSERT_EQUAL( shots[3]->GetDuration(), (EditUnitDuration) 3 );
+    
+    shots[3]->SetUniqueID("sh2");
+    auto transitionShot1=videoTracks[0]->GetShot("sh2");
+    
+    CPPUNIT_ASSERT_EQUAL( transitionShot1->GetInCount(), (EditUnitInCount) 8 );
+    CPPUNIT_ASSERT_EQUAL( transitionShot1->GetDuration(), (EditUnitDuration) 3 );
 
 	CPPUNIT_ASSERT_EQUAL( shots[4]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
 	CPPUNIT_ASSERT_EQUAL( shots[4]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
+    
+    
+    auto shot2=videoTracks[0]->GetShot("notAvailable");
+    if(shot2.get()==NULL)
+        CPPUNIT_ASSERT(true);
+    else
+        CPPUNIT_ASSERT(false);
+    
+    auto clipShot2=videoTracks[0]->GetShot("notAvailable");
+    if(clipShot2.get()==NULL)
+        CPPUNIT_ASSERT(true);
+    else
+        CPPUNIT_ASSERT(false);
+    
+    auto transitionShot2=videoTracks[0]->GetShot("notAvailable");
+    if(transitionShot2.get()==NULL)
+        CPPUNIT_ASSERT(true);
+    else
+        CPPUNIT_ASSERT(false);
+    
+    videoTracks[0]->RemoveAllShots();
+    
+    auto allClipShots = videoTracks[0]->GetAllClipShots();
+    auto allTransitionShots = videoTracks[0]->GetAllTransitionShots();
+    auto allShots= videoTracks[0]->GetAllShots();
+    
+    CPPUNIT_ASSERT_EQUAL(allClipShots.size(), (size_t)0 );
+    CPPUNIT_ASSERT_EQUAL(allTransitionShots.size(), (size_t)0 );
+    CPPUNIT_ASSERT_EQUAL(allShots.size(), (size_t)0 );
+    
+    //error scenarios
+    auto output2 = sp->AddOutput();
+    auto videoTrack1 = output2->AddVideoTrack();
+    auto audioTrack1 = output2->AddAudioTrack();
+    auto clip2=videoTrack1->AddClipShot();
+    
+
+    auto clip3=videoTrack1->AddTransitionShot();
+        
+    
 }
 
 void AddingShotsToTracksTests::SerializeShots()
@@ -213,6 +271,106 @@ void AddingShotsToTracksTests::ParseShots()
 
 	CPPUNIT_ASSERT_EQUAL( shots[4]->GetInCount(), (EditUnitInCount) kEditUnitInCountFromBeginning );
 	CPPUNIT_ASSERT_EQUAL( shots[4]->GetDuration(), (EditUnitDuration) kEditUnitDurationTillEnd );
+    
+    spIUMC sp2 = IUMC::CreateEmptyUMC();
+    auto output1 = sp2->AddOutput();
+    auto output2 = sp2->AddOutput();
+    auto videoTrack1=output1->AddVideoTrack();
+    
+    //checking for Empty string as input
+    try {
+        videoTrack1->AddShot("");
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(true);
+    }
+    
+    try {
+        videoTrack1->AddClipShot("");
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(true);
+    }
+    
+    
+    try {
+        videoTrack1->AddTransitionShot("");
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(true);
+    }
+    
+    
+    
+    auto audioTrack1=output1->AddAudioTrack();
+    audioTrack1->AddShot(ReadTextFileIntoString( Join( GetMaterialDir(), "ShotBuffer.xml" )));
+    auto shots1=audioTrack1->GetAllShots();
+    
+    CPPUNIT_ASSERT_EQUAL( shots1[0]->GetInCount(), (EditUnitInCount) 12 );
+    CPPUNIT_ASSERT_EQUAL( shots1[0]->GetDuration(), (EditUnitDuration) 15 );
+    
+    auto audioTrack2=output2->AddAudioTrack();
+    audioTrack2->AddClipShot(ReadTextFileIntoString( Join( GetMaterialDir(), "ClipShotBuffer.xml" )));
+    auto shots2=audioTrack2->GetAllClipShots();
+    
+    CPPUNIT_ASSERT_EQUAL( shots2[0]->GetInCount(), (EditUnitInCount) 10 );
+    CPPUNIT_ASSERT_EQUAL( shots2[0]->GetDuration(), (EditUnitDuration) 15 );
+    
+    
+    auto audioTrack3=output2->AddAudioTrack();
+    audioTrack3->AddTransitionShot(ReadTextFileIntoString( Join( GetMaterialDir(), "TransitionShotBuffer.xml" )));
+    auto shots3=audioTrack3->GetAllTransitionShots();
+    
+    CPPUNIT_ASSERT_EQUAL( shots3[0]->GetInCount(), (EditUnitInCount) 8 );
+    CPPUNIT_ASSERT_EQUAL( shots3[0]->GetDuration(), (EditUnitDuration) 3 );
+
+    
+    
+
+}
+
+void AddingShotsToTracksTests::RemoveShots() {
+    std::cout<< "********** AddingShotsToTracksTests::RemoveShots **********"<<"\n";
+    
+    auto sp = CreateDefaultUMC();
+    auto outputs=sp->AddOutput();
+    auto audioTrack=outputs->AddAudioTrack();
+    
+    auto sp2= CreateDefaultUMC();
+    auto outputs2=sp->GetAllOutputs();
+    auto videoTracks2 = outputs2[0]->GetAllVideoTracks();
+    
+    audioTrack->RemoveAllShots();
+    
+    try {
+        audioTrack->RemoveAllClipShots();
+        CPPUNIT_ASSERT(true);
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(false);
+    }
+    
+    try {
+        audioTrack->RemoveAllTransitionShots();
+        CPPUNIT_ASSERT(true);
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(false);
+    }
+    
+    videoTracks2[0]->RemoveShot( "notAvailable" );
+    
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ShotCount(), (size_t) 6 );
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ClipShotCount(), (size_t) 3 );
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->TransitionShotCount(), (size_t) 3 );
+    
+    videoTracks2[0]->RemoveClipShot( "notAvailable" );
+    
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ShotCount(), (size_t) 6 );
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ClipShotCount(), (size_t) 3 );
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->TransitionShotCount(), (size_t) 3 );
+    
+    videoTracks2[0]->RemoveTransitionShot( "notAvailable" );
+    
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ShotCount(), (size_t) 6 );
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ClipShotCount(), (size_t) 3 );
+    CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->TransitionShotCount(), (size_t) 3 );
+    
 }
 
 

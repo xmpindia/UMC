@@ -61,6 +61,7 @@ namespace UMC {
 		//! Creates a new shot from the provided buffer and adds it to the track
 		//! \param[in] a value of type std::string indicating the serialized form of a shot/
 		//! \return a shared pointer to a non-const object of type IShot indicating the shot that was newly created. An error will be thrown if parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIShot AddShot( const std::string & buffer ) = 0;
 
@@ -68,6 +69,7 @@ namespace UMC {
 		//! Creates a new clip shot from the provided buffer and adds it to the track
 		//! \param[in] a value of type std::string indicating the serialized form of a clip shot
 		//! \return a shared pointer to a non-const object of type IClipShot indicating the shot that was newly created.An error will be thrown if parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spIClipShot AddClipShot( const std::string & buffer ) = 0;
 
@@ -75,6 +77,7 @@ namespace UMC {
 		//! Creates a new transition shot from the provided buffer and adds it to the track
 		//! \param[in] a value of type std::string indicating the serialized form of a transition shot
 		//! \return a shared pointer to a non-const object of type ITransitionShot indicating the shot that was newly created.An error will be thrown if parsing of the buffer fails.
+        //! \Error is thrown in case buffer is empty
 		//!
 		virtual spITransitionShot AddTransitionShot( const std::string & buffer ) = 0;
 
@@ -104,7 +107,7 @@ namespace UMC {
 
 		//!
 		//! Gets all the shots present in the track
-		//! \return object of type ShotList indicating the list of all shots present in the track
+		//! \return a const object of type ShotList indicating the list of all shots present in the track
 		//!
 		virtual cShotList GetAllShots() const = 0;
 
@@ -136,7 +139,7 @@ namespace UMC {
 
 		//!
 		//! Gets all the clip shots present in the track
-		//! \return object of type ClipShotList indicating the list of all clip shots present in the track
+		//! \return const object of type ClipShotList indicating the list of all clip shots present in the track
 		//!
 		virtual cClipShotList GetAllClipShots() const = 0;
 
@@ -144,7 +147,7 @@ namespace UMC {
 		//! Gets a clip shot with a particular unique id
 		//! \param[in] a value of type std::string indicating the unique id of the clip shot
 		//! \return a shared pointer to a non-const object of type IClipShot. An empty shared pointer is returned if no clip shot is found with the provided id
-		//!
+		//! 
 		virtual spIClipShot GetClipShot( const std::string & uniqueID ) = 0;
 
 		//!
@@ -168,7 +171,7 @@ namespace UMC {
 
 		//!
 		//! Gets all the transition shots present in the track
-		//! \return object of type TransitionShotList indicating the list of all transition shots present in the track
+		//! \return const object of type TransitionShotList indicating the list of all transition shots present in the track
 		//!
 		virtual cTransitionShotList GetAllTransitionShots() const = 0;
 
