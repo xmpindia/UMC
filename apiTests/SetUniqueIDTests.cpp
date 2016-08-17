@@ -105,8 +105,7 @@ void SetUniqueIDTests::ParsedIDPreserved() {
 
 	auto temp = CreateDefaultUMC();
 	auto sp = IUMC::CreateUMCFromBuffer( temp->Serialize() );
-    auto sp2=IUMC::CreateUMCFromBuffer("");
-	std::cout<<temp->Serialize();
+    std::cout<<temp->Serialize();
 	std::cout<<sp->Serialize();
 
 	auto videoSourceNode = sp->GetVideoSource( "2" );

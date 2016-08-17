@@ -564,15 +564,29 @@ namespace INT_UMC {
 	}
 
 	spIUMCNode UMCImpl::GetChildNode( const std::string & uniqueID ) {
-		spIUMCNode node = mVideoSourceMap.find( uniqueID )->second;
-		if ( node ) return node;
-		node = mAudioSourceMap.find( uniqueID )->second;
-		if ( node ) return node;
-		node = mVideoFrameSourceMap.find( uniqueID )->second;
-		if ( node ) return node;
-		node = mImageSourceMap.find( uniqueID )->second;
-		if ( node ) return node;
-		node = mOutputMap.find( uniqueID )->second;
+        spIUMCNode node;
+            
+        if(mVideoSourceMap.find( uniqueID ) != mVideoSourceMap.end()){
+            node = mVideoSourceMap.find( uniqueID )->second;
+            return node;
+        }
+        if(mAudioSourceMap.find( uniqueID ) != mAudioSourceMap.end()){
+            node = mAudioSourceMap.find( uniqueID )->second;
+            return node;
+        }
+        if(mVideoFrameSourceMap.find( uniqueID ) != mVideoFrameSourceMap.end()){
+            node = mVideoFrameSourceMap.find( uniqueID )->second;
+            return node;
+        }
+        if(mImageSourceMap.find( uniqueID ) != mImageSourceMap.end()){
+            node = mImageSourceMap.find( uniqueID )->second;
+            return node;
+        }
+        if(mOutputMap.find( uniqueID ) != mOutputMap.end()){
+            node = mOutputMap.find( uniqueID )->second;
+            return node;
+        }
+        
 		return node;
 	}
 

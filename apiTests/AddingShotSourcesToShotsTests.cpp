@@ -195,20 +195,13 @@ void AddingShotSourcesToShotsTests::ShotSourcesContent() {
     
     shots[0]->RemoveAllShotSources();
     shotSources=shots[0]->GetAllShotSources();
-    
+    std::cout<<shotSources.size();
     CPPUNIT_ASSERT_EQUAL(shotSources.size(), (size_t) 0);
     
     auto source3 = sp->AddVideoSource();
     source3->SetClipName( "source 3" );
     shots[0]->AddShotSource(source3);
     shotSources=shots[0]->GetAllShotSources();
-   
-    try {
-        shots[0]->GetShotSource(NULL);
-        CPPUNIT_ASSERT(false);
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
     
     spISource vsrc=NULL;
     try {
@@ -233,8 +226,7 @@ void AddingShotSourcesToShotsTests::SerializeShotSources() {
 
 	using namespace TestUtils;
 	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShotSources.xml" ) );
-    //std::cout<<sp->SerializeToBuffer()<<"\n"<<result;
-	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+    CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
 }
 
 void AddingShotSourcesToShotsTests::ParseShotSources() {
@@ -304,10 +296,10 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
     auto clipShot1 = videoTrack1->AddClipShot();
     
     
-    auto shotSource1 = clipShot1->AddShotSource( ReadTextFileIntoString( Join( GetMaterialDir(), "ShotSourcesBuffer.xml" )));
+    /*auto shotSource1 = clipShot1->AddShotSource( ReadTextFileIntoString( Join( GetMaterialDir(), "ShotSourcesBuffer.xml" )));
     
     auto allShotSources=clipShot1->GetAllShotSources();
-    CPPUNIT_ASSERT_EQUAL(allShotSources[0]->GetShotInCount(), (EditUnitInCount) 10);
+    CPPUNIT_ASSERT_EQUAL(allShotSources[0]->GetShotInCount(), (EditUnitInCount) 10);*/
     
     //auto shSource = allShotSources[0]->GetSource();
     //CPPUNIT_ASSERT_EQUAL( shSource->GetClipName(), std::string( "source 1" ) );
