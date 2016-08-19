@@ -17,6 +17,9 @@
 #include "interfaces/IShot.h"
 
 namespace UMC {
+	//!
+	//! \brief This interface is for clip shots added to tracks in UMC
+	//!
 
 	class IClipShot
 		: public IShot

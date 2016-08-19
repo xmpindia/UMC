@@ -19,19 +19,23 @@
 
 namespace UMC {
 
+	//!
+	//! \brief This interface represents Audio Track added to an output.
+	//! \details Provides all the functions to get and set various properties of the audio track.
+	//!
 	class IAudioTrack
 		: public ITrack
 	{
 	public:
 
 		//!
-		//! Sets audio edit rate for the audio track
-		//! \param[in] EditRate object.
+		//! \brief Sets audio edit rate for the audio track
+		//! \param[in] editRate EditRate object.
 		//!
 		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
 
 		//!
-		//! Gets audio edit rate for the audio track
+		//! \brief Gets audio edit rate for the audio track
 		//! \return EditRate object.
 		//!
 		virtual EditRate GetAudioEditRate() const = 0;

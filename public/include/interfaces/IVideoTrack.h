@@ -19,31 +19,36 @@
 
 namespace UMC {
 
+	//!
+	//! \brief This interface represents Video Track added to an output.
+	//! \details Provides all the functions to get and set various properties of the video track.
+	//!
+
 	class IVideoTrack
 		: public ITrack
 	{
 	public:
 
 		//!
-		//! Sets video edit rate for the video track
-		//! \param[in] EditRate object.
+		//! \brief Sets video edit rate for the video track
+		//! \param[in] editRate EditRate object.
 		//!
 		virtual void SetVideoEditRate( const EditRate & editRate ) = 0;
 
 		//!
-		//! Gets video edit rate for the video track
+		//! \brief Gets video edit rate for the video track
 		//! \return EditRate object.
 		//!
 		virtual EditRate GetVideoEditRate() const = 0;
 
 		//!
-		//! Sets audio edit rate for the video track
-		//! \param[in] EditRate object.
+		//! \brief Sets audio edit rate for the video track
+		//! \param[in] editRate EditRate object.
 		//!
 		virtual void SetAudioEditRate( const EditRate & editRate ) = 0;
 
 		//!
-		//! Gets audio edit rate for the video track
+		//! \brief Gets audio edit rate for the video track
 		//! \return EditRate object.
 		//!
 		virtual EditRate GetAudioEditRate() const = 0;

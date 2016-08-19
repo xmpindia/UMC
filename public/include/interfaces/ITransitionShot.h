@@ -18,6 +18,9 @@
 
 namespace UMC {
 
+	//!
+	//! \brief This interface is for transition shots added to tracks in UMC
+	//!
 	class ITransitionShot
 		: public IShot
 	{

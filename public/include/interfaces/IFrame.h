@@ -20,6 +20,10 @@
 #include <string>
 
 namespace UMC {
+	//!
+	//! \brief This interface is for frames added to shots in UMC
+	//! \details Provides functions to get and set various properties of frames
+	//!
 
 	class IFrame 
 		: public IUMCNode
@@ -28,37 +32,37 @@ namespace UMC {
 	public:
 
 		//!
-		//! Get the source from which the frame has been created
+		//! \brief Get the source from which the frame has been created
 		//! \return a shared pointer to a non const ISource object
 		//!
 		virtual spISource GetSource() = 0;
 
 		//!
-		//! Get the source from which the frame has been created
+		//! \brief Get the source from which the frame has been created
 		//! \return a shared pointer to a const ISource object
 		//!
 		virtual spcISource GetSource() const = 0;
 
 		//!
-		//! Set the in count for the source from which the frame has been created
-		//! \param[in] a value of type EditUnitCount indicating the in count for the source from which the frame has been created
+		//! \brief Set the in count for the source from which the frame has been created
+		//! \param[in] sourceInCount a value of type EditUnitCount indicating the in count for the source from which the frame has been created
 		//!
 		virtual void SetSourceInCount( const EditUnitInCount & sourceInCount ) = 0;
 
 		//!
-		//! Get the in count for the source from which the frame has been created
+		//! \brief Get the in count for the source from which the frame has been created
 		//! \return  a value of type EditUnitCount indicating the in count for the source from which the frame has been created
 		//!
 		virtual EditUnitInCount GetSourceInCount() const = 0;
 		
 		//!
-		//! Set the in count of the shot from which the frame has been created
-		//! \param[in] a value of type EditUnitCount indicating the in count of the shot from which the frame has been created
+		//! \brief Set the in count of the shot from which the frame has been created
+		//! \param[in] shotInCount a value of type EditUnitCount indicating the in count of the shot from which the frame has been created
 		//!
 		virtual void SetShotInCount( const EditUnitInCount & shotInCount ) = 0;
 
 		//!
-		//! Get the in count of the shot from which the frame has been created
+		//! \brief Get the in count of the shot from which the frame has been created
 		//! \return  a value of type EditUnitCount indicating the in count of the shot from which the frame has been created
 		//!
 		virtual EditUnitInCount GetShotInCount() const = 0;
