@@ -52,7 +52,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AddingShotSourcesToShotsTests );
 
 static UMC::spIUMC CreateDefaultUMC() {
 	using namespace UMC;
-
+    
 	spIUMC sp = IUMC::CreateEmptyUMC();
 	auto output1 = sp->AddOutput();
 	auto source1 = sp->AddVideoSource();
@@ -73,6 +73,7 @@ static UMC::spIUMC CreateDefaultUMC() {
 	auto shotSource2 = transitionShot1->AddShotSource( source1 );
 	auto shotSource3 = transitionShot1->AddShotSource( source2 );
     //std::cout<<shotSource1->Serialize();
+    
 	return sp;
 }
 
@@ -223,7 +224,6 @@ void AddingShotSourcesToShotsTests::ShotSourcesContent() {
 void AddingShotSourcesToShotsTests::SerializeShotSources() {
 	std::cout<< "********** AddingShotSourcesToShotsTests::SerializeShotSources **********"<<"\n";
 	auto sp = CreateDefaultUMC();
-
 	using namespace TestUtils;
 	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShotSources.xml" ) );
     CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
@@ -234,7 +234,7 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
 	using namespace TestUtils;
 	using namespace UMC;
 	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShotSources.xml" ) ) );
-
+    std::cout<<sp->SerializeToBuffer();
 	auto outputs = sp->GetAllOutputs();
 	auto tracks = outputs[0]->GetAllTracks();
 	auto shots = tracks[0]->GetAllShots();
