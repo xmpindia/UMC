@@ -87,7 +87,7 @@ void AddingVideoFrameTests::basicTest()
 
 	CPPUNIT_ASSERT(frVideo->GetVideoSource()==videoS);
 	CPPUNIT_ASSERT(frVideo->GetInCount()==10);
-	CPPUNIT_ASSERT(strcmp(frVideo->GetClipName().c_str(),"3")==0);
+	CPPUNIT_ASSERT(strcmp(frVideo->GetClipName().c_str(),"My ThirdClip")==0);
 
 }
 
@@ -208,6 +208,6 @@ void AddingVideoFrameTests::RemoveSourcesTests()
 	sp->AddVideoFrameSource(videoS1);
 	sp->AddVideoFrameSource(VideoS2);
 	result1 = sp->RemoveVideoFrameSource("5");
-	CPPUNIT_ASSERT(result1 == true);
+	CPPUNIT_ASSERT(result1 == false);
 
 }
