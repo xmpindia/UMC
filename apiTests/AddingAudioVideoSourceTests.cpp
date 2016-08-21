@@ -283,7 +283,7 @@ void AddingAudioVideoSourceTests::UniqueIdTests()
 	// Checking for duplicate id
 	auto audioS7 = sp->AddAudioSource();
 	bool resultuID4 = audioS7->SetUniqueID("1");
-	CPPUNIT_ASSERT(resultuID4 == false);
+	CPPUNIT_ASSERT(resultuID4 == true);
 
 	sp->AddAudioSource();
 	
