@@ -54,6 +54,7 @@ void AddingDoViDisplayCustomDataToUMC::SetCustomDataTest() {
 
 	//std::cout<<" ******* AddingDoViDisplayCustomDataToUMC::Test *****\n";
 	//std::cout<<rdfRep<<"\n\n\n\n\n";
+	printf("DONE\n");
 }
 
 void AddingDoViDisplayCustomDataToUMC::tearDown() {

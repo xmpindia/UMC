@@ -106,6 +106,7 @@ void AddingFramesToShotsTests::CountOfFrames() {
     shots[0]->RemoveAllFrames();
     
     CPPUNIT_ASSERT_EQUAL( shots[0]->FrameCount(), ( size_t ) 0 );
+	printf("DONE AddingFramesToShotsTests::CountOfFrames\n");
 }
 
 
@@ -185,7 +186,7 @@ void AddingFramesToShotsTests::FramesContent() {
     }
     
     
-    
+	printf("DONE AddingFramesToShotsTests::FramesContent\n");
 }
 
 void AddingFramesToShotsTests::SerializeFrames() {
@@ -197,6 +198,7 @@ void AddingFramesToShotsTests::SerializeFrames() {
     
     CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
     std::cout<<sp->SerializeToBuffer();
+	printf("DONE AddingFramesToShotsTests::SerializeFrames\n");
 }
 
 void AddingFramesToShotsTests::ParseFrames() {
@@ -278,7 +280,7 @@ void AddingFramesToShotsTests::ParseFrames() {
     //CPPUNIT_ASSERT_EQUAL( fsource1->GetType(), ISource::kSourceTypeVideo );
     
     
-    
+	printf("DONE AddingFramesToShotsTests::ParseFrames\n");
 }
 
 void AddingFramesToShotsTests::RemoveFrames() {
@@ -296,7 +298,7 @@ void AddingFramesToShotsTests::RemoveFrames() {
     CPPUNIT_ASSERT_EQUAL( shots[0]->FrameCount(), ( size_t ) 3 );
     
     
-    
+	printf("DONE AddingFramesToShotsTests::RemoveFrames\n");
 }
 
 void AddingFramesToShotsTests::CheckNodeHierarchy() {
@@ -428,7 +430,7 @@ void AddingFramesToShotsTests::CheckNodeHierarchy() {
     auto sAudioSource=sp->GetDecendant<IAudioSource>(source2->GetUniqueID());
     CPPUNIT_ASSERT_EQUAL(sAudioSource->GetClipName(),std::string("source 2") );
 
-    
+	printf("DONE  AddingFramesToShotsTests::CheckNodeHierarchy\n");
     
 }
 

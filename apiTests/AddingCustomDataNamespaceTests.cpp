@@ -64,6 +64,7 @@ void AddingCustomDataNamespaceTests::SetCustomDataTest1() {
 
 		UMC_Terminate();
 	}
+	printf("Done");
 }
 
 
@@ -92,5 +93,6 @@ void AddingCustomDataNamespaceTests::SetCustomDataTest2() {
 	}
 
 	UMC_Terminate();
+	printf("Done");
 }
 

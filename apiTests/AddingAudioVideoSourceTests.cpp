@@ -11,6 +11,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include <stdexcept>
 #include "TestUtils.h"
+#include <string.h>
 
 class AddingAudioVideoSourceTests : public CppUnit::TestCase {
 
@@ -105,6 +106,7 @@ void AddingAudioVideoSourceTests::basicTest()
 	CPPUNIT_ASSERT(ts1.Seconds() == 22);
 	CPPUNIT_ASSERT(ts1.StandardFrameRate() == TimeCode::k30Fps);
 	
+//	printf("DONE\n");
 }
 
 void AddingAudioVideoSourceTests::NegativeTest()
@@ -129,6 +131,7 @@ void AddingAudioVideoSourceTests::NegativeTest()
 	videoS2->SetInCount((EditUnitInCount)30);
 
 	std::string buffer=sp->SerializeToBuffer();
+//	printf("DONE\n");
 }
 
 void AddingAudioVideoSourceTests::MultipleAudioSourcesTest()
@@ -185,7 +188,7 @@ void AddingAudioVideoSourceTests::MultipleAudioSourcesTest()
 	sp->AddAudioSource();
 	buffer = sp->SerializeToBuffer();
 
-
+//	printf("DONE\n");
 }
 
 void AddingAudioVideoSourceTests::MultipleVideoSourcesTest()
@@ -241,6 +244,7 @@ void AddingAudioVideoSourceTests::MultipleVideoSourcesTest()
 
 	sp->AddVideoSource();
 	buffer = sp->SerializeToBuffer();
+//	printf("DONE\n");
 }
 
 void AddingAudioVideoSourceTests::UniqueIdTests()
@@ -291,6 +295,7 @@ void AddingAudioVideoSourceTests::UniqueIdTests()
 	CPPUNIT_ASSERT(strcmp(audioS6->GetUniqueID().c_str(), "6") == 0);
 
 	 buffer = sp->SerializeToBuffer();
+//	 printf("DONE\n");
 }
 
 void AddingAudioVideoSourceTests::RemoveSourcesTests()
@@ -331,5 +336,5 @@ void AddingAudioVideoSourceTests::RemoveSourcesTests()
 	CPPUNIT_ASSERT(count == 1);
 
 	count=sp->RemoveAllVideoSources();
-
+//	printf("DONE\n");
 }

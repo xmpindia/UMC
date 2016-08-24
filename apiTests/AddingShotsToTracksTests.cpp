@@ -149,6 +149,8 @@ void AddingShotsToTracksTests::CountOfShots() {
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ShotCount(), (size_t) 0 );
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->ClipShotCount(), (size_t) 0 );
 	CPPUNIT_ASSERT_EQUAL( videoTracks[0]->TransitionShotCount(), (size_t) 0 );
+
+	printf("DONE AddingShotsToTracksTests::CountOfShots\n");
 }
 
 
@@ -233,7 +235,7 @@ void AddingShotsToTracksTests::ShotsContent() {
 
     auto clip3=videoTrack1->AddTransitionShot();
         
-    
+	printf("DONE AddingShotsToTracksTests::ShotsContent\n");
 }
 
 void AddingShotsToTracksTests::SerializeShots()
@@ -243,7 +245,9 @@ void AddingShotsToTracksTests::SerializeShots()
 
 	using namespace TestUtils;
 	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShots.xml" ) );
+	std::string temp = sp->SerializeToBuffer();
 	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+	printf("DONE AddingShotsToTracksTests::SerializeShots\n");
 }
 
 void AddingShotsToTracksTests::ParseShots()
@@ -321,7 +325,7 @@ void AddingShotsToTracksTests::ParseShots()
     CPPUNIT_ASSERT_EQUAL( shots3[0]->GetInCount(), (EditUnitInCount) 8 );
     CPPUNIT_ASSERT_EQUAL( shots3[0]->GetDuration(), (EditUnitDuration) 3 );
 
-    
+	printf("DONE AddingShotsToTracksTests::ParseShots\n");
     
 
 }
@@ -371,6 +375,7 @@ void AddingShotsToTracksTests::RemoveShots() {
     CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->ClipShotCount(), (size_t) 3 );
     CPPUNIT_ASSERT_EQUAL( videoTracks2[0]->TransitionShotCount(), (size_t) 3 );
     
+	printf("DONE AddingShotsToTracksTests::RemoveShots\n");
 }
 
 
