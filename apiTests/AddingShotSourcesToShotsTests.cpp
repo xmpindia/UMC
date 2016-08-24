@@ -120,6 +120,8 @@ void AddingShotSourcesToShotsTests::CountOfShotSources() {
 
 	CPPUNIT_ASSERT_EQUAL( shots[0]->ShotSourceCount(), ( size_t ) 0 );
 	CPPUNIT_ASSERT_EQUAL( shots[1]->ShotSourceCount(), ( size_t ) 0 );
+
+	printf("DONE AddingShotSourcesToShotsTests::CountOfShotSources \n");
 }
 
 
@@ -217,7 +219,7 @@ void AddingShotSourcesToShotsTests::ShotSourcesContent() {
     
     CPPUNIT_ASSERT_EQUAL(shotSources.size(), (size_t) 0);
     
-    
+	printf("DONE AddingShotSourcesToShotsTests::ShotSourcesContent \n");
 }
 
 
@@ -227,6 +229,8 @@ void AddingShotSourcesToShotsTests::SerializeShotSources() {
 	using namespace TestUtils;
 	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShotSources.xml" ) );
     CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+
+	printf("DONE AddingShotSourcesToShotsTests::SerializeShotSources \n");
 }
 
 void AddingShotSourcesToShotsTests::ParseShotSources() {
@@ -305,7 +309,7 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
     //CPPUNIT_ASSERT_EQUAL( shSource->GetClipName(), std::string( "source 1" ) );
     //CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
     
-    
+	printf("DONE AddingShotSourcesToShotsTests::ParseShotSources \n");
     
 }
 
@@ -339,7 +343,7 @@ void AddingShotSourcesToShotsTests::RemoveShotSources() {
         CPPUNIT_ASSERT(false);
     }
     
-    
+	printf("DONE AddingShotSourcesToShotsTests::RemoveShotSources \n");
 }
 
 void AddingShotSourcesToShotsTests::setUp() {

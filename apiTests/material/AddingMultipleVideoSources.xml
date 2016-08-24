@@ -1,0 +1,68 @@
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 5.6.0">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description rdf:about=""
+            xmlns:umc="http://ns.umc.com/xmp/1.0/UniversalMetadataContainer/"
+            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+			xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/">			
+            <umc:videoSources>
+               <rdf:Bag>
+                  <rdf:li rdf:parseType="Resource">
+                     <xmpMM:DocumentID>1</xmpMM:DocumentID>
+                     <xmpDM:startTimeCode rdf:parseType="Resource">
+                        <xmpDM:timeFormat>23976Timecode</xmpDM:timeFormat>
+                        <xmpDM:timeValue>02:04:12:21</xmpDM:timeValue>
+                     </xmpDM:startTimeCode>
+                     <xmpDM:title>clipNamev1</xmpDM:title>
+                     <umc:audioEditRate>48000</umc:audioEditRate>
+                     <umc:duration>50</umc:duration>
+                     <umc:inCount>5</umc:inCount>
+                     <umc:videoEditRate>24000/1001</umc:videoEditRate>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                     <xmpMM:DocumentID>2</xmpMM:DocumentID>
+                     <umc:audioEditRate>48000</umc:audioEditRate>
+                     <umc:videoEditRate>1</umc:videoEditRate>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                     <xmpMM:DocumentID>3</xmpMM:DocumentID>
+                     <umc:audioEditRate>48000</umc:audioEditRate>
+                     <umc:videoEditRate>1</umc:videoEditRate>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                     <xmpMM:DocumentID>4</xmpMM:DocumentID>
+                     <umc:audioEditRate>48000</umc:audioEditRate>
+                     <umc:videoEditRate>1</umc:videoEditRate>
+                  </rdf:li>
+                  <rdf:li rdf:parseType="Resource">
+                     <xmpMM:DocumentID>5</xmpMM:DocumentID>
+                     <umc:audioEditRate>48000</umc:audioEditRate>
+                     <umc:videoEditRate>1</umc:videoEditRate>
+                  </rdf:li>
+               </rdf:Bag>
+            </umc:videoSources>
+        </rdf:Description>
+    </rdf:RDF>
+</x:xmpmeta>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xpacket end="w"?>
