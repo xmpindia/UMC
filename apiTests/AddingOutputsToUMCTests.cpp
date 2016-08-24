@@ -126,7 +126,7 @@ void AddingOutputsToUMCTests::CountOfOutputs() {
     sp->RemoveAllOutputs();
     CPPUNIT_ASSERT_EQUAL( sp->OutputCount(), ( size_t ) 0 );
     
-    
+	printf("AddingOutputsToUMCTests::CountOfOutputs\n");
     
 }
 
@@ -243,16 +243,20 @@ void AddingOutputsToUMCTests::OutputsContent() {
     IUMC::OutputList olist = sp->GetAllOutputs();
     CPPUNIT_ASSERT_EQUAL(olist.size(), ( size_t ) 0);
     
-    
+	printf("AddingOutputsToUMCTests::OutputsContent\n");
 }
 
 void AddingOutputsToUMCTests::SerializeOutputs() {
     std::cout<< "********** AddingOutputsToUMCTests::SerializeOutputs **********"<<"\n";
     auto sp = CreateDefaultUMC();
-    std::cout<<sp->SerializeToBuffer();
+    //std::cout<<sp->SerializeToBuffer();
     using namespace TestUtils;
-    std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingOutputs.xml" ) );
+    std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "\\AddingOutputs.xml" ) );
+	std::string temp = sp->SerializeToBuffer();
     CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+    std::cout<<sp->SerializeToBuffer();
+	printf("AddingOutputsToUMCTests::SerializeOutputs\n");
+
 }
 
 void AddingOutputsToUMCTests::ParseOutputs() {
@@ -261,7 +265,7 @@ void AddingOutputsToUMCTests::ParseOutputs() {
     using namespace UMC;
     
     //creating UMC from Buffer
-    auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingOutputs.xml" ) ) );
+    auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "\\AddingOutputs.xml" ) ) );
     
     IUMC::OutputList outputs = sp->GetAllOutputs();
     CPPUNIT_ASSERT_EQUAL( outputs.size(), (size_t) 2 );
@@ -294,7 +298,7 @@ void AddingOutputsToUMCTests::ParseOutputs() {
     }
     
     
-    sp2->AddOutput( ReadTextFileIntoString( Join( GetMaterialDir(), "OutputBuffer.xml" ) ) );
+    sp2->AddOutput( ReadTextFileIntoString( Join( GetMaterialDir(), "\\OutputBuffer.xml" ) ) );
     IUMC::OutputList outputs2 = sp2->GetAllOutputs();
     std::cout<<outputs2.size();
     CPPUNIT_ASSERT_EQUAL( outputs2.size(), (size_t) 1 );
@@ -303,6 +307,7 @@ void AddingOutputsToUMCTests::ParseOutputs() {
     CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetImageAspectRatio(), AspectRatio( 1080, 720 ) );
     CPPUNIT_ASSERT_EQUAL( outputs[ 1 ]->GetCanvasAspectRatio(), AspectRatio( 640, 480 ) );
     
+	printf("AddingOutputsToUMCTests::ParseOutputs\n");
 }
 
 
@@ -333,7 +338,7 @@ void AddingOutputsToUMCTests::RemoveOutputs(){
     sp->RemoveOutput( "notAvailable" );
     CPPUNIT_ASSERT_EQUAL( sp->OutputCount(), ( size_t ) 1 );
    
-    
+	printf("AddingOutputsToUMCTests::RemoveOutputs\n");
     
 }
 

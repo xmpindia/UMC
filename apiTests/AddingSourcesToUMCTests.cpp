@@ -11,6 +11,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include <stdexcept>
 #include "TestUtils.h"
+#include <string.h>
 
 class AddingSourcesToUMCTests : public CppUnit::TestCase {
 
@@ -22,6 +23,7 @@ class AddingSourcesToUMCTests : public CppUnit::TestCase {
 		CPPUNIT_TEST(referenceCountTest);
 		CPPUNIT_TEST(parentChildTest);
 		CPPUNIT_TEST(TimeCodeTest);
+		CPPUNIT_TEST(CreatingFromBufferTest);
 	CPPUNIT_TEST_SUITE_END();
 
 
@@ -33,6 +35,7 @@ protected:
 	void referenceCountTest();
 	void parentChildTest();
 	void TimeCodeTest();
+	void CreatingFromBufferTest();
 
 public:
 	virtual void setUp();
@@ -220,6 +223,8 @@ void AddingSourcesToUMCTests::CountOfSources() {
 	CPPUNIT_ASSERT_EQUAL( sp->RemoveAllSources(), videoSourceCount + imageSourceCount + audioSourceCount + videoFrameSourceCount );
 	videoSourceCount = imageSourceCount = audioSourceCount = videoFrameSourceCount = 0;
 	CPPUNIT_ASSERT_EQUAL( CheckCount( sp, videoSourceCount, audioSourceCount, imageSourceCount, videoFrameSourceCount ), true );
+
+	printf("DONE AddingSourcesToUMCTests::CountOfSources\n");
 }
 
 void AddingSourcesToUMCTests::SourcesContent() {
@@ -350,6 +355,8 @@ void AddingSourcesToUMCTests::SourcesContent() {
 	imageSources = sp->GetAllImageSources();
 	CPPUNIT_ASSERT_EQUAL( imageSources[0]->GetClipName(), std::string( "imageClip" ) );
 	CPPUNIT_ASSERT_EQUAL( imageSources[0]->GetType(), ISource::kSourceTypeImage );
+
+	printf("DONE AddingSourcesToUMCTests::SourcesContent\n");
 }
 
 void AddingSourcesToUMCTests::SerializeSources() {
@@ -358,6 +365,8 @@ void AddingSourcesToUMCTests::SerializeSources() {
 	using namespace TestUtils;
 	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingSources.xml" ) );
 	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+
+	printf("DONE AddingSourcesToUMCTests::SerializeSources\n");
 }
 
 void AddingSourcesToUMCTests::ParseSources() {
@@ -436,6 +445,8 @@ void AddingSourcesToUMCTests::ParseSources() {
 		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetClipName(), std::string( "" ) );
 		CPPUNIT_ASSERT_EQUAL( imageSources[i]->GetType(), ISource::kSourceTypeImage );
 	}
+
+	printf("DONE AddingSourcesToUMCTests::ParseSources\n");
 }
 
 void AddingSourcesToUMCTests::referenceCountTest()
@@ -498,6 +509,7 @@ void AddingSourcesToUMCTests::referenceCountTest()
 	result=sp->RemoveAudioSource("8");
 	CPPUNIT_ASSERT(result != 0);
 
+	printf("DONE AddingSourcesToUMCTests::referenceCountTest\n");
 }
 
 void AddingSourcesToUMCTests::parentChildTest()
@@ -541,6 +553,98 @@ void AddingSourcesToUMCTests::TimeCodeTest()
 	TimeCode ts3(TimeCode::k30Fps, "3:5:22:41");
 	std::string temp=ts3.SMPTETimecode();
 	CPPUNIT_ASSERT(strcmp(temp.c_str(), "03:05:22:41") == 0);
+
+	printf("DONE AddingSourcesToUMCTests::TimeCodeTest\n");
+}
+
+void AddingSourcesToUMCTests::CreatingFromBufferTest()
+{
+	using namespace UMC;
+	using namespace TestUtils;
+	spIUMC sp = IUMC::CreateEmptyUMC();
+
+	// Creating AudioSource from bufffer 
+	std::string temp = ReadTextFileIntoString(Join(GetMaterialDir(), "AddingAudioSource.xml"));
+	auto audio1=sp->AddAudioSource(ReadTextFileIntoString(Join(GetMaterialDir(), "AddingAudioSource.xml")));
+	CPPUNIT_ASSERT(audio1->GetAudioEditRate() ==48000 );
+	CPPUNIT_ASSERT(strcmp(audio1->GetClipName().c_str(),"clipNamea1") == 0);
+	CPPUNIT_ASSERT(audio1->GetInCount() == 10);
+	CPPUNIT_ASSERT(strcmp(audio1->GetUniqueID().c_str(),"6") == 0);
+
+	// Creating VideoSource from bufffer 
+	auto video1 = sp->AddVideoSource(ReadTextFileIntoString(Join(GetMaterialDir(), "AddingVideoSource.xml")));
+	CPPUNIT_ASSERT(video1->GetAudioEditRate() == 48000);
+	CPPUNIT_ASSERT(strcmp(video1->GetClipName().c_str(), "clipNamev1") == 0);
+	CPPUNIT_ASSERT(video1->GetInCount() == 5);
+	CPPUNIT_ASSERT(video1->GetDuration() == 50);
+	UMC::EditRate temp1 = video1->GetVideoEditRate();
+	CPPUNIT_ASSERT(temp1.Numerator()==24000);
+	CPPUNIT_ASSERT(temp1.Denominator() == 1001);
+	CPPUNIT_ASSERT(strcmp(video1->GetUniqueID().c_str(), "1") == 0);
+
+	// Creating ImageSource from bufffer 
+	auto image1 = sp->AddImageSource(ReadTextFileIntoString(Join(GetMaterialDir(), "AddingImageSource.xml")));
+	CPPUNIT_ASSERT(strcmp(image1->GetClipName().c_str(), "clipNamei1") == 0);
+	CPPUNIT_ASSERT(strcmp(image1->GetUniqueID().c_str(), "11") == 0);
+	
+	// Creating videoFrameSource from buffer
+//	spIUMC sp1 = IUMC::CreateUMCFromBuffer(ReadTextFileIntoString(Join(GetMaterialDir(), "AddingSources.xml")));
+	auto vframe1 = sp->AddVideoFrameSource(ReadTextFileIntoString(Join(GetMaterialDir(), "AddingVideoFrameSource.xml")));
+	CPPUNIT_ASSERT(strcmp(vframe1->GetClipName().c_str(), "clipNamevf1") == 0);
+	CPPUNIT_ASSERT(strcmp(vframe1->GetUniqueID().c_str(), "16") == 0);
+	CPPUNIT_ASSERT(strcmp(vframe1->GetVideoSource()->GetUniqueID().c_str(), "1") == 0);
+	CPPUNIT_ASSERT(vframe1->GetVideoSource()->GetInCount()==5);
+
+	//Negative Test Cases
+
+	
+	// When buffer contains garbage
+	try {
+		auto image1 = sp->AddImageSource(std::string("This is nothing"));
+		CPPUNIT_ASSERT(false);
+	}
+	catch (std::logic_error)
+	{
+		CPPUNIT_ASSERT(true);
+	}
+
+	try {
+		auto audio1 = sp->AddAudioSource(std::string("This is nothing"));
+		CPPUNIT_ASSERT(false);
+	}
+	catch (std::logic_error)
+	{
+		CPPUNIT_ASSERT(true);
+	}
+
+	try {
+		auto video1 = sp->AddVideoSource(std::string("This is nothing"));
+		CPPUNIT_ASSERT(false);
+	}
+	catch (std::logic_error)
+	{
+		CPPUNIT_ASSERT(true);
+	}
+
+	try {
+		auto vframe1 = sp->AddVideoFrameSource(std::string("This is nothing"));
+		CPPUNIT_ASSERT(false);
+	}
+	catch (std::logic_error)
+	{
+		CPPUNIT_ASSERT(true);
+	}
+	
+
+	// When buffer contains multiple video sources
+	try {
+		auto image1 = sp->AddImageSource(ReadTextFileIntoString(Join(GetMaterialDir(), "AddingMultipleVideoSources.xml")));
+		CPPUNIT_ASSERT(false);
+	}
+	catch (std::logic_error)
+	{
+		CPPUNIT_ASSERT(true);
+	}
 
 }
 

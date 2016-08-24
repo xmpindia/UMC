@@ -11,6 +11,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include <stdexcept>
 #include "TestUtils.h"
+#include <string.h>
 
 class AddingVideoFrameTests : public CppUnit::TestCase {
 
@@ -88,6 +89,7 @@ void AddingVideoFrameTests::basicTest()
 	CPPUNIT_ASSERT(frVideo->GetVideoSource()==videoS);
 	CPPUNIT_ASSERT(frVideo->GetInCount()==10);
 	CPPUNIT_ASSERT(strcmp(frVideo->GetClipName().c_str(),"My ThirdClip")==0);
+	printf("DONE AddingVideoFrameTests::basicTest\n");
 
 }
 
@@ -109,6 +111,7 @@ void AddingVideoFrameTests::NegativeTest()
 	frVideo1->SetInCount((EditUnitInCount)55);
 
 	std::string buffer = sp->SerializeToBuffer();
+	printf("DONE AddingVideoFrameTests::NegativeTest\n");
 }
 
 void AddingVideoFrameTests::MultipleVideoFrameSourcesTest()
@@ -166,6 +169,8 @@ void AddingVideoFrameTests::MultipleVideoFrameSourcesTest()
 	CPPUNIT_ASSERT(strcmp(VframeSources[3]->GetUniqueID().c_str(), "6") == 0);
 	CPPUNIT_ASSERT(strcmp(VframeSources[4]->GetUniqueID().c_str(), "7") == 0);
 	CPPUNIT_ASSERT(strcmp(VframeSources[5]->GetUniqueID().c_str(), "9") == 0);
+
+	printf("DONE AddingVideoFrameTests::MultipleVideoFrameSourcesTest\n");
 }
 
 
@@ -210,4 +215,5 @@ void AddingVideoFrameTests::RemoveSourcesTests()
 	result1 = sp->RemoveVideoFrameSource("5");
 	CPPUNIT_ASSERT(result1 == false);
 
+	printf("DONE AddingVideoFrameTests::RemoveSourcesTests\n");
 }

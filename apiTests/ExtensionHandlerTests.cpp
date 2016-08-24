@@ -108,6 +108,7 @@ void ExtensionHandlerTests::ExtensionHandlerTestForCompositeData() {
 	
     compareAvailableDisplaysObjects(*parsedAvailableDisplays,*customData);
     
+	printf("DONE ExtensionHandlerTests::ExtensionHandlerTestForCompositeData\n");
 }
 
 void ExtensionHandlerTests::ExtensionHandlerNegativeTest(){
@@ -150,4 +151,5 @@ void ExtensionHandlerTests::ExtensionHandlerNegativeTest(){
     
     CPPUNIT_ASSERT_EQUAL(bool(parsedAvailableDisplays),false);
     
+	printf("DONE ExtensionHandlerTests::ExtensionHandlerNegativeTest\n");
 }

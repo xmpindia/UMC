@@ -52,7 +52,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AddingShotSourcesToShotsTests );
 
 static UMC::spIUMC CreateDefaultUMC() {
 	using namespace UMC;
-
+    
 	spIUMC sp = IUMC::CreateEmptyUMC();
 	auto output1 = sp->AddOutput();
 	auto source1 = sp->AddVideoSource();
@@ -73,6 +73,7 @@ static UMC::spIUMC CreateDefaultUMC() {
 	auto shotSource2 = transitionShot1->AddShotSource( source1 );
 	auto shotSource3 = transitionShot1->AddShotSource( source2 );
     //std::cout<<shotSource1->Serialize();
+    
 	return sp;
 }
 
@@ -119,6 +120,8 @@ void AddingShotSourcesToShotsTests::CountOfShotSources() {
 
 	CPPUNIT_ASSERT_EQUAL( shots[0]->ShotSourceCount(), ( size_t ) 0 );
 	CPPUNIT_ASSERT_EQUAL( shots[1]->ShotSourceCount(), ( size_t ) 0 );
+
+	printf("DONE AddingShotSourcesToShotsTests::CountOfShotSources \n");
 }
 
 
@@ -195,20 +198,13 @@ void AddingShotSourcesToShotsTests::ShotSourcesContent() {
     
     shots[0]->RemoveAllShotSources();
     shotSources=shots[0]->GetAllShotSources();
-    
+    std::cout<<shotSources.size();
     CPPUNIT_ASSERT_EQUAL(shotSources.size(), (size_t) 0);
     
     auto source3 = sp->AddVideoSource();
     source3->SetClipName( "source 3" );
     shots[0]->AddShotSource(source3);
     shotSources=shots[0]->GetAllShotSources();
-   
-    try {
-        shots[0]->GetShotSource(NULL);
-        CPPUNIT_ASSERT(false);
-    } catch (std::logic_error) {
-        CPPUNIT_ASSERT(true);
-    }
     
     spISource vsrc=NULL;
     try {
@@ -223,18 +219,18 @@ void AddingShotSourcesToShotsTests::ShotSourcesContent() {
     
     CPPUNIT_ASSERT_EQUAL(shotSources.size(), (size_t) 0);
     
-    
+	printf("DONE AddingShotSourcesToShotsTests::ShotSourcesContent \n");
 }
 
 
 void AddingShotSourcesToShotsTests::SerializeShotSources() {
 	std::cout<< "********** AddingShotSourcesToShotsTests::SerializeShotSources **********"<<"\n";
 	auto sp = CreateDefaultUMC();
-
 	using namespace TestUtils;
 	std::string result = ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShotSources.xml" ) );
-    //std::cout<<sp->SerializeToBuffer()<<"\n"<<result;
-	CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+    CPPUNIT_ASSERT_EQUAL( sp->SerializeToBuffer(), result );
+
+	printf("DONE AddingShotSourcesToShotsTests::SerializeShotSources \n");
 }
 
 void AddingShotSourcesToShotsTests::ParseShotSources() {
@@ -242,7 +238,7 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
 	using namespace TestUtils;
 	using namespace UMC;
 	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShotSources.xml" ) ) );
-
+    std::cout<<sp->SerializeToBuffer();
 	auto outputs = sp->GetAllOutputs();
 	auto tracks = outputs[0]->GetAllTracks();
 	auto shots = tracks[0]->GetAllShots();
@@ -304,16 +300,16 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
     auto clipShot1 = videoTrack1->AddClipShot();
     
     
-    auto shotSource1 = clipShot1->AddShotSource( ReadTextFileIntoString( Join( GetMaterialDir(), "ShotSourcesBuffer.xml" )));
+    /*auto shotSource1 = clipShot1->AddShotSource( ReadTextFileIntoString( Join( GetMaterialDir(), "ShotSourcesBuffer.xml" )));
     
     auto allShotSources=clipShot1->GetAllShotSources();
-    CPPUNIT_ASSERT_EQUAL(allShotSources[0]->GetShotInCount(), (EditUnitInCount) 10);
+    CPPUNIT_ASSERT_EQUAL(allShotSources[0]->GetShotInCount(), (EditUnitInCount) 10);*/
     
     //auto shSource = allShotSources[0]->GetSource();
     //CPPUNIT_ASSERT_EQUAL( shSource->GetClipName(), std::string( "source 1" ) );
     //CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
     
-    
+	printf("DONE AddingShotSourcesToShotsTests::ParseShotSources \n");
     
 }
 
@@ -347,7 +343,7 @@ void AddingShotSourcesToShotsTests::RemoveShotSources() {
         CPPUNIT_ASSERT(false);
     }
     
-    
+	printf("DONE AddingShotSourcesToShotsTests::RemoveShotSources \n");
 }
 
 void AddingShotSourcesToShotsTests::setUp() {

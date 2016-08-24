@@ -79,6 +79,8 @@ void SetUniqueIDTests::ReferenceCountPreserved() {
 	CPPUNIT_ASSERT_EQUAL( videoSourceNode->SetUniqueID( "video2" ), true );
 	CPPUNIT_ASSERT_EQUAL( videoSourceNode->GetReferenceCount(), ( size_t ) 2 );
 	CPPUNIT_ASSERT_EQUAL( videoSourceNode->GetUniqueID().compare( "video2" ), 0 );
+
+	printf("DONE SetUniqueIDTests::ReferenceCountPreserved\n");
 }
 
 void SetUniqueIDTests::setUp() {
@@ -96,7 +98,7 @@ void SetUniqueIDTests::UniqueIDPreserved() {
     sp->SetUniqueID("umc 1");
     CPPUNIT_ASSERT_EQUAL(sp->GetUniqueID(), std::string("umc 1") );
     
-    
+	printf("DONE SetUniqueIDTests::UniqueIDPreserved\n");
 }
 
 void SetUniqueIDTests::ParsedIDPreserved() {
@@ -105,12 +107,13 @@ void SetUniqueIDTests::ParsedIDPreserved() {
 
 	auto temp = CreateDefaultUMC();
 	auto sp = IUMC::CreateUMCFromBuffer( temp->Serialize() );
-    auto sp2=IUMC::CreateUMCFromBuffer("");
-	std::cout<<temp->Serialize();
+    std::cout<<temp->Serialize();
 	std::cout<<sp->Serialize();
 
 	auto videoSourceNode = sp->GetVideoSource( "2" );
 	CPPUNIT_ASSERT_EQUAL( videoSourceNode->GetReferenceCount(), ( size_t ) 2 );
 	CPPUNIT_ASSERT_EQUAL( videoSourceNode->GetParsedID().compare("2"), 0 );
+
+	printf("DONE SetUniqueIDTests::ParsedIDPreserved\n");
 }
 
