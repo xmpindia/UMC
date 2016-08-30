@@ -265,19 +265,28 @@ void AddingFramesToShotsTests::ParseFrames() {
     }
     
     spIUMC sp2 = IUMC::CreateEmptyUMC();
-    auto output1 = sp2->AddOutput();
-    auto videoTrack1 = output1->AddVideoTrack();
+    auto output2 = sp2->AddOutput();
+    auto videoTrack2 = output2->AddVideoTrack();
+    auto clipShot2 = videoTrack2->AddClipShot();
+    try {
+        auto frame2 = clipShot2->AddFrame( ReadTextFileIntoString( Join( GetMaterialDir(), "FrameBuffer.xml" ) ) );
+        CPPUNIT_ASSERT(false);
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(true);
+    }
     
-    auto clipShot1 = videoTrack1->AddClipShot();
+    spIUMC sp3 = IUMC::CreateEmptyUMC();
+    auto source3=sp3->AddSource(ReadTextFileIntoString( Join( GetMaterialDir(), "AddingVideoSource.xml" ) ) );
+    auto output3 = sp3->AddOutput();
+    auto videoTrack3 = output3->AddVideoTrack();
+    auto clipShot3 = videoTrack3->AddClipShot();
+    auto frame = clipShot3->AddFrame( ReadTextFileIntoString( Join( GetMaterialDir(), "FrameBuffer.xml" )));
     
-    
-    //auto frame1 = clipShot1->AddFrame( ReadTextFileIntoString( Join( GetMaterialDir(), "FrameBuffer.xml" ) ) );
-    //auto frames1=clipShot1->GetAllFrames();
-    //CPPUNIT_ASSERT_EQUAL( frames1[0]->GetShotInCount(), ( EditUnitInCount ) 12 );
-    
-    //auto fsource1=frames1[0]->GetSource();
-    //CPPUNIT_ASSERT_EQUAL( fsource1->GetClipName(), std::string( "source 1" ) );
-    //CPPUNIT_ASSERT_EQUAL( fsource1->GetType(), ISource::kSourceTypeVideo );
+    auto bFrames=clipShot3->GetAllFrames();
+    CPPUNIT_ASSERT_EQUAL( bFrames[0]->GetShotInCount(), ( EditUnitInCount ) 12 );
+    auto fsource=bFrames[0]->GetSource();
+    CPPUNIT_ASSERT_EQUAL( fsource->GetClipName(), std::string( "clipNamev1" ) );
+    CPPUNIT_ASSERT_EQUAL( fsource->GetType(), ISource::kSourceTypeVideo );
     
     
 	printf("DONE AddingFramesToShotsTests::ParseFrames\n");

@@ -8,9 +8,7 @@
                 <xmpMM:DocumentID>6</xmpMM:DocumentID>
                 <umc:inCount>10</umc:inCount>
                 <umc:source rdf:parseType="Resource">
-                    <xmpMM:DocumentID>2</xmpMM:DocumentID>
-                    <umc:duration>4</umc:duration>
-                    <umc:inCount>12</umc:inCount>
+                    <xmpMM:DocumentID>1</xmpMM:DocumentID>
                 </umc:source>
             </umc:shotSources>
         </rdf:Description>

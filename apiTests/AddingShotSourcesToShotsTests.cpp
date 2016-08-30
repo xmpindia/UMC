@@ -238,7 +238,6 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
 	using namespace TestUtils;
 	using namespace UMC;
 	auto sp = IUMC::CreateUMCFromBuffer( ReadTextFileIntoString( Join( GetMaterialDir(), "AddingShotSources.xml" ) ) );
-    std::cout<<sp->SerializeToBuffer();
 	auto outputs = sp->GetAllOutputs();
 	auto tracks = outputs[0]->GetAllTracks();
 	auto shots = tracks[0]->GetAllShots();
@@ -292,22 +291,29 @@ void AddingShotSourcesToShotsTests::ParseShotSources() {
     }
     
     spIUMC sp2 = IUMC::CreateEmptyUMC();
-    auto output1 = sp2->AddOutput();
-    auto videoTrack1=output1->AddVideoTrack();
-    auto source1=sp2->AddVideoSource();
-    //source1->SetClipName( "source 1" );
+    auto output2 = sp2->AddOutput();
+    auto videoTrack2 = output2->AddVideoTrack();
+    auto clipShot2 = videoTrack2->AddClipShot();
     
-    auto clipShot1 = videoTrack1->AddClipShot();
+    try {
+        auto shotSource1 = clipShot2->AddShotSource( ReadTextFileIntoString( Join( GetMaterialDir(), "ShotSourcesBuffer.xml" )));
+        CPPUNIT_ASSERT(false);
+    } catch (std::logic_error) {
+        CPPUNIT_ASSERT(true);
+    }
     
+    spIUMC sp3 = IUMC::CreateEmptyUMC();
+    auto source3=sp3->AddSource(ReadTextFileIntoString( Join( GetMaterialDir(), "AddingVideoSource.xml" ) ) );
+    auto output3 = sp3->AddOutput();
+    auto videoTrack3 = output3->AddVideoTrack();
+    auto clipShot3 = videoTrack3->AddClipShot();
     
-    /*auto shotSource1 = clipShot1->AddShotSource( ReadTextFileIntoString( Join( GetMaterialDir(), "ShotSourcesBuffer.xml" )));
-    
-    auto allShotSources=clipShot1->GetAllShotSources();
-    CPPUNIT_ASSERT_EQUAL(allShotSources[0]->GetShotInCount(), (EditUnitInCount) 10);*/
-    
-    //auto shSource = allShotSources[0]->GetSource();
-    //CPPUNIT_ASSERT_EQUAL( shSource->GetClipName(), std::string( "source 1" ) );
-    //CPPUNIT_ASSERT_EQUAL( source->GetType(), ISource::kSourceTypeVideo );
+    auto shotSource1 = clipShot3->AddShotSource( ReadTextFileIntoString( Join( GetMaterialDir(), "ShotSourcesBuffer.xml" )));
+    auto bshotSources=clipShot3->GetAllShotSources();
+    CPPUNIT_ASSERT_EQUAL( bshotSources[0]->GetShotInCount(), ( EditUnitInCount ) 10 );
+    auto shSource=bshotSources[0]->GetSource();
+    CPPUNIT_ASSERT_EQUAL( shSource->GetClipName(), std::string( "clipNamev1" ) );
+    CPPUNIT_ASSERT_EQUAL( shSource->GetType(), ISource::kSourceTypeVideo );
     
 	printf("DONE AddingShotSourcesToShotsTests::ParseShotSources \n");
     
