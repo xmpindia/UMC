@@ -93,15 +93,16 @@ namespace UMC {
 
 		//!
 		//! \brief Creates a new video frame source from a buffer
-		//! \param[in] buffer a value of type std::string indicating the buffer from which the video frame source source object is to be created
+		//! \param[in] buffer a value of type std::string indicating the buffer from which the video frame source object is to be created
 		//! \return a shared pointer to a non-const object of type IVideoFrameSource representing the newly created video frame source. A parsing error will be thrown in case the parsing of the buffer fails.
-        //! \note Error is thrown in case buffer is empty
+		//! \note Source referenced in VideoFrame should also be parsed through buffer else error is thrown.
+		//!       Error is thrown in case buffer is empty
 		//!
 		virtual spIVideoFrameSource AddVideoFrameSource( const std::string & buffer ) = 0;
 
 		//!
 		//! \brief Creates a new image source from a buffer
-		//! \param[in] buffer A value of type std::string indicating the buffer from which the image source source object is to be created
+		//! \param[in] buffer A value of type std::string indicating the buffer from which the image source object is to be created
 		//! \return a shared pointer to a non-const object of type IImageSource representing the newly created image source. A parsing error will be thrown in case the parsing of the buffer fails.
         //! \note Error is thrown in case buffer is empty
 		//!

@@ -59,7 +59,7 @@ namespace INT_UMC {
 	UMC::spIFrame ShotImpl::AddFrame( const spIStructureNode & node, const spIUMCNode & spSelf ) {
 		auto actualNode = TryToGetActualNode( node, kFramesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
-		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
+		spIFrame frame = CreateFrame( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mFrames, kFramesPair );
 		AddElementToMap( mFrameMap, frame, spSelf, mFrames );
 		frame->GetInternalNode()->SyncXMPToUMC();
@@ -98,7 +98,7 @@ namespace INT_UMC {
 	UMC::spIShotSource ShotImpl::AddShotSource( const spIStructureNode & node, const spIUMCNode & spSelf ) {
 		auto actualNode = TryToGetActualNode( node, kShotSourcesPair );
 		if ( !actualNode ) THROW_PARSING_ERROR;
-		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), node );
+		spIShotSource shotSource = CreateShotSource( mspUniqueIDAndReferenceTracker, mspUniqueIDGenerator, spISource(), actualNode );
 		CreateEquivalentXMPNodes( mXMPStructureNode, mShotSources, kShotSourcesPair );
 		AddElementToMap( mShotSourceMap, shotSource, spSelf, mShotSources );
 		shotSource->GetInternalNode()->SyncXMPToUMC();

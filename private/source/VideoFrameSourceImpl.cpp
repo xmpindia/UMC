@@ -162,6 +162,8 @@ namespace INT_UMC {
 			UpdateDataFromXMPDOM( userUniqueID, kUniqueIDPair, source, kEmptyString );
 			std::string sourceID;
 			mspUniqueIDAndReferenceTracker->GetUserUniqueID( userUniqueID, sourceID );
+			if ( sourceID.empty () )
+				THROW_SOURCE_SHOULD_BE_CREATED_USING_BUFFER
 			spIUMC umc = GetParent< IUMC >().lock();
 			mVideoSource = umc->GetVideoSource( sourceID );
 		}

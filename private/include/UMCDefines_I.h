@@ -39,7 +39,7 @@ namespace INT_UMC {
     #define THROW_BUFFER_CANT_BE_EMPTY throw std::logic_error("input buffer can't be empty");
     #define THROW_INPUT_CANT_BE_ZERO throw std::logic_error("Input can't be zero");
     #define THROW_INPUT_CANT_BE_NULL throw std::logic_error("input can't be null");
-
+	#define THROW_SOURCE_SHOULD_BE_CREATED_USING_BUFFER throw std::logic_error("source referenced in frame should be created using buffer");
 
 }
 

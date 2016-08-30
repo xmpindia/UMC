@@ -93,7 +93,8 @@ namespace UMC {
 		//! \brief Creates a new frame from a buffer and adds it to the shot
 		//! \param[in] buffer a value of type std::string indicating the buffer from which the frame is to be created
 		//! \return a shared pointer to a non-object of type IFrame. A parsing error will be thrown in case the creation of the frame fails.
-        //! \attention Error is thrown in case buffer is empty
+		//! \attention Source referenced in frame should also be parsed through buffer else error is thrown.
+		//!            Error is thrown in case buffer is empty
 		//!
 		virtual spIFrame AddFrame( const std::string & buffer ) = 0;
         
@@ -108,7 +109,8 @@ namespace UMC {
 		//! \brief Creates a new shot source from a buffer and adds it to the shot
 		//! \param[in] buffer a value of type std::string indicating the buffer from which the shot source is to be created
 		//! \return a shared pointer to a non-const of type IShotSource. A parsing error will be thrown in case the creation of the shot source fails.
-        //! \attention Error is thrown in case buffer is empty
+		//! \attention Source referenced in shot source should also be parsed through buffer else error is thrown. 
+		//!            Error is thrown in case buffer is empty 
 		//!
 		virtual spIShotSource AddShotSource( const std::string & buffer ) = 0;
 

@@ -210,6 +210,8 @@ namespace INT_UMC {
 			UpdateDataFromXMPDOM( userUniqueID, kUniqueIDPair, source, kEmptyString );
 			std::string sourceID;
 			mspUniqueIDAndReferenceTracker->GetUserUniqueID( userUniqueID, sourceID );
+			if( sourceID.empty() )
+				THROW_SOURCE_SHOULD_BE_CREATED_USING_BUFFER
 			spIUMC umc = GetParentNode().lock()->GetParentNode().lock()->GetParentNode().lock()->GetParent< IUMC >().lock();
 			mSource = umc->GetSource( sourceID );
 		}

@@ -282,7 +282,7 @@ namespace INT_UMC {
 			return retNode;
 		} else {
 			auto parentNode = node->GetParent();
-			if ( ( strcmp( parentNode->GetName()->c_str(), pair.second ) == 0 ) &&
+			if ( parentNode && ( strcmp( parentNode->GetName()->c_str(), pair.second ) == 0 ) &&
 				 ( strcmp( parentNode->GetNameSpace()->c_str(), pair.first ) == 0 ) )
 			{
 				return node;
