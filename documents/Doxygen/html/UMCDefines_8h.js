@@ -1,0 +1,26 @@
+var UMCDefines_8h =
+[
+    [ "EditUnitDuration", "UMCDefines_8h.html#ad6d39b1906623441968fa1f1fb614dc8", null ],
+    [ "EditUnitInCount", "UMCDefines_8h.html#aac69e7a46adacc736e1431e417f61cf4", null ],
+    [ "UMC_Initialize", "UMCDefines_8h.html#a93fe5f510431cbc08d8290889ae59747", null ],
+    [ "UMC_Terminate", "UMCDefines_8h.html#a31bf6a9f438c2190c4d3a87b7edd26d9", null ],
+    [ "kEditUnitDurationTillEnd", "UMCDefines_8h.html#ab148c58397f8e2b577e603e3232fc209", null ],
+    [ "kEditUnitInCountFromBeginning", "UMCDefines_8h.html#af21d1b4e076c800a5b874ce4c3cffdfb", null ],
+    [ "Max_UMC_Int16", "UMCDefines_8h.html#a2a11298eedf39be6c5a3465c6dfb0da5", null ],
+    [ "Max_UMC_Int32", "UMCDefines_8h.html#a6ce4fb0742c3e7f1df2974f7668965bb", null ],
+    [ "Max_UMC_Int64", "UMCDefines_8h.html#a5926c70350d73e9048f252ad7ee44a38", null ],
+    [ "Max_UMC_Int8", "UMCDefines_8h.html#ac7dae01d5b80c13bf3c08053b542f89f", null ],
+    [ "Max_UMC_Uns16", "UMCDefines_8h.html#a56ad14ba4b2217d1b07a1dbd144f26af", null ],
+    [ "Max_UMC_Uns32", "UMCDefines_8h.html#a401b2baf83f85c4347ba44f2ef3c25ca", null ],
+    [ "Max_UMC_Uns64", "UMCDefines_8h.html#a03e74b0fd0110458ed5f3e1f4ec7a8d8", null ],
+    [ "Max_UMC_Uns8", "UMCDefines_8h.html#a1bac84a4af4f4d5fc506f7403dfbb9d3", null ],
+    [ "Min_UMC_Int16", "UMCDefines_8h.html#a92538743f31531f23c068849f787af47", null ],
+    [ "Min_UMC_Int32", "UMCDefines_8h.html#ac7c7234010bbe4ec3fb4f6328a902071", null ],
+    [ "Min_UMC_Int64", "UMCDefines_8h.html#a2adb84aa5bf77b64f6f983370cf7c5df", null ],
+    [ "Min_UMC_Int8", "UMCDefines_8h.html#adb52546ba39dc6ade9eaa844987ff13c", null ],
+    [ "Min_UMC_Uns16", "UMCDefines_8h.html#a638df14fc96a28a25a44980778a2ba74", null ],
+    [ "Min_UMC_Uns32", "UMCDefines_8h.html#a5de2c6c511ac660c2242d925cc1452e7", null ],
+    [ "Min_UMC_Uns64", "UMCDefines_8h.html#a5c425a43b9d6cf39d2da83148da11bcd", null ],
+    [ "Min_UMC_Uns8", "UMCDefines_8h.html#a725a0d2e5a9261ca2b30784110e34882", null ],
+    [ "npos", "UMCDefines_8h.html#a58e26e0adcf94d91e0a54cbc09bb6fce", null ]
+];

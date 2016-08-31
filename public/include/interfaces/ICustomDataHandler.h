@@ -18,7 +18,7 @@
 
 namespace UMC {
 	//!
-	//! \brief Interface for CustomDataHandler.
+	//! \brief This interface allows client to create custom extension handler.
 	//! \details This interface need to be implemented , if clients want to support custom data.
 	//! Clients have to implement Serialize function,in the way he/she wants to serialize custom data using customDataCreator. 
 	//! Clients have to implement other functions, to support deserializing of custom data while creating the data model out of serialized data.
