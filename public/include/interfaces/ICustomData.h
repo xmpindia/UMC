@@ -19,7 +19,7 @@
 namespace UMC {
 
 	//!
-    //! \brief Interface for CustomData.
+    //! \brief This interface represents CustomData of UMC.
     //! \details This interface need to be implemented by all client's custom data classes to support custom data.
     //!
 
