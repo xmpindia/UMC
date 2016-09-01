@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "UMC", "index.html", [
+    [ "XMP Media Production SDK", "index.html", null ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [
