@@ -57,7 +57,7 @@ The root directory of the XMP Media Production SDK is referred as the XMP_MP_ROO
 3.3.1 Installing Cmake
 
 •	Cmake is required to build the SDK.
-•	Cmake : minimum version should be 2.8.6
+•	Cmake : minimum version should be 3.5.2
 
 Obtain a copy of the CMake distribution for your platform from cmake official site.
 
